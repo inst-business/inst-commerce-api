@@ -1,7 +1,6 @@
 {
   "name": "javascript",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "json-server --watch db.json --port 7542",
@@ -10,6 +9,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "json-serve": "^0.1.0",
     "json-server": "^0.17.3"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/btoann/api.instances.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/btoann/api.instances/issues"
+  },
+  "homepage": "https://github.com/btoann/api.instances#readme",
+  "description": ""
 }
