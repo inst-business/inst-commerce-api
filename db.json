@@ -20,5 +20,31 @@
       "description": "This is Ruby course",
       "id": 7
     }
+  ],
+  "musics": [
+    {
+      "id": 1,
+      "name": "I can't stand the rain",
+      "artist": "Super M",
+      "path": "I Can't Stand the Rain_SuperM.mp3",
+      "cover": "i-cant-stand-the-rain_superm.jpg",
+      "description": ""
+    },
+    {
+      "id": 2,
+      "name": "I like me better",
+      "artist": "Lauv",
+      "path": "Lauv - I Like Me Better [Official Audio].mp3",
+      "cover": "i-like-me-better_lauv.jpg",
+      "description": ""
+    },
+    {
+      "id": 3,
+      "name": "Lạc trôi",
+      "artist": "Sơn Tùng - MTP",
+      "path": "LẠC TRÔI - OFFICIAL MUSIC VIDEO - SƠN TÙNG M-TP.mp3",
+      "cover": "lac-troi_son-tung-mtp.png",
+      "description": ""
+    }
   ]
 }
