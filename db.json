@@ -24,22 +24,114 @@
   "musics": [
     {
       "id": 1,
-      "name": "I can't stand the rain",
-      "artist": "Super M",
-      "path": "I Can't Stand the Rain_SuperM.mp3",
-      "cover": "i-cant-stand-the-rain_superm.jpg",
+      "name": "Paris in the rain",
+      "artist": "Lauv",
+      "path": "Lauv - Paris In The Rain.mp3",
+      "cover": "i-met-you-when-you-was-18_lauv-cover-album.jpg",
+      "album": "I met you when you was 18",
       "description": ""
     },
     {
       "id": 2,
-      "name": "I like me better",
-      "artist": "Lauv",
-      "path": "Lauv - I Like Me Better [Official Audio].mp3",
-      "cover": "i-like-me-better_lauv.jpg",
+      "name": "Try Again",
+      "artist": "(d.ear) X Jaehyun",
+      "path": "[STATION] 디어 (d.ear) X 재현 (Jaehyun) 'Try Again'.mp3",
+      "cover": "try-again_Jaehyun-dear.png",
+      "album": "Station2",
       "description": ""
     },
     {
       "id": 3,
+      "name": "I like me better",
+      "artist": "Lauv",
+      "path": "Lauv - I Like Me Better [Official Audio].mp3",
+      "cover": "i-like-me-better_lauv.jpg",
+      "album": "I met you when you was 18",
+      "description": ""
+    },
+    {
+      "id": 4,
+      "name": "Truth",
+      "artist": "TVXQ!",
+      "path": "TVXQ! 동방신기 'Truth'.mp3",
+      "cover": "new-chapter-2-the-truth-of-love_tvxq.jpg",
+      "album": "New Chapter #2 : The Truth of Love",
+      "description": ""
+    },
+    {
+      "id": 5,
+      "name": "Tháng năm",
+      "artist": "Soobin",
+      "path": "SOOBIN - Tháng Năm (Official Audio).mp3",
+      "cover": "thang-nam_soobin.jpg",
+      "album": "The Playah",
+      "description": ""
+    },
+    {
+      "id": 6,
+      "name": "Better Days",
+      "artist": "SuperM",
+      "path": "SuperM - Better Days _ Super One.mp3",
+      "cover": "superm_superone.jpg",
+      "album": "Super One",
+      "description": ""
+    },
+    {
+      "id": 7,
+      "name": "Boy",
+      "artist": "Charlie Puth",
+      "path": "Charlie Puth - BOY [Official Audio].mp3",
+      "cover": "charlie-puth_voicenote_album-cover.png",
+      "album": "Voicenote",
+      "description": ""
+    },
+    {
+      "id": 8,
+      "name": "Slow it down",
+      "artist": "Charlie Puth",
+      "path": "Charlie Puth - Slow It Down [Official Audio].mp3",
+      "cover": "charlie-puth_voicenote_album-cover.png",
+      "album": "Voicenote",
+      "description": ""
+    },
+    {
+      "id": 9,
+      "name": "Somebody told me",
+      "artist": "Charlie Puth",
+      "path": "Charlie Puth - Somebody Told Me [Official Audio].mp3",
+      "cover": "charlie-puth_voicenote_album-cover.png",
+      "album": "Voicenote",
+      "description": ""
+    },
+    {
+      "id": 10,
+      "name": "Symphony",
+      "artist": "Clean Bandit ft. Zara Larsson",
+      "path": "Clean Bandit - Symphony (feat. Zara Larsson).mp3",
+      "cover": "symphony_clean-bandit.jpg",
+      "album": "Symphony (feat. Zara Larsson)",
+      "description": ""
+    },
+    {
+      "id": 11,
+      "name": "Chandelier",
+      "artist": "Charlie Puth",
+      "path": "Sia - Chandelier (Charlie Puth Cover).mp3",
+      "cover": "charlie-puth_artworks.jpg",
+      "album": "",
+      "description": ""
+    },
+    {
+      "id": 12,
+      "name": "I can't stand the rain",
+      "artist": "SuperM",
+      "path": "I Can't Stand the Rain_SuperM.mp3",
+      "cover": "i-cant-stand-the-rain_superm.jpg",
+      "album": "SuperM",
+      "description": ""
+    },
+    {
+      "id": 13,
       "name": "Lạc trôi",
       "artist": "Sơn Tùng - MTP",
       "path": "LẠC TRÔI - OFFICIAL MUSIC VIDEO - SƠN TÙNG M-TP.mp3",
