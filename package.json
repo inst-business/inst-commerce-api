@@ -31,11 +31,11 @@
     "nodemon": "^2.0.22",
     "prettier": "^2.8.7"
   },
-           "engines": {
+  "engines": {
     "node": ">=16"
   },
   "lint-staged": {
-    "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --write"
+    "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --tab-width 2 --write"
   },
   "husky": {
     "hooks": {
