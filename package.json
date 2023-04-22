@@ -25,15 +25,17 @@
   "devDependencies": {
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
+
+    
     "morgan": "^1.10.0",
     "node-sass": "^8.0.0",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.7"
   },
-  "engines": {
+        "engines": {
     "node": ">=16"
   },
-  "lint-staged": {
+    "lint-staged": {
     "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --write"
   },
   "husky": {
