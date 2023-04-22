@@ -30,7 +30,7 @@
     "nodemon": "^2.0.22",
     "prettier": "^2.8.7"
   },
-  "engines": {
+          "engines": {
     "node": ">=16"
   },
   "lint-staged": {
