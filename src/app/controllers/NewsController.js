@@ -5,7 +5,7 @@ class NewsController {
   }
 
   // GET: /news/:slug
-      detail(req, res) {
+  detail(req, res) {
     console.log(req.query);
     res.send('DETAIL');
     res.render('news');
