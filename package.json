@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "scripts": {
-    "pretting": "lint-staged",
+    "prettying": "lint-staged",
     "build:sass": "node-sass src/resources/scss/ --output src/public/css/ --no-source-map",
     "watch:sass": "yarn run build:sass && node-sass -wr src/resources/scss/ -o src/public/css/",
     "watch": "npm-run-all --parallel watch:*",
@@ -30,7 +30,7 @@
     "nodemon": "^2.0.22",
     "prettier": "^2.8.7"
   },
-          "engines": {
+  "engines": {
     "node": ">=16"
   },
   "lint-staged": {
