@@ -1,19 +1,30 @@
 {
   "name": "javascript",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "json-server --watch db.json --port 7542",
+    "build:sass": "node-sass src/resources/scss/ --output src/public/css/ --no-source-map",
+    "watch:sass": "yarn run build:sass && node-sass -wr src/resources/scss/ -o src/public/css/",
+    "watch": "npm-run-all --parallel watch:*",
+    "serve": "nodemon --inspect src/index.js",
+    "start": "npm-run-all --parallel watch serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.0.7",
     "json-serve": "^0.1.0",
-    "json-server": "^0.17.3"
+    "json-server": "^0.17.3",
+    "npm-run-all": "^4.1.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "morgan": "^1.10.0",
+    "node-sass": "^8.0.0",
+    "nodemon": "^2.0.22"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/btoann/api.instances.git"
