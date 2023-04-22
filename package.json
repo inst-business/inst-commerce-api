@@ -7,7 +7,8 @@
     "watch:sass": "yarn run build:sass && node-sass -wr src/resources/scss/ -o src/public/css/",
     "watch": "npm-run-all --parallel watch:*",
     "serve": "nodemon --inspect src/index.js",
-    "start": "npm-run-all --parallel watch serve",
+    "dev": "npm-run-all --parallel watch serve",
+    "start": "npm-run-all --parallel serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -24,6 +25,9 @@
     "morgan": "^1.10.0",
     "node-sass": "^8.0.0",
     "nodemon": "^2.0.22"
+  },
+  "engines": {
+    "node": ">=16"
   },
   "repository": {
     "type": "git",

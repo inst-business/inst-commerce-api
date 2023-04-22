@@ -1,20 +1,6 @@
-const path = require('path')
-
-// start DB server
-// "start": "json-server --watch db.json",
-const jsonServer = require('json-server')
-const server = jsonServer.create()
-const router = jsonServer.router('db.json')
-const middleware = jsonServer.defaults()
-const db_port = process.env.PORT_DB || 7542
-server.use(middleware)
-server.use(router)
-server.listen(db_port)
-
-// Config API
-
 const express = require('express')
 const morgan = require('morgan')
+const path = require('path')
 const handlebars = require('express-handlebars')
 const route = require('./routes')
 const app = express()
@@ -40,3 +26,16 @@ app.set('views', path.join(__dirname, 'resources/views'))
 route(app)
 
 app.listen(api_port, () => console.log(`example app listening at http://localhost:${api_port}`))
+
+
+
+// start DB server
+// "start": "json-server --watch db.json",
+const jsonServer = require('json-server')
+const server = jsonServer.create()
+const router = jsonServer.router('db.json')
+const middleware = jsonServer.defaults()
+const db_port = process.env.PORT_DB || 7542
+server.use(middleware)
+server.use(router)
+server.listen(db_port)
