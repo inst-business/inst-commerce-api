@@ -35,7 +35,7 @@ const jsonServer = require('json-server')
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')
 const middleware = jsonServer.defaults()
-const db_port = process.env.PORT_DB || 7542
+const db_port = process.env.PORT_DB || 7544
 server.use(middleware)
 server.use(router)
 server.listen(db_port)
