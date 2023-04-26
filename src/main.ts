@@ -1,12 +1,18 @@
-const express = require('express')
-const morgan = require('morgan')
-const path = require('path')
-const handlebars = require('express-handlebars')
-const route = require('./routes')
+import express from 'express'
+import morgan from 'morgan'
+import path from 'path'
+import { engine } from 'express-handlebars'
+import route from './routes'
+import { conn } from './config/db'
+import jsonServer from 'json-server'
+
 const app = express()
 const api_port = process.env.PORT_API || 7543
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '../public')))
+
+// Connect to db
+conn()
 
 // Middleware
 app.use(express.urlencoded({ extended: true }))
@@ -17,11 +23,11 @@ app.use(express.json())
 app.use(morgan('dev'))
 
 // Template engine
-app.engine('hbs', handlebars.engine({
+app.engine('hbs', engine({
   extname: '.hbs',
 }))
 app.set('view engine', 'hbs')
-app.set('views', path.join(__dirname, 'resources/views'))
+app.set('views', path.join(__dirname, '../src', 'resources', 'views'))
 
 route(app)
 
@@ -31,7 +37,6 @@ app.listen(api_port, () => console.log(`example app listening at http://localhos
 
 // start DB server
 // "start": "json-server --watch db.json",
-const jsonServer = require('json-server')
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')
 const middleware = jsonServer.defaults()
