@@ -3,7 +3,7 @@
 node_modules/
 dist/
 
-src/public/css/
+public/css/
 
 package-lock.json
 yarn.lock
