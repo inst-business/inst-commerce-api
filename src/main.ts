@@ -5,11 +5,11 @@ import { engine } from 'express-handlebars'
 import route from './routes'
 import { conn } from './config/db'
 import jsonServer from 'json-server'
+import hbsHelpers from './utils/handlebars'
+import methodOverride from 'method-override'
 
 const app = express()
 const api_port = process.env.PORT_API || 7543
-
-app.use(express.static(path.join(__dirname, '../public')))
 
 // Connect to db
 conn()
@@ -17,6 +17,9 @@ conn()
 // Middleware
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(methodOverride('_method'))
+app.use(express.static(path.join(__dirname, '../public')))
+app.use(express.static(path.join(__dirname, '../node_modules/bootstrap')))
 
 // HTTP logger
 // app.use(morgan('":remote-addr - :remote-user [:date[web]]" :method :url HTTP/:http-version :status :response-time ms - :res[content-length]'))
@@ -25,6 +28,7 @@ app.use(morgan('dev'))
 // Template engine
 app.engine('hbs', engine({
   extname: '.hbs',
+  helpers: hbsHelpers
 }))
 app.set('view engine', 'hbs')
 app.set('views', path.join(__dirname, '../src', 'resources', 'views'))

@@ -1,0 +1,20 @@
+
+const ERR = {
+  UNKNOWN: -1,
+  UNAUTHORIZED: -2,
+  UNVERIFIED: -3,
+  OBJECT_NOT_FOUND: -4,
+  INVALID_ROLE: -5,
+  INVALID_FORMAT: -6,
+  INVALID_VERSION: -7,
+  INVALID_DATA: -8,
+  INVALID_USER: -9,
+  ACTION_FALSE: -10,
+
+  RENDER_VIEW_REJECTED: -51,
+  
+}
+
+Object.freeze(ERR)
+
+export default ERR

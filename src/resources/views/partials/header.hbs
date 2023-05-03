@@ -1,17 +1,17 @@
 <header>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark ia-navbar" data-current-page="" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand" href="/">Instances API</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ia-navbar__ul">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="./">Home</a>
+            <a class="nav-link ia-navbar__link {{#ifEquals 1 1}}active{{/ifEquals}}" data-page="courses" aria-current="page" href="/courses{{routeI 'index'}}">Courses</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="./courses">Courses</a>
+            <a class="nav-link ia-navbar__link" data-page="musics" aria-current="page" href="/musics{{routeI 'DEMO' 1 2 'abc'}}">Musics</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

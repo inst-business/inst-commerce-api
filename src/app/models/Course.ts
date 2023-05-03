@@ -1,19 +1,19 @@
-import { Schema, model } from 'mongoose'
+import mongoose, { Schema, model } from 'mongoose'
 
 export interface ICourse {
-  name: String;
-  desc: String;
-  img: String;
-  slug: String;
+  name: string;
+  desc: string;
+  img: string;
+  slug: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 const courseSchema = new Schema<ICourse>({
-  name: { type: Number, maxLength: 255, require: true },
-  desc: { type: String, maxLength: 1000 },
-  img: { type: String, maxLength: 255, require: true },
-  slug: Number
+  name: { type: String, maxLength: 255, required: true },
+  desc: { type: String },
+  img: { type: String, required: true },
+  slug: { type: String, maxLength: 255, required: true },
 }, { timestamps: true })
 
 const Course = model<ICourse>('Course', courseSchema)

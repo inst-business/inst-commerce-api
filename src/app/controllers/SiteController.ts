@@ -1,14 +1,15 @@
 class SiteController {
 
   // GET: /courses
-  static index (req, res) {
+  static index (req: any, res: any) {
     res.render('home')
   }
 
   // GET: /courses/:slug
-  static search (req, res) {
+  static search (req: any, res: any) {
     console.log(req.query)
     res.render('search')
+    // return res.send('search')
   }
 
 }
