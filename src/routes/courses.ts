@@ -5,7 +5,6 @@ import { ROUTES } from '../config/global/const'
 import _ from '../utils/utils'
 
 const router = express.Router()
-
 const viewData = (data: any) => ({
   data,
   _coursesPage: true
@@ -39,11 +38,11 @@ router.put(ROUTES.I.UPDATE, _.routeAsync(async (req, res) => {
 }, _.redirectView(`/courses${ROUTES.I.SHOW}`, 'id')
 ))
 
-router.delete(ROUTES.I.DESTROY, _.routeAsync(async (req, res) => {
+router.delete(ROUTES.I.DELETE, _.routeAsync(async (req, res) => {
   const { id } = req.params
   const result = await CourseController.deleteCourse(id)
   return result
-}, _.redirectView('back')
+}//, _.redirectView('back')
 ))
 
 router.get(ROUTES.I.SHOW, _.routeAsync(async (req, res) => {

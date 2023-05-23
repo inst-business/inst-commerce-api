@@ -1,7 +1,5 @@
 import Course, { ICourse } from '../models/Course'
-import { mongooseToObj } from '../../utils/mongoose'
 import _ from '../../utils/utils'
-
 
 class CourseController {
 
@@ -39,29 +37,22 @@ class CourseController {
     return res
   }
 
-  static async deleteCourse (id: string): Promise<Object> {
-    const query = Course.deleteOne({ _id: id })
+  static async deleteCourse (id: string): Promise<Boolean> {
+    console.log(Course.removeOne(id))
+    
+    const query = Course.removeOne(id)
+    const res = await query
+    console.log(res)
+    
+    return res
+  }
+
+  static async destroyCourse (id: string): Promise<Object> {
+    const query = Course.deleteOne({ _id: id, deleted: true })
     const res = await query
     return res
   }
 
-  // // GET: /courses
-  // static async index (req, res, next) {
-  //   Course.find({}).lean()
-  //     .then(courses => 
-  //       res.render('courses/index', { courses, _coursePage })
-  //     )
-  //     .catch(next)
-  // }
-
-  // // GET: /course/:slug
-  // static detail (req, res, next) {
-  //   Course.findOne({ slug: req.params.slug }).lean()
-  //     .then(course => 
-  //       res.render('courses/detail', { course, _coursePage })
-  //     )
-  //     .catch(next)
-  // }
 }
 
 export default CourseController
