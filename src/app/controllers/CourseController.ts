@@ -37,10 +37,8 @@ class CourseController {
     return res
   }
 
-  static async deleteCourse (id: string): Promise<Boolean> {
-    console.log(Course.removeOne(id))
-    
-    const query = Course.removeOne(id)
+  static async deleteCourse (id: string): Promise<Object> {
+    const query = Course.findById(id).softDelete()
     const res = await query
     console.log(res)
     
@@ -48,7 +46,7 @@ class CourseController {
   }
 
   static async destroyCourse (id: string): Promise<Object> {
-    const query = Course.deleteOne({ _id: id, deleted: true })
+    const query = Course.deleteOne({ _id: id })
     const res = await query
     return res
   }

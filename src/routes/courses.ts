@@ -42,7 +42,14 @@ router.delete(ROUTES.I.DELETE, _.routeAsync(async (req, res) => {
   const { id } = req.params
   const result = await CourseController.deleteCourse(id)
   return result
-}//, _.redirectView('back')
+}, _.redirectView('back')
+))
+
+router.delete(ROUTES.I.DESTROY, _.routeAsync(async (req, res) => {
+  const { id } = req.params
+  const result = await CourseController.destroyCourse(id)
+  return result
+}, _.redirectView('back')
 ))
 
 router.get(ROUTES.I.SHOW, _.routeAsync(async (req, res) => {

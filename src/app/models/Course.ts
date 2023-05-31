@@ -21,10 +21,10 @@ const CourseSchema = new Schema<ICourse>({
 }, { timestamps: true })
 
 withSoftDeletePlugin(CourseSchema)
-// CourseSchema.plugin(softDeletePlugin)
+// CourseSchema.plugin(withSoftDeletePlugin)
 
-const Course = model<ICourse, ISoftDeleteQueryHelpers<ICourse>>('Course', CourseSchema)
-console.log(Course)
+const Course = model<ICourse, TSoftDeleteQueryHelpers<ICourse>>('Course', CourseSchema)
+// const Course = model<ICourse>('Course', CourseSchema)
 
 
 export default Course

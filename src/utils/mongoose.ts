@@ -1,14 +1,15 @@
-import mongoose, { Schema, Document, Query, Model, QueryWithHelpers, HydratedDocument } from 'mongoose'
+import { isNull } from 'lodash'
+import mongoose, { Schema, Document, Query, Model, QueryWithHelpers, HydratedDocument, MongooseDefaultQueryMiddleware } from 'mongoose'
 
 export type TWithSoftDeleted = {
   isDeleted: boolean
   deletedAt: Date | null
 }
-type TDocument = TWithSoftDeleted & Document
+type TDocument = Document & TWithSoftDeleted
 
 type TQueryWithHelpers = QueryWithHelpers<Boolean, TDocument>
 export interface ISoftDeleteQueryHelpers<T> extends Model<T> {
-  removeOne(id: string): TQueryWithHelpers
+  softDelete(): TQueryWithHelpers
 }
 export type TSoftDeleteQueryHelpers<T> = Model<T, ISoftDeleteQueryHelpers<T>>
 
@@ -37,35 +38,26 @@ const withSoftDeletePlugin = (schema: Schema) => {
     'updateMany',
   ]
 
+  const deleteQueries = [
+    'deleteOne',
+    'deleteMany'
+  ]
+
   const QueryHelpers = {
     // Remove (soft deletes) document
-    removeOne: async function (
-      this: QueryWithHelpers<TDocument, HydratedDocument<TDocument>, ISoftDeleteQueryHelpers<TDocument>>,
-      id: string
-    ): Promise<TQueryWithHelpers> {
-      const doc = await this.findById(id)
-      const res = await setIsDeleted(<TDocument>doc)
-        .then(res => res.toObject())
-        .catch(err => false)
-      return res
+    softDelete: async function (
+      this: QueryWithHelpers<TDocument, HydratedDocument<TDocument>, ISoftDeleteQueryHelpers<TDocument>>
+      // this: TDocument
+    ) {
+      const doc = await this
+      if (isNull(doc)) return false
+      doc.isDeleted = true
+      doc.deletedAt = new Date()
+      doc.$isDeleted(true)
+      return doc.save().then(res => [true, res.toObject()]).catch(err => false)
     },
   }
-
-  const setIsDeleted = async (doc: TDocument) => {
-    doc.isDeleted = true
-    doc.deletedAt = new Date()
-    doc.$isDeleted(true)
-    return await doc.save()
-  }
-
-  const excludeDeletedInQuery = async function (
-    this: Query<TWithSoftDeleted, Document>,
-    next: mongoose.CallbackWithoutResultAndOptionalError
-  ) {
-    this.where({ isDeleted: false })
-    next()
-  }
-
+  
   const excludeDeletedInAggregateMiddleware = async function (
     this: mongoose.Aggregate<any>,
     next: mongoose.CallbackWithoutResultAndOptionalError
@@ -77,12 +69,22 @@ const withSoftDeletePlugin = (schema: Schema) => {
   // Query Helpers
   schema.query = QueryHelpers
 
-  // Queries for available document(s)
-  findQueries.forEach((type) => {
-    schema.pre(<any>type, excludeDeletedInQuery)
+  // Exclude deleted document(s)
+  findQueries.forEach(method => {
+    schema.pre(<MongooseDefaultQueryMiddleware>method, function (next): void {
+      this.where({ isDeleted: false })
+      next()
+    })
   })
   schema.pre('aggregate', excludeDeletedInAggregateMiddleware)
 
+  // Delete queries for available document(s)
+  deleteQueries.forEach((type) => {
+    schema.pre(<any>type, function (next): void {
+      this.where({ isDeleted: true })
+      next()
+    })
+  })
 }
 
 export {
