@@ -7,13 +7,24 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ia-navbar__ul">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Categories
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/courses{{routeI 'index'}}">Courses</a></li>
+              <li><a class="dropdown-item" href="/musics{{routeI 'index'}}">Musics</a></li>
+              {{!-- <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
+            </ul>
+          </li>
           <li class="nav-item">
             <a class="nav-link ia-navbar__link {{#ifEquals 1 1}}active{{/ifEquals}}" data-page="courses" aria-current="page" href="/courses{{routeI 'index'}}">Courses</a>
           </li>
           <li class="nav-item">
             <a class="nav-link ia-navbar__link" data-page="musics" aria-current="page" href="/musics{{routeI 'DEMO' 1 2 'abc'}}">Musics</a>
           </li>
-          <li class="nav-item dropdown">
+          {{!-- <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Dropdown
             </a>
@@ -23,7 +34,7 @@
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
-          </li>
+          </li> --}}
           {{!-- <li class="nav-item">
             <a class="nav-link disabled">Disabled</a>
           </li> --}}

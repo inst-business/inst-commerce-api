@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import express, { Router } from 'express'
 import { default as courses } from './courses'
 import { default as site } from './site'
 

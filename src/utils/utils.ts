@@ -55,7 +55,13 @@ class Utils {
         }
       }
       : (res: express.Response, req?: express.Request): ExpressCallback => {
-        return (data: any, err?: any) => {
+        return (data: any, err?: any) => {          
+          const dataWithRouters = {
+            router: {
+              
+            },
+            data,
+          }
           res.render(view, data)
         }
       }

@@ -78,4 +78,9 @@ router.get(ROUTES.E.INDEX, _.routeAsync(async () => {
   return data
 }))
 
+console.log(router.stack)
+
+
+// router.stack.forEach(l => console.log(l.route.path, l.route.methods))  
+
 export default router
