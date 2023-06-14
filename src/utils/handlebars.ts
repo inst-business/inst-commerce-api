@@ -1,6 +1,9 @@
 import { ROUTES, ITF_TYPE } from "../config/global/const"
 import _ from "lodash"
+import express from "express"
+import expressListRoutes from "express-list-routes"
 
+const activeAnchor = (title: string, target: string) => title === target ? 'active' : ''
 
 const routeParseParams = (type: string, act: string, ...args: any[]): string => {
   const _type = ROUTES[<ITF_TYPE>type.toUpperCase()]
@@ -19,7 +22,7 @@ const routeParseParams = (type: string, act: string, ...args: any[]): string => 
 const routeI = (...args: any[]) => routeParseParams('i', <string>args[0], ...args.slice(1))
 const routeE = (...args: any[]) => routeParseParams('e', <string>args[0], ...args.slice(1))
 
-const ifEquals = (arg1: string | number, arg2: string | number, options: any): boolean => 
+const equals = (arg1: string | number, arg2: string | number, options: any): boolean => 
   (arg1 === arg2) ? options.fn(this) : options.inverse(this)
 
 
@@ -28,7 +31,8 @@ const ifEquals = (arg1: string | number, arg2: string | number, options: any): b
 const hbsHelpers = {
   routeI,
   routeE,
-  ifEquals,
+  equals,
+  activeAnchor,
 }
 
 export default hbsHelpers

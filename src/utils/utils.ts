@@ -44,7 +44,7 @@ class Utils {
     }
   }
 
-  renderView (view: string): ExpressCallbackProvider {
+  renderView (view: string, page?: {}): ExpressCallbackProvider {
     return !VIEWABLE
       ? (res) => {
         try {
@@ -55,14 +55,9 @@ class Utils {
         }
       }
       : (res: express.Response, req?: express.Request): ExpressCallback => {
-        return (data: any, err?: any) => {          
-          const dataWithRouters = {
-            router: {
-              
-            },
-            data,
-          }
-          res.render(view, data)
+        return (data: any, err?: any) => {
+          const reception = { data, page }
+          res.render(view, reception)
         }
       }
   }
