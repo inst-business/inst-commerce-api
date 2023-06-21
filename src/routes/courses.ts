@@ -46,8 +46,8 @@ router.patch(ROUTES.I.RESTORE, _.routeAsync(async (req, res) => {
 ))
 
 router.delete(ROUTES.I.DESTROY, _.routeAsync(async (req, res) => {
-  const { id } = req.body
-  const result = await CourseController.destroyOne(id)
+  const { ids } = req.body
+  const result = await CourseController.destroyOneOrMany(ids)
   return result
 }, _.redirectView('back')
 ))

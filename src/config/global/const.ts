@@ -17,7 +17,7 @@ export class ROUTES {
     SHOW: '/i/:id',  // GET
     EDIT: '/i/:id/edit',  // GET
     UPDATE: '/i/:id',  // PUT
-    DELETE: '/i/:id',  // PATCH
+    DELETE: '/i',  // PATCH
   }
 
   static E = {

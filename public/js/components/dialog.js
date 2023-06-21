@@ -1,4 +1,4 @@
-import qs from './consts.js'
+import qs from '../consts.js'
 
 export const __DialogBtns = Array.from(qs.$a('[data-toggle = dialog]'))
 export const __Dialogs = Array.from(qs.$a('dialog.dialog'))

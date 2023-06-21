@@ -18,11 +18,11 @@
         </div>
         <div class="col-md-4 col-sm-6">
           <label for="createdAt" class="form-label">Created at</label>
-          <input type="text" class="form-control" id="createdAt" value="{{data.createdAt}}" readonly disabled>
+          <input type="text" class="form-control" id="createdAt" value="{{dateFormat data.createdAt}}" readonly disabled>
         </div>
         <div class="col-md-4 col-sm-6">
           <label for="updatedAt" class="form-label">Updated at</label>
-          <input type="text" class="form-control" id="updatedAt" value="{{data.updatedAt}}" readonly disabled>
+          <input type="text" class="form-control" id="updatedAt" value="{{dateFormat data.updatedAt}}" readonly disabled>
         </div>
         <div class="col-md-6 col-sm-12">
           <label for="name" class="form-label">Name</label>

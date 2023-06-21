@@ -25,13 +25,13 @@ class Utils {
 
   private createServiceCallback (res: express.Response): ExpressCallback {    
     return (data?: any, err?: any) => {
-      const resData = data ? JSON.parse(JSON.stringify(data)) : {}
+      const resData = data ? structuredClone(data) : {}
       res.statusCode = 200
       if (err) {
         let errObj = { message: err, code: -7 }
         let code
         if (typeof err == 'object') {
-          errObj = JSON.parse(JSON.stringify(err))
+          errObj = structuredClone(err)
           errObj.message = err.message
           errObj.code = parseInt(err.code)
           code = err.httpCode
@@ -82,8 +82,9 @@ class Utils {
     console.error(`${e.title}: ${e.message}\n`, `{http: ${e.httpCode}, error: ${e.errorCode}}\n`, e.pars)
   }
 
-  genUniqueSlug (title: string) {
-    const uniqueId = uniqueSlug(Date.now().toString())
+  genUniqueSlug (title: string, code: string) {
+    // const uniqueId = uniqueSlug(Date.now().toString())
+    const uniqueId = uniqueSlug(code)
     const options = {
       replacement: '-',
       remove: /[*+~.()'"!:@]/g,

@@ -1,5 +1,5 @@
-import Course, { ICourse } from '../models/Course'
-import _ from '../../utils/utils'
+import Course, { ICourse } from '@models/Course'
+import _ from '@/utils/utils'
 
 class CourseController {
 
@@ -22,22 +22,26 @@ class CourseController {
   }
   
   static async insertOne (course: ICourse): Promise<ICourse> {
-    const formData = course
-    formData.slug = _.genUniqueSlug(course.name)
+    const formData = structuredClone(course)
+    formData.slug = course.name
     const query = Course.create(formData)
     const res = await query
+    if (res) {
+      res.slug = _.genUniqueSlug(course.name, res._id.toString())
+      res.save()
+    }
     return res
   }
 
   static async updateOne (id: string, course: ICourse): Promise<ICourse | null> {
     const formData = course
-    formData.slug = _.genUniqueSlug(course.name)
+    formData.slug = _.genUniqueSlug(course.name, id)
     const query = Course.findOneAndUpdate({ _id: id }, formData)
     const res = await query
     return res
   }
   
-  static async deleteOneOrMany (ids: string[]): Promise<Object> {
+  static async deleteOneOrMany (ids: string | string[]): Promise<Object> {
     const query = Course.find({ _id: ids }).softDelete()
     const res = await query
     return res
@@ -55,13 +59,13 @@ class CourseController {
     return data
   }
 
-  static async restoreOneOrMany (ids: string[]): Promise<Object> {
+  static async restoreOneOrMany (ids: string | string[]): Promise<Object> {
     const query = Course.find({ _id: ids, isDeleted: true }).restoreDeleted()
     const res = await query
     return res
   }
 
-  static async destroyOne (id: string): Promise<Object> {
+  static async destroyOneOrMany (id: string | string[]): Promise<Object> {
     const query = Course.deleteOne({ _id: id, isDeleted: true })
     const res = await query
     return res
