@@ -1,7 +1,5 @@
-import { ROUTES, ITF_TYPE } from "../config/global/const"
+import { ROUTES, ITF_TYPE } from "@/config/global/const"
 import _ from "lodash"
-import express from "express"
-import expressListRoutes from "express-list-routes"
 import moment from "moment"
 
 const activeAnchor = (title: string, target: string) => title === target ? 'active' : ''

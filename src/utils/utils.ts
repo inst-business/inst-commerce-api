@@ -3,8 +3,8 @@ import slugify from 'slugify'
 import uniqueSlug from 'unique-slug'
 import _ from 'lodash'
 import LogicError, { Primitives } from './logicError'
-import ERR from './../config/global/error'
-import { VIEWABLE } from './../config/global/const'
+import ERR from '@/config/global/error'
+import { VIEWABLE } from '@/config/global/const'
 
 export type ExpressAsyncRequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<any>
 export type ExpressCallback = (data?: any, err?: any) => void

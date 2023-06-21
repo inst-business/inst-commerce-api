@@ -1,8 +1,8 @@
 import express from 'express'
-import CourseController from '../app/controllers/CourseController'
-import { ICourse } from '../app/models/Course'
-import { ROUTES } from '../config/global/const'
-import _ from '../utils/utils'
+import CourseController from '@controllers/CourseController'
+import { ICourse } from '@models/Course'
+import { ROUTES } from '@/config/global/const'
+import _ from '@/utils/utils'
 
 const router = express.Router()
 const pageData = { title: 'courses' }

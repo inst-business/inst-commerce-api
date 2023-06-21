@@ -3,10 +3,10 @@ import express from 'express'
 import morgan from 'morgan'
 import path from 'path'
 import { engine } from 'express-handlebars'
-import route from './routes'
-import { conn } from './config/db'
+import route from '@/routes'
+import { conn } from '@/config/db'
 import jsonServer from 'json-server'
-import hbsHelpers from './utils/handlebars'
+import hbsHelpers from '@/utils/handlebars'
 import methodOverride from 'method-override'
 
 const app = express()

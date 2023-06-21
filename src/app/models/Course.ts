@@ -1,6 +1,6 @@
 import mongoose, { Model, Schema, model } from 'mongoose'
-import { STATUS } from '../../config/global/const'
-import { ISoftDeleteQueryHelpers, TSoftDeleteQueryHelpers, withSoftDeletePlugin } from '../../utils/mongoose'
+import { STATUS } from '@/config/global/const'
+import { ISoftDeleteQueryHelpers, TSoftDeleteQueryHelpers, withSoftDeletePlugin } from '@/utils/mongoose'
 
 export interface ICourse {
   name: string

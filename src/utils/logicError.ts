@@ -1,4 +1,4 @@
-import ERR from "./../config/global/error"
+import ERR from "@/config/global/error"
 
 export type Primitives = string | number | boolean
 
