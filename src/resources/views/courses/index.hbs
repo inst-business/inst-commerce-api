@@ -1,11 +1,13 @@
 
-<h1 class="">List of available Courses</h1>
+<h1 class="appTitle">List of available Courses</h1>
 
 <aside class="row mb-3">
   <nav class="col-12 d-flex">
     <ul class="nav me-auto">
       <li class="nav-item">
-        <a class="btn btn-outline-success btn-sm" aria-current="page" href="/courses{{routeI 'create'}}">Create new Course <strong>+</strong></a>
+        <a class="btn btn-outline-success btn-sm" href="/courses{{routeI 'create'}}">
+          <i class="fa-regular fa-circle-plus"></i> Add new
+        </a>
       </li>
     </ul>
     <div class="view-switcher" role="toolbar">
@@ -17,8 +19,70 @@
   </nav>
 </aside>
 
-<section class="view-area row mb-3">
-  {{#each data}}
+<section class="appSection">
+  <table class="table table-hover appTable">
+    <thead class="appTable__head">
+      <tr>
+        <th scope="col">
+          <input type="checkbox" id="">
+        </th>
+        <th>#</th>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Description</th>
+        <th>Created</th>
+        <th>Updated</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody class="appTable__body">
+      {{#each data}}
+        <tr class="appItem">
+          <td scope="row"><input type="checkbox" name="items[]" value="{{this._id}}"></td>
+          <td>{{increase @index 1}}</td>
+          <td class="appItem__name">{{this.name}}</td>
+          <td class="appItem__img"><img src="/img/courses/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}"></td>
+          <td class="appItem__desc">
+            <div class="popover-content" data-content="popover" data-for="desc-popover" data-id="{{@index}}">{{this.desc}}</div>
+            <button popovertarget="desc-popover" data-trigger="popover" data-get="{{@index}}">...more</button>
+          </td>
+          <td class="appItem__time">
+            {{dateFormat this.createdAt 'date'}}
+            <br>
+            {{dateFormat this.createdAt 'time'}}
+          </td>
+          <td class="appItem__time">
+            {{dateFormat this.updatedAt 'date'}}
+            <br>
+            {{dateFormat this.updatedAt 'time'}}
+          </td>
+          <td class="appItem__actions">
+            <a href="/courses{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="btn btn-outline-secondary btn-sm">
+              <i class="fa-regular fa-pen-to-square"></i>
+            </a>
+            <button class="appItem__actions-delete btn btn-outline-danger btn-sm" title="Delete '{{this.name}}'"
+              data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+              <i class="fa-regular fa-trash"></i>
+            </button>
+            
+            <button class="appItem__actions-delete appBtn" title="Delete '{{this.name}}'"
+              data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+              <i class="fa-regular fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+    {{!-- <tfoot>
+      <th>
+        <div class="btn-group" role="group">
+          <button type="button" value="grid" class="btn btn-outline-secondary btn-sm">Grid</button>
+          <button type="button" value="list" class="btn btn-outline-secondary btn-sm">List</button>
+        </div>
+      </th>
+    </tfoot> --}}
+  </table>
+  {{!-- {{#each data}}
     <article class="col-sm-4 col-lg-3 mb-4">
       <div class="card course-item" style="width: 100%;">
         <a href="/courses{{routeI 'show' this._id}}">
@@ -41,22 +105,28 @@
         </div>
       </div>
     </article>
-  {{/each}}
+  {{/each}} --}}
 </section>
 
-<!-- Modal Delete -->
-<dialog id="delete-dialog" class="dialog">
-  <form class="dialog__form" method="POST">
-    <div class="dialog__header">Confirmation</div>
-    <div class="dialog__body">
+{{!-- Popover --}}
+<div id="desc-popover" popover>
+</div>
+{{!-- End of popover --}}
+
+{{!-- Modal Delete --}}
+<dialog id="delete-dialog" class="appDialog">
+  <form class="appDialog__form" method="POST">
+    <div class="appDialog__header">Confirmation</div>
+    <div class="appDialog__body">
       You really want to perform this action?
     </div>
-    <div class="dialog__footer">
+    <div class="appDialog__footer">
       <input type="hidden" name="ids[]" value="">
       <button type="submit" class="btn btn-danger">Yes, delete it!</button>
       <button type="submit" class="btn btn-secondary" formmethod="dialog">Cancel</button>
     </div>
   </form>
 </dialog>
+{{!-- End of Modal Delete --}}
 
 <script src="/js/pages/courses/index.js"></script>

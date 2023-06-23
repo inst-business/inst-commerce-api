@@ -1,67 +1,74 @@
+@import 'fonts';
 @import 'variables';
 
-h1 {
-  // color: $primary-color;
-  // background-color: lightblue;
+* {
+  font-family: 'Nunito', sans-serif;
+  user-select: none;
+}
+
+.appTitle {
+  font-size: 1.75rem;
   margin: 1.5rem 0 1rem;
 }
 
-.dialog {
-  display: block;
-  width: 100%;
-  max-width: 500px;
+.appSection {
+  border-radius: $radius-md;
+  box-shadow: $shadow-1;
   padding: 1rem;
-  border: 0;
-  border-radius: 8px;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  visibility: hidden;
-  transition: all 0.35s ease;
+}
 
-  &[open] {
-    opacity: 1;
-    visibility: visible;
+.appBtn {
+  --btn-padding: 0.25rem 0.5rem;
+  --btn-font-size: #{$btn-font-size};
+  --btn-font-weight: #{$btn-font-weight};
+  --btn-line-height: #{$btn-line-height};
+  --btn-color: #fff;
+  --btn-bg: #{$primary};
+  --btn-border: #{$primary};
+  --btn-radius: #{$radius-sm};
+}
+.appBtn {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  padding: var(--btn-padding);
+  font-size: var(--btn-font-size);
+  font-weight: var(--btn-font-weight);
+  line-height: var(--btn-line-height);
+  border: 1px solid var(--btn-border);
+  border-radius: var(--btn-radius);
+  background-color: var(--btn-bg);
+  color: var(--btn-color);
+  transition: all 0.15s ease-in-out;
+  &:hover {
+    filter: brightness(1.2);
   }
-  &::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
-    animation: hide-backdrop 0.35s ease forwards;
-  }
-  &[open]::backdrop {
-    animation: show-backdrop 0.35s ease forwards;
-  }
+}
 
-  &__header {
-    font-size: 1.25rem;
-    font-weight: 500;
+.appTable {
+  &__head th {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
   }
   &__body {
-    margin: 0.75rem 0;
-    padding-bottom: 1rem;
-    font-size: 1rem;
+    .appItem {
+      &__img img {
+        width: auto;
+        height: 3rem;
+        object-fit: cover;
+        overflow: hidden;
+        font-size: 0.75rem;
+        color: grey;
+        word-wrap: break-word;
+        cursor: pointer;
+      }
+      &__time {
+        font-size: 0.85rem;
+        color: grey;
+        font-style: italic;
+      }
+    }
   }
-  &__footer {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    padding-top: 1rem;
-    border-top: solid 1px #eee;
-  }
-}
-
-@keyframes show-backdrop {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes hide-backdrop {
-  to {
-    opacity: 0;
-  }
-}
-
-.menu-categories {
 }

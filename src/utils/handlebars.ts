@@ -24,9 +24,18 @@ const routeE = (...args: any[]) => routeParseParams('e', <string>args[0], ...arg
 const equals = (arg1: string | number, arg2: string | number, options: any): boolean => 
   (arg1 === arg2) ? options.fn(this) : options.inverse(this)
 
-const dateFormat = (timestamp: Date) => moment(timestamp).format('DD-MM-YY LT (Z)')
+type DateFormatType = 'detail' | 'date' | 'time'
+const dateFormat = (timestamp: Date, format?: DateFormatType) => {
+  const formatTypes = {
+    detail: 'DD-MM-YY LT (Z)',
+    date: 'DD-MM-YY',
+    time: 'LT',
+  }
+  const formatString = !format ? formatTypes.detail : formatTypes[format]
+  return moment(timestamp).format(formatString)
+}
 
-// const activePage = 
+const increase = (n: number, offset: number) => n + offset
 
 const hbsHelpers = {
   routeI,
@@ -34,6 +43,7 @@ const hbsHelpers = {
   equals,
   activeAnchor,
   dateFormat,
+  increase,
 }
 
 export default hbsHelpers

@@ -1,1 +1,20 @@
-$primary-color: green;
+$primary: #3f5b91;
+$primary-hover: color-mix(srgb, $primary 80%, #fff);
+$primary-emphasis: color-mix(srgb, $primary 80%, #000);
+$secondary: #c54446;
+$primary-hover: color-mix(srgb, $secondary 80%, #fff);
+$primary-emphasis: color-mix(srgb, $secondary 80%, #000);
+$tertiary: #e2ad49;
+$primary-hover: color-mix(srgb, $tertiary 80%, #fff);
+$primary-emphasis: color-mix(srgb, $tertiary 80%, #000);
+
+$radius-sm: 0.25rem;
+$radius-md: 0.375rem;
+$radius-lg: 1rem;
+$radius-circle: 50%;
+
+$shadow-1: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+$btn-font-size: 0.875rem;
+$btn-font-weight: 400;
+$btn-line-height: 1.5;
