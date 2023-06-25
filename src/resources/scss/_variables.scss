@@ -1,20 +1,90 @@
 $primary: #3f5b91;
-$primary-hover: color-mix(srgb, $primary 80%, #fff);
-$primary-emphasis: color-mix(srgb, $primary 80%, #000);
-$secondary: #c54446;
-$primary-hover: color-mix(srgb, $secondary 80%, #fff);
-$primary-emphasis: color-mix(srgb, $secondary 80%, #000);
-$tertiary: #e2ad49;
-$primary-hover: color-mix(srgb, $tertiary 80%, #fff);
-$primary-emphasis: color-mix(srgb, $tertiary 80%, #000);
+$primary-hover: color-mix(srgb, $primary 85%, #fff);
+$primary-emphasis: color-mix(srgb, $primary 85%, #000);
+$secondary: #b15e5e;
+$primary-hover: color-mix(srgb, $secondary 85%, #fff);
+$primary-emphasis: color-mix(srgb, $secondary 85%, #000);
+$tertiary: #c59c44;
+$primary-hover: color-mix(srgb, $tertiary 85%, #fff);
+$primary-emphasis: color-mix(srgb, $tertiary 85%, #000);
+$success: #3f9161;
+$danger: #c54446;
+$warning: #e2ad49;
+$info: #3f8191;
+$grey: #656c72;
+$dark: #272a2c;
+$colors: (
+  'primary': $primary,
+  'secondary': $secondary,
+  'tertiary': $tertiary,
+  'success': $success,
+  'danger': $danger,
+  'warning': $warning,
+  'info': $info,
+  'grey': $grey,
+  'dark': $dark,
+);
+$text-color: #404142;
+$background-color: #edf2f9;
+$background-color-lighter: #f1f4f8;
+$section-bg: #fff;
 
 $radius-sm: 0.25rem;
 $radius-md: 0.375rem;
-$radius-lg: 1rem;
+$radius-lg: 0.5rem;
+$radius-xl: 1rem;
 $radius-circle: 50%;
 
 $shadow-1: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
-$btn-font-size: 0.875rem;
+$btn-font-size: 1rem;
+$btn-font-size-sm: 0.875rem;
+$btn-font-size-lg: 1.25rem;
 $btn-font-weight: 400;
 $btn-line-height: 1.5;
+
+$strike-color: #dee2e6;
+
+@mixin scroll-bar {
+  overflow: auto;
+  overflow-y: overlay;
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    border: 5px solid #66666675;
+    // border-radius: 10rem;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    border: 5px solid #22222275;
+  }
+  &::-webkit-scrollbar-track {
+    position: absolute;
+    right: -3rem;
+    top: -50rem;
+    background: transparent;
+  }
+}
+
+@mixin scroll-bar-overlay {
+  scroll-behavior: smooth;
+  overflow: auto;
+  // overflow-y: overlay !important;
+  scrollbar-gutter: stable;
+
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    border: 5px solid #66666625;
+    border-radius: 10rem;
+  }
+  &::-webkit-scrollbar-track {
+    position: absolute;
+    right: -3rem;
+    top: -50rem;
+    background: transparent;
+  }
+}

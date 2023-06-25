@@ -30,34 +30,61 @@
   src: url("/fonts/Nunito/Nunito-Italic-VariableFont_wght.ttf") format("truetype");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-* {
-  font-family: "Nunito", sans-serif;
-  user-select: none;
+.Text-lineclamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.Text-lineclamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.Text-lineclamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.Text-lineclamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.Text-lineclamp-5 {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.appTitle {
-  font-size: 1.75rem;
-  margin: 1.5rem 0 1rem;
-}
-
-.appSection {
-  border-radius: 0.375rem;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  padding: 1rem;
-}
-
-.appBtn {
-  --btn-padding: .25rem .5rem;
-  --btn-font-size: 0.875rem;
+/*  Initial */
+.Btn, .Btn-lg, .Btn-sm {
+  --btn-padding: .375rem .75rem;
+  --btn-font-size: 1rem;
   --btn-font-weight: 400;
   --btn-line-height: 1.5;
-  --btn-color: #fff;
-  --btn-bg: #3f5b91;
-  --btn-border: #3f5b91;
+  --btn-color-main: #3f5b91;
+  --btn-color-side: #fff;
+  --btn-radius: 0.375rem;
+  --btn-intensity: 80%;
+}
+.Btn-sm {
+  --btn-padding: 0.25rem 0.5rem;
+  --btn-font-size: .875rem;
   --btn-radius: 0.25rem;
 }
+.Btn-lg {
+  --btn-padding: .5rem 1rem;
+  --btn-font-size: 1.25rem;
+  --btn-radius: 0.5rem;
+}
 
-.appBtn {
+.Btn, .Btn-sm, .Btn-lg {
+  appearance: none;
   display: inline-block;
   text-align: center;
   text-decoration: none;
@@ -67,21 +94,157 @@
   font-size: var(--btn-font-size);
   font-weight: var(--btn-font-weight);
   line-height: var(--btn-line-height);
-  border: 1px solid var(--btn-border);
   border-radius: var(--btn-radius);
-  background-color: var(--btn-bg);
-  color: var(--btn-color);
+  border: 1px solid;
+  border-color: var(--btn-color-main);
+  background-color: var(--btn-color-main);
+  color: var(--btn-color-side);
   transition: all 0.15s ease-in-out;
 }
-.appBtn:hover {
-  filter: brightness(1.2);
+.Btn, .Btn-sm, .Btn-lg {
+  /*  Default */
+  /*  Outline */
+  /*  Each color */
+}
+.Btn:hover, .Btn-sm:hover, .Btn-lg:hover {
+  --btn-color-override: #fff;
+}
+.Btn:active, .Btn-sm:active, .Btn-lg:active {
+  --btn-color-override: #000;
+}
+.Btn:hover, .Btn-sm:hover, .Btn-lg:hover, .Btn:active, .Btn-sm:active, .Btn-lg:active {
+  --btn-color-main-hover: color-mix(in srgb, var(--btn-color-main) var(--btn-intensity), #fff);
+  background-color: var(--btn-color-main-hover);
+  border-color: var(--btn-color-main-hover);
+}
+.Btn-outline {
+  --btn-color-main: transparent;
+  --btn-color-side: #3f5b91;
+  border-color: var(--btn-color-side);
+}
+.Btn-outline:hover {
+  color: #fff;
+  background-color: var(--btn-color-side);
+  border-color: var(--btn-color-side);
+}
+.Btn-outline:active {
+  --btn-color-side-active: color-mix(in srgb, var(--btn-color-side) var(--btn-intensity), #000);
+  background-color: var(--btn-color-side-active);
+  border-color: var(--btn-color-side-active);
+}
+.Btn-primary {
+  --btn-color-main: #3f5b91;
+}
+.Btn-primary.Btn-outline {
+  --btn-color-main: transparent;
+  --btn-color-side: #3f5b91;
+}
+.Btn-secondary {
+  --btn-color-main: #b15e5e;
+}
+.Btn-secondary.Btn-outline {
+  --btn-color-main: transparent;
+  --btn-color-side: #b15e5e;
+}
+.Btn-tertiary {
+  --btn-color-main: #c59c44;
+}
+.Btn-tertiary.Btn-outline {
+  --btn-color-main: transparent;
+  --btn-color-side: #c59c44;
+}
+.Btn-success {
+  --btn-color-main: #3f9161;
+}
+.Btn-success.Btn-outline {
+  --btn-color-main: transparent;
+  --btn-color-side: #3f9161;
+}
+.Btn-danger {
+  --btn-color-main: #c54446;
+}
+.Btn-danger.Btn-outline {
+  --btn-color-main: transparent;
+  --btn-color-side: #c54446;
+}
+.Btn-warning {
+  --btn-color-main: #e2ad49;
+}
+.Btn-warning.Btn-outline {
+  --btn-color-main: transparent;
+  --btn-color-side: #e2ad49;
+}
+.Btn-info {
+  --btn-color-main: #3f8191;
+}
+.Btn-info.Btn-outline {
+  --btn-color-main: transparent;
+  --btn-color-side: #3f8191;
+}
+.Btn-grey {
+  --btn-color-main: #656c72;
+}
+.Btn-grey.Btn-outline {
+  --btn-color-main: transparent;
+  --btn-color-side: #656c72;
+}
+.Btn-dark {
+  --btn-color-main: #272a2c;
+}
+.Btn-dark.Btn-outline {
+  --btn-color-main: transparent;
+  --btn-color-side: #272a2c;
+}
+.Btn-circle {
+  --btn-radius: 50%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+.Btn-circle > i {
+  width: var(--btn-font-size);
+  font-size: var(--btn-font-size);
+  text-align: center;
 }
 
-.appTable__head th {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+.Table {
+  --table-border-color: #dee2e6;
+  --table-hover-color: rgba(0, 0, 0, 0.025);
+  --thead-col-padding: .75rem .5rem;
+  --tbody-col-padding: .5rem;
+  --table-caption-position: top;
 }
-.appTable__body .appItem__img img {
+
+.Table {
+  width: 100%;
+  vertical-align: top;
+  border-collapse: collapse;
+  border-color: var(--table-border-color);
+  caption-side: var(--table-caption-position);
+}
+.Table-reponsive {
+  overflow-x: auto;
+}
+.Table tbody, .Table td, .Table tfoot, .Table th, .Table thead, .Table tr {
+  transition: all 0.1s ease-in-out;
+}
+.Table thead > tr > th,
+.Table thead > tr > td {
+  padding: var(--thead-col-padding);
+}
+.Table tbody tr {
+  padding: var(--tbody-col-padding);
+}
+.Table-hover > tbody > tr:hover {
+  background-color: var(--table-hover-color);
+}
+
+.Table__caption-reversed {
+  --table-caption-position: bottom;
+}
+.Table .Item__name {
+  min-width: 25%;
+}
+.Table .Item__img img {
   width: auto;
   height: 3rem;
   object-fit: cover;
@@ -91,8 +254,128 @@
   word-wrap: break-word;
   cursor: pointer;
 }
-.appTable__body .appItem__time {
+.Table .Item__time {
   font-size: 0.85rem;
   color: grey;
   font-style: italic;
+  white-space: nowrap;
+}
+.Table .Item__desc {
+  min-width: 25%;
+}
+.Table .Item__actions {
+  width: 1%;
+  white-space: nowrap;
+}
+
+/**
+  Dialog
+*/
+.Dialog {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  padding: 1rem;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  visibility: hidden;
+  transition: all 0.35s ease;
+}
+.Dialog[open] {
+  opacity: 1;
+  visibility: visible;
+}
+.Dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: hide-backdrop 0.35s ease forwards;
+}
+.Dialog[open]::backdrop {
+  animation: show-backdrop 0.35s ease forwards;
+}
+.Dialog__header {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+.Dialog__body {
+  margin: 0.75rem 0;
+  padding-bottom: 1rem;
+  font-size: 1rem;
+}
+.Dialog__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: solid 1px #eee;
+}
+
+/* End of Dialog */
+@keyframes show-backdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes hide-backdrop {
+  to {
+    opacity: 0;
+  }
+}
+* {
+  font-family: "Nunito", sans-serif;
+  user-select: none;
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
+
+:root {
+  --body-color: #404142;
+  --body-bg: #f1f4f8;
+  --section-bg: #fff;
+}
+
+body {
+  margin: 0;
+  color: var(--body-color);
+  background-color: var(--body-bg);
+  overflow: auto;
+  overflow-y: overlay;
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+}
+body::-webkit-scrollbar {
+  width: 0.5rem;
+}
+body::-webkit-scrollbar-thumb {
+  border: 5px solid rgba(102, 102, 102, 0.4588235294);
+}
+body::-webkit-scrollbar-thumb:hover {
+  border: 5px solid rgba(34, 34, 34, 0.4588235294);
+}
+body::-webkit-scrollbar-track {
+  position: absolute;
+  right: -3rem;
+  top: -50rem;
+  background: transparent;
+}
+
+.Title {
+  font-size: 1.75rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.Section {
+  background-color: var(--section-bg);
+  border-radius: 0.375rem;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 1rem;
+}
+.Section__scrollable {
+  width: 100%;
+  overflow-x: auto;
 }

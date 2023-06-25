@@ -1,0 +1,98 @@
+$grid-breakpoints: (
+  xs: 0,
+  sm: 600px,
+  md: 900px,
+  lg: 1200px,
+  xl: 1536px,
+  hd: 1920px,
+);
+
+$device-breakpoints: (
+  mobile: 0,
+  tablet: 740px,
+  desktop-lowres: 1024px,
+  desktop: 1239px,
+);
+
+@mixin col-props($size) {
+  &.#{$size}-0 {
+    display: none;
+  }
+  @for $i from 1 through 12 {
+    &.#{$size}-#{$i} {
+      flex: 0 0 calc((100% / 12) * #{$i});
+      max-width: calc((100% / 12) * #{$i});
+    }
+  }
+  @for $i from 1 through 11 {
+    &.o#{$size}-#{$i} {
+      margin-left: calc((100% / 12) * #{$i});
+    }
+  }
+}
+
+.Grid {
+  --wide-width: 1200px;
+  --row-margin: -4px;
+  --col-padding: 4px;
+}
+
+.Grid {
+  width: 100%;
+  display: block;
+  padding: 0;
+
+  .Row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: var(--row-margin);
+    margin-right: var(--row-margin);
+
+    & .Col {
+      padding-left: var(--col-padding);
+      padding-right: var(--col-padding);
+    }
+    & .Col {
+      /* Mobile */
+      @include col-props(sm);
+      /* Tablet */
+      @media (min-width: 740px) {
+        --row-margin: -8px;
+        --col-padding: 8px;
+        @include col-props(md);
+      }
+      /* Desktop low resolution */
+      @media (min-width: 1113px) {
+        --row-margin: -12px;
+        --col-padding: 12px;
+        @include col-props(lg);
+      }
+    }
+
+    &-wide {
+      max-width: var(--wide-width);
+      margin: 0 auto;
+      transition: all 0.15s linear;
+      /* Tablet -> Desktop low resolution */
+      @media (min-width: 740px) and (max-width: 1023px) {
+        --wide-width: 644px;
+      }
+      /* Desktop low resolution -> Desktop common resolution */
+      @media (min-width: 1024px) and (max-width: 1239px) {
+        --wide-width: 984px;
+        --row-margin: -8px;
+        --col-padding: 8px;
+        @include col-props(lg);
+      }
+    }
+
+    &-gutters-0 {
+      margin-left: 0;
+      margin-right: 0;
+      & .Col {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+}

@@ -1,74 +1,42 @@
 @import 'fonts';
 @import 'variables';
+@import 'components/text';
+@import 'components/button';
+@import 'components/table';
+@import 'components/dialog';
 
 * {
   font-family: 'Nunito', sans-serif;
   user-select: none;
+  box-sizing: border-box;
+  word-wrap: break-word;
 }
 
-.appTitle {
+:root {
+  --body-color: #{$text-color};
+  --body-bg: #{$background-color-lighter};
+  --section-bg: #{$section-bg};
+}
+
+body {
+  margin: 0;
+  color: var(--body-color);
+  background-color: var(--body-bg);
+  @include scroll-bar;
+}
+
+.Title {
   font-size: 1.75rem;
   margin: 1.5rem 0 1rem;
 }
 
-.appSection {
+.Section {
+  background-color: var(--section-bg);
   border-radius: $radius-md;
   box-shadow: $shadow-1;
   padding: 1rem;
-}
-
-.appBtn {
-  --btn-padding: 0.25rem 0.5rem;
-  --btn-font-size: #{$btn-font-size};
-  --btn-font-weight: #{$btn-font-weight};
-  --btn-line-height: #{$btn-line-height};
-  --btn-color: #fff;
-  --btn-bg: #{$primary};
-  --btn-border: #{$primary};
-  --btn-radius: #{$radius-sm};
-}
-.appBtn {
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  vertical-align: middle;
-  cursor: pointer;
-  padding: var(--btn-padding);
-  font-size: var(--btn-font-size);
-  font-weight: var(--btn-font-weight);
-  line-height: var(--btn-line-height);
-  border: 1px solid var(--btn-border);
-  border-radius: var(--btn-radius);
-  background-color: var(--btn-bg);
-  color: var(--btn-color);
-  transition: all 0.15s ease-in-out;
-  &:hover {
-    filter: brightness(1.2);
-  }
-}
-
-.appTable {
-  &__head th {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-  }
-  &__body {
-    .appItem {
-      &__img img {
-        width: auto;
-        height: 3rem;
-        object-fit: cover;
-        overflow: hidden;
-        font-size: 0.75rem;
-        color: grey;
-        word-wrap: break-word;
-        cursor: pointer;
-      }
-      &__time {
-        font-size: 0.85rem;
-        color: grey;
-        font-style: italic;
-      }
-    }
+  &__scrollable {
+    width: 100%;
+    overflow-x: auto;
   }
 }

@@ -1,5 +1,5 @@
 
-<h1 class="appTitle">List of available Courses</h1>
+<h1 class="Title">List of available Courses</h1>
 
 <aside class="row mb-3">
   <nav class="col-12 d-flex">
@@ -19,69 +19,70 @@
   </nav>
 </aside>
 
-<section class="appSection">
-  <table class="table table-hover appTable">
-    <thead class="appTable__head">
-      <tr>
-        <th scope="col">
-          <input type="checkbox" id="">
-        </th>
-        <th>#</th>
-        <th>Name</th>
-        <th>Image</th>
-        <th>Description</th>
-        <th>Created</th>
-        <th>Updated</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody class="appTable__body">
-      {{#each data}}
-        <tr class="appItem">
-          <td scope="row"><input type="checkbox" name="items[]" value="{{this._id}}"></td>
-          <td>{{increase @index 1}}</td>
-          <td class="appItem__name">{{this.name}}</td>
-          <td class="appItem__img"><img src="/img/courses/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}"></td>
-          <td class="appItem__desc">
-            <div class="popover-content" data-content="popover" data-for="desc-popover" data-id="{{@index}}">{{this.desc}}</div>
-            <button popovertarget="desc-popover" data-trigger="popover" data-get="{{@index}}">...more</button>
-          </td>
-          <td class="appItem__time">
-            {{dateFormat this.createdAt 'date'}}
-            <br>
-            {{dateFormat this.createdAt 'time'}}
-          </td>
-          <td class="appItem__time">
-            {{dateFormat this.updatedAt 'date'}}
-            <br>
-            {{dateFormat this.updatedAt 'time'}}
-          </td>
-          <td class="appItem__actions">
-            <a href="/courses{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="btn btn-outline-secondary btn-sm">
-              <i class="fa-regular fa-pen-to-square"></i>
-            </a>
-            <button class="appItem__actions-delete btn btn-outline-danger btn-sm" title="Delete '{{this.name}}'"
-              data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
-              <i class="fa-regular fa-trash"></i>
-            </button>
-            
-            <button class="appItem__actions-delete appBtn" title="Delete '{{this.name}}'"
-              data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
-              <i class="fa-regular fa-trash"></i>
-            </button>
-          </td>
+<section class="Section">
+  <div class="Section__scrollable">
+    <table class="table Table Table-hover">
+      {{!-- <caption>List</caption> --}}
+      <thead>
+        <tr>
+          <th scope="col">
+            <input type="checkbox" id="">
+          </th>
+          <th>#</th>
+          <th>Name</th>
+          <th>Image</th>
+          <th>Description</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>Actions</th>
         </tr>
-      {{/each}}
-    </tbody>
-    {{!-- <tfoot>
-      <th>
-        <div class="btn-group" role="group">
-          <button type="button" value="grid" class="btn btn-outline-secondary btn-sm">Grid</button>
-          <button type="button" value="list" class="btn btn-outline-secondary btn-sm">List</button>
-        </div>
-      </th>
-    </tfoot> --}}
-  </table>
+      </thead>
+      <tbody>
+        {{#each data}}
+          <tr class="Item">
+            <td scope="row"><input type="checkbox" name="items[]" value="{{this._id}}"></td>
+            <td>{{increase @index 1}}</td>
+            <td class="Item__name" width="25%">
+              <p class="Text-lineclamp-3">{{this.name}}</p>
+            </td>
+            <td class="Item__img">
+              <img src="/img/courses/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">
+            </td>
+            <td class="Item__desc" width="25%">
+              <p class="Text-lineclamp-3">{{this.desc}}</p>
+              {{!-- <div class="popover-content" data-content="popover" data-for="desc-popover" data-id="{{@index}}"></div> --}}
+              {{!-- <button popovertarget="desc-popover" data-trigger="popover" data-get="{{@index}}">...more</button> --}}
+            </td>
+            <td class="Item__time">
+              {{dateFormat this.createdAt 'date'}}
+              <br>
+              {{dateFormat this.createdAt 'time'}}
+            </td>
+            <td class="Item__time">
+              {{dateFormat this.updatedAt 'date'}}
+              <br>
+              {{dateFormat this.updatedAt 'time'}}
+            </td>
+            <td class="Item__actions">
+              <a href="/courses{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn-sm Btn-outline Btn-grey Btn-circle">
+                <i class="fa-regular fa-pen-to-square"></i>
+              </a>
+              <button class="Item__actions-delete Btn-sm Btn-outline Btn-danger Btn-circle" title="Delete '{{this.name}}'"
+                data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+                <i class="fa-regular fa-trash"></i>
+              </button>            
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+      <tfoot>
+        <th colspan="8">
+        </th>
+      </tfoot>
+      <div id="desc-popover" popover>
+      </div>
+    </table>
+  </div>
   {{!-- {{#each data}}
     <article class="col-sm-4 col-lg-3 mb-4">
       <div class="card course-item" style="width: 100%;">
@@ -108,19 +109,14 @@
   {{/each}} --}}
 </section>
 
-{{!-- Popover --}}
-<div id="desc-popover" popover>
-</div>
-{{!-- End of popover --}}
-
 {{!-- Modal Delete --}}
-<dialog id="delete-dialog" class="appDialog">
-  <form class="appDialog__form" method="POST">
-    <div class="appDialog__header">Confirmation</div>
-    <div class="appDialog__body">
+<dialog id="delete-dialog" class="Dialog">
+  <form class="Dialog__form" method="POST">
+    <div class="Dialog__header">Confirmation</div>
+    <div class="Dialog__body">
       You really want to perform this action?
     </div>
-    <div class="appDialog__footer">
+    <div class="Dialog__footer">
       <input type="hidden" name="ids[]" value="">
       <button type="submit" class="btn btn-danger">Yes, delete it!</button>
       <button type="submit" class="btn btn-secondary" formmethod="dialog">Cancel</button>
