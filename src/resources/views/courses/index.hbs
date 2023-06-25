@@ -1,8 +1,8 @@
 
 <h1 class="Title">List of available Courses</h1>
 
-<aside class="row mb-3">
-  <nav class="col-12 d-flex">
+<aside class="mb-3">
+  <nav class="Col sm-12 d-flex">
     <ul class="nav me-auto">
       <li class="nav-item">
         <a class="btn btn-outline-success btn-sm" href="/courses{{routeI 'create'}}">
@@ -40,7 +40,7 @@
       <tbody>
         {{#each data}}
           <tr class="Item">
-            <td scope="row"><input type="checkbox" name="items[]" value="{{this._id}}"></td>
+            <td scope="Row"><input type="checkbox" name="items[]" value="{{this._id}}"></td>
             <td>{{increase @index 1}}</td>
             <td class="Item__name" width="25%">
               <p class="Text-lineclamp-3">{{this.name}}</p>

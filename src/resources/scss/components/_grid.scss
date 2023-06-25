@@ -41,6 +41,8 @@ $device-breakpoints: (
   width: 100%;
   display: block;
   padding: 0;
+  margin: 0 auto;
+  transition: all 0.15s linear;
 
   .Row {
     display: flex;
@@ -69,23 +71,6 @@ $device-breakpoints: (
       }
     }
 
-    &-wide {
-      max-width: var(--wide-width);
-      margin: 0 auto;
-      transition: all 0.15s linear;
-      /* Tablet -> Desktop low resolution */
-      @media (min-width: 740px) and (max-width: 1023px) {
-        --wide-width: 644px;
-      }
-      /* Desktop low resolution -> Desktop common resolution */
-      @media (min-width: 1024px) and (max-width: 1239px) {
-        --wide-width: 984px;
-        --row-margin: -8px;
-        --col-padding: 8px;
-        @include col-props(lg);
-      }
-    }
-
     &-gutters-0 {
       margin-left: 0;
       margin-right: 0;
@@ -93,6 +78,21 @@ $device-breakpoints: (
         padding-left: 0;
         padding-right: 0;
       }
+    }
+  }
+
+  &-wide {
+    max-width: var(--wide-width);
+    /* Tablet -> Desktop low resolution */
+    @media (min-width: 740px) and (max-width: 1023px) {
+      --wide-width: 644px;
+    }
+    /* Desktop low resolution -> Desktop common resolution */
+    @media (min-width: 1024px) and (max-width: 1239px) {
+      --wide-width: 984px;
+      --row-margin: -8px;
+      --col-padding: 8px;
+      @include col-props(lg);
     }
   }
 }
