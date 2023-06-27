@@ -1,0 +1,114 @@
+$media-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  hd: 1400px,
+);
+
+$container-max-widths: (
+  xs: 0,
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  hd: 1320px,
+);
+
+@mixin make-breakpoint($name, $max-width, $breakpoints: $media-breakpoints) {
+  $min-width: map-get($breakpoints, $name);
+  @if $min-width {
+    @media (min-width: $min-width) {
+      @if $max-width != 0 {
+        max-width: $max-width;
+      }
+      @content;
+    }
+  }
+}
+
+@mixin make-12col($size) {
+  &.#{$size}-0 {
+    display: none;
+  }
+  // Columns 1 -> 12
+  @for $i from 1 through 12 {
+    &.#{$size}-#{$i} {
+      display: unset;
+      flex: 0 0 calc((100% / 12) * #{$i});
+      max-width: calc((100% / 12) * #{$i});
+    }
+  }
+  // Offset of Columns 1 -> 12
+  @for $i from 1 through 11 {
+    &.o#{$size}-#{$i} {
+      margin-left: calc((100% / 12) * #{$i});
+    }
+  }
+}
+
+.Container {
+  --container-max-width: 100%;
+  --container-wide-width: 100%;
+  --container-spacing: 0.75rem;
+  --row-margin: calc(0rem - var(--container-spacing));
+  --col-padding: var(--container-spacing);
+}
+
+.Container {
+  // gap: var(--col-padding);
+  width: 100%;
+  max-width: var(--container-max-width);
+  padding: 0 var(--container-spacing);
+  margin: 0 auto;
+  transition: all 0.15s linear;
+}
+
+.Container {
+  .Row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 var(--row-margin);
+
+    & > * {
+      flex-shrink: 0;
+      width: 100%;
+      max-width: 100%;
+      padding: 0 var(--col-padding);
+    }
+
+    & .Col {
+      padding: 0 var(--col-padding);
+    }
+
+    &-gutters-0 {
+      margin: 0 0;
+      & .Col {
+        padding: 0 0;
+      }
+    }
+  }
+
+  $self: #{&};
+  &-wide {
+    @extend #{$self};
+    min-width: var(--container-wide-width);
+  }
+
+  @each $breakpoint, $container-max-width in $container-max-widths {
+    @include make-breakpoint($breakpoint, $container-max-width) {
+      @if ($breakpoint == 'xs') or
+        ($breakpoint == 'sm') or
+        ($breakpoint == 'md')
+      {
+        --container-spacing: 0.5rem;
+      } @else {
+        --container-spacing: 0.75rem;
+      }
+      .Row .Col {
+        @include make-12col($breakpoint);
+      }
+    }
+  }
+}

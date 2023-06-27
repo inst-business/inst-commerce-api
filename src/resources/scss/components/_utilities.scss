@@ -1,0 +1,11 @@
+.Box {
+  width: 100%;
+  background-color: var(--section-bg);
+  border-radius: $radius-md;
+  box-shadow: $shadow-1;
+  padding: 1rem;
+
+  &-scrollable {
+    overflow-x: auto;
+  }
+}

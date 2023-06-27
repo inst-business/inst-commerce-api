@@ -2,9 +2,9 @@
 const qs = {
   o: document.querySelector.bind(document),
   a: document.querySelectorAll.bind(document),
-  $: document.getElementById('app'),
-  $o: document.getElementById('app').querySelector.bind(document.getElementById('app')),
-  $a: document.getElementById('app').querySelectorAll.bind(document.getElementById('app')),
+  $: document.getElementById('App'),
+  $o: document.getElementById('App').querySelector.bind(document.getElementById('App')),
+  $a: document.getElementById('App').querySelectorAll.bind(document.getElementById('App')),
 }
 
 export default qs

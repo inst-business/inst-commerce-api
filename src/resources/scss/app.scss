@@ -1,10 +1,11 @@
 @import 'fonts';
 @import 'variables';
-@import 'components/grid';
+@import 'components/container';
 @import 'components/text';
 @import 'components/button';
 @import 'components/table';
 @import 'components/dialog';
+@import 'components/utilities';
 
 * {
   font-family: 'Nunito', sans-serif;
@@ -23,21 +24,16 @@ body {
   margin: 0;
   color: var(--body-color);
   background-color: var(--body-bg);
+  min-height: 100vh;
   @include scroll-bar;
+}
+
+.App {
+  width: 100%;
+  min-height: 100vh;
 }
 
 .Title {
   font-size: 1.75rem;
   margin: 1.5rem 0 1rem;
-}
-
-.Section {
-  background-color: var(--section-bg);
-  border-radius: $radius-md;
-  box-shadow: $shadow-1;
-  padding: 1rem;
-  &__scrollable {
-    width: 100%;
-    overflow-x: auto;
-  }
 }

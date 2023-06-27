@@ -1,8 +1,9 @@
 
 <h1 class="Title">List of available Courses</h1>
 
-<aside class="mb-3">
-  <nav class="Col sm-12 d-flex">
+<aside class="Row mb-3">
+  {{!-- <div class="Col"></div> --}}
+  <nav class="Col sm-12 lg-8 olg-4 d-flex">
     <ul class="nav me-auto">
       <li class="nav-item">
         <a class="btn btn-outline-success btn-sm" href="/courses{{routeI 'create'}}">
@@ -19,8 +20,8 @@
   </nav>
 </aside>
 
-<section class="Section">
-  <div class="Section__scrollable">
+<section>
+  <div class="Box Box-scrollable">
     <table class="table Table Table-hover">
       {{!-- <caption>List</caption> --}}
       <thead>
@@ -43,13 +44,13 @@
             <td scope="Row"><input type="checkbox" name="items[]" value="{{this._id}}"></td>
             <td>{{increase @index 1}}</td>
             <td class="Item__name" width="25%">
-              <p class="Text-lineclamp-3">{{this.name}}</p>
+              <p class="Text-limit-3">{{this.name}}</p>
             </td>
             <td class="Item__img">
               <img src="/img/courses/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">
             </td>
             <td class="Item__desc" width="25%">
-              <p class="Text-lineclamp-3">{{this.desc}}</p>
+              <p class="Text-limit-3">{{this.desc}}</p>
               {{!-- <div class="popover-content" data-content="popover" data-for="desc-popover" data-id="{{@index}}"></div> --}}
               {{!-- <button popovertarget="desc-popover" data-trigger="popover" data-get="{{@index}}">...more</button> --}}
             </td>
