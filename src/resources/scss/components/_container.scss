@@ -94,6 +94,14 @@ $container-max-widths: (
   &-wide {
     @extend #{$self};
     min-width: var(--container-wide-width);
+    // .Row {
+    //   padding: 0 var(--container-spacing);
+    //   // column-gap: var(--container-spacing);
+    //   .Col {
+    //     padding: 0;
+
+    //   }
+    // }
   }
 
   @each $breakpoint, $container-max-width in $container-max-widths {
