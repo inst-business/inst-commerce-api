@@ -1,45 +1,83 @@
-$primary: #3f5b91;
-$primary-hover: color-mix(srgb, $primary 85%, #fff);
-$primary-emphasis: color-mix(srgb, $primary 85%, #000);
-$secondary: #b15e5e;
-$primary-hover: color-mix(srgb, $secondary 85%, #fff);
-$primary-emphasis: color-mix(srgb, $secondary 85%, #000);
-$tertiary: #c59c44;
-$primary-hover: color-mix(srgb, $tertiary 85%, #fff);
-$primary-emphasis: color-mix(srgb, $tertiary 85%, #000);
-$success: #3f9161;
-$danger: #c54446;
-$warning: #e2ad49;
-$info: #3f8191;
-$grey: #656c72;
-$dark: #272a2c;
+// Colors
+$color-primary: #3f5b91;
+$color-primary-hover: color-mix(in srgb, $color-primary 85%, #fff);
+$color-primary-emphasis: color-mix(in srgb, $color-primary 85%, #000);
+$color-secondary: #b15e5e;
+$color-primary-hover: color-mix(in srgb, $color-secondary 85%, #fff);
+$color-primary-emphasis: color-mix(in srgb, $color-secondary 85%, #000);
+$color-tertiary: #c59c44;
+$color-primary-hover: color-mix(in srgb, $color-tertiary 85%, #fff);
+$color-primary-emphasis: color-mix(in srgb, $color-tertiary 85%, #000);
+$color-success: #3f9161;
+$color-danger: #c54446;
+$color-warning: #e2ad49;
+$color-info: #3f8191;
+$color-grey: #656c72;
+$color-dark: #272a2c;
+$color-light: #e8eaf4;
 $colors: (
-  'primary': $primary,
-  'secondary': $secondary,
-  'tertiary': $tertiary,
-  'success': $success,
-  'danger': $danger,
-  'warning': $warning,
-  'info': $info,
-  'grey': $grey,
-  'dark': $dark,
+  'primary': $color-primary,
+  'secondary': $color-secondary,
+  'tertiary': $color-tertiary,
+  'success': $color-success,
+  'danger': $color-danger,
+  'warning': $color-warning,
+  'info': $color-info,
+  'grey': $color-grey,
+  'dark': $color-dark,
 );
-$text-color: #404142;
-$background-color: #edf2f9;
-$background-color-lighter: #f1f4f8;
-$section-bg: #fff;
 
+// Make color variant or emphasized
+@function make-color-variant($color) {
+  $variant: color-mix(in srgb, $color 85%, #fff);
+  @return $variant;
+}
+@function make-color-emphasis($color) {
+  $emphasis: color-mix(in srgb, $color 85%, #000);
+  @return $emphasis;
+}
+
+// Colors for main content
+$color-txt-dark: #404142;
+$color-txt-grey: #677483;
+$color-txt-light: #fff;
+$color-txt-muted: #7d8da1;
+$color-bg: #f1f4f8;
+$color-bg-section: #fff;
+// Colors for main content (dark mode)
+$color-txt-dark-darkened: #f1f4f8;
+$color-txt-grey-darkened: #a3bdcc;
+$color-txt-light-darkened: #404142;
+$color-bg-darkened: #181a1e;
+$color-bg-section-darkened: #202528;
+
+// Border radius
 $radius-sm: 0.25rem;
 $radius-md: 0.375rem;
 $radius-lg: 0.5rem;
 $radius-xl: 1rem;
 $radius-circle: 50%;
 
-$shadow-1: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+// Box shadow
+$shadow-1: rgba(64, 65, 66, 0.1) 0px 2px 8px 0px; // Based on $color-dark
+$shadow-1-darkened: rgba(241, 244, 248, 0.1) 0px 2px 8px 0px; // Based on $color-dark
 
-$btn-font-size: 1rem;
-$btn-font-size-sm: 0.875rem;
-$btn-font-size-lg: 1.25rem;
+// Transition
+$transition-1: all 0.15s ease-in-out;
+$transition-2: all 0.3s ease;
+
+// Font properties
+$font-size: 1rem;
+$font-size-xs: 0.65rem;
+$font-size-sm: 0.875rem;
+$font-size-lg: 1.25rem;
+$font-size-xl: 1.75rem;
+$font-line-height: 1.25rem;
+
+$btn-font-size: $font-size;
+$btn-font-size-sm: $font-size-sm;
+$btn-font-size-lg: $font-size-lg;
+$btn-font-size-xl: $font-size-xl;
 $btn-font-weight: 400;
 $btn-line-height: 1.5;
 

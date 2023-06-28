@@ -7,25 +7,78 @@
 @import 'components/dialog';
 @import 'components/utilities';
 
+@import 'app/sidebar';
+
 * {
-  font-family: 'Nunito', sans-serif;
-  user-select: none;
   box-sizing: border-box;
   word-wrap: break-word;
+  user-select: none;
+  text-decoration: none;
+  appearance: none;
 }
 
 :root {
-  --body-color: #{$text-color};
-  --body-bg: #{$background-color-lighter};
-  --section-bg: #{$section-bg};
+  --color-primary: #{$color-primary};
+  --color-secondary: #{$color-secondary};
+  --color-tertiary: #{$color-tertiary};
+  --color-success: #{$color-success};
+  --color-danger: #{$color-danger};
+  --color-warning: #{$color-warning};
+  --color-info: #{$color-info};
+  --color-grey: #{$color-grey};
+  --color-dark: #{$color-dark};
+  --color-light: #{$color-light};
+
+  --color-txt-dark: #{$color-txt-dark};
+  --color-txt-grey: #{$color-txt-grey};
+  --color-txt-light: #{$color-txt-light};
+  --color-txt-muted: #{$color-txt-muted};
+  --color-bg: #{$color-bg};
+  --color-bg-section: #{$color-bg-section};
+
+  --radius-sm: #{$radius-sm};
+  --radius-md: #{$radius-md};
+  --radius-lg: #{$radius-lg};
+  --radius-xl: #{$radius-xl};
+  --radius-circle: #{$radius-circle};
+
+  --font-size: #{$font-size};
+  --font-size-xs: #{$font-size-xs};
+  --font-size-sm: #{$font-size-sm};
+  --font-size-lg: #{$font-size-lg};
+  --font-size-xl: #{$font-size-xl};
+  --font-line-height: #{$font-line-height};
+
+  --shadow-1: #{$shadow-1};
+
+  --transition-1: #{$transition-1};
+}
+
+.DarkMode {
+  --color-txt-dark: #{$color-txt-dark-darkened};
+  --color-txt-grey: #{$color-txt-grey-darkened};
+  --color-txt-light: #{$color-txt-light-darkened};
+  --color-bg: #{$color-bg-darkened};
+  --color-bg-section: #{$color-bg-section-darkened};
+  --shadow-1: #{$shadow-1-darkened};
 }
 
 body {
-  margin: 0;
-  color: var(--body-color);
-  background-color: var(--body-bg);
+  font-family: 'Nunito', sans-serif;
   min-height: 100vh;
+  margin: 0;
+  // padding: 1rem 0;
+  overflow-x: hidden;
+  user-select: none;
+  color: var(--color-txt-dark);
+  background-color: var(--color-bg);
   @include scroll-bar;
+}
+
+img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
 }
 
 .App {

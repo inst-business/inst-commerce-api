@@ -1,0 +1,96 @@
+.Sidebar {
+  --sidebar-padding: 1rem;
+  --sidebar-logo-size: 2rem;
+  --sidebar-link-height: 3rem;
+  --sidebar-link-transition: all 0.3s ease;
+  min-height: 100vh;
+  padding-top: var(--sidebar-padding);
+  padding-bottom: var(--sidebar-padding);
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &-logo {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      & img {
+        width: var(--sidebar-logo-size);
+        height: var(--sidebar-logo-size);
+      }
+    }
+
+    &-close {
+      padding-right: 1rem;
+      display: none;
+    }
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: var(--sidebar-padding);
+    height: calc(100vh - var(--sidebar-padding) * 3 - var(--sidebar-logo-size));
+    padding-top: var(--sidebar-padding);
+    padding-bottom: var(--sidebar-padding);
+    background-color: var(--color-bg-section);
+    box-shadow: var(--shadow-1);
+    border-radius: var(--radius-md);
+    transition: var(--transition-1);
+    overflow: hidden;
+
+    &:hover {
+      box-shadow: none;
+    }
+
+    a {
+      --link-padding: 1.5rem;
+      font-size: var(--font-size-lg);
+      display: flex;
+      align-items: center;
+      color: var(--color-txt-grey);
+      height: var(--sidebar-link-height);
+      gap: 1rem;
+      position: relative;
+      padding-left: var(--link-padding);
+      padding-right: var(--link-padding);
+      transition: var(--sidebar-link-transition);
+      // white-space: nowrap;
+
+      &:last-child {
+        position: absolute;
+        bottom: 1rem;
+        width: 100%;
+      }
+
+      .icon {
+        // color: var(--color-txt-primary);
+        width: calc(var(--font-size-lg) * 1.25);
+      }
+
+      &:hover {
+        color: var(--color-primary);
+        padding-left: calc(var(--link-padding) * 1.25);
+        padding-right: calc(var(--link-padding) * 0.75);
+      }
+
+      &.active {
+        cursor: none;
+        pointer-events: none;
+        color: var(--color-primary);
+        background-color: var(--color-light);
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          width: 2px;
+          height: 100%;
+          background-color: var(--color-primary);
+        }
+      }
+    }
+  }
+}

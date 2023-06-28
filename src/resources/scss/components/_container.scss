@@ -60,8 +60,10 @@ $container-max-widths: (
   // gap: var(--col-padding);
   width: 100%;
   max-width: var(--container-max-width);
-  padding: 0 var(--container-spacing);
-  margin: 0 auto;
+  padding-left: var(--container-spacing);
+  padding-right: var(--container-spacing);
+  margin-left: auto;
+  margin-right: auto;
   transition: all 0.15s linear;
 }
 
@@ -69,23 +71,28 @@ $container-max-widths: (
   .Row {
     display: flex;
     flex-wrap: wrap;
-    margin: 0 var(--row-margin);
+    margin-left: var(--row-margin);
+    margin-right: var(--row-margin);
 
     & > * {
       flex-shrink: 0;
       width: 100%;
       max-width: 100%;
-      padding: 0 var(--col-padding);
+      padding-left: var(--col-padding);
+      padding-right: var(--col-padding);
     }
 
     & .Col {
-      padding: 0 var(--col-padding);
+      padding-left: var(--col-padding);
+      padding-right: var(--col-padding);
     }
 
     &-gutters-0 {
-      margin: 0 0;
+      margin-left: 0;
+      margin-right: 0;
       & .Col {
-        padding: 0 0;
+        padding-left: 0;
+        padding-right: 0;
       }
     }
   }

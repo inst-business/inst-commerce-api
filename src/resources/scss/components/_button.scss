@@ -4,10 +4,11 @@
   --btn-font-size: 1rem;
   --btn-font-weight: 400;
   --btn-line-height: 1.5;
-  --btn-color-main: #{$primary};
+  --btn-color-main: #{$color-primary};
   --btn-color-side: #fff;
   --btn-radius: #{$radius-md};
   --btn-intensity: 80%;
+  --btn-transition: #{$transition-1};
   $self: #{&};
   &-sm {
     @extend #{$self};
@@ -39,7 +40,7 @@
   border-color: var(--btn-color-main);
   background-color: var(--btn-color-main);
   color: var(--btn-color-side);
-  transition: all 0.15s ease-in-out;
+  transition: var(--btn-transition);
   $self: #{&};
   &-sm,
   &-lg {
@@ -69,7 +70,7 @@
   /*  Outline */
   &-outline {
     --btn-color-main: transparent;
-    --btn-color-side: #{$primary};
+    --btn-color-side: #{$color-primary};
     border-color: var(--btn-color-side);
 
     &:hover {
