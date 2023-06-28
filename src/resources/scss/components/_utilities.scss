@@ -16,6 +16,7 @@
 
 @mixin make-badge {
   padding: 4px 4px 3px;
+  margin-top: -3px;
   font-size: $font-size-xs;
   font-weight: 600;
   line-height: 1;

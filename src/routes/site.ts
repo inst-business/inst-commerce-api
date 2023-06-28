@@ -1,14 +1,12 @@
 import express from 'express'
 import siteController from '@controllers/SiteController'
+import { ROUTES } from '@/config/global/const'
+import _ from '@/utils/utils'
 
 const router = express.Router()
 
-router.get('/search', siteController.search)
-router.get('/', siteController.index)
-
-// app.post('/search', (req, res) => {
-//   console.log(req.body)
-//   res.send('')
-// })
+router.get(ROUTES.I.INDEX, _.routeAsync(async () => {
+}, _.renderView('dashboard/index')
+))
 
 export default router
