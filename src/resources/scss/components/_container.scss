@@ -85,6 +85,7 @@ $container-max-widths: (
     & .Col {
       padding-left: var(--col-padding);
       padding-right: var(--col-padding);
+      padding-bottom: var(--col-padding);
     }
 
     &-gutters-0 {

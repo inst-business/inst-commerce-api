@@ -1,0 +1,128 @@
+
+<h1 class="Title">List of available Courses</h1>
+
+<div class="Row mb-3">
+  <nav class="Col d-flex">
+    <ul class="nav me-auto">
+      <li class="nav-item">
+        <a class="btn btn-outline-success btn-sm" href="/courses{{routeI 'create'}}">
+          <i class="fa-regular fa-circle-plus"></i> Add new
+        </a>
+      </li>
+    </ul>
+    <div class="view-switcher" role="toolbar">
+      <div class="btn-group" role="group">
+        <button type="button" value="grid" class="btn btn-outline-secondary btn-sm">Grid</button>
+        <button type="button" value="list" class="btn btn-outline-secondary btn-sm">List</button>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<section>
+  <div class="Box Box-scrollable">
+    <table class="table Table Table-hover">
+      {{!-- <caption>List</caption> --}}
+      <thead>
+        <tr>
+          <th scope="col">
+            <input type="checkbox" id="">
+          </th>
+          <th>#</th>
+          <th>Name</th>
+          <th>Image</th>
+          <th>Description</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each data}}
+          <tr class="Item">
+            <td scope="Row"><input type="checkbox" name="items[]" value="{{this._id}}"></td>
+            <td>{{increase @index 1}}</td>
+            <td class="Item__name" width="25%">
+              <p class="Text-limit-3">{{this.name}}</p>
+            </td>
+            <td class="Item__img">
+              <img src="/img/courses/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">
+            </td>
+            <td class="Item__desc" width="25%">
+              <p class="Text-limit-3">{{this.desc}}</p>
+              {{!-- <div class="popover-content" data-content="popover" data-for="desc-popover" data-id="{{@index}}"></div> --}}
+              {{!-- <button popovertarget="desc-popover" data-trigger="popover" data-get="{{@index}}">...more</button> --}}
+            </td>
+            <td class="Item__time">
+              {{dateFormat this.createdAt 'date'}}
+              <br>
+              {{dateFormat this.createdAt 'time'}}
+            </td>
+            <td class="Item__time">
+              {{dateFormat this.updatedAt 'date'}}
+              <br>
+              {{dateFormat this.updatedAt 'time'}}
+            </td>
+            <td class="Item__actions">
+              <a href="/courses{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn-sm Btn-outline Btn-grey Btn-circle">
+                <i class="fa-regular fa-pen-to-square"></i>
+              </a>
+              <button class="Item__actions-delete Btn-sm Btn-outline Btn-danger Btn-circle" title="Delete '{{this.name}}'"
+                data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+                <i class="fa-regular fa-trash"></i>
+              </button>            
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+      <tfoot>
+        <th colspan="8">
+        </th>
+      </tfoot>
+      <div id="desc-popover" popover>
+      </div>
+    </table>
+  </div>
+  {{!-- {{#each data}}
+    <article class="col-sm-4 col-lg-3 mb-4">
+      <div class="card course-item" style="width: 100%;">
+        <a href="/courses{{routeI 'show' this._id}}">
+          <img src="/img/courses/{{this.img}}" class="card-img-top" alt="{{this.name}}">
+        </a>
+        <div class="card-body">
+          <a href="/courses{{routeI 'show' this._id}}">
+            <h5 class="card-title course-item__title">{{this.name}}</h5>
+            <span></span>
+          </a>
+          <p class="card-text">{{this.desc}}</p>
+          <div class="d-flex justify-content-end gap-2">
+            <a href="/courses{{routeI 'edit' this._id}}" class="btn btn-outline-primary btn-sm">
+              Edit
+            </a>
+            <button class="btn btn-outline-danger btn-sm delete-course" data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </article>
+  {{/each}} --}}
+</section>
+
+{{!-- Modal Delete --}}
+<dialog id="delete-dialog" class="Dialog">
+  <form class="Dialog__form" method="POST">
+    <div class="Dialog__header">Confirmation</div>
+    <div class="Dialog__body">
+      You really want to perform this action?
+    </div>
+    <div class="Dialog__footer">
+      <input type="hidden" name="ids[]" value="">
+      <button type="submit" class="btn btn-danger">Yes, delete it!</button>
+      <button type="submit" class="btn btn-secondary" formmethod="dialog">Cancel</button>
+    </div>
+  </form>
+</dialog>
+{{!-- End of Modal Delete --}}
+
+<script src="/js/pages/courses/index.js"></script>

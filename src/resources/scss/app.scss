@@ -52,6 +52,12 @@
   --shadow-1: #{$shadow-1};
 
   --transition-1: #{$transition-1};
+
+  --spacing-xs: #{spacing-xs};
+  --spacing-sm: #{spacing-sm};
+  --spacing-md: #{spacing-md};
+  --spacing-lg: #{spacing-lg};
+  --spacing-xl: #{spacing-xl};
 }
 
 .DarkMode {

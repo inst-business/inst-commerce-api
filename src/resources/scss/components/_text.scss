@@ -1,57 +1,57 @@
 @mixin gen-text-properties {
   margin-top: 0;
   margin-bottom: 0;
-  // line-height: var(--font-line-height);
+  // line-height: $font-line-height;
 }
 
 .Text-link,
 a {
-  color: var(--color-txt-dark);
+  color: $color-txt-dark;
   text-decoration: none;
   @include gen-text-properties;
 }
 .Text-h1,
 h1 {
   font-weight: 800;
-  font-size: var(--font-size-xl);
+  font-size: $font-size-xl;
   @include gen-text-properties;
 }
 .Text-h2,
 h2 {
   font-weight: 600;
-  font-size: var(--font-size-lg);
+  font-size: $font-size-lg;
   @include gen-text-properties;
 }
 .Text-h3,
 h3 {
   font-weight: 500;
-  font-size: var(--font-size-sm);
+  font-size: $font-size-sm;
   @include gen-text-properties;
 }
 .Text-small,
 small {
-  font-size: var(--font-size-xs);
+  font-size: $font-size-xs;
   @include gen-text-properties;
 }
 p {
-  font-size: var(--font-size);
-  color: var(--color-txt-grey);
+  font-size: $font-size;
+  color: $color-txt-grey;
   @include gen-text-properties;
 }
 b {
-  color: var(--color-txt-dark);
+  color: $color-txt-dark;
   @include gen-text-properties;
 }
 
 .Text {
-  font-size: var(--font-size);
+  font-size: $font-size;
   @include gen-text-properties;
 
   &-brand {
     font-weight: 900;
   }
   &-muted {
-    color: var(--color-txt-muted);
+    color: $color-txt-muted;
   }
 
   @for $i from 1 through 5 {
