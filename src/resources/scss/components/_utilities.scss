@@ -1,3 +1,7 @@
+// @mixin gen-box-styles {
+
+// }
+// Box
 .Box {
   width: 100%;
   background-color: var(--color-bg-section);
@@ -8,12 +12,12 @@
   &:hover {
     box-shadow: none;
   }
-
   &-scrollable {
     overflow-x: auto;
   }
 }
 
+// Badge
 @mixin make-badge {
   padding: 4px 4px 3px;
   margin-top: -3px;
@@ -36,7 +40,9 @@
   }
 }
 
+// Analyze box
 .Analyze {
+  @extend .Box;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -85,5 +91,11 @@
         stroke: #{$color};
       }
     }
+  }
+}
+
+.ItemsList {
+  @extend .Box;
+  & .Item {
   }
 }
