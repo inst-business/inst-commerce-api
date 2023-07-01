@@ -1,15 +1,15 @@
 import mongoose, { Model, Schema, model } from 'mongoose'
-import { STATUS } from '@/config/global/const'
+import { ITEM_STATUS } from '@/config/global/const'
 import { ISoftDeleteQueryHelpers, TSoftDeleteQueryHelpers, withSoftDeletePlugin } from '@/utils/mongoose'
 
 export interface ICourse {
-  name: string
-  desc: string
-  img: string
-  slug: string
-  status: STATUS
-  createdAt?: Date
-  updatedAt?: Date
+  name: string,
+  desc: string,
+  img: string,
+  slug: string,
+  status: ITEM_STATUS,
+  createdAt?: Date,
+  updatedAt?: Date,
 }
 
 const CourseSchema = new Schema<ICourse>({

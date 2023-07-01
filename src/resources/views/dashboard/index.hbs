@@ -71,7 +71,7 @@
 
 {{!-- Recent added --}}
 <section class="Row M-t-3">
-  <h2>Recently added</h2>
+  <h2>Recent added</h2>
   <div class="Col lg-12">
     <div class="ItemsList">
       <div class="Item">
@@ -79,8 +79,115 @@
           <source srcset="/assets/avatar-placeholders/webp/profile-1.webp" type="image/webp">
           <img src="/assets/avatar-placeholders/profile-1.jpg" alt="Profile 1">
         </picture>
-        <b></b>
+        <b class="Item__title">Product 1</b>
+        <p class="Item__desc">54 mins ago</p>
       </div>
+      <div class="Item">
+        <picture class="Item__img">
+          <source srcset="/assets/avatar-placeholders/webp/profile-2.webp" type="image/webp">
+          <img src="/assets/avatar-placeholders/profile-2.jpg" alt="Profile 2">
+        </picture>
+        <b class="Item__title">Product 2</b>
+        <p class="Item__desc">54 mins ago</p>
+      </div>
+      <div class="Item">
+        <picture class="Item__img">
+          <source srcset="/assets/avatar-placeholders/webp/profile-3.webp" type="image/webp">
+          <img src="/assets/avatar-placeholders/profile-3.jpg" alt="Profile 3">
+        </picture>
+        <b class="Item__title">Product 3</b>
+        <p class="Item__desc">54 mins ago</p>
+      </div>
+      <div class="Item">
+        <picture class="Item__img">
+          <source srcset="/assets/avatar-placeholders/webp/profile-4.webp" type="image/webp">
+          <img src="/assets/avatar-placeholders/profile-4.jpg" alt="Profile 4">
+        </picture>
+        <b class="Item__title">Product 4</b>
+        <p class="Item__desc">54 mins ago</p>
+      </div>
+      <div class="Item">
+        <picture class="Item__img">
+          <source srcset="/assets/avatar-placeholders/webp/profile-5.webp" type="image/webp">
+          <img src="/assets/avatar-placeholders/profile-5.jpg" alt="Profile 5">
+        </picture>
+        <b class="Item__title">Product 5</b>
+        <p class="Item__desc">54 mins ago</p>
+      </div>
+      <div class="Item">
+        <picture class="Item__img">
+          <source srcset="/assets/avatar-placeholders/webp/profile-6.webp" type="image/webp">
+          <img src="/assets/avatar-placeholders/profile-6.jpg" alt="Profile 6">
+        </picture>
+        <b class="Item__title">Product 6</b>
+        <p class="Item__desc">54 mins ago</p>
+      </div>
+      <div class="Item">
+        <picture class="Item__img">
+          <source srcset="/assets/avatar-placeholders/webp/profile-7.webp" type="image/webp">
+          <img src="/assets/avatar-placeholders/profile-7.jpg" alt="Profile 7">
+        </picture>
+        <b class="Item__title">Product 7</b>
+        <p class="Item__desc">54 mins ago</p>
+      </div>
+    </div>
+  </div>
+</section>
+{{!-- End of Recent added --}}
+
+{{!-- Recent Orders --}}
+<section class="Row M-t-3">
+  <h2>Recent Orders</h2>
+  <div class="Col lg-6 sm-12">
+    <div class="Box Box-scrollable">
+      <table class="table Table Table-hover">
+        {{!-- <caption>List</caption> --}}
+        <thead>
+          <tr>
+            {{!-- <th>#</th> --}}
+            <th>Number</th>
+            <th>Amount</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Created at</th>
+            {{!-- <th></th> --}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each data.orders}}
+            <tr class="Item">
+              {{!-- <td class="" width="">
+                <b class="Text-limit-3">{{this._id}}</b>
+              </td> --}}
+              <td class="" width="">
+                <b class="Text-limit-3">{{this.code}}</b>
+              </td>
+              <td class="" width="">
+                <b class="Text-limit-3">{{this.amount}}</b>
+              </td>
+              <td class="" width="">
+                <b class="Text-limit-3">{{this.payment}}</b>
+              </td>
+              <td class="" width="">
+                <b class="Text-limit-3">{{this.status}}</b>
+              </td>
+              <td class="Item__time">
+                {{dateFormat this.createdAt 'date'}}
+                {{dateFormat this.createdAt 'time'}}
+              </td>
+              {{!-- <td class="">
+                <p class="Text-limit-3">view</p>
+              </td> --}}
+            </tr>
+          {{/each}}
+        </tbody>
+        <tfoot>
+          <th colspan="8">
+          </th>
+        </tfoot>
+        <div id="desc-popover" popover>
+        </div>
+      </table>
     </div>
   </div>
 </section>

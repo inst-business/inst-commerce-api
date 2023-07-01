@@ -2,7 +2,8 @@
 export const VIEWABLE = true
 
 export type ITF_TYPE = 'I' | 'E'
-export type STATUS = 'hidden' | 'pending' | 'active'
+export type ITEM_STATUS = 'hidden' | 'pending' | 'active'
+export type ORDER_STATUS = 'declined' | 'pending' | 'approved'
 
 export class ROUTES {
   static I = {

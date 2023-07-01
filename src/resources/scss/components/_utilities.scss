@@ -96,6 +96,23 @@
 
 .ItemsList {
   @extend .Box;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  // transition: $transition-2;
   & .Item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    // gap: $spacing-1;
+
+    &__img,
+    &__img img {
+      width: 5rem;
+      height: 5rem;
+      border-radius: $radius-circle;
+      margin-bottom: $spacing-2;
+    }
   }
 }

@@ -1,6 +1,8 @@
 import express from 'express'
 import slugify from 'slugify'
 import uniqueSlug from 'unique-slug'
+// import CryptoJS from 'crypto-js'
+import crypto from 'crypto'
 import _ from 'lodash'
 import LogicError, { Primitives } from './logicError'
 import ERR from '@/config/global/error'
@@ -11,6 +13,20 @@ export type ExpressCallback = (data?: any, err?: any) => void
 export type ExpressCallbackProvider = (res: express.Response, req?: express.Request) => ExpressCallback
 
 class Utils {
+
+  async asyncAllSettled (records: Record<string, Promise<any>>) {
+    const promises = Object.values(records)
+    const keys = Object.keys(records)    
+    const resData = await Promise.allSettled(promises).then(res => res)
+    // const res = Object.fromEntries(
+    //   resData.map((data, index) =>
+    //     [keys[index], data.status === 'fulfilled' ? data.value : data.reason]
+    //   )
+    // )
+    const res = resData.reduce((prev, cur, index) => 
+      ({...prev, [keys[index]]: cur.status === 'fulfilled' ? cur.value : cur.reason}), {})
+    return res
+  }
 
   routeAsync (reqHandler: ExpressAsyncRequestHandler, callbackProvider?: ExpressCallbackProvider): express.RequestHandler {
     return (req, res, next) => {      
@@ -81,6 +97,14 @@ class Utils {
   errorMsg (e: LogicError) {
     console.error(`${e.title}: ${e.message}\n`, `{http: ${e.httpCode}, error: ${e.errorCode}}\n`, e.pars)
   }
+  
+  routeParseParams = (route: string, ...args: any[]): string => {
+    const regex = new RegExp(":\\w+")
+    return args.reduce((prev, val) =>
+      (_.isString(val) || _.isNumber(val) || val.constructor.name === 'ObjectId')
+        ? prev.replace(regex, val?.toString()) : prev
+    , route)
+  }
 
   genUniqueSlug (title: string, code: string) {
     // const uniqueId = uniqueSlug(Date.now().toString())
@@ -93,13 +117,23 @@ class Utils {
     const slug = slugify(`${title} ${uniqueId}`, options)
     return slug
   }
-  
-  routeParseParams = (route: string, ...args: any[]): string => {
-    const regex = new RegExp(":\\w+")
-    return args.reduce((prev, val) =>
-      (_.isString(val) || _.isNumber(val) || val.constructor.name === 'ObjectId')
-        ? prev.replace(regex, val?.toString()) : prev
-    , route)
+
+  genOrderCode () {
+    const uniqueId = this.genUniqueId()
+    // const uniqueId = id
+    const timestamp = Date.now().toString()
+    // const codeString = uniqueId + timestamp
+    const hashString = this.genHash(uniqueId + timestamp)
+    return `${hashString.substring(0, 8)}-${uniqueId}`
+  }
+
+  genUniqueId () {
+    return crypto.randomUUID()
+  }
+
+  genHash (data: string) {
+    // MD5 hashing algorithm
+    return crypto.createHash('md5').update(data).digest('hex')
   }
 
 }
