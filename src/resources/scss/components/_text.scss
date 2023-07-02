@@ -3,6 +3,11 @@
   margin-bottom: 0;
   // line-height: $font-line-height;
 }
+@mixin gen-heading-properties {
+  margin-top: 0;
+  padding-bottom: 0;
+  // line-height: $font-line-height;
+}
 
 .Text-link,
 a {
@@ -53,6 +58,15 @@ b {
   &-muted {
     color: $color-txt-muted;
   }
+  &-status {
+    // max-width: fit-content;
+    // block-size: fit-content;
+    width: fit-content;
+    font-weight: 700;
+    font-size: calc(#{$font-size} * 0.75);
+    position: relative;
+    z-index: 1;
+  }
 
   @for $i from 1 through 5 {
     &-limit-#{$i} {
@@ -66,6 +80,18 @@ b {
   @each $name, $color in $colors {
     &-#{$name} {
       color: #{$color};
+    }
+    &-status#{&}-#{$name}::before {
+      content: '';
+      display: inline-block;
+      position: absolute;
+      top: -0.125rem;
+      left: -0.625rem;
+      width: calc(100% + 1.25rem);
+      height: calc(100% + 0.25rem);
+      background-color: make-color-spread($color);
+      border-radius: $radius-xl;
+      z-index: -1;
     }
   }
 }

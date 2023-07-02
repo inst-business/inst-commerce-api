@@ -83,6 +83,13 @@ $container-max-widths: (
       padding-bottom: var(--col-padding);
     }
 
+    & .Heading {
+      margin: 0;
+      // padding-left: var(--col-padding);
+      // padding-right: var(--col-padding);
+      padding-bottom: var(--col-padding);
+    }
+
     & .Col {
       padding-left: var(--col-padding);
       padding-right: var(--col-padding);

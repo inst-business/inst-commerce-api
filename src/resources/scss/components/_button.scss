@@ -1,24 +1,24 @@
 /*  Initial */
 .Btn {
-  --btn-padding: 0.375rem 0.75rem;
-  --btn-font-size: 1rem;
-  --btn-font-weight: 400;
-  --btn-line-height: 1.5;
+  --btn-padding: #{$btn-padding};
+  --btn-font-size: #{$btn-font-size};
+  --btn-font-weight: #{$btn-font-weight};
+  --btn-line-height: #{$btn-line-height};
   --btn-color-main: #{$color-primary};
-  --btn-color-side: #fff;
   --btn-radius: #{$radius-md};
+  --btn-color-side: #fff;
   --btn-intensity: 80%;
   --btn-transition: #{$transition-1};
   $self: #{&};
   &-sm {
     @extend #{$self};
-    --btn-padding: 0.25rem 0.5rem;
-    --btn-font-size: 0.875rem;
+    --btn-padding: #{$btn-padding-sm};
+    --btn-font-size: #{$btn-font-size-sm};
     --btn-radius: #{$radius-sm};
   }
   &-lg {
     @extend #{$self};
-    --btn-padding: 0.5rem 1rem;
+    --btn-padding: #{$btn-padding-lg};
     --btn-font-size: 1.25rem;
     --btn-radius: #{$radius-lg};
   }
@@ -108,6 +108,21 @@
       width: var(--btn-font-size);
       font-size: var(--btn-font-size);
       text-align: center;
+    }
+  }
+
+  &-viewmore {
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0;
+    text-align: center;
+    background-color: transparent;
+    color: $color-primary;
+    border: unset;
+    font-size: #{$btn-font-size-sm};
+    &:hover {
+      text-decoration: underline;
+      background-color: transparent;
     }
   }
 }

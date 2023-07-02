@@ -3,8 +3,7 @@
 
 {{!-- Analysis --}}
 <section class="Row">
-  <h2>Analysis</h2>
-
+  <h2 class="Heading">Analysis</h2>
   <div class="Col lg-3">
     <div class="Analyze">
       <div class="Analyze__info">
@@ -71,7 +70,7 @@
 
 {{!-- Recent added --}}
 <section class="Row M-t-3">
-  <h2>Recent added</h2>
+  <h2 class="Heading">Recent added</h2>
   <div class="Col lg-12">
     <div class="ItemsList">
       <div class="Item">
@@ -137,47 +136,36 @@
 
 {{!-- Recent Orders --}}
 <section class="Row M-t-3">
-  <h2>Recent Orders</h2>
   <div class="Col lg-6 sm-12">
+    <h2 class="Heading">Recent Orders</h2>
     <div class="Box Box-scrollable">
-      <table class="table Table Table-hover">
+      <table class="Table Table-sm Table-hover Table-center Table__caption-reversed">
         {{!-- <caption>List</caption> --}}
         <thead>
           <tr>
             {{!-- <th>#</th> --}}
             <th>Number</th>
-            <th>Amount</th>
-            <th>Payment</th>
+            <th>Amount ($)</th>
+            <th>Payment Method</th>
             <th>Status</th>
-            <th>Created at</th>
+            <th>Checked out at</th>
             {{!-- <th></th> --}}
           </tr>
         </thead>
         <tbody>
           {{#each data.orders}}
             <tr class="Item">
-              {{!-- <td class="" width="">
-                <b class="Text-limit-3">{{this._id}}</b>
-              </td> --}}
-              <td class="" width="">
-                <b class="Text-limit-3">{{this.code}}</b>
-              </td>
-              <td class="" width="">
-                <b class="Text-limit-3">{{this.amount}}</b>
-              </td>
-              <td class="" width="">
-                <b class="Text-limit-3">{{this.payment}}</b>
-              </td>
-              <td class="" width="">
-                <b class="Text-limit-3">{{this.status}}</b>
+              <td class="">{{this.code}}</td>
+              <td class="">{{this.amount}}</td>
+              <td class="">{{this.payment}}</td>
+              <td class="">
+                <span class="Text-status Text-{{stylingStatus this.status}}">
+                  {{this.status}}
+                </span>
               </td>
               <td class="Item__time">
-                {{dateFormat this.createdAt 'date'}}
-                {{dateFormat this.createdAt 'time'}}
+                {{dateFormat this.createdAt 'datetime'}}
               </td>
-              {{!-- <td class="">
-                <p class="Text-limit-3">view</p>
-              </td> --}}
             </tr>
           {{/each}}
         </tbody>
@@ -188,6 +176,7 @@
         <div id="desc-popover" popover>
         </div>
       </table>
+      <a href="#" class="Btn Btn-viewmore">Viewmore</a>
     </div>
   </div>
 </section>

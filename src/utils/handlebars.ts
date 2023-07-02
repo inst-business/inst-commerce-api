@@ -24,15 +24,25 @@ const routeE = (...args: any[]) => routeParseParams('e', <string>args[0], ...arg
 const equals = (arg1: string | number, arg2: string | number, options: any): boolean => 
   (arg1 === arg2) ? options.fn(this) : options.inverse(this)
 
-type DateFormatType = 'detail' | 'date' | 'time'
+type DateFormatType = 'detailed' | 'date' | 'time' | 'datetime'
 const dateFormat = (timestamp: Date, format?: DateFormatType) => {
   const formatTypes = {
-    detail: 'DD-MM-YY LT (Z)',
+    detailed: 'DD-MM-YY LT (Z)',
+    datetime: 'DD-MM-YY LT',
     date: 'DD-MM-YY',
     time: 'LT',
   }
-  const formatString = !format ? formatTypes.detail : formatTypes[format]
+  const formatString = !format ? formatTypes.datetime : formatTypes[format]
   return moment(timestamp).format(formatString)
+}
+
+const stylingStatus = (status: string) => {
+  switch (status) {
+    case 'approved': return 'success'
+    case 'declined': return 'danger'
+    case 'pending': return 'warning'
+    default: return 'primary'
+  }
 }
 
 const increase = (n: number, offset: number) => n + offset
@@ -43,6 +53,7 @@ const hbsHelpers = {
   equals,
   activeAnchor,
   dateFormat,
+  stylingStatus,
   increase,
 }
 

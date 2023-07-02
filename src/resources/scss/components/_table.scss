@@ -1,9 +1,12 @@
 .Table {
   --table-border-color: #{$strike-color};
-  --table-hover-color: rgba(0, 0, 0, 0.025);
-  --thead-col-padding: 0.75rem 0.5rem;
-  --tbody-col-padding: 0.5rem;
+  --table-hover-color: #{$table-hover-color};
+  --thead-cell-padding: #{$table-cell-padding-lg} #{$table-cell-padding};
+  --tbody-cell-padding: #{$table-cell-padding};
+  --table-border-width: 1px;
+  --table-transition: #{$transition-1};
   --table-caption-position: top;
+  --table-alignment: inherit;
 }
 
 @mixin cell-fit-content {
@@ -26,24 +29,37 @@
   th,
   thead,
   tr {
-    // border-color: inherit;
-    // border-style: solid;
-    // border-width: 0;
-    transition: all 0.1s ease-in-out;
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+    transition: var(--table-transition);
   }
   thead {
     > tr > th,
     > tr > td {
-      padding: var(--thead-col-padding);
+      padding: var(--thead-cell-padding);
+      text-align: var(--table-alignment);
     }
   }
   tbody {
-    tr {
-      padding: var(--tbody-col-padding);
+    > tr > th,
+    > tr > td {
+      padding: var(--tbody-cell-padding);
+      border-bottom-width: var(--table-border-width);
+      text-align: var(--table-alignment);
     }
   }
   &-hover > tbody > tr:hover {
     background-color: var(--table-hover-color);
+  }
+
+  &-sm {
+    --thead-cell-padding: #{$table-cell-padding} #{$table-cell-padding-sm};
+    --tbody-cell-padding: #{$table-cell-padding-sm};
+  }
+
+  &-center {
+    --table-alignment: center;
   }
 }
 
@@ -52,7 +68,7 @@
     --table-caption-position: bottom;
   }
   .Item {
-    &__name {
+    &__priority {
       min-width: 25%;
     }
     &__img img {
@@ -66,13 +82,11 @@
       cursor: pointer;
     }
     &__time {
-      font-size: 0.85rem;
+      font-size: 0.85rem !important;
+      line-height: 1.15;
       color: grey;
       font-style: italic;
       white-space: nowrap;
-    }
-    &__desc {
-      min-width: 25%;
     }
     &__actions {
       @include cell-fit-content;

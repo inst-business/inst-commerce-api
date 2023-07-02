@@ -12,7 +12,7 @@ router.get(ROUTES.I.INDEX, _.routeAsync(async () => {
     'orders': OrderController.getAll(),
     'products': CourseController.getAll()
   }
-  const data = _.allSettledAsync(fetchRecords)
+  const data = _.asyncAllSettled(fetchRecords)
   return data
 }, _.renderView('dashboard/index')
 ))
