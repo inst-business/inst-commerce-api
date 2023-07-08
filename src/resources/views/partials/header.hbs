@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark ia-navbar" data-current-page="" data-bs-theme="dark">
+{{!-- <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark ia-navbar" data-current-page="" data-bs-theme="dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">APInst</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -10,8 +10,8 @@
           <ul class="dropdown-menu menu-categories" data-categories="">
             <li><a class="dropdown-item {{#equals page.title 'courses'}}active{{/equals}}" href="/courses{{routeI 'index'}}">Courses</a></li>
             <li><a class="dropdown-item {{#equals page.title 'musics'}}active{{/equals}}" href="/musics{{routeI 'index'}}">Musics</a></li>
-            {{!-- <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
         <li class="nav-item">
@@ -25,20 +25,6 @@
             <button class="nav-link ia-navbar__link" type="submit">Test</button>
           </form>
         </li>
-        {{!-- <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li> --}}
-        {{!-- <li class="nav-item">
-          <a class="nav-link disabled">Disabled</a>
-        </li> --}}
       </ul>
     </div>
     <form class="d-flex" role="search">
@@ -46,4 +32,40 @@
       <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
   </div>
+</nav> --}}
+
+<div class="Row">
+  <nav class="Navbar">
+    <h1 class="Title Navbar__brand">Dashboard</h1>
+    <div class="Navbar__right">
+      <button class="Navbar__menu Btn-lg Btn-unstyled">
+        <i class="fa-regular fa-grid-2"></i>
+      </button>
+      <div class="Navbar__theme Btn__group-toggle">
+        <button class="Btn-sm Btn-unstyled Btn-spacing-0 active">
+          <i class="fa-regular fa-sun"></i>
+        </button>
+        <button class="Btn-sm Btn-unstyled Btn-spacing-0">
+          <i class="fa-regular fa-moon"></i>
+        </button>
+      </div>
+      <div class="Navbar__profile">
+        <div class="Navbar__profile-info">
+          <b>Btoann</b>
+          <p class="Text-h3">Admin</p>
+        </div>
+        <div class="Navbar__profile-avt">
+          <picture>
+            <source srcset="/assets/avatar-placeholders/webp/profile-8.webp" type="image/webp">
+            <img src="/assets/avatar-placeholders/profile-8.jpg" alt="Profile 8">
+          </picture>
+        </div>
+      </div>
+    </div>
+    {{!-- <form class="d-flex" role="search">
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form> --}}
 </nav>
+
+</div>

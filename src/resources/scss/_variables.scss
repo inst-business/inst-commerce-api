@@ -13,7 +13,8 @@ $color-danger: #c54446;
 $color-warning: #e2ad49;
 $color-info: #3f8191;
 $color-grey: #656c72;
-$color-dark: #272a2c;
+// $color-dark: #272a2c;
+$color-dark: #404142;
 $color-light: #e8eaf4;
 $colors: (
   'primary': $color-primary,
@@ -36,8 +37,8 @@ $colors: (
   $emphasis: color-mix(in srgb, $color 85%, #000);
   @return $emphasis;
 }
-@function make-color-spread($color) {
-  $spread: color-mix(in srgb, $color 5%, #fff);
+@function make-color-spread($color, $intensity: 5%) {
+  $spread: color-mix(in srgb, $color $intensity, #fff);
   @return $spread;
 }
 
@@ -60,6 +61,7 @@ $radius-sm: 0.25rem;
 $radius-md: 0.375rem;
 $radius-lg: 0.5rem;
 $radius-xl: 1rem;
+$radius-rounded: 5rem;
 $radius-circle: 50%;
 
 // Box shadow
@@ -69,6 +71,7 @@ $shadow-1-darkened: rgba(241, 244, 248, 0.1) 0px 2px 8px 0px; // Based on $color
 // Transition
 $transition-1: all 0.15s ease-in-out;
 $transition-2: all 0.3s ease;
+$transition-3: all 0.35s ease-out;
 
 // Font properties
 $font-size: 1rem;
@@ -103,6 +106,10 @@ $table-cell-padding: 0.5rem;
 $table-cell-padding-sm: 0.25rem;
 $table-cell-padding-lg: 0.75rem;
 $table-hover-color: rgba(0, 0, 0, 0.025);
+
+// Navbar properties
+$navbar-padding: 0.5rem;
+$navbar-spacing: 0.5rem;
 
 @mixin scroll-bar {
   overflow: auto;

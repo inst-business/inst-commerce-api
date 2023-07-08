@@ -9,6 +9,13 @@
   // line-height: $font-line-height;
 }
 
+@mixin make-text-ellipsised($max-width: 100%) {
+  max-width: $max-width;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .Text-link,
 a {
   color: $color-txt-dark;

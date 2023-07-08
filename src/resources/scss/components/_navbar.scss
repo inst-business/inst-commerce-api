@@ -1,0 +1,84 @@
+.Navbar {
+  // --table-border-color: #{$strike-color};
+  // --table-hover-color: #{$table-hover-color};
+  --navbar-padding: #{$navbar-padding};
+  // --tbody-cell-padding: #{$table-cell-padding};
+  // --table-border-width: 1px;
+  // --table-transition: #{$transition-1};
+  // --table-caption-position: top;
+  // --table-alignment: inherit;
+}
+
+.Navbar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--navbar-padding) 0;
+  padding-bottom: var(--navbar-padding) !important;
+
+  & > * {
+    display: flex;
+    max-height: 3rem;
+    height: 3rem;
+  }
+
+  &__brand {
+    display: inline-flex;
+    // padding: var(--navbar-padding) 0;
+    margin-top: var(--navbar-padding) !important;
+    margin-bottom: var(--navbar-padding) !important;
+  }
+
+  &__right {
+    display: inline-flex;
+    // width: auto;
+    justify-content: end;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  &__menu {
+    display: none;
+  }
+
+  &__theme {
+    background-color: var(--color-txt-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: $radius-rounded;
+    & > * {
+      padding: 0.5rem;
+      &.active {
+        border-radius: $radius-circle;
+        background-color: $color-primary;
+        color: $color-light;
+      }
+    }
+  }
+
+  &__profile {
+    display: flex;
+    height: 100%;
+    gap: 1rem;
+    text-align: right;
+    &-info {
+      @include make-text-ellipsised(6rem);
+    }
+    &-avt {
+      height: 100%;
+      border-radius: $radius-circle;
+      border: solid 2px $color-primary;
+      padding: 1px;
+      cursor: pointer;
+      & img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        border-radius: $radius-circle;
+      }
+    }
+  }
+}

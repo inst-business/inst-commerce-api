@@ -1,3 +1,5 @@
+@import '../helpers/helpers';
+
 $media-breakpoints: (
   xs: 0,
   sm: 576px,
@@ -19,7 +21,7 @@ $container-max-widths: (
 @mixin make-breakpoint($name, $max-width, $breakpoints: $media-breakpoints) {
   $min-width: map-get($breakpoints, $name);
   @if $min-width {
-    @media (min-width: $min-width) {
+    @media screen and (min-width: $min-width) {
       @if $max-width != 0 {
         max-width: $max-width;
       }
@@ -27,11 +29,17 @@ $container-max-widths: (
     }
   }
 }
+@mixin make-breakpoint-up($name, $breakpoints: $media-breakpoints) {
+  $min-width: map-get-next($breakpoints, $name, true);
+  @if $min-width {
+    $max-width: $min-width - 1px;
+    @media screen and (max-width: $max-width) {
+      @content;
+    }
+  }
+}
 
 @mixin make-12col($size) {
-  &.#{$size}-0 {
-    display: none;
-  }
   // Columns 1 -> 12
   @for $i from 1 through 12 {
     &.#{$size}-#{$i} {
@@ -47,11 +55,17 @@ $container-max-widths: (
     }
   }
 }
+@mixin make-hidden-col($size) {
+  &.#{$size}-0 {
+    display: none;
+  }
+}
 
 .Container {
   --container-max-width: 100%;
   --container-wide-width: 100%;
   --container-spacing: 0.75rem;
+  --container-gutter: 0.75rem;
   --row-margin: calc(0rem - var(--container-spacing));
   --col-padding: var(--container-spacing);
 }
@@ -60,8 +74,8 @@ $container-max-widths: (
   // gap: var(--col-padding);
   width: 100%;
   max-width: var(--container-max-width);
-  padding-left: var(--container-spacing);
-  padding-right: var(--container-spacing);
+  padding-left: var(--container-gutter);
+  padding-right: var(--container-gutter);
   margin-left: auto;
   margin-right: auto;
   transition: all 0.15s linear;
@@ -112,8 +126,9 @@ $container-max-widths: (
     min-width: var(--container-wide-width);
   }
 
-  @each $breakpoint, $container-max-width in $container-max-widths {
-    @include make-breakpoint($breakpoint, $container-max-width) {
+  $container-max-widths-list: $container-max-widths;
+  @each $breakpoint, $max-width in $container-max-widths-list {
+    @include make-breakpoint($breakpoint, $max-width) {
       @if ($breakpoint == 'xs') or
         ($breakpoint == 'sm') or
         ($breakpoint == 'md')
@@ -122,9 +137,66 @@ $container-max-widths: (
       } @else {
         --container-spacing: 0.75rem;
       }
-      .Row .Col {
-        @include make-12col($breakpoint);
+      @if ($breakpoint == 'sm') or
+        ($breakpoint == 'md') or
+        ($breakpoint == 'lg') or
+        ($breakpoint == 'xl')
+      {
+        .Row .Col {
+          @include make-12col($breakpoint);
+        }
       }
     }
+    @include make-breakpoint-up($breakpoint) {
+      .Row .Col {
+        @include make-hidden-col($breakpoint);
+      }
+    }
+  }
+}
+
+@mixin make-reponsive($breakpoint, $breakpoints: $media-breakpoints) {
+  // keys(name) list
+  $keys: map-keys($breakpoints);
+  // current index
+  $index: index($keys, $breakpoint);
+  @if $index {
+    // if key is followed by larger value
+    @if $index < length($keys) {
+      $min-width: map-get($breakpoints, $breakpoint);
+      $next-breakpoint: map-get-next($breakpoints, $breakpoint);
+      $max-width: map-get($breakpoints, $next-breakpoint);
+      @media screen and (min-width: $min-width) and (max-width: calc($max-width - 1px)) {
+        @content;
+      }
+    }
+    // if key is the largest value
+    @if $index == length($keys) {
+      @media screen and (min-width: map-get($breakpoints, $breakpoint)) {
+        @content;
+      }
+    }
+  } @else {
+    @error "Invalid breakpoint #{$breakpoint}!";
+  }
+}
+
+@mixin make-multi-reponsive($breakpoints...) {
+  @each $breakpoint in $breakpoints {
+    @include make-reponsive($breakpoint) {
+      @content;
+    }
+  }
+}
+
+@mixin make-range-reponsive($min-breakpoint, $max-breakpoint) {
+  $min-width: map-get($media-breakpoints, $min-breakpoint);
+  $max-width: map-get($media-breakpoints, $max-breakpoint);
+  @if $min-width and $max-width and $min-width < $max-width {
+    @media screen and (min-width: $min-width) and (max-width: calc($max-width - 1px)) {
+      @content;
+    }
+  } @else {
+    @error "Invalid breakpoints!";
   }
 }

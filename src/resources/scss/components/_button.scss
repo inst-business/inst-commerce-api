@@ -49,6 +49,7 @@
 }
 
 .Btn {
+  $self: #{&};
   /*  Default */
   &:hover {
     --btn-color-override: #fff;
@@ -104,10 +105,44 @@
     --btn-radius: #{$radius-circle};
     aspect-ratio: 1 / 1;
     object-fit: cover;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     > i {
       width: var(--btn-font-size);
       font-size: var(--btn-font-size);
       text-align: center;
+    }
+  }
+
+  &-unstyled {
+    @extend #{$self}-circle;
+    --btn-color-main: transparent;
+    --btn-color-side: #{$color-dark};
+    border: none;
+    --btn-transition: #{$transition-2};
+    position: relative;
+    &:hover {
+      // background-color: make-color-spread($color-dark, 10%);
+      color: make-color-variant($color-dark);
+    }
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      z-index: -1;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(149, 157, 165, 0.5);
+      border-radius: $radius-circle;
+      transition: $transition-3;
+      opacity: 0;
+    }
+    &:active::after {
+      opacity: 1;
+      height: 0;
+      width: 0;
+      transition: 0s;
     }
   }
 
@@ -116,13 +151,17 @@
     margin-top: 0.75rem;
     padding: 0;
     text-align: center;
-    background-color: transparent;
-    color: $color-primary;
+    --btn-color-main: transparent;
+    --btn-color-side: #{$color-primary};
     border: unset;
     font-size: #{$btn-font-size-sm};
     &:hover {
       text-decoration: underline;
       background-color: transparent;
     }
+  }
+
+  &-spacing-0 {
+    --btn-padding: 0;
   }
 }

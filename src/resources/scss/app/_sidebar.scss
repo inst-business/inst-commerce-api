@@ -4,31 +4,36 @@
   --sidebar-link-height: 3rem;
   --sidebar-link-transition: all 0.3s ease;
   min-height: 100vh;
+  // min-width: fit-content;
   padding-top: var(--sidebar-padding);
   padding-bottom: var(--sidebar-padding);
+  position: fixed;
+  // margin-left: 100%;
+
+  $self: #{&};
 
   &__toggle {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-
+    // justify-content: space-between;
+    gap: 0.5rem;
     &-logo {
       display: flex;
-      gap: 0.5rem;
       align-items: center;
       & img {
         width: var(--sidebar-logo-size);
         height: var(--sidebar-logo-size);
       }
     }
-
+    &-brand {
+    }
     &-close {
       padding-right: 1rem;
       display: none;
     }
   }
 
-  &__container {
+  &__main {
     display: flex;
     flex-direction: column;
     position: relative;
@@ -41,55 +46,94 @@
     border-radius: var(--radius-md);
     transition: var(--transition-1);
     overflow: hidden;
+    overflow-y: auto;
 
     &:hover {
       box-shadow: none;
     }
+  }
 
-    a {
-      --link-padding: 1.5rem;
-      font-size: var(--font-size-lg);
-      display: flex;
-      align-items: center;
-      color: var(--color-txt-grey);
-      height: var(--sidebar-link-height);
-      gap: 1rem;
-      position: relative;
-      padding-left: var(--link-padding);
-      padding-right: var(--link-padding);
-      transition: var(--sidebar-link-transition);
-      // white-space: nowrap;
+  &__link {
+    --link-padding: 1.5rem;
+    font-size: var(--font-size-lg);
+    display: flex;
+    align-items: center;
+    color: var(--color-txt-grey);
+    height: var(--sidebar-link-height);
+    gap: 0.75rem;
+    position: relative;
+    padding-left: var(--link-padding);
+    padding-right: var(--link-padding);
+    transition: var(--sidebar-link-transition);
+    @include make-text-ellipsised;
+    // white-space: nowrap;
 
-      &:last-child {
+    & > * {
+      display: initial;
+    }
+
+    &:last-child {
+      margin-top: auto;
+      // position: absolute;
+      // bottom: 1rem;
+      width: 100%;
+    }
+
+    &-icon {
+      // color: var(--color-txt-primary);
+      width: calc(var(--font-size-lg) * 1.25);
+      text-align: center;
+      & > * {
+        min-width: 100%;
+      }
+    }
+
+    &:hover {
+      color: var(--color-primary);
+      padding-left: calc(var(--link-padding) * 1.25);
+      padding-right: calc(var(--link-padding) * 0.75);
+    }
+
+    &.active {
+      cursor: none;
+      pointer-events: none;
+      color: var(--color-primary);
+      background-color: var(--color-light);
+      &::before {
+        content: '';
         position: absolute;
-        bottom: 1rem;
-        width: 100%;
+        left: 0;
+        width: 2px;
+        height: 100%;
+        background-color: var(--color-primary);
       }
+    }
+  }
+}
 
-      .icon {
-        // color: var(--color-txt-primary);
-        width: calc(var(--font-size-lg) * 1.25);
+@include make-range-reponsive(sm, lg) {
+  .Sidebar {
+    min-width: fit-content;
+    &__main {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
+    &__toggle {
+      justify-content: center;
+      &-brand {
+        display: none;
       }
-
-      &:hover {
-        color: var(--color-primary);
-        padding-left: calc(var(--link-padding) * 1.25);
-        padding-right: calc(var(--link-padding) * 0.75);
+    }
+    &__link {
+      --link-padding: 0;
+      justify-content: center;
+      > *:not(#{&}-icon) {
+        display: none;
       }
-
-      &.active {
-        cursor: none;
-        pointer-events: none;
-        color: var(--color-primary);
-        background-color: var(--color-light);
-        &::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          width: 2px;
-          height: 100%;
-          background-color: var(--color-primary);
-        }
+      &:last-child {
+        position: static;
+        // bottom: 1rem;
+        // width: 100%;
       }
     }
   }

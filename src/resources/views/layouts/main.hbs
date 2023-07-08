@@ -18,23 +18,26 @@
 </head>
 <body class="">
   <div class="App" id="App">
-    {{!-- Header Section --}}
-    <header>
-      {{!-- {{> header}} --}}
-    </header>
-    {{!-- End of Header Section --}}
-
     <div class="Container Container-wide">
       <div class="Row">
+
         {{!-- Sidebar Section --}}
-        <aside class="Sidebar Col lg-2 sm-6">
+        <aside class="Sidebar Col lg-2 md-1 sm-0">
           {{> sidebar}}
         </aside>
         {{!-- End of Sidebar Section --}}
         
-        {{!-- Main Section --}}
-        <main class="Col lg-10 sm-6">{{{body}}}</main>
-        {{!-- End of Main Section --}}
+        <div class="Col lg-10 olg-2 md-11 omd-1 sm-12">
+          {{!-- Header Section --}}
+          <header>
+            {{> header}}
+          </header>
+          {{!-- End of Header Section --}}
+          {{!-- Main Section --}}
+          <main>{{{body}}}</main>
+          {{!-- End of Main Section --}}
+        </div>
+
       </div>
     </div>
     
