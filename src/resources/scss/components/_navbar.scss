@@ -1,12 +1,5 @@
 .Navbar {
-  // --table-border-color: #{$strike-color};
-  // --table-hover-color: #{$table-hover-color};
-  --navbar-padding: #{$navbar-padding};
-  // --tbody-cell-padding: #{$table-cell-padding};
-  // --table-border-width: 1px;
-  // --table-transition: #{$transition-1};
-  // --table-caption-position: top;
-  // --table-alignment: inherit;
+  --Navbar-padding: #{$navbar-padding};
 }
 
 .Navbar {
@@ -15,8 +8,8 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding: var(--navbar-padding) 0;
-  padding-bottom: var(--navbar-padding) !important;
+  padding: var(--Navbar-padding) 0;
+  padding-bottom: var(--Navbar-padding) !important;
 
   & > * {
     display: flex;
@@ -26,9 +19,9 @@
 
   &__brand {
     display: inline-flex;
-    // padding: var(--navbar-padding) 0;
-    margin-top: var(--navbar-padding) !important;
-    margin-bottom: var(--navbar-padding) !important;
+    // padding: var(--Navbar-padding) 0;
+    margin-top: var(--Navbar-padding) !important;
+    margin-bottom: var(--Navbar-padding) !important;
   }
 
   &__right {

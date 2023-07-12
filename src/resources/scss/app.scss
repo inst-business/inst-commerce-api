@@ -1,6 +1,7 @@
 @import 'fonts';
 @import 'variables';
 @import 'components/container';
+@import 'components/grid';
 @import 'components/spacing';
 @import 'components/text';
 @import 'components/button';
@@ -9,7 +10,9 @@
 @import 'components/dialog';
 @import 'components/utilities';
 
+@import 'app/header';
 @import 'app/sidebar';
+@import 'app/rightbar';
 
 * {
   box-sizing: border-box;
@@ -65,6 +68,11 @@
   --spacing-md: #{spacing-md};
   --spacing-lg: #{spacing-lg};
   --spacing-xl: #{spacing-xl};
+}
+
+:root {
+  --Sidebar-width: #{$sidebar-width};
+  --Rightbar-width: #{$rightbar-width};
 }
 
 .DarkMode {

@@ -44,25 +44,28 @@
 .Analyze {
   @extend .Box;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
 
   &__info {
     padding-left: 0.5rem;
     &-title {
+      width: 12ch;
       font-size: $font-size;
     }
     &-content {
-      font-size: $font-size-xl;
+      font-size: $font-size-lg;
       font-weight: 800;
     }
   }
 
   &__progress {
-    --progress-width: 6rem;
+    --progress-width: 5rem;
     width: var(--progress-width);
     height: var(--progress-width);
     display: flex;
+    margin-left: auto;
     align-items: center;
     justify-content: center;
     position: relative;
@@ -72,7 +75,7 @@
       height: var(--progress-width);
       position: relative;
       & circle {
-        --stroke-width: 10px;
+        --stroke-width: 0.5rem;
         // --excess-width: calc(var(--stroke-width) / 2);
         fill: none;
         stroke-width: var(--stroke-width);
@@ -84,6 +87,7 @@
     }
     &-percentage {
       position: absolute;
+      font-size: $font-size-sm;
     }
     @each $name, $color in $colors {
       &-#{$name} svg circle,

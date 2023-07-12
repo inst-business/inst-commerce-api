@@ -1,20 +1,21 @@
-.Sidebar {
-  --Sidebar-width: #{$sidebar-width};
-  --Sidebar-width-collapsed: #{$sidebar-width-collapsed};
-  --Sidebar-padding: 1rem;
-  --Sidebar-logo-size: 2rem;
-  --Sidebar-link-height: 3rem;
-  --Sidebar-link-transition: all 0.3s ease;
-  --Sidebar-font-size: #{$font-size};
+.Rightbar {
+  --Rightbar-width: #{$rightbar-width};
+  --Rightbar-width-collapsed: #{$rightbar-width-collapsed};
+  // --Rightbar-padding: 1rem;
+  // --Rightbar-logo-size: 2rem;
+  // --Rightbar-link-height: 3rem;
+  // --Rightbar-link-transition: all .3s ease;
+  // --Rightbar-font-size: #{$font-size};
 }
 
-.Sidebar {
+.Rightbar {
   min-height: 100vh;
-  width: var(--Sidebar-width);
-  max-width: var(--Sidebar-width);
-  padding-top: var(--Sidebar-padding);
-  padding-bottom: var(--Sidebar-padding);
+  width: var(--Rightbar-width);
+  max-width: var(--Rightbar-width);
+  padding-top: var(--Rightbar-padding);
+  padding-bottom: var(--Rightbar-padding);
   position: fixed;
+  right: 0.75rem;
   // margin-left: 100%;
 
   $self: #{&};
@@ -28,8 +29,8 @@
       display: flex;
       align-items: center;
       & img {
-        width: var(--Sidebar-logo-size);
-        height: var(--Sidebar-logo-size);
+        width: var(--Rightbar-logo-size);
+        height: var(--Rightbar-logo-size);
       }
     }
     &-brand {
@@ -44,10 +45,12 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    top: var(--Sidebar-padding);
-    height: calc(100vh - var(--Sidebar-padding) * 3 - var(--Sidebar-logo-size));
-    padding-top: var(--Sidebar-padding);
-    padding-bottom: var(--Sidebar-padding);
+    top: var(--Rightbar-padding);
+    height: calc(
+      100vh - var(--Rightbar-padding) * 3 - var(--Rightbar-logo-size)
+    );
+    padding-top: var(--Rightbar-padding);
+    padding-bottom: var(--Rightbar-padding);
     background-color: var(--color-bg-section);
     box-shadow: var(--shadow-1);
     border-radius: var(--radius-md);
@@ -62,16 +65,16 @@
 
   &__link {
     --link-padding: 1.5rem;
-    font-size: var(--Sidebar-font-size);
+    font-size: var(--Rightbar-font-size);
     display: flex;
     align-items: center;
     color: var(--color-txt-grey);
-    height: var(--Sidebar-link-height);
+    height: var(--Rightbar-link-height);
     gap: 0.75rem;
     position: relative;
     padding-left: var(--link-padding);
     padding-right: var(--link-padding);
-    transition: var(--Sidebar-link-transition);
+    transition: var(--Rightbar-link-transition);
     @include make-text-ellipsised;
     // white-space: nowrap;
 
@@ -88,7 +91,7 @@
 
     &-icon {
       // color: var(--color-txt-primary);
-      width: calc(var(--Sidebar-font-size) * 1.25);
+      width: calc(var(--Rightbar-font-size) * 1.25);
       text-align: center;
       & > * {
         min-width: 100%;
@@ -119,8 +122,8 @@
 }
 
 @include make-range-reponsive(sm, lg) {
-  .Sidebar {
-    --Sidebar-width: var(--Sidebar-width-collapsed);
+  .Rightbar {
+    --Rightbar-width: var(--Rightbar-width-collapsed);
     // min-width: fit-content;
     &__main {
       padding-top: 0.25rem;

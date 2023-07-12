@@ -1,4 +1,5 @@
-@import '../helpers/helpers';
+@use '../helpers/helpers';
+@import '../variables';
 
 $media-breakpoints: (
   xs: 0,
@@ -18,7 +19,11 @@ $container-max-widths: (
   hd: 1320px,
 );
 
-@mixin make-breakpoint($name, $max-width, $breakpoints: $media-breakpoints) {
+@mixin make-breakpoint(
+  $name,
+  $max-width: null,
+  $breakpoints: $media-breakpoints
+) {
   $min-width: map-get($breakpoints, $name);
   @if $min-width {
     @media screen and (min-width: $min-width) {
@@ -30,7 +35,7 @@ $container-max-widths: (
   }
 }
 @mixin make-breakpoint-up($name, $breakpoints: $media-breakpoints) {
-  $min-width: map-get-next($breakpoints, $name, true);
+  $min-width: helpers.map-get-next($breakpoints, $name, true);
   @if $min-width {
     $max-width: $min-width - 1px;
     @media screen and (max-width: $max-width) {
@@ -62,20 +67,20 @@ $container-max-widths: (
 }
 
 .Container {
-  --container-max-width: 100%;
-  --container-wide-width: 100%;
-  --container-spacing: 0.75rem;
-  --container-gutter: 0.75rem;
-  --row-margin: calc(0rem - var(--container-spacing));
-  --col-padding: var(--container-spacing);
+  --Container-max-width: 100%;
+  --Container-wide-width: 100%;
+  --Container-spacing: 0.75rem;
+  --Container-gutter: #{$main-gutter};
+  --Row-margin: calc(0rem - var(--Container-spacing));
+  --Col-padding: var(--Container-spacing);
 }
 
 .Container {
-  // gap: var(--col-padding);
+  // gap: var(--Col-padding);
   width: 100%;
-  max-width: var(--container-max-width);
-  padding-left: var(--container-gutter);
-  padding-right: var(--container-gutter);
+  max-width: var(--Container-max-width);
+  padding-left: var(--Container-gutter);
+  padding-right: var(--Container-gutter);
   margin-left: auto;
   margin-right: auto;
   transition: all 0.15s linear;
@@ -85,29 +90,29 @@ $container-max-widths: (
   .Row {
     display: flex;
     flex-wrap: wrap;
-    margin-left: var(--row-margin);
-    margin-right: var(--row-margin);
+    margin-left: var(--Row-margin);
+    margin-right: var(--Row-margin);
 
     & > * {
       flex-shrink: 0;
       width: 100%;
       max-width: 100%;
-      padding-left: var(--col-padding);
-      padding-right: var(--col-padding);
-      padding-bottom: var(--col-padding);
+      padding-left: var(--Col-padding);
+      padding-right: var(--Col-padding);
+      padding-bottom: var(--Col-padding);
     }
 
     & .Heading {
       margin: 0;
-      // padding-left: var(--col-padding);
-      // padding-right: var(--col-padding);
-      padding-bottom: var(--col-padding);
+      // padding-left: var(--Col-padding);
+      // padding-right: var(--Col-padding);
+      padding-bottom: var(--Col-padding);
     }
 
     & .Col {
-      padding-left: var(--col-padding);
-      padding-right: var(--col-padding);
-      padding-bottom: var(--col-padding);
+      padding-left: var(--Col-padding);
+      padding-right: var(--Col-padding);
+      padding-bottom: calc(var(--Col-padding) * 2);
     }
 
     &-gutters-0 {
@@ -123,7 +128,10 @@ $container-max-widths: (
   $self: #{&};
   &-wide {
     @extend #{$self};
-    min-width: var(--container-wide-width);
+    min-width: var(--Container-wide-width);
+  }
+  &-gutter-0 {
+    --Container-gutter: 0;
   }
 
   $container-max-widths-list: $container-max-widths;
@@ -133,9 +141,9 @@ $container-max-widths: (
         ($breakpoint == 'sm') or
         ($breakpoint == 'md')
       {
-        --container-spacing: 0.5rem;
+        --Container-spacing: 0.5rem;
       } @else {
-        --container-spacing: 0.75rem;
+        --Container-spacing: 0.75rem;
       }
       @if ($breakpoint == 'sm') or
         ($breakpoint == 'md') or

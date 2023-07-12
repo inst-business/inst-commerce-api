@@ -7,18 +7,18 @@ export type ORDER_STATUS = 'declined' | 'pending' | 'approved'
 
 export class ROUTES {
   static I = {
-    TEST: '/i/test',  // test ROUTE
-    INDEX: '/i',  // GET
-    CREATE: '/i/create',  // GET
-    STORE: '/i',  // POST
-    DELETEDS: '/i/deleted',  // GET
-    DELETED: '/i/deleted/:id',  // GET
-    RESTORE: '/i/deleted',  // PATCH
-    DESTROY: '/i/deleted',  // DELETE
-    SHOW: '/i/:id',  // GET
-    EDIT: '/i/:id/edit',  // GET
-    UPDATE: '/i/:id',  // PUT
-    DELETE: '/i',  // PATCH
+    TEST: '/test',  // test ROUTE
+    INDEX: '/',  // GET
+    CREATE: '/create',  // GET
+    STORE: '/',  // POST
+    DELETEDS: '/deleted',  // GET
+    DELETED: '/deleted/:id',  // GET
+    RESTORE: '/deleted',  // PATCH
+    DESTROY: '/deleted',  // DELETE
+    SHOW: '/:id',  // GET
+    EDIT: '/:id/edit',  // GET
+    UPDATE: '/:id',  // PUT
+    DELETE: '/',  // PATCH
   }
 
   static E = {

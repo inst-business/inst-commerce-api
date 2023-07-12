@@ -69,6 +69,7 @@ $shadow-1: rgba(64, 65, 66, 0.1) 0px 2px 8px 0px; // Based on $color-dark
 $shadow-1-darkened: rgba(241, 244, 248, 0.1) 0px 2px 8px 0px; // Based on $color-dark
 
 // Transition
+$transition-0: none;
 $transition-1: all 0.15s ease-in-out;
 $transition-2: all 0.3s ease;
 $transition-3: all 0.35s ease-out;
@@ -99,7 +100,13 @@ $spacing-md: 1rem;
 $spacing-lg: 1.25rem;
 $spacing-xl: 1.5rem;
 
+// Others properties
+$main-gutter: 0.75rem;
 $strike-color: #dee2e6;
+$sidebar-width: 11rem;
+$sidebar-width-collapsed: 3rem;
+$rightbar-width: 18rem;
+$rightbar-width-collapsed: 3rem;
 
 // Table properties
 $table-cell-padding: 0.5rem;

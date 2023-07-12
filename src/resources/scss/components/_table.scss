@@ -1,12 +1,12 @@
 .Table {
-  --table-border-color: #{$strike-color};
-  --table-hover-color: #{$table-hover-color};
-  --thead-cell-padding: #{$table-cell-padding-lg} #{$table-cell-padding};
-  --tbody-cell-padding: #{$table-cell-padding};
-  --table-border-width: 1px;
-  --table-transition: #{$transition-1};
-  --table-caption-position: top;
-  --table-alignment: inherit;
+  --Table-border-color: #{$strike-color};
+  --Table-hover-color: #{$table-hover-color};
+  --Table-thead-cell-padding: #{$table-cell-padding-lg} #{$table-cell-padding};
+  --Table-tbody-cell-padding: #{$table-cell-padding};
+  --Table-border-width: 1px;
+  --Table-transition: #{$transition-1};
+  --Table-caption-position: top;
+  --Table-alignment: inherit;
 }
 
 @mixin cell-fit-content {
@@ -18,8 +18,8 @@
   width: 100%;
   vertical-align: top;
   border-collapse: collapse;
-  border-color: var(--table-border-color);
-  caption-side: var(--table-caption-position);
+  border-color: var(--Table-border-color);
+  caption-side: var(--Table-caption-position);
   &-reponsive {
     overflow-x: auto;
   }
@@ -32,40 +32,40 @@
     border-color: inherit;
     border-style: solid;
     border-width: 0;
-    transition: var(--table-transition);
+    transition: var(--Table-transition);
   }
   thead {
     > tr > th,
     > tr > td {
-      padding: var(--thead-cell-padding);
-      text-align: var(--table-alignment);
+      padding: var(--Table-thead-cell-padding);
+      text-align: var(--Table-alignment);
     }
   }
   tbody {
     > tr > th,
     > tr > td {
-      padding: var(--tbody-cell-padding);
-      border-bottom-width: var(--table-border-width);
-      text-align: var(--table-alignment);
+      padding: var(--Table-tbody-cell-padding);
+      border-bottom-width: var(--Table-border-width);
+      text-align: var(--Table-alignment);
     }
   }
   &-hover > tbody > tr:hover {
-    background-color: var(--table-hover-color);
+    background-color: var(--Table-hover-color);
   }
 
   &-sm {
-    --thead-cell-padding: #{$table-cell-padding} #{$table-cell-padding-sm};
-    --tbody-cell-padding: #{$table-cell-padding-sm};
+    --Table-thead-cell-padding: #{$table-cell-padding} #{$table-cell-padding-sm};
+    --Table-tbody-cell-padding: #{$table-cell-padding-sm};
   }
 
   &-center {
-    --table-alignment: center;
+    --Table-alignment: center;
   }
 }
 
 .Table {
   &__caption-reversed {
-    --table-caption-position: bottom;
+    --Table-caption-position: bottom;
   }
   .Item {
     &__priority {
