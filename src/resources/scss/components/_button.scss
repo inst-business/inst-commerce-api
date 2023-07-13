@@ -118,13 +118,14 @@
   &-unstyled {
     @extend #{$self}-circle;
     --Btn-color-main: transparent;
-    --Btn-color-side: #{$color-dark};
+    --Btn-color-side: inherit;
     border: none;
     --Btn-transition: #{$transition-2};
     position: relative;
+    z-index: 1;
     &:hover {
-      // background-color: make-color-spread($color-dark, 10%);
-      color: make-color-variant($color-dark);
+      background-color: rgba(149, 157, 165, 0.15);
+      color: make-color-variant(inherit);
     }
     &::after {
       content: '';
@@ -143,6 +144,39 @@
       height: 0;
       width: 0;
       transition: 0s;
+    }
+  }
+
+  &__group {
+    background-color: var(--color-txt-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: $radius-rounded;
+    cursor: pointer;
+    #{$self} {
+      @extend .Btn-unstyled;
+      padding: 0.3rem;
+      margin: 0.2rem;
+      &.active,
+      &[aria-current='true'] {
+        border-radius: $radius-circle;
+        background-color: $color-primary;
+        color: $color-light;
+        &::after {
+          display: none;
+        }
+      }
+    }
+    &-sm {
+      #{$self} {
+        @extend .Btn-sm;
+      }
+    }
+    &-lg {
+      #{$self} {
+        @extend .Btn-lg;
+      }
     }
   }
 

@@ -1,3 +1,5 @@
+@use '../helpers/responsive';
+
 .Rightbar {
   --Rightbar-width: #{$rightbar-width};
   --Rightbar-width-collapsed: #{$rightbar-width-collapsed};
@@ -121,7 +123,7 @@
   }
 }
 
-@include make-range-reponsive(sm, lg) {
+@include responsive.make-range-responsive(sm, lg) {
   .Rightbar {
     --Rightbar-width: var(--Rightbar-width-collapsed);
     // min-width: fit-content;

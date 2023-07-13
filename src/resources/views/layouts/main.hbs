@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,19 +21,23 @@
     <div class="Grid Grid-dashboard">
 
       {{!-- Sidebar Section --}}
-      <aside class="Grid__sidebar">
-        {{> sidebar}}
+      <aside class="Grid__sidebar" id="Sidebar" aria-expanded="false">
+        <div class="Grid__sidebar-fixed">
+          {{> sidebar}}
+        </div>
       </aside>
       {{!-- End of Sidebar Section --}}
 
       {{!-- Header Section --}}
       <header class="Grid__header">
-        {{> header}}
+        <div class="Grid__header-fixed">
+          {{> header}}
+        </div>
       </header>
       {{!-- End of Header Section --}}
 
       {{!-- Main Section --}}
-      <main class="Grid__main Container Container-wide">
+      <main class="Grid__main Container Container-wide Container-gutter-responsive">
         {{{body}}}
       </main>
       {{!-- End of Main Section --}}

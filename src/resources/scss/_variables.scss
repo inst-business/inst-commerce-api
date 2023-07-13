@@ -3,11 +3,11 @@ $color-primary: #3f5b91;
 $color-primary-hover: color-mix(in srgb, $color-primary 85%, #fff);
 $color-primary-emphasis: color-mix(in srgb, $color-primary 85%, #000);
 $color-secondary: #b15e5e;
-$color-primary-hover: color-mix(in srgb, $color-secondary 85%, #fff);
-$color-primary-emphasis: color-mix(in srgb, $color-secondary 85%, #000);
+$color-secondary-hover: color-mix(in srgb, $color-secondary 85%, #fff);
+$color-secondary-emphasis: color-mix(in srgb, $color-secondary 85%, #000);
 $color-tertiary: #c59c44;
-$color-primary-hover: color-mix(in srgb, $color-tertiary 85%, #fff);
-$color-primary-emphasis: color-mix(in srgb, $color-tertiary 85%, #000);
+$color-tertiary-hover: color-mix(in srgb, $color-tertiary 85%, #fff);
+$color-tertiary-emphasis: color-mix(in srgb, $color-tertiary 85%, #000);
 $color-success: #3f9161;
 $color-danger: #c54446;
 $color-warning: #e2ad49;
@@ -41,6 +41,26 @@ $colors: (
   $spread: color-mix(in srgb, $color $intensity, #fff);
   @return $spread;
 }
+@function make-color-transparent($color, $intensity: 5%) {
+  $transparent: color-mix(in srgb, $color $intensity, transparent);
+  @return $transparent;
+}
+
+// Light theme colors
+$base-color: #404142;
+$base-color-variant: #656c72;
+$base-color-muted: rgba(0, 0, 0, 0.15);
+$base-body: #f1f4f8;
+$base-box: #ddd8d1;
+$base-border: #bbb3a9;
+
+// Dark theme colors
+$base-dark-color: #adbac7;
+$base-dark-color-variant: #768390;
+$base-dark-color-muted: rgba(255, 255, 255, 0.15);
+$base-dark-body: #1c2128;
+$base-dark-box: #22272e;
+$base-dark-border: #444c56;
 
 // Colors for main content
 $color-txt-dark: #404142;
@@ -53,8 +73,16 @@ $color-bg-section: #fff;
 $color-txt-dark-darkened: #f1f4f8;
 $color-txt-grey-darkened: #a3bdcc;
 $color-txt-light-darkened: #404142;
-$color-bg-darkened: #181a1e;
-$color-bg-section-darkened: #202528;
+$color-bg-darkened: #202528;
+$color-bg-section-darkened: #2e3338;
+
+// Layout properties
+$main-gutter: 0.75rem;
+$header-height: 4rem;
+$sidebar-width: 11rem;
+$sidebar-width-collapsed: 3rem;
+$rightbar-width: 18rem;
+$rightbar-width-collapsed: 3rem;
 
 // Border radius
 $radius-sm: 0.25rem;
@@ -67,6 +95,8 @@ $radius-circle: 50%;
 // Box shadow
 $shadow-1: rgba(64, 65, 66, 0.1) 0px 2px 8px 0px; // Based on $color-dark
 $shadow-1-darkened: rgba(241, 244, 248, 0.1) 0px 2px 8px 0px; // Based on $color-dark
+$shadow-outlined: $base-dark-color-muted 0 0 0 0.25rem;
+$shadow-border: $base-dark-color-muted 0 0 0 1px;
 
 // Transition
 $transition-0: none;
@@ -81,6 +111,9 @@ $font-size-sm: 0.875rem;
 $font-size-lg: 1.25rem;
 $font-size-xl: 1.75rem;
 $font-line-height: 1.25rem;
+
+// Input properties
+$input-border: 1px solid make-color-spread($color-dark);
 
 // Button properties
 $btn-font-size: $font-size;
@@ -101,12 +134,7 @@ $spacing-lg: 1.25rem;
 $spacing-xl: 1.5rem;
 
 // Others properties
-$main-gutter: 0.75rem;
 $strike-color: #dee2e6;
-$sidebar-width: 11rem;
-$sidebar-width-collapsed: 3rem;
-$rightbar-width: 18rem;
-$rightbar-width-collapsed: 3rem;
 
 // Table properties
 $table-cell-padding: 0.5rem;
@@ -117,6 +145,31 @@ $table-hover-color: rgba(0, 0, 0, 0.025);
 // Navbar properties
 $navbar-padding: 0.5rem;
 $navbar-spacing: 0.5rem;
+
+// Breakpoints
+$media-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  hd: 1400px,
+);
+$container-max-widths: (
+  xs: 0,
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  hd: 1320px,
+);
+
+@mixin dark-mode {
+  :root[data-theme='dark'],
+  .DarkMode {
+    @content;
+  }
+}
 
 @mixin scroll-bar {
   overflow: auto;
@@ -144,15 +197,15 @@ $navbar-spacing: 0.5rem;
 @mixin scroll-bar-overlay {
   scroll-behavior: smooth;
   overflow: auto;
-  // overflow-y: overlay !important;
-  scrollbar-gutter: stable;
+  overflow-y: overlay !important;
+  // scrollbar-gutter: stable;
 
   &::-webkit-scrollbar {
-    width: 0.5rem;
+    width: 0.35rem;
   }
   &::-webkit-scrollbar-thumb {
     border: 5px solid #66666625;
-    border-radius: 10rem;
+    border-radius: $radius-lg;
   }
   &::-webkit-scrollbar-track {
     position: absolute;

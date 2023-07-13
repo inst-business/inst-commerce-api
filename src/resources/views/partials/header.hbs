@@ -35,16 +35,28 @@
 </nav> --}}
 <div class="Header">
   <nav class="Navbar">
-    <h1 class="Title Navbar__brand">Dashboard</h1>
+    {{!-- <h1 class="Title Navbar__brand">Dashboard</h1> --}}
+    <div class="Navbar__toggle">
+      <div class="Navbar__toggle-collapse" id="Sidebar-collapse-btn">
+        <button class="Btn Btn-unstyled Btn-lg">
+          <i class="fa-regular fa-bars"></i>
+        </button>
+      </div>
+      <div class="Navbar__toggle-brand">
+        <img src="/img/favicon.png" alt="icon">
+        <b class="Text-brand Text-h2"><span class="Text-primary">API</span>nst</b>
+      </div>
+    </div>
+    
     <div class="Navbar__right">
-      <button class="Navbar__menu Btn-lg Btn-unstyled">
+      <button class="Navbar__menu Btn-lg">
         <i class="fa-regular fa-grid-2"></i>
       </button>
-      <div class="Navbar__theme Btn__group-toggle">
-        <button class="Btn-sm Btn-unstyled Btn-spacing-0 active">
+      <div class="Navbar__theme Btn__group Btn__group-sm" id="Swicth-theme-btn">
+        <button class="Btn Btn-spacing-0">
           <i class="fa-regular fa-sun"></i>
         </button>
-        <button class="Btn-sm Btn-unstyled Btn-spacing-0">
+        <button class="Btn Btn-spacing-0" aria-current="true">
           <i class="fa-regular fa-moon"></i>
         </button>
       </div>

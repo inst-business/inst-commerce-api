@@ -1,23 +1,6 @@
 @use '../helpers/helpers';
+@use '../helpers/responsive';
 @import '../variables';
-
-$media-breakpoints: (
-  xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px,
-  hd: 1400px,
-);
-
-$container-max-widths: (
-  xs: 0,
-  sm: 540px,
-  md: 720px,
-  lg: 960px,
-  xl: 1140px,
-  hd: 1320px,
-);
 
 @mixin make-breakpoint(
   $name,
@@ -130,21 +113,22 @@ $container-max-widths: (
     @extend #{$self};
     min-width: var(--Container-wide-width);
   }
-  &-gutter-0 {
-    --Container-gutter: 0;
+  &-gutter {
+    &-0 {
+      --Container-gutter: 0;
+    }
+    &-responsive {
+      --Container-gutter: var(--Container-spacing);
+    }
+  }
+
+  @include responsive.make-responsive(xs, sm, md) {
+    --Container-spacing: 0.5rem;
   }
 
   $container-max-widths-list: $container-max-widths;
   @each $breakpoint, $max-width in $container-max-widths-list {
     @include make-breakpoint($breakpoint, $max-width) {
-      @if ($breakpoint == 'xs') or
-        ($breakpoint == 'sm') or
-        ($breakpoint == 'md')
-      {
-        --Container-spacing: 0.5rem;
-      } @else {
-        --Container-spacing: 0.75rem;
-      }
       @if ($breakpoint == 'sm') or
         ($breakpoint == 'md') or
         ($breakpoint == 'lg') or
@@ -160,51 +144,5 @@ $container-max-widths: (
         @include make-hidden-col($breakpoint);
       }
     }
-  }
-}
-
-@mixin make-reponsive($breakpoint, $breakpoints: $media-breakpoints) {
-  // keys(name) list
-  $keys: map-keys($breakpoints);
-  // current index
-  $index: index($keys, $breakpoint);
-  @if $index {
-    // if key is followed by larger value
-    @if $index < length($keys) {
-      $min-width: map-get($breakpoints, $breakpoint);
-      $next-breakpoint: map-get-next($breakpoints, $breakpoint);
-      $max-width: map-get($breakpoints, $next-breakpoint);
-      @media screen and (min-width: $min-width) and (max-width: calc($max-width - 1px)) {
-        @content;
-      }
-    }
-    // if key is the largest value
-    @if $index == length($keys) {
-      @media screen and (min-width: map-get($breakpoints, $breakpoint)) {
-        @content;
-      }
-    }
-  } @else {
-    @error "Invalid breakpoint #{$breakpoint}!";
-  }
-}
-
-@mixin make-multi-reponsive($breakpoints...) {
-  @each $breakpoint in $breakpoints {
-    @include make-reponsive($breakpoint) {
-      @content;
-    }
-  }
-}
-
-@mixin make-range-reponsive($min-breakpoint, $max-breakpoint) {
-  $min-width: map-get($media-breakpoints, $min-breakpoint);
-  $max-width: map-get($media-breakpoints, $max-breakpoint);
-  @if $min-width and $max-width and $min-width < $max-width {
-    @media screen and (min-width: $min-width) and (max-width: calc($max-width - 1px)) {
-      @content;
-    }
-  } @else {
-    @error "Invalid breakpoints!";
   }
 }

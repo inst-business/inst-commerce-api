@@ -75,7 +75,26 @@
   --Rightbar-width: #{$rightbar-width};
 }
 
+:root {
+  --base-color: #{$base-color};
+  --base-color-variant: #{$base-color-variant};
+  --base-color-muted: #{$base-color-muted};
+  --base-body: #{$base-body};
+  --base-box: #{$base-box};
+  --base-border: #{$base-border};
+}
+
+:root[data-theme='dark'],
 .DarkMode {
+  --base-color: #{$base-dark-color};
+  --base-color-variant: #{$base-dark-color-variant};
+  --base-color-muted: #{$base-dark-color-muted};
+  --base-body: #{$base-dark-body};
+  --base-box: #{$base-dark-box};
+  --base-border: #{$base-dark-border};
+
+  --color-dark: #{$color-dark};
+  --color-light: #{$color-light};
   --color-txt-dark: #{$color-txt-dark-darkened};
   --color-txt-grey: #{$color-txt-grey-darkened};
   --color-txt-light: #{$color-txt-light-darkened};
@@ -88,11 +107,9 @@ body {
   font-family: 'Nunito', sans-serif;
   min-height: 100vh;
   margin: 0;
-  // padding: 1rem 0;
   overflow-x: hidden;
-  // user-select: none;
-  color: var(--color-txt-dark);
-  background-color: var(--color-bg);
+  color: var(--base-color);
+  background-color: var(--base-body);
   @include scroll-bar;
 }
 

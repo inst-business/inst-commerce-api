@@ -1,5 +1,7 @@
+@use '../helpers/responsive';
+
 .Sidebar {
-  --Sidebar-width: #{$sidebar-width};
+  --Sidebar-height: inherit;
   --Sidebar-width-collapsed: #{$sidebar-width-collapsed};
   --Sidebar-padding: 1rem;
   --Sidebar-logo-size: 2rem;
@@ -9,59 +11,68 @@
 }
 
 .Sidebar {
-  min-height: 100vh;
-  width: var(--Sidebar-width);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: inherit;
   max-width: var(--Sidebar-width);
-  padding-top: var(--Sidebar-padding);
-  padding-bottom: var(--Sidebar-padding);
-  position: fixed;
-  // margin-left: 100%;
+  height: 100%;
+  transition: $transition-1;
 
   $self: #{&};
 
-  &__toggle {
-    display: flex;
-    align-items: center;
-    // justify-content: space-between;
-    gap: 0.5rem;
-    &-logo {
+  &__searchbox {
+    @extend .Box;
+    padding: $spacing-xs;
+    cursor: pointer;
+    &-input {
+      --input-padding: #{$spacing-xs} #{$spacing-md};
       display: flex;
       align-items: center;
-      & img {
-        width: var(--Sidebar-logo-size);
-        height: var(--Sidebar-logo-size);
-      }
+      gap: 0.75rem;
+      padding: var(--input-padding);
+      border: 1px solid var(--base-color-muted);
+      border-radius: $radius-md;
+      transition: $transition-1;
     }
-    &-brand {
+    &-icon {
+      color: $color-txt-grey;
     }
-    &-close {
-      padding-right: 1rem;
-      display: none;
+    &-placeholder {
+      appearance: none;
+      cursor: inherit;
+      pointer-events: none;
+      outline: none;
+      width: 100%;
+      border: none;
+      color: $color-txt-grey;
+      font-size: $font-size;
+      @include make-text-ellipsised;
+    }
+    &:hover &-input {
+      box-shadow: $shadow-outlined;
     }
   }
 
   &__main {
+    @extend .Box;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    position: relative;
-    top: var(--Sidebar-padding);
-    height: calc(100vh - var(--Sidebar-padding) * 3 - var(--Sidebar-logo-size));
+    flex-grow: 1;
     padding-top: var(--Sidebar-padding);
     padding-bottom: var(--Sidebar-padding);
     background-color: var(--color-bg-section);
-    box-shadow: var(--shadow-1);
     border-radius: var(--radius-md);
     transition: var(--transition-1);
     overflow: hidden;
     overflow-y: auto;
-
-    &:hover {
-      box-shadow: none;
-    }
+    @include scroll-bar-overlay;
   }
 
   &__link {
     --link-padding: 1.5rem;
+    min-height: 2rem;
     font-size: var(--Sidebar-font-size);
     display: flex;
     align-items: center;
@@ -78,16 +89,11 @@
     & > * {
       display: initial;
     }
-
     &:last-child {
       margin-top: auto;
-      // position: absolute;
-      // bottom: 1rem;
       width: 100%;
     }
-
     &-icon {
-      // color: var(--color-txt-primary);
       width: calc(var(--Sidebar-font-size) * 1.25);
       text-align: center;
       & > * {
@@ -101,7 +107,8 @@
       padding-right: calc(var(--link-padding) * 0.75);
     }
 
-    &.active {
+    &.active,
+    &[aria-current='page'] {
       cursor: none;
       pointer-events: none;
       color: var(--color-primary);
@@ -118,10 +125,21 @@
   }
 }
 
-@include make-range-reponsive(sm, lg) {
+@mixin sidebar-collapse {
   .Sidebar {
     --Sidebar-width: var(--Sidebar-width-collapsed);
-    // min-width: fit-content;
+    &__searchbox {
+      // display: none;
+      &-input {
+        --input-padding: 0;
+        justify-content: center;
+        border-color: transparent;
+        box-shadow: none !important;
+      }
+      &-placeholder {
+        display: none;
+      }
+    }
     &__main {
       padding-top: 0.25rem;
       padding-bottom: 0.25rem;
@@ -134,15 +152,23 @@
     }
     &__link {
       --link-padding: 0;
+      --Sidebar-link-height: 2.5rem;
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
       justify-content: center;
       > *:not(#{&}-icon) {
         display: none;
       }
       &:last-child {
-        position: static;
-        // bottom: 1rem;
-        // width: 100%;
+        margin-top: auto;
       }
     }
   }
+}
+
+[aria-expanded='false'] .Sidebar {
+  @include sidebar-collapse;
+}
+@include responsive.make-range-responsive(sm, lg) {
+  @include sidebar-collapse;
 }

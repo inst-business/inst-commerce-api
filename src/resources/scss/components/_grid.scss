@@ -1,6 +1,6 @@
 // @use '../variables';
 @use '../helpers/helpers';
-@use './container';
+@use '../helpers/responsive';
 
 .Grid {
   --Grid-max-width: 100%;
@@ -16,9 +16,7 @@
     'sidebar header header'
     'sidebar main main'
     'sidebar footer footer';
-  grid-template-columns: var(--Grid-sidebar-width) auto var(
-      --Grid-rightbar-width
-    );
+  grid-template-columns: min-content auto var(--Grid-rightbar-width);
   gap: calc(var(--Grid-spacing) * 1);
   width: var(--Grid-max-width);
   max-width: var(--Grid-max-width);
@@ -26,20 +24,27 @@
   padding-left: var(--Grid-gutter);
   padding-right: var(--Grid-gutter);
   transition: all 0.15s linear;
+  $self: #{&};
 
-  &-dashboard {
-    grid-template-areas:
-      'sidebar header header'
-      'sidebar main rightbar'
-      'sidebar footer footer';
+  &-gutter {
+    &-0 {
+      --Grid-gutter: 0;
+    }
+    &-responsive {
+      --Grid-gutter: var(--Grid-spacing);
+    }
   }
 
-  @include container.make-breakpoint-up(md) {
+  @include responsive.make-responsive(xs, sm, md) {
+    --Grid-spacing: 0.5rem;
+  }
+
+  @include responsive.make-responsive-up(md) {
     // grid-template-columns: var(--Grid-sidebar-width-collapsed) auto var(--Grid-rightbar-width-collapsed);
     --Grid-sidebar-width: #{$sidebar-width-collapsed};
     --Grid-sidebar-width: #{$sidebar-width-collapsed};
   }
-  @include container.make-breakpoint-up(xs) {
+  @include responsive.make-responsive-up(xs) {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     gap: var(--Grid-spacing) 0;
@@ -48,12 +53,6 @@
 
   &__header {
     grid-area: header;
-    position: fixed;
-    left: calc(var(--Grid-sidebar-width) + var(--Grid-spacing) * 2);
-    width: calc(100% - var(--Grid-sidebar-width));
-    height: fit-content;
-    padding-left: var(--Grid-gutter);
-    padding-right: var(--Grid-gutter);
   }
   &__sidebar {
     grid-area: sidebar;
@@ -66,5 +65,43 @@
   }
   &__footer {
     grid-area: footer;
+  }
+
+  &-dashboard {
+    grid-template-areas:
+      'header header header'
+      'sidebar main rightbar'
+      'sidebar footer footer';
+
+    & #{$self}__header {
+      position: relative;
+      width: 100%;
+      height: $header-height;
+      &-fixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding-left: var(--Grid-gutter);
+        padding-right: var(--Grid-gutter);
+      }
+    }
+
+    & #{$self}__sidebar {
+      position: relative;
+      width: var(--Sidebar-width);
+      height: calc(100vh - $header-height - var(--Grid-spacing));
+
+      &-collapsed,
+      &[aria-expanded='false'] {
+        --Sidebar-width: #{$sidebar-width-collapsed};
+      }
+      &-fixed {
+        position: fixed;
+        width: inherit;
+        height: inherit;
+        padding-bottom: var(--Grid-spacing);
+      }
+    }
   }
 }

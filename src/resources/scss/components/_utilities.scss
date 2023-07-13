@@ -1,6 +1,8 @@
-// @mixin gen-box-styles {
+.FixedElement {
+  position: fixed;
+  width: 100%;
+}
 
-// }
 // Box
 .Box {
   width: 100%;
@@ -9,11 +11,18 @@
   box-shadow: $shadow-1;
   padding: $spacing-md;
   transition: $transition-1;
+  // border: 1px solid transparent;
   &:hover {
     box-shadow: none;
   }
   &-scrollable {
     overflow-x: auto;
+  }
+}
+@include dark-mode {
+  .Box {
+    box-shadow: $shadow-border;
+    // border-color: var(--base-border);
   }
 }
 

@@ -1,0 +1,86 @@
+@use '../helpers/helpers';
+@import '../variables';
+
+@mixin make-responsive($breakpoints...) {
+  // breakpoints list, keys(name) list
+  $bp-list: $media-breakpoints;
+  $keys: map-keys($bp-list);
+  @each $breakpoint in $breakpoints {
+    // current index
+    $index: index($keys, $breakpoint);
+    @if $index {
+      // if key is followed by larger value
+      @if $index < length($keys) {
+        $min-width: map-get($bp-list, $breakpoint);
+        $next-breakpoint: helpers.map-get-next($bp-list, $breakpoint);
+        $max-width: map-get($bp-list, $next-breakpoint);
+        @media screen and (min-width: $min-width) and (max-width: calc($max-width - 1px)) {
+          @content;
+        }
+      }
+      // if key is the largest value
+      @if $index == length($keys) {
+        @media screen and (min-width: map-get($bp-list, $breakpoint)) {
+          @content;
+        }
+      }
+    } @else {
+      @error "Invalid breakpoint #{$breakpoint}!";
+    }
+  }
+}
+
+@mixin make-responsive-up($breakpoints...) {
+  // breakpoints list, keys(name) list
+  $bp-list: $media-breakpoints;
+  $keys: map-keys($bp-list);
+  @each $breakpoint in $breakpoints {
+    // current index
+    $index: index($keys, $breakpoint);
+    @if $index {
+      @if $index < length($keys) {
+        $min-width: helpers.map-get-next($bp-list, $breakpoint, true);
+        $max-width: $min-width - 1px;
+        @media screen and (max-width: $max-width) {
+          @content;
+        }
+      } @else {
+        @media screen and (max-width: map-get($bp-list, $breakpoint)) {
+          @content;
+        }
+      }
+    } @else {
+      @error "Invalid breakpoint #{$breakpoint}!";
+    }
+  }
+}
+
+@mixin make-responsive-down($breakpoints...) {
+  // breakpoints list, keys(name) list
+  $bp-list: $media-breakpoints;
+  $keys: map-keys($bp-list);
+  @each $breakpoint in $breakpoints {
+    // current index
+    $index: index($keys, $breakpoint);
+    @if $index {
+      $min-width: map-get($bp-list, $breakpoint);
+      @media screen and (min-width: $min-width) {
+        @content;
+      }
+    } @else {
+      @error "Invalid breakpoint #{$breakpoint}!";
+    }
+  }
+}
+
+@mixin make-range-responsive($min-breakpoint, $max-breakpoint) {
+  $min-width: map-get($media-breakpoints, $min-breakpoint);
+  $max-width: map-get($media-breakpoints, $max-breakpoint);
+  @if $min-width and $max-width and $min-width < $max-width {
+    @media screen and (min-width: $min-width) and (max-width: calc($max-width - 1px)) {
+      @content;
+    }
+  } @else {
+    @error "Invalid breakpoints!";
+  }
+}
