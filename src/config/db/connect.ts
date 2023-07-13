@@ -13,7 +13,10 @@ class Connect {
 
   public async configureConnections () {
     try {
-      await connect(this.ENV.mongodb.host + '/' + this.ENV.mongodb.database, this.ENV.mongodb.opts)
+      const connectionString = this.ENV.mongodb.connectionString
+      const db = this.ENV.mongodb.database
+      const opts = this.ENV.mongodb.opts
+      await connect(`${connectionString}/${db}`, opts)
       console.log(`MongoDB connect to ${this.ENV.mongodb.database} successfully!`)
     }
     catch (err) {

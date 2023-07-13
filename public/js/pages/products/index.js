@@ -8,8 +8,8 @@ Array.from(dialogBtns).map(btn => btn.onclick = e => {
         _id = e.target.dataset.formId,
         input = dialog.querySelector('input[name="ids[]"]'),
         title = item.querySelector('.Item__name').innerText,
-        quote = /*html*/`You really want to delete <strong>${title}</strong> course?`,
-        url = `/courses/i?_method=DELETE`
+        quote = /*html*/`You really want to delete <strong>${title}</strong> product?`,
+        url = `/products/i?_method=DELETE`
   input.value = _id
   dialog.querySelector('.Dialog__body').innerHTML = quote
   const form = dialog.querySelector('.Dialog__form')

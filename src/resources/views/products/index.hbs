@@ -1,11 +1,11 @@
 
-<h1 class="Title">List of available Courses</h1>
+<h1 class="Title">List of available Products</h1>
 
 <div class="Row mb-3">
   <nav class="Col d-flex">
     <ul class="nav me-auto">
       <li class="nav-item">
-        <a class="btn btn-outline-success btn-sm" href="/courses{{routeI 'create'}}">
+        <a class="btn btn-outline-success btn-sm" href="/products{{routeI 'create'}}">
           <i class="fa-regular fa-circle-plus"></i> Add new
         </a>
       </li>
@@ -46,7 +46,7 @@
               <p class="Text-limit-3">{{this.name}}</p>
             </td>
             <td class="Item__img">
-              <img src="/img/courses/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">
+              <img src="/img/products/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">
             </td>
             <td class="Item__desc" width="25%">
               <p class="Text-limit-3">{{this.desc}}</p>
@@ -64,7 +64,7 @@
               {{dateFormat this.updatedAt 'time'}}
             </td>
             <td class="Item__actions">
-              <a href="/courses{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn-sm Btn-outline Btn-grey Btn-circle">
+              <a href="/products{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn-sm Btn-outline Btn-grey Btn-circle">
                 <i class="fa-regular fa-pen-to-square"></i>
               </a>
               <button class="Item__actions-delete Btn-sm Btn-outline Btn-danger Btn-circle" title="Delete '{{this.name}}'"
@@ -85,21 +85,21 @@
   </div>
   {{!-- {{#each data}}
     <article class="col-sm-4 col-lg-3 mb-4">
-      <div class="card course-item" style="width: 100%;">
-        <a href="/courses{{routeI 'show' this._id}}">
-          <img src="/img/courses/{{this.img}}" class="card-img-top" alt="{{this.name}}">
+      <div class="card product-item" style="width: 100%;">
+        <a href="/products{{routeI 'show' this._id}}">
+          <img src="/img/products/{{this.img}}" class="card-img-top" alt="{{this.name}}">
         </a>
         <div class="card-body">
-          <a href="/courses{{routeI 'show' this._id}}">
-            <h5 class="card-title course-item__title">{{this.name}}</h5>
+          <a href="/products{{routeI 'show' this._id}}">
+            <h5 class="card-title product-item__title">{{this.name}}</h5>
             <span></span>
           </a>
           <p class="card-text">{{this.desc}}</p>
           <div class="d-flex justify-content-end gap-2">
-            <a href="/courses{{routeI 'edit' this._id}}" class="btn btn-outline-primary btn-sm">
+            <a href="/products{{routeI 'edit' this._id}}" class="btn btn-outline-primary btn-sm">
               Edit
             </a>
-            <button class="btn btn-outline-danger btn-sm delete-course" data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+            <button class="btn btn-outline-danger btn-sm delete-product" data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
               Delete
             </button>
           </div>
@@ -125,4 +125,4 @@
 </dialog>
 {{!-- End of Modal Delete --}}
 
-<script src="/js/pages/courses/index.js"></script>
+<script src="/js/pages/products/index.js"></script>

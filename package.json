@@ -14,8 +14,10 @@
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"yarn run watch:ts\" \"yarn run serve\"",
     "serve-debug": "nodemon --inspect dist/main.js",
     "serve": "node dist/main.js",
-    "dev": "yarn run build && yarn run watch-debug",
     "start": "yarn run build && yarn run watch",
+    "dev": "yarn run build && yarn run watch-debug",
+    "staging": "NODE_ENV=staging yarn start",
+    "production": "NODE_ENV=production yarn start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "btoann",

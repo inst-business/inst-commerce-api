@@ -8,7 +8,7 @@
             Categories
           </a>
           <ul class="dropdown-menu menu-categories" data-categories="">
-            <li><a class="dropdown-item {{#equals page.title 'courses'}}active{{/equals}}" href="/courses{{routeI 'index'}}">Courses</a></li>
+            <li><a class="dropdown-item {{#equals page.title 'products'}}active{{/equals}}" href="/products{{routeI 'index'}}">Products</a></li>
             <li><a class="dropdown-item {{#equals page.title 'musics'}}active{{/equals}}" href="/musics{{routeI 'index'}}">Musics</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
@@ -21,7 +21,7 @@
           <a class="nav-link ia-navbar__link" aria-current="page" href="/{{page.title}}{{routeI 'deleteds'}}">Deleted</a>
         </li>
         <li class="nav-item">
-          <form action="/courses/i/test?_method=DELETE" method="post">
+          <form action="/products/i/test?_method=DELETE" method="post">
             <button class="nav-link ia-navbar__link" type="submit">Test</button>
           </form>
         </li>

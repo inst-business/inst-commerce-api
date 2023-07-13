@@ -4,14 +4,14 @@
     <div class="col-md-3 d-none d-md-block">
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/courses">Back to Courses</a>
-          <a class="nav-link active" aria-current="page" href="/courses{{routeI 'show' data._id}}">Back to detail</a>
+          <a class="nav-link active" aria-current="page" href="/products">Back to Products</a>
+          <a class="nav-link active" aria-current="page" href="/products{{routeI 'show' data._id}}">Back to detail</a>
         </li>
       </ul>
     </div>
     <div class="col-md-9 col-sm-12">
-      <h2 class="mb-4">Edit course: {{data.name}}</h2>
-      <form action="/courses{{routeI 'update' data._id}}?_method=PUT" method="post" class="row g-3">
+      <h2 class="mb-4">Edit product: {{data.name}}</h2>
+      <form action="/products{{routeI 'update' data._id}}?_method=PUT" method="post" class="row g-3">
         <div class="col-md-4 col-sm-12">
           <label for="id" class="form-label">Id</label>
           <input type="text" class="form-control" id="id" placeholder="" value="{{data._id}}" readonly disabled>

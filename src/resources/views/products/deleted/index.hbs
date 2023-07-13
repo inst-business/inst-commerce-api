@@ -1,11 +1,11 @@
 
-<h1 class="">List of deleted Courses</h1>
+<h1 class="">List of deleted Products</h1>
 
 <aside class="row mb-3">
   <nav class="col-12 d-flex">
     <ul class="nav me-auto">
       <li class="nav-item">
-        <a class="btn btn-outline-secondary" aria-current="page" href="/courses{{routeI 'index'}}"><strong><</strong> Back to available courses</a>
+        <a class="btn btn-outline-secondary" aria-current="page" href="/products{{routeI 'index'}}"><strong><</strong> Back to available products</a>
       </li>
     </ul>
     <div class="view-switcher" role="toolbar">
@@ -20,21 +20,21 @@
 <section class="view-area row mb-3">
   {{#each data}}
     <article class="col-sm-4 col-lg-3 mb-4">
-      <div class="card course-item" style="width: 100%;">
-        <a href="/courses{{routeI 'deleted' this._id}}">
-          <img src="/img/courses/{{this.img}}" class="card-img-top" alt="{{this.name}}">
+      <div class="card product-item" style="width: 100%;">
+        <a href="/products{{routeI 'deleted' this._id}}">
+          <img src="/img/products/{{this.img}}" class="card-img-top" alt="{{this.name}}">
         </a>
         <div class="card-body">
-          <a href="/courses{{routeI 'deleted' this._id}}">
-            <h5 class="card-title course-item__name">{{this.name}}</h5>
+          <a href="/products{{routeI 'deleted' this._id}}">
+            <h5 class="card-title product-item__name">{{this.name}}</h5>
             <span></span>
           </a>
           <p class="card-text">{{this.desc}}</p>
           <div class="d-flex justify-content-end gap-2 action-buttons">
-            <button class="btn btn-outline-primary btn-sm restore-course" data-toggle="dialog" data-action="restore" data-dialog-target="#actions-dialog" data-form-id="{{this._id}}">
+            <button class="btn btn-outline-primary btn-sm restore-product" data-toggle="dialog" data-action="restore" data-dialog-target="#actions-dialog" data-form-id="{{this._id}}">
               Restore
             </button>
-            <button class="btn btn-outline-danger btn-sm destroy-course" data-toggle="dialog" data-action="destroy" data-dialog-target="#actions-dialog" data-form-id="{{this._id}}">
+            <button class="btn btn-outline-danger btn-sm destroy-product" data-toggle="dialog" data-action="destroy" data-dialog-target="#actions-dialog" data-form-id="{{this._id}}">
               Destroy
             </button>
           </div>
@@ -47,7 +47,7 @@
 <!-- Modal Actions -->
 <dialog id="actions-dialog" class="dialog">
   <form class="dialog__form" method="POST">
-    <a href="/courses/i/deleted" id="dialog-action" hidden></a>
+    <a href="/products/i/deleted" id="dialog-action" hidden></a>
     <div class="dialog__header">Confirmation</div>
     <div class="dialog__body">
       You really want to perform this action?
@@ -60,4 +60,4 @@
   </form>
 </dialog>
 
-<script src="/js/pages/courses/deleteds.js"></script>
+<script src="/js/pages/products/deleteds.js"></script>
