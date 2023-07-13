@@ -1,7 +1,8 @@
 import express from 'express'
 import 'module-alias/register'
 import 'dotenv/config'
-import { env } from '@/config/env'
+import fs from 'fs'
+// import env from '@/config/env'
 import Connect from '@/config/db/connect'
 import morgan from 'morgan'
 import path from 'path'
@@ -11,10 +12,17 @@ import route from '@/routes'
 import hbsHelpers from '@/utils/handlebars'
 import methodOverride from 'method-override'
 
-const ENV = (<any>env)[process.env.NODE_ENV ? process.env.NODE_ENV! : 'development']
+let ENV: any
 
 class Server {
   public static async run () {
+    try {
+      const { env } = require('@/config/env')
+      ENV = (<any>env)[process.env.NODE_ENV ? process.env.NODE_ENV! : 'development']
+    } catch {
+      ENV = process.env
+    }
+
     const app = express()
 
     // Connect to db
