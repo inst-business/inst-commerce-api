@@ -1,18 +1,18 @@
-@import 'fonts';
-@import 'variables';
-@import 'components/container';
-@import 'components/grid';
-@import 'components/spacing';
-@import 'components/text';
-@import 'components/button';
-@import 'components/navbar';
-@import 'components/table';
-@import 'components/dialog';
-@import 'components/utilities';
+@import "fonts";
+@import "variables";
+@import "components/container";
+@import "components/grid";
+@import "components/spacing";
+@import "components/text";
+@import "components/button";
+@import "components/navbar";
+@import "components/table";
+@import "components/dialog";
+@import "components/utilities";
 
-@import 'app/header';
-@import 'app/sidebar';
-@import 'app/rightbar';
+@import "app/header";
+@import "app/sidebar";
+@import "app/rightbar";
 
 * {
   box-sizing: border-box;
@@ -75,7 +75,7 @@
   --Rightbar-width: #{$rightbar-width};
 }
 
-:root[data-theme='light'] {
+:root[data-theme="light"] {
   --base-color: #{$base-color};
   --base-color-variant: #{$base-color-variant};
   --base-color-muted: #{$base-color-muted};
@@ -84,7 +84,7 @@
   --base-border: #{$base-border};
 }
 
-:root[data-theme='dark'],
+:root[data-theme="dark"],
 .DarkMode {
   --base-color: #{$base-dark-color};
   --base-color-variant: #{$base-dark-color-variant};
@@ -104,7 +104,7 @@
 }
 
 body {
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;

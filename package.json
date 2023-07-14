@@ -68,7 +68,8 @@
     "@models": "dist/app/models"
   },
   "lint-staged": {
-    "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --tab-width 2 --write"
+    "src/**/*.{js,json}": "prettier --single-quote --trailing-comma all --tab-width 2 --write",
+    "src/**/*.scss": "prettier --trailing-comma all --tab-width 2 --write"
   },
   "husky": {
     "hooks": {
