@@ -16,17 +16,18 @@ let ENV: any
 
 class Server {
   public static async run () {
-    try {
-      const { env } = require('@/config/env')
-      ENV = (<any>env)[process.env.NODE_ENV ? process.env.NODE_ENV! : 'development']
-    } catch {
-      ENV = process.env
-    }
+    // try {
+    //   const { env } = require('@/config/env')
+    //   ENV = (<any>env)[process.env.NODE_ENV ? process.env.NODE_ENV! : 'development']
+    // } catch {
+    //   ENV = process.env
+    // }
+    ENV = process.env
 
     const app = express()
 
     // Connect to db
-    new Connect(ENV)
+    new Connect()
 
     // Middleware
     app.use(express.urlencoded({ extended: true }))
@@ -67,8 +68,8 @@ class Server {
     route(app)
     
     // Start server
-    app.listen(ENV.port, () =>
-      console.log(`(つ▀¯▀ )つ Server is listening at ${ENV.protocol}://${ENV.host} on port: ${ENV.port}`)
+    app.listen(ENV.PORT, () =>
+      console.log(`(つ▀¯▀ )つ Server is listening at ${ENV.PROTOCOL}://${ENV.HOST} on port: ${ENV.PORT}`)
     )
     
   }

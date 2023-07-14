@@ -6,16 +6,18 @@ class Connect {
   public static DB: any
   public static NODEMAILER: any
 
-  constructor (env: any) {
-    this.ENV = env
+  constructor () {
+    this.ENV = process.env
     this.configureConnections()
   }
 
   public async configureConnections () {
     try {
-      const connectionString = this.ENV.mongodb?.connectionString || this.ENV.DB_CONNSTR
-      const dbname = this.ENV.mongodb?.database || this.ENV.DB_NAME
-      const opts = this.ENV.mongodb?.opts
+      const connectionString = this.ENV.DB_CONNSTR
+      const dbname = this.ENV.DB_NAME
+      const opts = {
+        retryWrites: true
+      }
       await connect(`${connectionString}/${dbname}`, opts)
       console.log(`MongoDB connect to ${dbname} successfully!`)
     }
