@@ -75,7 +75,7 @@
   --Rightbar-width: #{$rightbar-width};
 }
 
-:root {
+:root[data-theme='light'] {
   --base-color: #{$base-color};
   --base-color-variant: #{$base-color-variant};
   --base-color-muted: #{$base-color-muted};
@@ -110,6 +110,7 @@ body {
   overflow-x: hidden;
   color: var(--base-color);
   background-color: var(--base-body);
+  transition: var(--transition-1);
   @include scroll-bar;
 }
 
