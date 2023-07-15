@@ -1,12 +1,14 @@
-@use '../helpers/responsive';
+@use "../helpers/responsive";
 
 .Sidebar {
   --Sidebar-height: inherit;
   --Sidebar-width-collapsed: #{$sidebar-width-collapsed};
-  --Sidebar-padding: 1rem;
+  --Sidebar-padding: 0.5rem;
   --Sidebar-logo-size: 2rem;
   --Sidebar-link-height: 3rem;
-  --Sidebar-link-transition: all 0.3s ease;
+  --Sidebar-link-min-height: 2rem;
+  --Sidebar-link-padding: 1rem;
+  --Sidebar-link-transition: #{$transition-2};
   --Sidebar-font-size: #{$font-size};
 }
 
@@ -56,42 +58,30 @@
 
   &__main {
     @extend .Box;
-    padding: 0;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding-top: var(--Sidebar-padding);
-    padding-bottom: var(--Sidebar-padding);
-    background-color: var(--color-bg-section);
-    border-radius: var(--radius-md);
-    transition: var(--transition-1);
-    overflow: hidden;
-    overflow-y: auto;
+    padding: var(--Sidebar-padding);
+    background-color: var(--base-box);
     @include scroll-bar-overlay;
   }
 
   &__link {
-    --link-padding: 1.5rem;
-    min-height: 2rem;
-    font-size: var(--Sidebar-font-size);
+    position: relative;
     display: flex;
     align-items: center;
-    color: var(--color-txt-grey);
-    height: var(--Sidebar-link-height);
     gap: 0.75rem;
-    position: relative;
-    padding-left: var(--link-padding);
-    padding-right: var(--link-padding);
+    min-height: var(--Sidebar-link-min-height);
+    height: var(--Sidebar-link-height);
+    padding: 0 var(--Sidebar-link-padding);
+    color: var(--txt-grey);
+    font-size: var(--Sidebar-font-size);
+    border-radius: $radius-md;
     transition: var(--Sidebar-link-transition);
     @include make-text-ellipsised;
-    // white-space: nowrap;
 
     & > * {
       display: initial;
-    }
-    &:last-child {
-      margin-top: auto;
-      width: 100%;
     }
     &-icon {
       width: calc(var(--Sidebar-font-size) * 1.25);
@@ -102,25 +92,46 @@
     }
 
     &:hover {
-      color: var(--color-primary);
-      padding-left: calc(var(--link-padding) * 1.25);
-      padding-right: calc(var(--link-padding) * 0.75);
+      background-color: var(--base-hover-overlay);
     }
 
     &.active,
-    &[aria-current='page'] {
+    &[aria-current="page"] {
       cursor: none;
       pointer-events: none;
-      color: var(--color-primary);
-      background-color: var(--color-light);
+      color: var(--base-color-highlight);
+      font-weight: 700;
       &::before {
-        content: '';
+        content: "";
         position: absolute;
-        left: 0;
-        width: 2px;
-        height: 100%;
-        background-color: var(--color-primary);
+        left: 3px;
+        margin-top: -3px;
+        width: 3px;
+        border-radius: $radius-md;
+        height: 1.25rem;
+        background-color: var(--base-color-highlight);
+        transition: var(--Sidebar-link-transition);
       }
+    }
+  }
+
+  &__dash {
+    padding: var(--Sidebar-padding) 0;
+    width: calc(100% - var(--Sidebar-link-padding));
+    margin-left: auto;
+    margin-right: auto;
+    height: 0;
+    $dash: #{&};
+    &::before {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: $color-lightergrey;
+    }
+    &-end {
+      @extend #{$dash};
+      margin-top: auto;
     }
   }
 }
@@ -128,8 +139,9 @@
 @mixin sidebar-collapse {
   .Sidebar {
     --Sidebar-width: var(--Sidebar-width-collapsed);
+    --Sidebar-padding: 0.25rem;
+    --Sidebar-link-padding: 0;
     &__searchbox {
-      // display: none;
       &-input {
         --input-padding: 0;
         justify-content: center;
@@ -140,10 +152,6 @@
         display: none;
       }
     }
-    &__main {
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
-    }
     &__toggle {
       justify-content: center;
       &-brand {
@@ -151,22 +159,24 @@
       }
     }
     &__link {
-      --link-padding: 0;
       --Sidebar-link-height: 2.5rem;
-      margin-top: 0.25rem;
-      margin-bottom: 0.25rem;
+      margin: 0.25rem 0;
       justify-content: center;
       > *:not(#{&}-icon) {
         display: none;
       }
-      &:last-child {
-        margin-top: auto;
+      &.active,
+      &[aria-current="page"] {
+        &::before {
+          border-radius: $radius-circle;
+          height: 3px;
+        }
       }
     }
   }
 }
 
-[aria-expanded='false'] .Sidebar {
+[aria-expanded="false"] {
   @include sidebar-collapse;
 }
 @include responsive.make-range-responsive(sm, lg) {

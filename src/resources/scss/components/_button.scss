@@ -128,7 +128,7 @@
       color: make-color-variant(inherit);
     }
     &::after {
-      content: '';
+      content: "";
       display: block;
       position: absolute;
       z-index: -1;
@@ -148,7 +148,7 @@
   }
 
   &__group {
-    background-color: var(--color-txt-light);
+    background-color: var(--txt-light);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -159,7 +159,7 @@
       padding: 0.3rem;
       margin: 0.2rem;
       &.active,
-      &[aria-current='true'] {
+      &[aria-current="true"] {
         border-radius: $radius-circle;
         background-color: $color-primary;
         color: $color-light;

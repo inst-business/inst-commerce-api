@@ -1,0 +1,33 @@
+.Input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: $font-size;
+  line-height: $line-height-sm;
+  border-radius: $radius-sm;
+  border: 1px solid $color-lightergrey;
+  color: var(--base-color);
+  background-color: var(--base-box);
+  transition: $transition-1-2;
+  &:focus {
+    border-color: $color-lightgrey;
+  }
+
+  &[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+  }
+  &__spinners[type="number"]:focus::-webkit-inner-spin-button {
+    appearance: auto !important;
+  }
+}
+
+select.Input {
+  appearance: none;
+  line-height: normal;
+  background-image: linear-gradient(45deg, transparent 50%, gray 50%),
+    linear-gradient(135deg, gray 50%, transparent 50%),
+    linear-gradient(to right, #ccc, #ccc);
+  background-position: calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-repeat: no-repeat;
+}

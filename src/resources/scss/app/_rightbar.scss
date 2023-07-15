@@ -1,4 +1,4 @@
-@use '../helpers/responsive';
+@use "../helpers/responsive";
 
 .Rightbar {
   --Rightbar-width: #{$rightbar-width};
@@ -53,7 +53,7 @@
     );
     padding-top: var(--Rightbar-padding);
     padding-bottom: var(--Rightbar-padding);
-    background-color: var(--color-bg-section);
+    background-color: var(--bg-section);
     box-shadow: var(--shadow-1);
     border-radius: var(--radius-md);
     transition: var(--transition-1);
@@ -70,7 +70,7 @@
     font-size: var(--Rightbar-font-size);
     display: flex;
     align-items: center;
-    color: var(--color-txt-grey);
+    color: var(--txt-grey);
     height: var(--Rightbar-link-height);
     gap: 0.75rem;
     position: relative;
@@ -92,7 +92,7 @@
     }
 
     &-icon {
-      // color: var(--color-txt-primary);
+      // color: var(--txt-primary);
       width: calc(var(--Rightbar-font-size) * 1.25);
       text-align: center;
       & > * {
@@ -101,7 +101,7 @@
     }
 
     &:hover {
-      color: var(--color-primary);
+      color: var(--primary);
       padding-left: calc(var(--link-padding) * 1.25);
       padding-right: calc(var(--link-padding) * 0.75);
     }
@@ -109,10 +109,10 @@
     &.active {
       cursor: none;
       pointer-events: none;
-      color: var(--color-primary);
-      background-color: var(--color-light);
+      color: var(--primary);
+      background-color: var(--light);
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         left: 0;
         width: 2px;

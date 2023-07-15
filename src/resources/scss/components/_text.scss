@@ -1,12 +1,12 @@
 @mixin gen-text-properties {
   margin-top: 0;
   margin-bottom: 0;
-  // line-height: $font-line-height;
+  // line-height: $line-height;
 }
 @mixin gen-heading-properties {
   margin-top: 0;
   padding-bottom: 0;
-  // line-height: $font-line-height;
+  // line-height: $line-height;
 }
 
 @mixin make-text-ellipsised($max-width: 100%) {
@@ -64,6 +64,7 @@ b {
 .Text {
   color: inherit;
   font-size: $font-size;
+  font-weight: inherit;
   @include gen-text-properties;
 
   &-brand {
@@ -96,7 +97,7 @@ b {
       color: #{$color};
     }
     &-status#{&}-#{$name}::before {
-      content: '';
+      content: "";
       display: inline-block;
       position: absolute;
       top: -0.125rem;

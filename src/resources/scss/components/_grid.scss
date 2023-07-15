@@ -1,6 +1,6 @@
 // @use '../variables';
-@use '../helpers/helpers';
-@use '../helpers/responsive';
+@use "../helpers/helpers";
+@use "../helpers/responsive";
 
 .Grid {
   --Grid-max-width: 100%;
@@ -13,9 +13,9 @@
 .Grid {
   display: grid;
   grid-template-areas:
-    'sidebar header header'
-    'sidebar main main'
-    'sidebar footer footer';
+    "sidebar header header"
+    "sidebar main main"
+    "sidebar footer footer";
   grid-template-columns: min-content auto var(--Grid-rightbar-width);
   gap: calc(var(--Grid-spacing) * 1);
   width: var(--Grid-max-width);
@@ -48,7 +48,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     gap: var(--Grid-spacing) 0;
-    grid-template-areas: 'header' 'main' 'footer';
+    grid-template-areas: "header" "main" "footer";
   }
 
   &__header {
@@ -69,9 +69,9 @@
 
   &-dashboard {
     grid-template-areas:
-      'header header header'
-      'sidebar main rightbar'
-      'sidebar footer footer';
+      "header header header"
+      "sidebar main rightbar"
+      "sidebar footer footer";
 
     & #{$self}__header {
       position: relative;
@@ -93,7 +93,10 @@
       height: calc(100vh - $header-height - var(--Grid-spacing));
 
       &-collapsed,
-      &[aria-expanded='false'] {
+      &[aria-expanded="false"] {
+        --Sidebar-width: #{$sidebar-width-collapsed};
+      }
+      @include responsive.make-range-responsive(sm, lg) {
         --Sidebar-width: #{$sidebar-width-collapsed};
       }
       &-fixed {

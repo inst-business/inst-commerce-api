@@ -1,5 +1,6 @@
 // Colors
 $color-primary: #3f5b91;
+$color-primary-lighter: #5477bd;
 $color-primary-hover: color-mix(in srgb, $color-primary 85%, #fff);
 $color-primary-emphasis: color-mix(in srgb, $color-primary 85%, #000);
 $color-secondary: #b15e5e;
@@ -13,19 +14,20 @@ $color-danger: #c54446;
 $color-warning: #e2ad49;
 $color-info: #3f8191;
 $color-grey: #656c72;
-// $color-dark: #272a2c;
+$color-lightgrey: #bdbdbd;
+$color-lightergrey: #ececec;
 $color-dark: #404142;
 $color-light: #e8eaf4;
 $colors: (
-  'primary': $color-primary,
-  'secondary': $color-secondary,
-  'tertiary': $color-tertiary,
-  'success': $color-success,
-  'danger': $color-danger,
-  'warning': $color-warning,
-  'info': $color-info,
-  'grey': $color-grey,
-  'dark': $color-dark,
+  "primary": $color-primary,
+  "secondary": $color-secondary,
+  "tertiary": $color-tertiary,
+  "success": $color-success,
+  "danger": $color-danger,
+  "warning": $color-warning,
+  "info": $color-info,
+  "grey": $color-grey,
+  "dark": $color-dark,
 );
 
 // Make color variant or emphasized
@@ -49,18 +51,22 @@ $colors: (
 // Light theme colors
 $base-color: #404142;
 $base-color-variant: #656c72;
+$base-color-highlight: $color-primary;
 $base-color-muted: rgba(0, 0, 0, 0.15);
 $base-body: #f1f4f8;
-$base-box: #ddd8d1;
+$base-box: #fff;
 $base-border: #bbb3a9;
+$base-hover-overlay: rgba(0, 0, 0, 0.05);
 
 // Dark theme colors
 $base-dark-color: #adbac7;
 $base-dark-color-variant: #768390;
+$base-dark-color-highlight: $color-primary-lighter;
 $base-dark-color-muted: rgba(255, 255, 255, 0.15);
 $base-dark-body: #1c2128;
-$base-dark-box: #22272e;
+$base-dark-box: #2e3338;
 $base-dark-border: #444c56;
+$base-dark-hover-overlay: rgba(255, 255, 255, 0.05);
 
 // Colors for main content
 $color-txt-dark: #404142;
@@ -68,13 +74,11 @@ $color-txt-grey: #677483;
 $color-txt-light: #fff;
 $color-txt-muted: #7d8da1;
 $color-bg: #f1f4f8;
-$color-bg-section: #fff;
 // Colors for main content (dark mode)
 $color-txt-dark-darkened: #f1f4f8;
 $color-txt-grey-darkened: #a3bdcc;
 $color-txt-light-darkened: #404142;
 $color-bg-darkened: #202528;
-$color-bg-section-darkened: #2e3338;
 
 // Layout properties
 $main-gutter: 0.75rem;
@@ -101,6 +105,7 @@ $shadow-border: $base-dark-color-muted 0 0 0 1px;
 // Transition
 $transition-0: none;
 $transition-1: all 0.15s ease-in-out;
+$transition-1-2: all 0.15s linear;
 $transition-2: all 0.3s ease;
 $transition-3: all 0.35s ease-out;
 
@@ -110,7 +115,8 @@ $font-size-xs: 0.65rem;
 $font-size-sm: 0.875rem;
 $font-size-lg: 1.25rem;
 $font-size-xl: 1.75rem;
-$font-line-height: 1.25rem;
+$line-height: 1.25rem;
+$line-height-sm: 1rem;
 
 // Input properties
 $input-border: 1px solid make-color-spread($color-dark);
@@ -165,7 +171,7 @@ $container-max-widths: (
 );
 
 @mixin dark-mode {
-  :root[data-theme='dark'],
+  :root[data-theme="dark"],
   .DarkMode {
     @content;
   }
@@ -196,21 +202,29 @@ $container-max-widths: (
 
 @mixin scroll-bar-overlay {
   scroll-behavior: smooth;
-  overflow: auto;
+  overflow: hidden;
   overflow-y: overlay !important;
-  // scrollbar-gutter: stable;
+  // scrollbar-gutter: stable both-edges;
 
+  // &::-webkit-scrollbar {
+  //   width: 0.35rem;
+  // }
+  // &::-webkit-scrollbar-thumb {
+  //   border: 5px solid #66666625;
+  //   border-radius: $radius-lg;
+  // }
   &::-webkit-scrollbar {
-    width: 0.35rem;
+    width: 0.25rem;
   }
+
   &::-webkit-scrollbar-thumb {
-    border: 5px solid #66666625;
+    height: 56px;
+    border: 1.25px solid transparent;
+    background-clip: content-box;
     border-radius: $radius-lg;
+    background-color: transparent;
   }
-  &::-webkit-scrollbar-track {
-    position: absolute;
-    right: -3rem;
-    top: -50rem;
-    background: transparent;
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: #66666650;
   }
 }
