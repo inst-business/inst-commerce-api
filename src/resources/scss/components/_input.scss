@@ -7,7 +7,7 @@
   border: 1px solid $color-lightergrey;
   color: var(--base-color);
   background-color: var(--base-box);
-  transition: $transition-1-2;
+  transition: all $transition-1-ln;
   &:focus {
     border-color: $color-lightgrey;
   }

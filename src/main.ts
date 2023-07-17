@@ -66,7 +66,7 @@ class Server {
     
     // Configure routes
     route(app)
-    
+
     // Start server
     app.listen(ENV.PORT, () =>
       console.log(`(つ▀¯▀ )つ Server is listening at ${ENV.PROTOCOL}://${ENV.HOST} on port: ${ENV.PORT}`)

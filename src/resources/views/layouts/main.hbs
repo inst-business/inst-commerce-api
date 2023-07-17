@@ -18,39 +18,41 @@
   <script defer type="module" src="/js/app.js"></script>
 </head>
 <body class="">
-  <div class="App" id="App">
-    <div class="Grid Grid-dashboard">
+  <div class="App App-onload" id="App">
+    <div class="Layout Layout-dashboard">
 
       {{!-- Sidebar Section --}}
-      <aside class="Grid__sidebar" id="Sidebar" aria-expanded="true">
-        <div class="Grid__sidebar-fixed">
+      <aside class="Layout__sidebar" id="Sidebar" aria-expanded="true">
+        <div class="Layout__sidebar-fixed">
           {{> sidebar}}
         </div>
       </aside>
       {{!-- End of Sidebar Section --}}
 
       {{!-- Header Section --}}
-      <header class="Grid__header">
-        <div class="Grid__header-fixed">
+      <header class="Layout__header">
+        <div class="Layout__header-fixed">
           {{> header}}
         </div>
       </header>
       {{!-- End of Header Section --}}
 
       {{!-- Main Section --}}
-      <main class="Grid__main Container Container-wide Container-gutter-responsive">
-        {{{body}}}
+      <main class="Layout__main">
+        <div class="Main Container Container-wide">
+          {{{body}}}
+        </div>
       </main>
       {{!-- End of Main Section --}}
 
       {{!-- Rightbar Section --}}
-      <div class="Grid__rightbar">
+      <div class="Layout__rightbar">
         {{> rightbar}}
       </div>
       {{!-- End of Rightbar Section --}}
     
       {{!-- Footer Section --}}
-      <footer class="Grid__footer">
+      <footer class="Layout__footer">
         {{> footer}}
       </footer>
       {{!-- End of Footer Section --}}

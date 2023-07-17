@@ -2,6 +2,7 @@
   margin-top: 0;
   margin-bottom: 0;
   // line-height: $line-height;
+  transition: $transition-color-1;
 }
 @mixin gen-heading-properties {
   margin-top: 0;

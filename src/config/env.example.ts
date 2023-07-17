@@ -12,7 +12,7 @@ export const env = {
       reset_pwd_url_internal: 'http://localhost:7543/internal/reset-password', 
       register_url: 'http://localhost:7543/register/continue',
       AES_passphase: '^%Fhwefwe53hx*^dsdf',
-      AES_passphase_internal: '^%weewf3673f*^dsdf',
+      AES_passphase_internal: '',
     },
     mongodb: {
       connectionString: 'mongodb://127.0.0.1:27017',
@@ -26,7 +26,7 @@ export const env = {
     },
     mysql: {
       host: '',
-      port: 0,
+      port: 80,
       database: '',
       user: '',
       password: ''
@@ -44,11 +44,11 @@ export const env = {
       authToken: '1975b33e0665121af61dbc46d93bafff'
     },
     nodemailer: {
-      username: "btoann.personal.business@gmail.com",
-      password: "MY.0000@password.google",
-      port: 465,
-      host: 'smtp.zoho.com',
-      service: 'Zoho'
+      username: "",
+      password: "",
+      port: 80,
+      host: '',
+      service: ''
     }
   },
   'staging': {

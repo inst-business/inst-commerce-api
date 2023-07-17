@@ -1,7 +1,7 @@
 .Navbar {
-  --Navbar-toggle-width: #{$sidebar-width};
-  --Navbar-collapse-width: #{$sidebar-width-collapsed};
   --Navbar-padding: #{$navbar-padding};
+  --Navbar-left-width: #{$sidebar-width - $navbar-padding};
+  --Navbar-collapse-width: #{$sidebar-width-collapsed};
   --Navbar-logo-size: 2.25rem;
 }
 
@@ -20,38 +20,30 @@
     height: 3rem;
   }
 
-  &__toggle {
+  &__left {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    // gap: .5rem;
-    width: var(--Navbar-toggle-width);
-    &-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      & img {
-        width: var(--Navbar-logo-size);
-        height: var(--Navbar-logo-size);
-      }
-    }
-    &-collapse {
-      position: static;
-      width: var(--Navbar-collapse-width);
-      display: flex;
-      justify-content: center;
-      // margin-right: -.75rem;
-      // padding: .5rem;
-      font-size: $font-size;
-      cursor: pointer;
+    gap: 0.5rem;
+    width: var(--Navbar-left-width);
+  }
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    & img {
+      width: var(--Navbar-logo-size);
+      height: var(--Navbar-logo-size);
     }
   }
-
-  &__brand {
-    display: inline-flex;
-    // padding: var(--Navbar-padding) 0;
-    margin-top: var(--Navbar-padding) !important;
-    margin-bottom: var(--Navbar-padding) !important;
+  &__collapse {
+    position: static;
+    width: var(--Navbar-collapse-width);
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    font-size: $font-size;
+    cursor: pointer;
   }
 
   &__right {

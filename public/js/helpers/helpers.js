@@ -1,5 +1,13 @@
 import qs from '../consts.js'
 
+export const loadingScreen = () => {
+  // qs.$.classList.add('App-loaded')
+  setTimeout(() => {
+    qs.$.classList.remove('App-onload')
+  }, 300)
+}
+
+
 const themeModes = ['light', 'dark']
 const storeTheme = (mode) => {
   localStorage.setItem('theme', mode)

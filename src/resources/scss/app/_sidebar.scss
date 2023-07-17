@@ -8,7 +8,7 @@
   --Sidebar-link-height: 3rem;
   --Sidebar-link-min-height: 2rem;
   --Sidebar-link-padding: 1rem;
-  --Sidebar-link-transition: #{$transition-2};
+  --Sidebar-link-transition: all #{$transition-1-ln};
   --Sidebar-font-size: #{$font-size};
 }
 
@@ -19,12 +19,14 @@
   width: inherit;
   max-width: var(--Sidebar-width);
   height: 100%;
-  transition: $transition-1;
+  padding: var(--Sidebar-padding);
+  background-color: var(--base-box);
+  border-right: 1px solid var(--base-border);
+  transition: $transition-1-eio;
 
   $self: #{&};
 
   &__searchbox {
-    @extend .Box;
     padding: $spacing-xs;
     cursor: pointer;
     &-input {
@@ -33,9 +35,9 @@
       align-items: center;
       gap: 0.75rem;
       padding: var(--input-padding);
-      border: 1px solid var(--base-color-muted);
+      border: 1px solid var(--base-border);
       border-radius: $radius-md;
-      transition: $transition-1;
+      transition: $transition-1-eio;
     }
     &-icon {
       color: $color-txt-grey;
@@ -52,17 +54,14 @@
       @include make-text-ellipsised;
     }
     &:hover &-input {
-      box-shadow: $shadow-outlined;
+      box-shadow: var(--base-shadow-outlined);
     }
   }
 
   &__main {
-    @extend .Box;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: var(--Sidebar-padding);
-    background-color: var(--base-box);
     @include scroll-bar-overlay;
   }
 
@@ -80,15 +79,23 @@
     transition: var(--Sidebar-link-transition);
     @include make-text-ellipsised;
 
-    & > * {
-      display: initial;
-    }
     &-icon {
+      display: flex;
       width: calc(var(--Sidebar-font-size) * 1.25);
       text-align: center;
       & > * {
         min-width: 100%;
       }
+    }
+    &-text {
+      @extend .Text;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    &-badge {
+      @extend .Badge-danger-variant;
+      margin-bottom: -3px;
     }
 
     &:hover {
@@ -97,10 +104,11 @@
 
     &.active,
     &[aria-current="page"] {
-      cursor: none;
-      pointer-events: none;
       color: var(--base-color-highlight);
       font-weight: 700;
+      &:hover {
+        background-color: transparent;
+      }
       &::before {
         content: "";
         position: absolute;
@@ -127,7 +135,8 @@
       display: block;
       width: 100%;
       height: 1px;
-      background-color: $color-lightergrey;
+      background-color: var(--base-border);
+      transition: $transition-1-eio;
     }
     &-end {
       @extend #{$dash};
@@ -139,7 +148,7 @@
 @mixin sidebar-collapse {
   .Sidebar {
     --Sidebar-width: var(--Sidebar-width-collapsed);
-    --Sidebar-padding: 0.25rem;
+    --Sidebar-padding: 0.5rem;
     --Sidebar-link-padding: 0;
     &__searchbox {
       &-input {
@@ -162,14 +171,18 @@
       --Sidebar-link-height: 2.5rem;
       margin: 0.25rem 0;
       justify-content: center;
-      > *:not(#{&}-icon) {
+      &-text {
         display: none;
+        // visibility: hidden;
       }
       &.active,
       &[aria-current="page"] {
         &::before {
+          // height: 1rem;
+          left: 0;
           border-radius: $radius-circle;
-          height: 3px;
+          height: 4px;
+          width: 4px;
         }
       }
     }

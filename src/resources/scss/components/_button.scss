@@ -8,7 +8,8 @@
   --Btn-radius: #{$radius-md};
   --Btn-color-side: #fff;
   --Btn-intensity: 80%;
-  --Btn-transition: #{$transition-1};
+  --Btn-transition: #{$transition-1-eio}, background-color #{$transition-1-ln},
+    color #{$transition-1-ln};
   $self: #{&};
   &-sm {
     @extend #{$self};
@@ -120,7 +121,6 @@
     --Btn-color-main: transparent;
     --Btn-color-side: inherit;
     border: none;
-    --Btn-transition: #{$transition-2};
     position: relative;
     z-index: 1;
     &:hover {

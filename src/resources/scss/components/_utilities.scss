@@ -3,6 +3,49 @@
   width: 100%;
 }
 
+@mixin loading-screen {
+  &-loaded {
+    &::before,
+    &::after {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  &-onload {
+    &::before {
+      content: "";
+      position: fixed;
+      z-index: 1000;
+      width: 100vw;
+      height: 100vh;
+      background-color: #{$base-body};
+      overflow: hidden;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: 1001;
+      inset: 0;
+      margin: auto;
+      display: block;
+      width: 5rem;
+      height: 5rem;
+      border: 0.5rem solid #ddd;
+      border-top-color: $color-primary;
+      border-radius: $radius-circle;
+      animation: app-loading 2s ease infinite;
+    }
+    @keyframes app-loading {
+      0% {
+        transform: rotate(0);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  }
+}
+
 // Box
 .Box {
   width: 100%;
@@ -10,7 +53,7 @@
   border-radius: $radius-sm;
   box-shadow: $shadow-1;
   padding: $spacing-md;
-  transition: $transition-1;
+  transition: $transition-1-eio;
   // border: 1px solid transparent;
   &:hover {
     box-shadow: none;

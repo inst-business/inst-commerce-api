@@ -1,7 +1,6 @@
 @import "fonts";
 @import "variables";
 @import "components/container";
-@import "components/grid";
 @import "components/spacing";
 @import "components/text";
 @import "components/button";
@@ -11,8 +10,10 @@
 @import "components/dialog";
 @import "components/utilities";
 
+@import "app/layout";
 @import "app/header";
 @import "app/sidebar";
+@import "app/main";
 @import "app/rightbar";
 
 * {
@@ -22,6 +23,8 @@
   text-decoration: none;
   // appearance: none;
   outline: none;
+  transition: color 0.15s linear;
+  transition: background-color 0.15s linear;
 
   &::selection {
     color: #fff;
@@ -64,7 +67,7 @@
 
   --shadow-1: #{$shadow-1};
 
-  --transition-1: #{$transition-1};
+  --transition-1-eio: #{$transition-1-eio};
 
   --spacing-xs: #{spacing-xs};
   --spacing-sm: #{spacing-sm};
@@ -87,6 +90,8 @@
   --base-box: #{$base-box};
   --base-border: #{$base-border};
   --base-hover-overlay: #{$base-hover-overlay};
+  --base-shadow-outlined: #{make-shadow-outlined($base-border)};
+  --base-shadow-outlined-sm: #{make-shadow-outlined($base-border, 0.15rem)};
 }
 
 :root[data-theme="dark"],
@@ -99,6 +104,8 @@
   --base-box: #{$base-dark-box};
   --base-border: #{$base-dark-border};
   --base-hover-overlay: #{$base-dark-hover-overlay};
+  --base-shadow-outlined: #{make-shadow-outlined($base-dark-border)};
+  --base-shadow-outlined-sm: #{make-shadow-outlined($base-dark-border, 0.15rem)};
 
   --dark: #{$color-dark};
   --light: #{$color-light};
@@ -116,7 +123,7 @@ body {
   overflow-x: hidden;
   color: var(--base-color);
   background-color: var(--base-body);
-  transition: var(--transition-1);
+  transition: var(--transition-1-eio);
   @include scroll-bar;
 }
 
@@ -129,6 +136,8 @@ img {
 .App {
   width: 100%;
   min-height: 100vh;
+  transition: opacity 0.3s, visibility 0.3s;
+  @include loading-screen;
 }
 
 .Title {
