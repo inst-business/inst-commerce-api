@@ -5,6 +5,7 @@
   --Sidebar-width-collapsed: #{$sidebar-width-collapsed};
   --Sidebar-padding: 0.5rem;
   --Sidebar-logo-size: 2rem;
+  --Sidebar-transition: all #{$transition-out-1};
   --Sidebar-link-height: 3rem;
   --Sidebar-link-min-height: 2rem;
   --Sidebar-link-padding: 1rem;
@@ -22,7 +23,8 @@
   padding: var(--Sidebar-padding);
   background-color: var(--base-box);
   border-right: 1px solid var(--base-border);
-  transition: $transition-1-eio;
+  transition: var(--Sidebar-transition);
+  overflow-x: visible;
 
   $self: #{&};
 
@@ -53,16 +55,22 @@
       font-size: $font-size;
       @include make-text-ellipsised;
     }
-    &:hover &-input {
+    &:hover &-input,
+    &:focus-visible &-input {
       box-shadow: var(--base-shadow-outlined);
     }
   }
 
   &__main {
+    height: 100%;
+  }
+
+  &__list {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    @include scroll-bar-overlay;
+    height: 100%;
+    overflow-x: hidden;
   }
 
   &__link {
@@ -77,7 +85,6 @@
     font-size: var(--Sidebar-font-size);
     border-radius: $radius-md;
     transition: var(--Sidebar-link-transition);
-    @include make-text-ellipsised;
 
     &-icon {
       display: flex;
@@ -92,13 +99,17 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      // @include make-text-ellipsised;
+      transition: none;
+      white-space: nowrap;
     }
     &-badge {
       @extend .Badge-danger-variant;
       margin-bottom: -3px;
     }
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       background-color: var(--base-hover-overlay);
     }
 
@@ -106,7 +117,8 @@
     &[aria-current="page"] {
       color: var(--base-color-highlight);
       font-weight: 700;
-      &:hover {
+      &:hover,
+      &:focus-visible {
         background-color: transparent;
       }
       &::before {
@@ -148,6 +160,7 @@
 @mixin sidebar-collapse {
   .Sidebar {
     --Sidebar-width: var(--Sidebar-width-collapsed);
+    // --Sidebar-transition: width #{$transition-in-1};
     --Sidebar-padding: 0.5rem;
     --Sidebar-link-padding: 0;
     &__searchbox {
@@ -167,13 +180,34 @@
         display: none;
       }
     }
+    &__list {
+      overflow-x: visible;
+    }
     &__link {
       --Sidebar-link-height: 2.5rem;
       margin: 0.25rem 0;
       justify-content: center;
+
       &-text {
-        display: none;
-        // visibility: hidden;
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        white-space: nowrap;
+        left: calc(100% + 0.5rem);
+        background-color: var(--base-overlay);
+        color: var(--base-body);
+        padding: var(--Sidebar-padding);
+        box-shadow: var(--base-shadow-variant);
+        border-radius: $radius-md;
+        font-size: $font-size-sm;
+        font-weight: 600 !important;
+        transition: opacity #{$transition-1-ln};
+        pointer-events: none;
+      }
+      &:hover .Sidebar__link-text,
+      &:focus-visible .Sidebar__link-text {
+        opacity: 1;
+        visibility: visible;
       }
       &.active,
       &[aria-current="page"] {

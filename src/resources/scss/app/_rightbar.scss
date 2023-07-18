@@ -60,7 +60,8 @@
     overflow: hidden;
     overflow-y: auto;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       box-shadow: none;
     }
   }
@@ -100,7 +101,8 @@
       }
     }
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       color: var(--primary);
       padding-left: calc(var(--link-padding) * 1.25);
       padding-right: calc(var(--link-padding) * 0.75);

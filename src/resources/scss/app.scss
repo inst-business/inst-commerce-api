@@ -90,6 +90,9 @@
   --base-box: #{$base-box};
   --base-border: #{$base-border};
   --base-hover-overlay: #{$base-hover-overlay};
+  --base-overlay: #{$base-overlay};
+  --base-shadow: #{$base-shadow};
+  --base-shadow-variant: #{$base-shadow-variant};
   --base-shadow-outlined: #{make-shadow-outlined($base-border)};
   --base-shadow-outlined-sm: #{make-shadow-outlined($base-border, 0.15rem)};
 }
@@ -104,6 +107,9 @@
   --base-box: #{$base-dark-box};
   --base-border: #{$base-dark-border};
   --base-hover-overlay: #{$base-dark-hover-overlay};
+  --base-overlay: #{$base-dark-overlay};
+  --base-shadow: #{$base-dark-shadow};
+  --base-shadow-variant: #{$base-dark-shadow-variant};
   --base-shadow-outlined: #{make-shadow-outlined($base-dark-border)};
   --base-shadow-outlined-sm: #{make-shadow-outlined($base-dark-border, 0.15rem)};
 

@@ -61,6 +61,9 @@ $base-body: #f1f4f8;
 $base-box: #fff;
 $base-border: #f1f1f1;
 $base-hover-overlay: rgba(0, 0, 0, 0.05);
+$base-overlay: rgba(0, 0, 0, 0.75);
+$base-shadow: #4041421a 0px 2px 8px 0px;
+$base-shadow-variant: #4041421a 0px 0px 2px 1px;
 
 // Dark theme colors
 $base-dark-color: #adbac7;
@@ -71,6 +74,9 @@ $base-dark-body: #1c2128;
 $base-dark-box: #2e3338;
 $base-dark-border: $base-dark-color-muted;
 $base-dark-hover-overlay: rgba(255, 255, 255, 0.05);
+$base-dark-overlay: rgba(255, 255, 255, 0.85);
+$base-dark-shadow: #e8eaf41a 0px 2px 8px 0px;
+$base-dark-shadow-variant: #e8eaf41a 0px 0px 2px 1px;
 
 // Colors for main content
 $color-txt-dark: #404142;
@@ -114,6 +120,8 @@ $transition-2: all 0.3s ease;
 $transition-3: all 0.35s ease-out;
 $transition-color-1: color 0.15s linear, background-color 0.15s linear;
 $transition-size-1: width 0.15s ease-in-out;
+$transition-in-1: 0.2s ease-out;
+$transition-out-1: 0.15s ease-in;
 
 // Font properties
 $font-size: 1rem;
@@ -208,17 +216,7 @@ $container-max-widths: (
 
 @mixin scroll-bar-overlay {
   scroll-behavior: smooth;
-  overflow: hidden;
   overflow-y: overlay !important;
-  // scrollbar-gutter: stable both-edges;
-
-  // &::-webkit-scrollbar {
-  //   width: 0.35rem;
-  // }
-  // &::-webkit-scrollbar-thumb {
-  //   border: 5px solid #66666625;
-  //   border-radius: $radius-lg;
-  // }
   &::-webkit-scrollbar {
     width: 0.25rem;
   }

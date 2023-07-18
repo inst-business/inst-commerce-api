@@ -51,11 +51,12 @@
   width: 100%;
   background-color: var(--base-box);
   border-radius: $radius-sm;
-  box-shadow: $shadow-1;
+  box-shadow: var(--base-shadow);
   padding: $spacing-md;
   transition: $transition-1-eio;
   // border: 1px solid transparent;
-  &:hover {
+  &:hover,
+  &:focus-visible {
     box-shadow: none;
   }
   &-scrollable {

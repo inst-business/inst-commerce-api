@@ -52,13 +52,15 @@
 .Btn {
   $self: #{&};
   /*  Default */
-  &:hover {
+  &:hover,
+  &:focus-visible {
     --Btn-color-override: #fff;
   }
   &:active {
     --Btn-color-override: #000;
   }
   &:hover,
+  &:focus-visible,
   &:active {
     --Btn-color-main-hover: color-mix(
       in srgb,
@@ -75,7 +77,8 @@
     --Btn-color-side: #{$color-primary};
     border-color: var(--Btn-color-side);
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       color: #fff;
       background-color: var(--Btn-color-side);
       border-color: var(--Btn-color-side);
@@ -123,7 +126,8 @@
     border: none;
     position: relative;
     z-index: 1;
-    &:hover {
+    &:hover,
+    &:focus-visible {
       background-color: rgba(149, 157, 165, 0.15);
       color: make-color-variant(inherit);
     }
@@ -189,7 +193,8 @@
     --Btn-color-side: #{$color-primary};
     border: unset;
     font-size: #{$btn-font-size-sm};
-    &:hover {
+    &:hover,
+    &:focus-visible {
       text-decoration: underline;
       background-color: transparent;
     }
