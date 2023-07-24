@@ -3,7 +3,7 @@
 .Rightbar {
   --Rightbar-width: #{$rightbar-width};
   --Rightbar-width-collapsed: #{$rightbar-width-collapsed};
-  // --Rightbar-padding: 1rem;
+  --Rightbar-padding: 1rem 0.5rem;
   // --Rightbar-logo-size: 2rem;
   // --Rightbar-link-height: 3rem;
   // --Rightbar-link-transition: all .3s ease;
@@ -11,36 +11,25 @@
 }
 
 .Rightbar {
-  min-height: 100vh;
-  width: var(--Rightbar-width);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: inherit;
   max-width: var(--Rightbar-width);
-  padding-top: var(--Rightbar-padding);
-  padding-bottom: var(--Rightbar-padding);
-  position: fixed;
-  right: 0.75rem;
+  height: 100%;
+  padding: var(--Rightbar-padding);
+  transition: var(--Sidebar-transition);
+  overflow-x: visible;
   // margin-left: 100%;
 
   $self: #{&};
 
-  &__toggle {
+  &__header {
     display: flex;
     align-items: center;
-    // justify-content: space-between;
+    justify-content: space-between;
     gap: 0.5rem;
-    &-logo {
-      display: flex;
-      align-items: center;
-      & img {
-        width: var(--Rightbar-logo-size);
-        height: var(--Rightbar-logo-size);
-      }
-    }
-    &-brand {
-    }
-    &-close {
-      padding-right: 1rem;
-      display: none;
-    }
+    // padding-bottom: .75rem;
   }
 
   &__main {

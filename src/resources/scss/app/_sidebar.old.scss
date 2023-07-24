@@ -1,4 +1,3 @@
-@use "../helpers/helpers";
 @use "../helpers/responsive";
 
 .Sidebar {
@@ -150,9 +149,12 @@
       margin-top: auto;
     }
   }
+}
 
-  @mixin sidebar-collapse {
+@mixin sidebar-collapse {
+  .Sidebar {
     --Sidebar-width: var(--Sidebar-width-collapsed);
+    // --Sidebar-transition: width #{$transition-in-1};
     --Sidebar-padding: 0.5rem;
     --Sidebar-link-padding: 0;
     &__searchbox {
@@ -176,23 +178,13 @@
       overflow-x: visible;
     }
     &__link {
-      $this: helpers.direct-parent(&);
       --Sidebar-link-height: 2.5rem;
       margin: 0.25rem 0;
       justify-content: center;
-
-      &:has(#{$this}-badge) #{$this}-icon::before {
-        content: "";
-        position: absolute;
-        inset: 8px 4px auto auto;
-        z-index: 5;
-        width: 0.65rem;
-        height: 0.65rem;
-        border-radius: $radius-circle;
-        background-color: $color-danger;
-        border: 2px solid var(--base-box);
+      &-icon {
+        // margin-right: auto;
+        // margin-left: auto;
       }
-
       &-text {
         opacity: 0;
         visibility: hidden;
@@ -209,8 +201,8 @@
         transition: opacity #{$transition-1-ln};
         pointer-events: none;
       }
-      &:hover #{$this}-text,
-      &:focus-visible #{$this}-text {
+      &:hover .Sidebar__link-text,
+      &:focus-visible .Sidebar__link-text {
         opacity: 1;
         visibility: visible;
       }
@@ -226,13 +218,11 @@
       }
     }
   }
+}
 
-  [aria-expanded="false"] & {
-    @include sidebar-collapse;
-  }
-  @include responsive.make-range-responsive(sm, lg) {
-    & {
-      @include sidebar-collapse;
-    }
-  }
+[aria-expanded="false"] {
+  @include sidebar-collapse;
+}
+@include responsive.make-range-responsive(sm, lg) {
+  @include sidebar-collapse;
 }

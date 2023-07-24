@@ -1,3 +1,8 @@
+@import "../utilities/box";
+@import "../utilities/badge";
+@import "../utilities/analyze";
+@import "../utilities/list";
+
 .FixedElement {
   position: fixed;
   width: 100%;
@@ -42,135 +47,6 @@
       100% {
         transform: rotate(360deg);
       }
-    }
-  }
-}
-
-// Box
-.Box {
-  width: 100%;
-  background-color: var(--base-box);
-  border-radius: $radius-sm;
-  box-shadow: var(--base-shadow);
-  padding: $spacing-md;
-  transition: $transition-1-eio;
-  // border: 1px solid transparent;
-  &:hover,
-  &:focus-visible {
-    box-shadow: none;
-  }
-  &-scrollable {
-    overflow-x: auto;
-  }
-}
-@include dark-mode {
-  .Box {
-    box-shadow: $shadow-border;
-    // border-color: var(--base-border);
-  }
-}
-
-// Badge
-@mixin make-badge {
-  padding: 4px 4px 3px;
-  margin-top: -3px;
-  font-size: $font-size-xs;
-  font-weight: 600;
-  line-height: 1;
-  color: $color-light;
-  border-radius: $radius-sm;
-}
-.Badge {
-  @each $name, $color in $colors {
-    &-#{$name} {
-      @include make-badge;
-      background-color: #{$color};
-    }
-    &-#{$name}-variant {
-      @include make-badge;
-      background-color: make-color-variant($color);
-    }
-  }
-}
-
-// Analyze box
-.Analyze {
-  @extend .Box;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-
-  &__info {
-    padding-left: 0.5rem;
-    &-title {
-      width: 12ch;
-      font-size: $font-size;
-    }
-    &-content {
-      font-size: $font-size-lg;
-      font-weight: 800;
-    }
-  }
-
-  &__progress {
-    --progress-width: 5rem;
-    width: var(--progress-width);
-    height: var(--progress-width);
-    display: flex;
-    margin-left: auto;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    border-radius: $radius-circle;
-    & svg {
-      width: var(--progress-width);
-      height: var(--progress-width);
-      position: relative;
-      & circle {
-        --stroke-width: 0.5rem;
-        // --excess-width: calc(var(--stroke-width) / 2);
-        fill: none;
-        stroke-width: var(--stroke-width);
-        stroke-linecap: round;
-        stroke-dashoffset: -30;
-        stroke-dasharray: 200;
-        // transform: translate(var(--excess-width), var(--excess-width));
-      }
-    }
-    &-percentage {
-      position: absolute;
-      font-size: $font-size-sm;
-    }
-    @each $name, $color in $colors {
-      &-#{$name} svg circle,
-      svg#{&}-#{$name} circle {
-        stroke: #{$color};
-      }
-    }
-  }
-}
-
-// Items list
-.ItemsList {
-  @extend .Box;
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  // transition: $transition-2;
-  & .Item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    // gap: $spacing-1;
-
-    &__img,
-    &__img img {
-      width: 5rem;
-      height: 5rem;
-      border-radius: $radius-circle;
-      margin-bottom: $spacing-2;
     }
   }
 }

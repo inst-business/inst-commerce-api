@@ -1,0 +1,23 @@
+// Box
+.Box {
+  width: 100%;
+  background-color: var(--base-box);
+  border-radius: $radius-sm;
+  box-shadow: var(--base-shadow);
+  padding: $spacing-md;
+  transition: $transition-1-eio;
+  // border: 1px solid transparent;
+  &:hover,
+  &:focus-visible {
+    box-shadow: none;
+  }
+  &-scrollable {
+    overflow-x: auto;
+  }
+}
+@include dark-mode {
+  .Box {
+    box-shadow: $shadow-border;
+    // border-color: var(--base-border);
+  }
+}

@@ -27,3 +27,13 @@
   }
   @return $result;
 }
+
+@function direct-parent($parent) {
+  $selector: nth($parent, 1);
+  $direct-parent: nth($selector, length($selector));
+  @return $direct-parent;
+}
+
+@function get1() {
+  @return ".Demo";
+}

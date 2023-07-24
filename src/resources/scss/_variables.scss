@@ -52,6 +52,19 @@ $colors: (
   @return $color 0 0 0 $size;
 }
 
+@mixin make-hover() {
+  &:hover,
+  &:focus-visible {
+    background-color: var(--base-hover-overlay);
+  }
+}
+@mixin make-hover-0() {
+  &:hover,
+  &:focus-visible {
+    background-color: transparent;
+  }
+}
+
 // Light theme colors
 $base-color: #404142;
 $base-color-variant: #656c72;
@@ -126,6 +139,7 @@ $transition-out-1: 0.15s ease-in;
 // Font properties
 $font-size: 1rem;
 $font-size-xs: 0.65rem;
+$font-size-ss: 0.75rem;
 $font-size-sm: 0.875rem;
 $font-size-lg: 1.25rem;
 $font-size-xl: 1.75rem;
@@ -162,9 +176,9 @@ $table-cell-padding-sm: 0.25rem;
 $table-cell-padding-lg: 0.75rem;
 $table-hover-color: rgba(0, 0, 0, 0.025);
 
-// Navbar properties
-$navbar-padding: 0.5rem;
-$navbar-spacing: 0.5rem;
+// Header properties
+$header-padding: 0.5rem;
+$header-spacing: 0.5rem;
 
 // Breakpoints
 $media-breakpoints: (

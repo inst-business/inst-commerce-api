@@ -1,0 +1,114 @@
+// Items list
+.ItemsList {
+  @extend .Box;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  // transition: $transition-2;
+  & .Item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    // gap: $spacing-1;
+
+    &__img,
+    &__img img {
+      width: 5rem;
+      height: 5rem;
+      border-radius: $radius-circle;
+      margin-bottom: $spacing-2;
+    }
+  }
+}
+
+.UsersList {
+  display: flex;
+  flex-direction: column;
+  & .User {
+    --User-status-color: #{$color-lightgrey};
+    &[data-status="online"] {
+      --User-status-color: #{$color-success};
+    }
+    &[data-status="offline"] {
+      --User-status-color: #{$color-lightgrey};
+    }
+    &[data-status="away"] {
+      --User-status-color: #{$color-warning};
+    }
+    &[data-status="busy"] {
+      --User-status-color: #{$color-danger};
+    }
+  }
+
+  & .User {
+    --User-padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: var(--User-padding);
+    border-radius: $radius-md;
+    cursor: pointer;
+    @include make-hover;
+
+    &__avatar,
+    &__avatar img {
+      position: relative;
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: $radius-circle;
+      object-fit: cover;
+    }
+    &__status {
+      transition: $transition-color-1;
+      &::before {
+        content: "";
+        position: absolute;
+        right: -2px;
+        bottom: -2px;
+        z-index: 5;
+        width: 0.65rem;
+        height: 0.65rem;
+        border-radius: $radius-circle;
+        background-color: var(--User-status-color);
+        border: 2px solid var(--base-body);
+        transition: border $transition-1-ln, $transition-color-1;
+      }
+    }
+    &__name {
+      font-size: $font-size;
+      font-weight: 700;
+      color: var(--base-color);
+      @include make-text-ellipsised;
+      max-width: calc(100% - 8.75ch);
+    }
+    &[data-unreads] {
+      // padding-right: 4.5ch;
+      &::before {
+        order: 2;
+        content: "";
+        display: block;
+        height: 4px;
+        width: 4px;
+        min-width: 4px;
+        margin-left: auto;
+        border-radius: $radius-circle;
+        background-color: $color-primary-lighter;
+      }
+      &::after {
+        order: 3;
+        // flex-grow: 1;
+        content: attr(data-unreads);
+        display: inline-block;
+        max-width: 3ch;
+        margin-left: -1ch;
+        color: var(--base-color-variant);
+        font-size: $font-size-ss;
+        font-weight: 600;
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
+  }
+}

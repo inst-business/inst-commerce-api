@@ -41,8 +41,6 @@
   }
 
   @include responsive.make-responsive-up(md) {
-    // layout-template-columns: var(--Layout-sidebar-width-collapsed) auto var(--Layout-rightbar-width-collapsed);
-    --Layout-sidebar-width: #{$sidebar-width-collapsed};
     --Layout-sidebar-width: #{$sidebar-width-collapsed};
   }
   @include responsive.make-responsive-up(xs) {
@@ -88,6 +86,7 @@
         top: 0;
         left: 0;
         width: 100%;
+        z-index: 100;
       }
     }
 
@@ -107,7 +106,25 @@
         position: fixed;
         width: var(--Sidebar-width);
         height: inherit;
-        // padding-bottom: var(--Layout-spacing);
+        z-index: 100;
+      }
+    }
+
+    & #{$self}__rightbar {
+      position: relative;
+      width: var(--Rightbar-width);
+      height: calc(100vh - $header-height);
+
+      &[aria-expanded="false"] {
+        --Sidebar-width: #{$rightbar-width-collapsed};
+      }
+      @include responsive.make-range-responsive(sm, lg) {
+        --Sidebar-width: #{$rightbar-width-collapsed};
+      }
+      &-fixed {
+        position: fixed;
+        width: var(--Rightbar-width);
+        height: inherit;
       }
     }
   }
