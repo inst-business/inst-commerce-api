@@ -181,18 +181,108 @@
   <div class="Col lg-6 sm-12">
     <h2 class="Heading">Form</h2>
     <div class="Box Box-scrollable">
-      <input type="text" class="Input">
-      <input type="number" class="Input">
-      <input type="number" class="Input Input__spinners">
-      <select class="Input" id="country" name="country">
-        <option value="">-- Choose your country --</option>
-        <option value="us">USA</option>
-        <option value="sg">Singapore</option>
-        <option value="vn">Vietnam</option>
-      </select>
-      <div id="content" contenteditable>
-    Click to type...
-  </div>
+      <form class="Form" action="" method="">
+        <div class="Form__head">
+          <p class="Form__head-title">Form Validation</p>
+          <p class="Form__head-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. A eos quia commodi.</p>
+        </div>
+        <div class="Form__body">
+          <div class="Field" aria-invalid="">
+            <label for="username" class="Field__label">Username</label>
+            <input type="text" class="Field__input" name="username" id="username">
+            <span class="Field__response"></span>
+          </div>
+          <div class="Field" aria-invalid="true">
+            <label for="password" class="Field__label">Password</label>
+            <input type="password" class="Field__input" name="password" id="password">
+            <span class="Field__response"></span>
+          </div>
+          <div class="Field" aria-invalid="false">
+            <label for="tel" class="Field__label">Phone Number</label>
+            <input type="number" class="Field__input" name="tel" id="tel">
+            <span class="Field__response"></span>
+          </div>
+          <div class="Field">
+            <label for="gender" class="Field__label">Gender</label>
+            <div class="Field-options" data-direction="row">
+              <div class="Field__option">
+                <input type="radio" name="gender" value="male" id="gender-male">
+                <label for="gender-male">Male</label>
+              </div>
+              <div class="Field__option">
+                <input type="radio" name="gender" value="female" id="gender-female">
+                <label for="gender-female">Female</label>
+              </div>
+              <div class="Field__option">
+                <input type="radio" name="gender" value="other" id="gender-other">
+                <label for="gender-other">Others</label>
+              </div>
+            </div>
+          </div>
+          <div class="Field-group">
+            <div class="Field lg-6 md-6" aria-invalid="">
+              <label for="input1" class="Field__label">Input</label>
+              <input type="text" class="Field__input" name="input1" id="input1">
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field lg-6 md-6" aria-invalid="">
+              <label for="input2" class="Field__label">Input</label>
+              <input type="text" class="Field__input" name="input2" id="input2">
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field lg-1 md-6" aria-invalid="">
+              <label for="input1" class="Field__label">Input</label>
+              <input type="text" class="Field__input" name="input1" id="input1">
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field lg-11 md-6" aria-invalid="">
+              <label for="input2" class="Field__label">Input</label>
+              <input type="text" class="Field__input" name="input2" id="input2">
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field lg-2 md-6" aria-invalid="">
+              <label for="input1" class="Field__label">Input</label>
+              <input type="text" class="Field__input" name="input1" id="input1">
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field lg-10 md-6" aria-invalid="">
+              <label for="input2" class="Field__label">Input</label>
+              <input type="text" class="Field__input" name="input2" id="input2">
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field lg-3 md-6" aria-invalid="">
+              <label for="input1" class="Field__label">Input</label>
+              <input type="text" class="Field__input" name="input1" id="input1">
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field lg-3 md-6" aria-invalid="">
+              <label for="input2" class="Field__label">Input</label>
+              <input type="text" class="Field__input" name="input2" id="input2">
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field lg-3 md-6" aria-invalid="">
+              <label for="input1" class="Field__label">Input</label>
+              <input type="text" class="Field__input" name="input1" id="input1">
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field lg-3 md-6" aria-invalid="">
+              <label for="input2" class="Field__label">Input</label>
+              <input type="text" class="Field__input" name="input2" id="input2">
+              <span class="Field__response"></span>
+            </div>
+          </div>
+          <div class="Field">
+            <label for="country" class="Field__label">Country</label>
+            <select class="Field__input" id="country" name="country">
+              <option value="">-- Choose your country --</option>
+              <option value="us">USA</option>
+              <option value="sg">Singapore</option>
+              <option value="vn">Vietnam</option>
+            </select>
+            <span class="Field__response"></span>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </section>

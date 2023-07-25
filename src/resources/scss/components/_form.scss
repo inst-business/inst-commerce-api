@@ -1,0 +1,199 @@
+@use "../helpers/helpers";
+
+/*  Initial */
+.Form {
+  --Form-gap: #{$spacing-4};
+  --Form-padding: 0;
+  --Form-background: transparent;
+  --Form-transition: all #{$transition-1-eio}, #{$transition-color-1};
+  --Field-spacing: 0.75rem;
+  --Field-response: var(--base-color-variant);
+  --Field-transition: all #{$transition-1-eio}, #{$transition-color-1};
+}
+
+.Form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--Form-gap);
+  width: 100%;
+  padding: var(--Form-padding);
+  background-color: var(--Form-background);
+  border-radius: $radius-md;
+  transition: var(--Form-transition);
+
+  &__head {
+    --Form-head-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &-title {
+      color: var(--base-color-variant);
+      font-size: $font-size-lg;
+      font-weight: 700;
+      line-height: $line-height;
+      margin: 0;
+    }
+    &-description {
+      color: var(--base-color-muted);
+      font-size: $font-size;
+      line-height: $line-height;
+      margin: 0;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--Field-spacing);
+    transition: var(--Form-transition);
+    // .Field + .Field {
+    //   margin-top: .75rem;
+    // }
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    button {
+      appearance: none;
+      display: flex;
+      min-width: calc(50% - 0.5rem);
+      flex-grow: 1;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      justify-content: center;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      color: #fff;
+      transition: var(--glob-transition);
+
+      &:hover {
+        filter: brightness(var(--hover-brightness));
+      }
+      &.btn-primary {
+        background-color: var(--primary);
+      }
+      &.btn-secondary {
+        background-color: var(--secondary);
+      }
+      &.btn-tertiary {
+        background-color: var(--tertiary);
+      }
+      &.btn-success {
+        background-color: var(--success);
+      }
+      &.btn-danger {
+        background-color: var(--danger);
+      }
+    }
+  }
+}
+
+@mixin make-field-12col($gap: 0.75rem) {
+  @each $dimension, $max-width in $container-max-widths {
+    $min-width: map-get($media-breakpoints, $dimension);
+    @if $min-width {
+      @media screen and (min-width: $min-width) {
+        @if ($dimension == "sm") or
+          ($dimension == "md") or
+          ($dimension == "lg") or
+          ($dimension == "xl")
+        {
+          // Columns 1 -> 12
+          @for $i from 1 through 12 {
+            // 100 - (12 / i - 1) * gap
+            $after-gap: calc(100% - ((12 / #{$i} - 1) * #{$gap}));
+            &.#{$dimension}-#{$i} {
+              display: unset;
+              // after / 12
+              flex: 0 0 calc((#{$after-gap} / 12) * #{$i});
+              max-width: calc((#{$after-gap} / 12) * #{$i});
+            }
+          }
+          // Offset of Columns 1 -> 12
+          @for $i from 1 through 11 {
+            &.o#{$dimension}-#{$i} {
+              margin-left: calc((100% / 12) * #{$i});
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.Field {
+  $Field: helpers.direct-parent(&);
+  display: flex;
+  flex-direction: column;
+  // flex-grow: 3;
+  transition: var(--Field-transition);
+
+  &__label {
+    width: 100%;
+    margin-bottom: 0.25rem;
+    font-size: $font-size-sm;
+    line-height: $line-height-sm;
+    @include make-text-ellipsised();
+    color: var(--base-color);
+    transition: var(--Field-transition);
+  }
+  &__input {
+    @extend .Input;
+  }
+  &__option {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  &__response {
+    width: 100%;
+    margin: 2px 0 0;
+    font-size: 0.75rem;
+    line-height: 0.75rem;
+    color: var(--Field-response);
+    transition: var(--Field-transition);
+  }
+  &-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0 var(--Field-spacing);
+    width: 100%;
+    transition: var(--Field-transition);
+    &[data-direction="row"] {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+  &-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--Field-spacing);
+    width: 100%;
+    transition: var(--Field-transition);
+  }
+
+  &[aria-invalid="false"] {
+    --Field-response: #{$color-danger};
+    #{$Field}-input {
+      border-color: $color-danger !important;
+      --Input-outline: #{make-shadow-outlined($color-danger)};
+    }
+  }
+  &[aria-invalid="true"] {
+    --Field-response: #{$color-success};
+    #{$Field}-input {
+      border-color: $color-success !important;
+      --Input-outline: #{make-shadow-outlined($color-success)};
+    }
+  }
+
+  @include make-field-12col(var(--Field-spacing));
+}

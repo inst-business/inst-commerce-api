@@ -5,6 +5,7 @@
 @import "components/text";
 @import "components/button";
 @import "components/input";
+@import "components/form";
 @import "components/table";
 @import "components/dialog";
 @import "components/utilities";
@@ -88,29 +89,31 @@
   --base-body: #{$base-body};
   --base-box: #{$base-box};
   --base-border: #{$base-border};
+  --base-border-highlighted: #{$base-border-highlighted};
   --base-hover-overlay: #{$base-hover-overlay};
   --base-overlay: #{$base-overlay};
   --base-shadow: #{$base-shadow};
   --base-shadow-variant: #{$base-shadow-variant};
-  --base-shadow-outlined: #{make-shadow-outlined($base-border)};
-  --base-shadow-outlined-sm: #{make-shadow-outlined($base-border, 0.15rem)};
+  --base-outlined: #{$base-outlined};
+  --base-outlined-sm: #{$base-outlined-sm};
 }
 
 :root[data-theme="dark"],
 .DarkMode {
-  --base-color: #{$base-dark-color};
-  --base-color-variant: #{$base-dark-color-variant};
-  --base-color-highlight: #{$base-dark-color-highlight};
-  --base-color-muted: #{$base-dark-color-muted};
-  --base-body: #{$base-dark-body};
-  --base-box: #{$base-dark-box};
-  --base-border: #{$base-dark-border};
-  --base-hover-overlay: #{$base-dark-hover-overlay};
-  --base-overlay: #{$base-dark-overlay};
-  --base-shadow: #{$base-dark-shadow};
-  --base-shadow-variant: #{$base-dark-shadow-variant};
-  --base-shadow-outlined: #{make-shadow-outlined($base-dark-border)};
-  --base-shadow-outlined-sm: #{make-shadow-outlined($base-dark-border, 0.15rem)};
+  --base-color: #{$base-night-color};
+  --base-color-variant: #{$base-night-color-variant};
+  --base-color-highlight: #{$base-night-color-highlight};
+  --base-color-muted: #{$base-night-color-muted};
+  --base-body: #{$base-night-body};
+  --base-box: #{$base-night-box};
+  --base-border: #{$base-night-border};
+  --base-border-highlighted: #{$base-night-border-highlighted};
+  --base-hover-overlay: #{$base-night-hover-overlay};
+  --base-overlay: #{$base-night-overlay};
+  --base-shadow: #{$base-night-shadow};
+  --base-shadow-variant: #{$base-night-shadow-variant};
+  --base-outlined: #{$base-night-outlined};
+  --base-outlined-sm: #{$base-night-outlined-sm};
 
   --dark: #{$color-dark};
   --light: #{$color-light};
@@ -128,7 +131,7 @@ body {
   overflow-x: hidden;
   color: var(--base-color);
   background-color: var(--base-body);
-  transition: var(--transition-1-eio);
+  transition: all $transition-1-eio, $transition-color-1;
   @include scroll-bar;
 }
 

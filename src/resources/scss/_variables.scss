@@ -49,7 +49,9 @@ $colors: (
 }
 
 @function make-shadow-outlined($color, $size: 0.25rem) {
-  @return $color 0 0 0 $size;
+  $color-spreaded: make-color-spread($color, 75%);
+  $color-outlined: make-color-transparent($color-spreaded, 25%);
+  @return $color-outlined 0 0 0 $size;
 }
 
 @mixin make-hover() {
@@ -69,27 +71,34 @@ $colors: (
 $base-color: #404142;
 $base-color-variant: #656c72;
 $base-color-highlight: $color-primary;
-$base-color-muted: rgba(0, 0, 0, 0.15);
+$base-color-muted: rgba(0, 0, 0, 0.25);
 $base-body: #f1f4f8;
 $base-box: #fff;
-$base-border: #f1f1f1;
+// $base-border: #f1f1f1;
+$base-border: #dee2e6;
+$base-border-highlighted: $color-lightgrey;
+$base-outlined: make-shadow-outlined($color-dark);
+$base-outlined-sm: make-shadow-outlined($color-dark, 0.15rem);
 $base-hover-overlay: rgba(0, 0, 0, 0.05);
 $base-overlay: rgba(0, 0, 0, 0.75);
 $base-shadow: #4041421a 0px 2px 8px 0px;
 $base-shadow-variant: #4041421a 0px 0px 2px 1px;
 
 // Dark theme colors
-$base-dark-color: #adbac7;
-$base-dark-color-variant: #768390;
-$base-dark-color-highlight: $color-primary-lighter;
-$base-dark-color-muted: rgba(255, 255, 255, 0.15);
-$base-dark-body: #1c2128;
-$base-dark-box: #2e3338;
-$base-dark-border: $base-dark-color-muted;
-$base-dark-hover-overlay: rgba(255, 255, 255, 0.05);
-$base-dark-overlay: rgba(255, 255, 255, 0.85);
-$base-dark-shadow: #e8eaf41a 0px 2px 8px 0px;
-$base-dark-shadow-variant: #e8eaf41a 0px 0px 2px 1px;
+$base-night-color: #adbac7;
+$base-night-color-variant: #768390;
+$base-night-color-highlight: $color-primary-lighter;
+$base-night-color-muted: rgba(255, 255, 255, 0.25);
+$base-night-body: #1c2128;
+$base-night-box: #2e3338;
+$base-night-border: $base-night-color-muted;
+$base-night-border-highlighted: $color-lightgrey;
+$base-night-outlined: make-shadow-outlined($color-light);
+$base-night-outlined-sm: make-shadow-outlined($color-light, 0.15rem);
+$base-night-hover-overlay: rgba(255, 255, 255, 0.05);
+$base-night-overlay: rgba(255, 255, 255, 0.85);
+$base-night-shadow: #e8eaf41a 0px 2px 8px 0px;
+$base-night-shadow-variant: #e8eaf41a 0px 0px 2px 1px;
 
 // Colors for main content
 $color-txt-dark: #404142;
@@ -122,12 +131,12 @@ $radius-circle: 50%;
 // Box shadow
 $shadow-1: rgba(64, 65, 66, 0.1) 0px 2px 8px 0px; // Based on $color-dark
 $shadow-1-darkened: rgba(241, 244, 248, 0.1) 0px 2px 8px 0px; // Based on $color-dark
-$shadow-outlined: $base-dark-color-muted 0 0 0 0.25rem;
-$shadow-border: $base-dark-color-muted 0 0 0 1px;
+$shadow-outlined: $base-night-color-muted 0 0 0 0.25rem;
+$shadow-border: $base-night-color-muted 0 0 0 1px;
 
 // Transition
 $transition-0: none;
-$transition-1-eio: all 0.15s ease-in-out;
+$transition-1-eio: 0.15s ease-in-out;
 $transition-1-ln: 0.15s linear;
 $transition-2: all 0.3s ease;
 $transition-3: all 0.35s ease-out;
@@ -168,7 +177,7 @@ $spacing-lg: 1.25rem;
 $spacing-xl: 1.5rem;
 
 // Others properties
-$strike-color: #dee2e6;
+$strike-color: #f1f1f1;
 
 // Table properties
 $table-cell-padding: 0.5rem;

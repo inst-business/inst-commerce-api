@@ -40,10 +40,14 @@
       padding: var(--input-padding);
       border: 1px solid var(--base-border);
       border-radius: $radius-md;
-      transition: $transition-1-eio;
+      transition: all $transition-1-eio, $transition-color-1;
     }
     &-icon {
       color: $color-txt-grey;
+      transition: all $transition-1-eio, $transition-color-1;
+      > * {
+        font-weight: inherit;
+      }
     }
     &-placeholder {
       appearance: none;
@@ -58,7 +62,8 @@
     }
     &:hover &-input,
     &:focus-visible &-input {
-      box-shadow: var(--base-shadow-outlined);
+      box-shadow: var(--base-outlined);
+      border-color: var(--base-border-highlighted);
     }
   }
 
@@ -156,11 +161,16 @@
     --Sidebar-padding: 0.5rem;
     --Sidebar-link-padding: 0;
     &__searchbox {
+      $this: helpers.direct-parent(&);
       &-input {
         --input-padding: 0;
         justify-content: center;
-        border-color: transparent;
+        border-color: transparent !important;
         box-shadow: none !important;
+      }
+      &:hover #{$this}-icon,
+      &:focus-visible #{$this}-icon {
+        font-weight: 900;
       }
       &-placeholder {
         display: none;

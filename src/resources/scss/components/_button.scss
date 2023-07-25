@@ -8,8 +8,7 @@
   --Btn-radius: #{$radius-md};
   --Btn-color-side: #fff;
   --Btn-intensity: 80%;
-  --Btn-transition: #{$transition-1-eio}, background-color #{$transition-1-ln},
-    color #{$transition-1-ln};
+  --Btn-transition: all #{$transition-1-eio}, #{$transition-color-1};
   $self: #{&};
   &-sm {
     @extend #{$self};

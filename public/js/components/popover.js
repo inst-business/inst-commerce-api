@@ -1,4 +1,4 @@
-import qs from '../consts.js'
+import { qs } from '../helpers/helpers.js'
 
 /**
  *  Popover elements required:

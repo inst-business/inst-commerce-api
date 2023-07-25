@@ -1,50 +1,27 @@
-import qs from '../consts.js'
 
-export const loadingScreen = () => {
-  // qs.$.classList.add('App-loaded')
-  setTimeout(() => {
-    qs.$.classList.remove('App-onload')
-  }, 300)
-}
-
-
-const themeModes = ['light', 'dark']
-const storeTheme = (mode) => {
-  localStorage.setItem('theme', mode)
-}
-export const loadTheme = () => {
-  const theme = localStorage.getItem('theme')
-  if (theme && themeModes.includes(theme)) {
-    const Root = qs.o('html')
-    Root.dataset.theme = theme
-  }
-}
-export const switchTheme = (btn) => {
-  btn.addEventListener('click', function switchRootTheme (e) {
-    const Root = qs.o('html')
-    const theme = (Root.dataset?.theme === 'dark') ? Root.dataset.theme : 'light'
-    const switchedTheme = (theme === 'light') ? 'dark' : 'light'
-    Root.dataset.theme = switchedTheme
-    storeTheme(switchedTheme)
-  })
+export const qs = {
+  o: document.querySelector.bind(document),
+  a: document.querySelectorAll.bind(document),
+  $: document.getElementById('App'),
+  $o: document.getElementById('App').querySelector.bind(document.getElementById('App')),
+  $a: document.getElementById('App').querySelectorAll.bind(document.getElementById('App')),
 }
 
+export const isValidFnName = name => {
+  const regex = /^[$A-Z_][0-9A-Z_$]*$/i
+  return regex.test(name)
+}
 
-const storeSidebarState = (state) => {
-  localStorage.setItem('sidebarExpanded', state)
+export const splitOutFnName = (str, all = false) => {
+  const opts = !all ? 'i' : 'ig',
+        regex = new RegExp('[$A-Z_][0-9A-Z_$]*', opts),
+        result = str.match(regex)
+  return all ? result : result[0]
 }
-export const loadSidebarState = () => {
-  const state = localStorage.getItem('sidebarExpanded')
-  if (state) {
-    const Sidebar = qs.$o('#Sidebar')
-    console.log(state, Sidebar.getAttribute('aria-expanded'))
-    Sidebar.setAttribute('aria-expanded', state)
-  }
-}
-export const toggleExpanded = (btn, target) => {
-  btn.addEventListener('click', function expandTarget (e) {
-    const expanded = (target.getAttribute('aria-expanded') === 'true') ? true : false
-    target.setAttribute('aria-expanded', !expanded)
-    storeSidebarState(!expanded)
-  })
+
+export const getFnValue = (str, all = false) => {
+  const opts = !all ? 'i' : 'ig',
+        regex = new RegExp('(?<![\\w$])\\d+(?![\\w])', opts),
+        result = str.match(regex)
+  return all ? result : result[0]
 }

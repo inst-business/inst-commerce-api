@@ -1,15 +1,47 @@
+/*  Initial */
+.Input {
+  --Input-padding: #{$spacing-2};
+  --Input-font-size: #{$font-size};
+  --Input-line-height: #{$line-height-sm};
+  --Input-background: var(--base-box);
+  --Input-color: var(--base-color);
+  --Input-border: var(--base-border);
+  --Input-hover: var(--base-border-highlighted);
+  --Input-outline: var(--base-outlined);
+  --Input-transition: #{$transition-color-1}, box-shadow #{$transition-1-eio},
+    border #{$transition-1-ln};
+}
+
 .Input {
   width: 100%;
-  padding: 0.5rem;
-  font-size: $font-size;
-  line-height: $line-height-sm;
-  border-radius: $radius-sm;
-  border: 1px solid $color-lightergrey;
-  color: var(--base-color);
-  background-color: var(--base-box);
-  transition: all $transition-1-ln;
+  padding: var(--Input-padding);
+  font-size: var(--Input-font-size);
+  line-height: var(--Input-line-height);
+  border-radius: #{$radius-sm};
+  border: 1px solid var(--Input-border);
+  color: var(--Input-color);
+  background-color: var(--Input-background);
+  transition: var(--Input-transition);
+  &:hover,
+  &:focus-visible {
+    border-color: var(--Input-hover);
+  }
   &:focus {
-    border-color: $color-lightgrey;
+    box-shadow: var(--Input-outline);
+    z-index: 1;
+    position: sticky;
+  }
+
+  /*  Each color */
+  @each $name, $color in $colors {
+    &[data-variant="#{$name}"],
+    %Input-#{$name} {
+      --Input-hover: #{$color};
+      --Input-outline: #{make-shadow-outlined($color)};
+      &[data-highlight="true"] {
+        --Input-border: #{make-color-spread($color, 25%)};
+      }
+    }
   }
 
   &[type="number"]::-webkit-inner-spin-button {
@@ -21,13 +53,18 @@
 }
 
 select.Input {
+  --Input-line-height: normal;
   appearance: none;
-  line-height: normal;
-  background-image: linear-gradient(45deg, transparent 50%, gray 50%),
-    linear-gradient(135deg, gray 50%, transparent 50%),
-    linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(
+      45deg,
+      transparent 50%,
+      $color-lightgrey 50%
+    ),
+    linear-gradient(135deg, $color-lightgrey 50%, transparent 50%),
+    linear-gradient(to right, var(--base-border), var(--base-border));
   background-position: calc(100% - 20px) calc(1em + 2px),
     calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
-  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-size: 5px 5px, 5px 5px, 2px 1.5em;
   background-repeat: no-repeat;
+  transition: var(--Input-transition), background-image $transition-1-ln;
 }
