@@ -1,5 +1,5 @@
-@use '../helpers/helpers';
-@import '../variables';
+@use "../helpers/helpers";
+@import "../variables";
 
 @mixin make-responsive($breakpoints...) {
   // breakpoints list, keys(name) list
@@ -15,13 +15,13 @@
         $next-breakpoint: helpers.map-get-next($bp-list, $breakpoint);
         $max-width: map-get($bp-list, $next-breakpoint);
         @media screen and (min-width: $min-width) and (max-width: calc($max-width - 1px)) {
-          @content;
+          @content ($breakpoint);
         }
       }
       // if key is the largest value
       @if $index == length($keys) {
         @media screen and (min-width: map-get($bp-list, $breakpoint)) {
-          @content;
+          @content ($breakpoint);
         }
       }
     } @else {
@@ -42,11 +42,11 @@
         $min-width: helpers.map-get-next($bp-list, $breakpoint, true);
         $max-width: $min-width - 1px;
         @media screen and (max-width: $max-width) {
-          @content;
+          @content ($breakpoint);
         }
       } @else {
         @media screen and (max-width: map-get($bp-list, $breakpoint)) {
-          @content;
+          @content ($breakpoint);
         }
       }
     } @else {
@@ -65,7 +65,7 @@
     @if $index {
       $min-width: map-get($bp-list, $breakpoint);
       @media screen and (min-width: $min-width) {
-        @content;
+        @content ($breakpoint);
       }
     } @else {
       @error "Invalid breakpoint #{$breakpoint}!";
@@ -82,5 +82,53 @@
     }
   } @else {
     @error "Invalid breakpoints!";
+  }
+}
+
+@mixin make-data-12col($shorthand: "df", $gap: 0px) {
+  @if $shorthand == null {
+    $shorthand: "df";
+  }
+  // Columns 1 -> 12
+  @for $i from 1 through 12 {
+    // 100 - (12 / i - 1) * gap
+    $after-gap: calc(100% - ((12 / #{$i} - 1) * #{$gap}));
+    &[data-col~="#{$shorthand}-#{$i}"] {
+      display: unset;
+      // after-gap / 12
+      flex: 0 0 calc((#{$after-gap} / 12) * #{$i});
+      max-width: calc((#{$after-gap} / 12) * #{$i});
+    }
+  }
+  // Offset of Columns 1 -> 12
+  @for $i from 1 through 11 {
+    &[data-offset~="#{$shorthand}-#{$i}"] {
+      margin-left: calc((100% / 12) * #{$i});
+    }
+  }
+}
+
+@mixin make-class-12col($shorthand: "df", $gap: 0px) {
+  // Columns 1 -> 12
+  @for $i from 1 through 12 {
+    // 100 - (12 / i - 1) * gap
+    $after-gap: calc(100% - ((12 / #{$i} - 1) * #{$gap}));
+    &.#{$shorthand}-#{$i} {
+      display: unset;
+      flex: 0 0 calc((#{$after-gap} / 12) * #{$i});
+      max-width: calc((#{$after-gap} / 12) * #{$i});
+    }
+  }
+  // Offset of Columns 1 -> 12
+  @for $i from 1 through 11 {
+    &.o#{$shorthand}-#{$i} {
+      margin-left: calc((100% / 12) * #{$i});
+    }
+  }
+}
+
+@mixin make-class-hidden-col($shorthand) {
+  &.#{$shorthand}-0 {
+    display: none;
   }
 }

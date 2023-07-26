@@ -1,6 +1,6 @@
-@use '../helpers/helpers';
-@use '../helpers/responsive';
-@import '../variables';
+@use "../helpers/helpers";
+@use "../helpers/responsive";
+@import "../variables";
 
 @mixin make-breakpoint(
   $name,
@@ -24,28 +24,6 @@
     @media screen and (max-width: $max-width) {
       @content;
     }
-  }
-}
-
-@mixin make-12col($size) {
-  // Columns 1 -> 12
-  @for $i from 1 through 12 {
-    &.#{$size}-#{$i} {
-      display: unset;
-      flex: 0 0 calc((100% / 12) * #{$i});
-      max-width: calc((100% / 12) * #{$i});
-    }
-  }
-  // Offset of Columns 1 -> 12
-  @for $i from 1 through 11 {
-    &.o#{$size}-#{$i} {
-      margin-left: calc((100% / 12) * #{$i});
-    }
-  }
-}
-@mixin make-hidden-col($size) {
-  &.#{$size}-0 {
-    display: none;
   }
 }
 
@@ -122,26 +100,26 @@
     }
   }
 
-  @include responsive.make-responsive(xs, sm, md) {
+  @include responsive.make-responsive(xs, sm, md) using ($breakpoint) {
     --Container-spacing: 0.5rem;
   }
 
   $container-max-widths-list: $container-max-widths;
   @each $breakpoint, $max-width in $container-max-widths-list {
     @include make-breakpoint($breakpoint, $max-width) {
-      @if ($breakpoint == 'sm') or
-        ($breakpoint == 'md') or
-        ($breakpoint == 'lg') or
-        ($breakpoint == 'xl')
+      @if ($breakpoint == "sm") or
+        ($breakpoint == "md") or
+        ($breakpoint == "lg") or
+        ($breakpoint == "xl")
       {
         .Row .Col {
-          @include make-12col($breakpoint);
+          @include responsive.make-class-12col($breakpoint);
         }
       }
     }
     @include make-breakpoint-up($breakpoint) {
       .Row .Col {
-        @include make-hidden-col($breakpoint);
+        @include responsive.make-class-hidden-col($breakpoint);
       }
     }
   }

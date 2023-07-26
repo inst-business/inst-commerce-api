@@ -36,14 +36,14 @@
     }
   }
 
-  @include responsive.make-responsive(xs, sm, md) {
+  @include responsive.make-responsive(xs, sm, md) using ($breakpoint) {
     --Layout-spacing: 0.5rem;
   }
 
-  @include responsive.make-responsive-up(md) {
+  @include responsive.make-responsive-up(md) using ($breakpoint) {
     --Layout-sidebar-width: #{$sidebar-width-collapsed};
   }
-  @include responsive.make-responsive-up(xs) {
+  @include responsive.make-responsive-up(xs) using ($breakpoint) {
     layout-template-columns: 1fr;
     layout-template-rows: auto;
     gap: var(--Layout-spacing) 0;
