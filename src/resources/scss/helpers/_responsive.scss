@@ -86,6 +86,7 @@
 }
 
 @mixin make-data-12col($shorthand: "df", $gap: 0px) {
+  // df: default
   @if $shorthand == null {
     $shorthand: "df";
   }
@@ -109,6 +110,10 @@
 }
 
 @mixin make-class-12col($shorthand: "df", $gap: 0px) {
+  // df: default
+  @if $shorthand == null {
+    $shorthand: "df";
+  }
   // Columns 1 -> 12
   @for $i from 1 through 12 {
     // 100 - (12 / i - 1) * gap
