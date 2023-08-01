@@ -17,5 +17,5 @@ const __SidebarCollapseBtn = qs.$o('#Sidebar-collapse-btn')
 const __Sidebar = qs.$o('#Sidebar')
 toggleExpanded(__SidebarCollapseBtn, __Sidebar)
 
-const __SwitchThemeBtn = qs.$o('#Swicth-theme-btn')
+const __SwitchThemeBtn = qs.$o('#Switch-theme-btn')
 switchTheme(__SwitchThemeBtn)

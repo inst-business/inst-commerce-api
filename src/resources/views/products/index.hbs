@@ -64,10 +64,10 @@
               {{dateFormat this.updatedAt 'time'}}
             </td>
             <td class="Item__actions">
-              <a href="/products{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn-sm Btn-outline Btn-grey Btn-circle">
+              <a href="/products{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="circle grey outline">
                 <i class="fa-regular fa-pen-to-square"></i>
               </a>
-              <button class="Item__actions-delete Btn-sm Btn-outline Btn-danger Btn-circle" title="Delete '{{this.name}}'"
+              <button class="Item__actions-delete Btn" data-size="sm" data-variant="outline circle danger" title="Delete '{{this.name}}'"
                 data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
                 <i class="fa-regular fa-trash"></i>
               </button>            

@@ -22,11 +22,13 @@ export const loadTheme = () => {
 }
 export const switchTheme = (btn) => {
   btn.addEventListener('click', function switchRootTheme (e) {
+    
     const Root = qs.o('html')
     const theme = (Root.dataset?.theme === 'dark') ? Root.dataset.theme : 'light'
     const switchedTheme = (theme === 'light') ? 'dark' : 'light'
     Root.dataset.theme = switchedTheme
     storeTheme(switchedTheme)
+    console.log(btn)
   })
 }
 

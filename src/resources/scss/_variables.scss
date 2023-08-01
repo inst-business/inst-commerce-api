@@ -14,7 +14,7 @@ $color-danger: #c54446;
 $color-warning: #e2ad49;
 $color-info: #3f8191;
 $color-grey: #656c72;
-$color-lightgrey: #bdbdbd;
+$color-lightgrey: #b3b3b3;
 $color-lightergrey: #ececec;
 $color-dark: #404142;
 $color-light: #e8eaf4;
@@ -31,12 +31,12 @@ $colors: (
 );
 
 // Make color variant or emphasized
-@function make-color-variant($color) {
-  $variant: color-mix(in srgb, $color 85%, #fff);
+@function make-color-variant($color, $intensity: 85%) {
+  $variant: color-mix(in srgb, $color $intensity, #fff);
   @return $variant;
 }
-@function make-color-emphasis($color) {
-  $emphasis: color-mix(in srgb, $color 85%, #000);
+@function make-color-emphasis($color, $intensity: 85%) {
+  $emphasis: color-mix(in srgb, $color $intensity, #000);
   @return $emphasis;
 }
 @function make-color-spread($color, $intensity: 5%) {

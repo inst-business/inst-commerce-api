@@ -5,23 +5,10 @@
   --Btn-font-weight: #{$btn-font-weight};
   --Btn-line-height: #{$btn-line-height};
   --Btn-color-main: #{$color-primary};
-  --Btn-radius: #{$radius-md};
+  --Btn-radius: #{$radius-sm};
   --Btn-color-side: #fff;
   --Btn-intensity: 80%;
   --Btn-transition: all #{$transition-1-eio}, #{$transition-color-1};
-  $self: #{&};
-  &-sm {
-    @extend #{$self};
-    --Btn-padding: #{$btn-padding-sm};
-    --Btn-font-size: #{$btn-font-size-sm};
-    --Btn-radius: #{$radius-sm};
-  }
-  &-lg {
-    @extend #{$self};
-    --Btn-padding: #{$btn-padding-lg};
-    --Btn-font-size: 1.25rem;
-    --Btn-radius: #{$radius-lg};
-  }
 }
 
 .Btn {
@@ -41,37 +28,39 @@
   background-color: var(--Btn-color-main);
   color: var(--Btn-color-side);
   transition: var(--Btn-transition);
-  $self: #{&};
-  &-sm,
-  &-lg {
-    @extend #{$self};
-  }
 }
 
 .Btn {
   $self: #{&};
   /*  Default */
   &:hover,
-  &:focus-visible {
-    --Btn-color-override: #fff;
-  }
-  &:active {
-    --Btn-color-override: #000;
-  }
-  &:hover,
   &:focus-visible,
   &:active {
-    --Btn-color-main-hover: color-mix(
-      in srgb,
-      var(--Btn-color-main) var(--Btn-intensity),
-      #fff
-    );
-    background-color: var(--Btn-color-main-hover);
+    --Btn-color-main-hover: #{make-color-emphasis(var(--Btn-color-main), 80%)};
+    background: var(--Btn-color-main-hover);
     border-color: var(--Btn-color-main-hover);
+  }
+  &:disabled {
+    --Btn-color-main-disable: #{make-color-variant(var(--Btn-color-main), 80%)};
+    background: var(--Btn-color-main-disable);
+    border-color: var(--Btn-color-main-disable);
+    cursor: default;
+  }
+
+  /*  Sizes */
+  &[data-size="sm"] {
+    --Btn-padding: #{$btn-padding-sm};
+    --Btn-font-size: #{$btn-font-size-sm};
+    --Btn-radius: #{$radius-sm};
+  }
+  &[data-size="lg"] {
+    --Btn-padding: #{$btn-padding-lg};
+    --Btn-font-size: #{$btn-font-size-lg};
+    --Btn-radius: #{$radius-lg};
   }
 
   /*  Outline */
-  &-outline {
+  &[data-variant~="outline"] {
     --Btn-color-main: transparent;
     --Btn-color-side: #{$color-primary};
     border-color: var(--Btn-color-side);
@@ -95,16 +84,19 @@
 
   /*  Each color */
   @each $name, $color in $colors {
-    &-#{$name} {
+    &[data-variant~="#{$name}"],
+    %Btn-#{$name} {
       --Btn-color-main: #{$color};
     }
-    &-#{$name}#{&}-outline {
+    &[data-variant~="#{$name}"][data-variant~="outline"],
+    %Btn-#{$name}-outline {
       --Btn-color-main: transparent;
       --Btn-color-side: #{$color};
     }
   }
 
-  &-circle {
+  &[data-variant~="circle"],
+  %Btn-circle {
     --Btn-radius: #{$radius-circle};
     aspect-ratio: 1 / 1;
     object-fit: cover;
@@ -118,8 +110,9 @@
     }
   }
 
-  &-unstyled {
-    @extend #{$self}-circle;
+  &[data-variant~="unstyled"] {
+    @extend .Btn, [data-variant~="circle"];
+    // --Btn-radius: #{$radius-circle};
     --Btn-color-main: transparent;
     --Btn-color-side: inherit;
     border: none;
@@ -150,38 +143,28 @@
     }
   }
 
-  &__group {
-    background-color: var(--txt-light);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: $radius-rounded;
-    cursor: pointer;
-    #{$self} {
-      @extend .Btn-unstyled;
-      padding: 0.3rem;
-      margin: 0.2rem;
-      &.active,
-      &[aria-current="true"] {
-        border-radius: $radius-circle;
-        background-color: $color-primary;
-        color: $color-light;
-        &::after {
-          display: none;
-        }
-      }
-    }
-    &-sm {
-      #{$self} {
-        @extend .Btn-sm;
-      }
-    }
-    &-lg {
-      #{$self} {
-        @extend .Btn-lg;
-      }
-    }
-  }
+  // &__group {
+  //   background-color: var(--txt-light);
+  //   display: flex;
+  //   justify-content: space-between;
+  //   align-items: center;
+  //   border-radius: $radius-rounded;
+  //   cursor: pointer;
+  //   #{$self} {
+  //     @extend .Btn-unstyled;
+  //     padding: 0.3rem;
+  //     margin: 0.2rem;
+  //     &.active,
+  //     &[aria-current="true"] {
+  //       border-radius: $radius-circle;
+  //       background-color: $color-primary;
+  //       color: $color-light;
+  //       &::after {
+  //         display: none;
+  //       }
+  //     }
+  //   }
+  // }
 
   &-viewmore {
     width: 100%;

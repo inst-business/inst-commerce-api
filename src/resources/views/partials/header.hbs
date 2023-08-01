@@ -1,7 +1,7 @@
 <div class="Header">
   <div class="Header__left">
     <div class="Header__collapse" id="Sidebar-collapse-btn">
-      <button class="Btn Btn-unstyled">
+      <button class="Btn" data-variant="unstyled" data-size="">
         <i class="fa-regular fa-bars"></i>
       </button>
     </div>
@@ -15,14 +15,9 @@
     <button class="Header__menu Btn-lg">
       <i class="fa-regular fa-layout-2"></i>
     </button>
-    <div class="Header__theme Btn__group Btn__group-sm" id="Swicth-theme-btn">
-      <button class="Btn Btn-spacing-0">
-        <i class="fa-regular fa-sun"></i>
-      </button>
-      <button class="Btn Btn-spacing-0" aria-current="true">
-        <i class="fa-regular fa-moon"></i>
-      </button>
-    </div>
+    <label class="Switch" for="Switch-theme-btn" data-size="sm" data-variant="">
+      <input type="checkbox" id="Switch-theme-btn">
+    </label>
     <div class="Header__profile">
       <div class="Header__profile-info">
         <b>Btoann</b>

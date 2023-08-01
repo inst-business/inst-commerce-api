@@ -8,6 +8,7 @@
   --Input-border: var(--base-border);
   --Input-hover: var(--base-border-highlighted);
   --Input-outline: var(--base-outlined);
+  --Input-radius: #{$radius-sm};
   --Input-transition: #{$transition-color-1}, box-shadow #{$transition-1-eio},
     border #{$transition-1-ln};
 }
@@ -17,14 +18,15 @@
   padding: var(--Input-padding);
   font-size: var(--Input-font-size);
   line-height: var(--Input-line-height);
-  border-radius: #{$radius-sm};
+  border-radius: var(--Input-radius);
   border: 1px solid var(--Input-border);
   color: var(--Input-color);
   background-color: var(--Input-background);
   transition: var(--Input-transition);
   &:hover,
   &:focus-visible {
-    border-color: var(--Input-hover);
+    // border-color: var(--Input-hover);
+    --Input-border: var(--Input-hover);
   }
   &:focus {
     box-shadow: var(--Input-outline);
@@ -55,16 +57,96 @@
 select.Input {
   --Input-line-height: normal;
   appearance: none;
+  padding-right: 2.75rem;
   background-image: linear-gradient(
       45deg,
       transparent 50%,
       $color-lightgrey 50%
     ),
     linear-gradient(135deg, $color-lightgrey 50%, transparent 50%),
-    linear-gradient(to right, var(--base-border), var(--base-border));
-  background-position: calc(100% - 20px) calc(1em + 2px),
-    calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
-  background-size: 5px 5px, 5px 5px, 2px 1.5em;
+    linear-gradient(to right, $color-lightgrey, $color-lightgrey);
+  background-position: calc(100% - 1rem) 50%, calc(100% - 0.75rem) 50%,
+    calc(100% - 2rem) 50%;
+  background-size: 0.25rem 0.25rem, 0.25rem 0.25rem, 0.5px 1.5em;
   background-repeat: no-repeat;
   transition: var(--Input-transition), background-image $transition-1-ln;
+}
+
+/* Switch */
+.Switch {
+  --Switch-width: #{$font-size * 2 + $spacing-1 * 2};
+  --Switch-height: #{$font-size + $spacing-1 * 2};
+  --Switch-padding: #{$spacing-1};
+  --Switch-slider-size: #{$font-size};
+  --Switch-radius: #{$radius-xl};
+  --Switch-color: var(--base-border-highlighted);
+  --Switch-background: var(--base-box);
+  --Switch-checked: var(--primary);
+  --Switch-transition: all #{$transition-1-eio}, #{$transition-color-1},
+    border #{$transition-1-ln};
+}
+.Switch {
+  /*  Default */
+  position: relative;
+  display: inline-block;
+  width: var(--Switch-width);
+  height: var(--Switch-height);
+  input[type="checkbox"] {
+    width: 0;
+    height: 0;
+    &::before {
+      content: "";
+      position: absolute;
+      height: var(--Switch-slider-size);
+      width: var(--Switch-slider-size);
+      inset: var(--Switch-padding) var(--Switch-padding);
+      border-radius: $radius-circle;
+      background-color: var(--Switch-color);
+      transition: var(--Switch-transition);
+      cursor: pointer;
+      z-index: 2;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--Switch-color);
+      border-radius: var(--Switch-radius);
+      background-color: var(--Switch-background);
+      transition: var(--Switch-transition);
+      cursor: pointer;
+      z-index: 1;
+    }
+    &:checked {
+      &::before {
+        background-color: var(--light);
+        transform: translateX(100%);
+      }
+      &::after {
+        background-color: var(--Switch-checked);
+        border-color: var(--Switch-checked);
+      }
+    }
+  }
+
+  /*  Sizes */
+  &[data-size="sm"] {
+    --Switch-width: #{$font-size * 2 - $spacing-1};
+    --Switch-height: #{$font-size};
+    --Switch-padding: #{$spacing-1 / 2};
+    --Switch-slider-size: #{$font-size - $spacing-1};
+  }
+  &[data-size="lg"] {
+    --Switch-width: #{$font-size-lg * 2 + $spacing-1 * 2};
+    --Switch-height: #{$font-size-lg + $spacing-1 * 2};
+    --Switch-padding: #{$spacing-1};
+    --Switch-slider-size: #{$font-size-lg};
+  }
+
+  /*  Each color */
+  @each $name, $color in $colors {
+    &[data-variant~="#{$name}"] {
+      --Switch-checked: #{$color};
+    }
+  }
 }

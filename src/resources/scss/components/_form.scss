@@ -22,8 +22,8 @@
   border-radius: $radius-md;
   transition: var(--Form-transition);
 
-  &__head {
-    --Form-head-align: left;
+  &__header {
+    --Form-header-align: left;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -48,91 +48,51 @@
     flex-direction: column;
     gap: var(--Field-spacing);
     transition: var(--Form-transition);
-    // .Field + .Field {
-    //   margin-top: .75rem;
-    // }
   }
 
   &__footer {
+    --Form-footer-align: left;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     gap: 0.5rem;
 
-    button {
-      appearance: none;
-      display: flex;
-      min-width: calc(50% - 0.5rem);
-      flex-grow: 1;
-      padding: 0.75rem 1rem;
-      text-align: center;
-      justify-content: center;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-      font-weight: 500;
-      color: #fff;
-      transition: var(--glob-transition);
+    // button {
+    //   appearance: none;
+    //   display: flex;
+    //   min-width: calc(50% - 0.5rem);
+    //   flex-grow: 1;
+    //   padding: 0.75rem 1rem;
+    //   text-align: center;
+    //   justify-content: center;
+    //   border-radius: 4px;
+    //   border: none;
+    //   cursor: pointer;
+    //   font-weight: 500;
+    //   color: #fff;
+    //   transition: var(--glob-transition);
 
-      &:hover {
-        filter: brightness(var(--hover-brightness));
-      }
-      &.btn-primary {
-        background-color: var(--primary);
-      }
-      &.btn-secondary {
-        background-color: var(--secondary);
-      }
-      &.btn-tertiary {
-        background-color: var(--tertiary);
-      }
-      &.btn-success {
-        background-color: var(--success);
-      }
-      &.btn-danger {
-        background-color: var(--danger);
-      }
-    }
+    //   &:hover {
+    //     filter: brightness(var(--hover-brightness));
+    //   }
+    //   &.btn-primary {
+    //     background-color: var(--primary);
+    //   }
+    //   &.btn-secondary {
+    //     background-color: var(--secondary);
+    //   }
+    //   &.btn-tertiary {
+    //     background-color: var(--tertiary);
+    //   }
+    //   &.btn-success {
+    //     background-color: var(--success);
+    //   }
+    //   &.btn-danger {
+    //     background-color: var(--danger);
+    //   }
+    // }
   }
 }
-
-// @mixin make-field-12col($gap: 0.75rem) {
-//   @each $dimension, $max-width in $container-max-widths {
-//     $min-width: map-get($media-breakpoints, $dimension);
-//     @if $min-width {
-//       @media screen and (min-width: $min-width) {
-//     // $reversed-media-breakpoints: helpers.reverse($media-breakpoints);
-//     // $min-width: helpers.map-get-next($reversed-media-breakpoints, $dimension, true);
-//     // @if $min-width {
-//     //   $max-width: $min-width - 1px;
-//     //   @media screen and (max-width: $max-width) {
-//         @if ($dimension == "sm") or
-//           ($dimension == "md") or
-//           ($dimension == "lg") or
-//           ($dimension == "xl")
-//         {
-//           // Columns 1 -> 12
-//           @for $i from 1 through 12 {
-//             // 100 - (12 / i - 1) * gap
-//             $after-gap: calc(100% - ((12 / #{$i} - 1) * #{$gap}));
-//             &.#{$dimension}-#{$i} {
-//               display: unset;
-//               // after / 12
-//               flex: 0 0 calc((#{$after-gap} / 12) * #{$i});
-//               max-width: calc((#{$after-gap} / 12) * #{$i});
-//             }
-//           }
-//           // Offset of Columns 1 -> 12
-//           @for $i from 1 through 11 {
-//             &.o#{$dimension}-#{$i} {
-//               margin-left: calc((100% / 12) * #{$i});
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
 
 @mixin make-field-12col($gap: 0.75rem) {
   @include responsive.make-data-12col(null, $gap);
@@ -164,6 +124,10 @@
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
+    label {
+      color: var(--base-color);
+      transition: var(--Field-transition);
+    }
   }
   &__response {
     width: 100%;

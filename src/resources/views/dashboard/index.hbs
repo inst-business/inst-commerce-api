@@ -182,9 +182,9 @@
     <h2 class="Heading">Form</h2>
     <div class="Box Box-scrollable">
       <form class="Form" action="" method="">
-        <div class="Form__head">
-          <p class="Form__head-title">Form Validation</p>
-          <p class="Form__head-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. A eos quia commodi.</p>
+        <div class="Form__header">
+          <p class="Form__header-title">Form Validation</p>
+          <p class="Form__header-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. A eos quia commodi.</p>
         </div>
         <div class="Form__body">
           <div class="Field" aria-invalid="">
@@ -280,6 +280,34 @@
               <option value="vn">Vietnam</option>
             </select>
             <span class="Field__response"></span>
+          </div>
+          <div class="Field">
+            <label for="gender" class="Field__label">Gender</label>
+            <div class="Field-options" data-direction="row">
+              <div class="Field__option">
+                <input type="checkbox" name="hobbies" value="game" id="hobbies-game">
+                <label for="hobbies-game">Game</label>
+              </div>
+              <div class="Field__option">
+                <input type="checkbox" name="hobbies" value="music" id="hobbies-music">
+                <label for="hobbies-music">Music</label>
+              </div>
+              <div class="Field__option">
+                <input type="checkbox" name="hobbies" value="sleep" id="hobbies-sleep">
+                <label for="hobbies-sleep">Sleep</label>
+              </div>
+              <div class="Field__option">
+                <input type="checkbox" name="hobbies" value="eat" id="hobbies-eat">
+                <label for="hobbies-eat">Eat</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="Form__footer">
+          <div class="Field" aria-invalid="">
+            <button type="submit" class="Btn" name="submit" id="submit">
+              Submit
+            </button>
           </div>
         </div>
       </form>

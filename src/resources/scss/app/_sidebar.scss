@@ -6,7 +6,7 @@
   --Sidebar-width-collapsed: #{$sidebar-width-collapsed};
   --Sidebar-padding: 0.5rem;
   --Sidebar-logo-size: 2rem;
-  --Sidebar-transition: all #{$transition-out-1};
+  --Sidebar-transition: all #{$transition-out-1}, #{$transition-color-1};
   --Sidebar-link-height: 3rem;
   --Sidebar-link-min-height: 2rem;
   --Sidebar-link-padding: 1rem;

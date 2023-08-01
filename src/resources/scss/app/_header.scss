@@ -16,6 +16,7 @@
   padding-bottom: var(--Header-padding) !important;
   background-color: var(--base-box);
   border-bottom: 1px solid var(--base-border);
+  transition: all $transition-1-eio, $transition-color-1;
 
   & > * {
     display: flex;
