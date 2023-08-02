@@ -61,6 +61,9 @@ b {
   // color: $color-txt-dark;
   @include gen-text-properties;
 }
+// span, strong, ins {
+//   @include gen-text-properties;
+// }
 
 .Text {
   color: inherit;

@@ -13,22 +13,22 @@ const themeModes = ['light', 'dark']
 const storeTheme = (mode) => {
   localStorage.setItem('theme', mode)
 }
-export const loadTheme = () => {
+export const loadTheme = (switcher) => {
   const theme = localStorage.getItem('theme')
   if (theme && themeModes.includes(theme)) {
     const Root = qs.o('html')
     Root.dataset.theme = theme
+    switcher.checked = (theme === 'dark') ? true : false
   }
 }
-export const switchTheme = (btn) => {
-  btn.addEventListener('click', function switchRootTheme (e) {
-    
+export const switchTheme = (switcher) => {
+  switcher.addEventListener('click', function switchRootTheme (e) {
     const Root = qs.o('html')
     const theme = (Root.dataset?.theme === 'dark') ? Root.dataset.theme : 'light'
     const switchedTheme = (theme === 'light') ? 'dark' : 'light'
     Root.dataset.theme = switchedTheme
+    // switcher.checked = (theme === 'dark') ? true : false
     storeTheme(switchedTheme)
-    console.log(btn)
   })
 }
 

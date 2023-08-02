@@ -7,15 +7,16 @@ import {
   toggleExpanded
 } from './storage.js'
 
+const __SwitchThemeBtn = qs.$o('#Switch-theme-btn')
+
 document.onload = [
   loadingScreen(),
-  loadTheme(),
+  loadTheme(__SwitchThemeBtn),
   loadSidebarState()
 ]
+
+switchTheme(__SwitchThemeBtn)
 
 const __SidebarCollapseBtn = qs.$o('#Sidebar-collapse-btn')
 const __Sidebar = qs.$o('#Sidebar')
 toggleExpanded(__SidebarCollapseBtn, __Sidebar)
-
-const __SwitchThemeBtn = qs.$o('#Switch-theme-btn')
-switchTheme(__SwitchThemeBtn)

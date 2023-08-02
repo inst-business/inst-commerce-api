@@ -55,42 +55,7 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    gap: 0.5rem;
-
-    // button {
-    //   appearance: none;
-    //   display: flex;
-    //   min-width: calc(50% - 0.5rem);
-    //   flex-grow: 1;
-    //   padding: 0.75rem 1rem;
-    //   text-align: center;
-    //   justify-content: center;
-    //   border-radius: 4px;
-    //   border: none;
-    //   cursor: pointer;
-    //   font-weight: 500;
-    //   color: #fff;
-    //   transition: var(--glob-transition);
-
-    //   &:hover {
-    //     filter: brightness(var(--hover-brightness));
-    //   }
-    //   &.btn-primary {
-    //     background-color: var(--primary);
-    //   }
-    //   &.btn-secondary {
-    //     background-color: var(--secondary);
-    //   }
-    //   &.btn-tertiary {
-    //     background-color: var(--tertiary);
-    //   }
-    //   &.btn-success {
-    //     background-color: var(--success);
-    //   }
-    //   &.btn-danger {
-    //     background-color: var(--danger);
-    //   }
-    // }
+    gap: var(--Field-spacing);
   }
 }
 
@@ -127,6 +92,9 @@
     label {
       color: var(--base-color);
       transition: var(--Field-transition);
+    }
+    &[data-align="center"] {
+      align-items: center;
     }
   }
   &__response {

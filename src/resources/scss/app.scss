@@ -24,7 +24,7 @@
   // appearance: none;
   outline: none;
   // transition: color 0.15s linear;
-  // transition: background-color 0.15s linear;
+  // transition: background-color 10s linear;
 
   &::selection {
     color: #fff;
@@ -131,7 +131,7 @@ body {
   overflow-x: hidden;
   color: var(--base-color);
   background-color: var(--base-body);
-  transition: all $transition-1-eio, $transition-color-1;
+  transition: background-color $transition-1-ln;
   @include scroll-bar;
 }
 
@@ -140,6 +140,10 @@ img {
   width: 100%;
   object-fit: cover;
 }
+
+// p, b, strong, span {
+//   transition: $transition-color-1;
+// }
 
 .App {
   width: 100%;
