@@ -220,6 +220,31 @@
             </div>
           </div>
           <div class="Field-group">
+            <div class="Field" data-col="df-4" aria-invalid="">
+              <label for="input-readonly" class="Field__label">Input readonly</label>
+              <input type="text" class="Field__input" name="input-readonly" id="input-readonly" value="Readonly" readonly>
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field" data-col="df-4" aria-invalid="">
+              <label for="input-disabled" class="Field__label">Input disabled</label>
+              <input type="text" class="Field__input" name="input-disabled" id="input-disabled" value="Disabled" disabled>
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field" data-col="df-4" aria-invalid="">
+              <label for="input-disabled-readonly" class="Field__label">Input disabled readonly</label>
+              <input type="text" class="Field__input" name="input-disabled-readonly" id="input-disabled-readonly" value="Disabled Readonly" disabled readonly>
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field" data-col="df-6" aria-invalid="">
+              <label for="input-variant-readonly" class="Field__label">Input variant readonly</label>
+              <input type="text" class="Field__input" data-variant="primary" name="input-variant-readonly" id="input-variant-readonly" value="Readonly" readonly>
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field" data-col="df-6" aria-invalid="">
+              <label for="input-variant-disabled" class="Field__label">Input variant disabled</label>
+              <input type="text" class="Field__input" data-variant="secondary" name="input-variant-disabled" id="input-variant-disabled" value="Disabled" disabled>
+              <span class="Field__response"></span>
+            </div>
             <div class="Field" data-col="df-6 lg-6 sm-4" aria-invalid="">
               <label for="input1" class="Field__label">Input</label>
               <input type="text" class="Field__input" name="input1" id="input1">
@@ -274,9 +299,12 @@
           <div class="Field">
             <label for="country" class="Field__label">Country</label>
             <select class="Field__input" id="country" name="country">
-              <option value="">-- Choose your country --</option>
-              <option value="us">USA</option>
+              <option value="" disabled selected>-- Choose your country --</option>
+              <option value="fr" disabled>Franch</option>
+              <option value="jp">Japan</option>
+              <option value="kr">Korea</option>
               <option value="sg">Singapore</option>
+              <option value="us" disabled>United States</option>
               <option value="vn">Vietnam</option>
             </select>
             <span class="Field__response"></span>
@@ -311,6 +339,12 @@
                   <input type="checkbox" id="accept-term" name="accept-term">
                 </label>
                 <label for="accept-term">I have read and agree to APInst's terms of contract.</label>
+              </div>
+              <div class="Field__option" data-align="center">
+                <label class="Switch" for="accept-term-2" data-size="sm" data-variant="primary">
+                  <input type="checkbox" id="accept-term-2" name="accept-term-2">
+                </label>
+                <label for="accept-term-2">I have read and agree to APInst's terms of contract.</label>
               </div>
             </div>
             <span class="Field__response"></span>

@@ -25,13 +25,22 @@
   transition: var(--Input-transition);
   &:hover,
   &:focus-visible {
-    // border-color: var(--Input-hover);
     --Input-border: var(--Input-hover);
   }
   &:focus {
     box-shadow: var(--Input-outline);
     z-index: 1;
     position: sticky;
+  }
+  &:disabled {
+    --Input-color: var(--base-color-muted);
+    // color: initial;
+    --Input-background: var(--base-hover-overlay) !important;
+    --Input-hover: var(--base-border) !important;
+    cursor: default;
+    &[readonly] {
+      --Input-color: var(--base-color);
+    }
   }
 
   /*  Each color */
@@ -69,6 +78,9 @@ select.Input {
   background-size: 0.25rem 0.25rem, 0.25rem 0.25rem, 0.5px 1.5em;
   background-repeat: no-repeat;
   transition: var(--Input-transition), background-image $transition-1-ln;
+  option[value=""]:disabled {
+    display: none;
+  }
 }
 
 /* Form's Check */
@@ -105,7 +117,7 @@ select.Input {
     transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
-    transition: 120ms transform ease-in-out;
+    transition: all $transition-1-eio;
     box-shadow: inset 1em 1em #fff;
     visibility: hidden;
     opacity: 0;
@@ -127,7 +139,7 @@ select.Input {
   }
   &:checked {
     background-color: var(--Check-checked);
-    border-color: var(--Check-checked);
+    border: 0px solid var(--Check-checked);
     &:focus {
       border-color: var(--Check-hover);
     }
@@ -158,6 +170,11 @@ select.Input {
       --Check-hover: #{make-color-variant($color, 75%)};
     }
   }
+
+  &[data-variant~="no-outline"] {
+    --Check-outline: none !important;
+    --Check-hover: var(--Check-border) !important;
+  }
 }
 
 /* Switch */
@@ -172,7 +189,10 @@ select.Input {
   --Switch-radius: #{$radius-xl};
   --Switch-color: var(--base-border-highlighted);
   --Switch-background: var(--base-box);
-  --Switch-checked: var(--primary);
+  --Switch-checked: var(--grey);
+  --Switch-border: var(--base-border-highlighted);
+  --Switch-hover: var(--Switch-border);
+  --Switch-outline: var(--base-outlined-sm);
   --Switch-transition: all #{$transition-1-eio}, #{$transition-color-1},
     border #{$transition-1-ln};
 }
@@ -213,11 +233,17 @@ select.Input {
       z-index: 1;
       min-width: var(--Switch-width);
       min-height: var(--Switch-height);
-      border: 1px solid var(--Switch-color);
+      border: 1px solid var(--Switch-border);
       border-radius: var(--Switch-radius);
       background-color: var(--Switch-background);
       transition: var(--Switch-transition);
       cursor: pointer;
+    }
+    &:focus {
+      &::after {
+        border-color: var(--Switch-hover);
+        box-shadow: var(--Switch-outline);
+      }
     }
     &:checked {
       &::before {
@@ -239,6 +265,15 @@ select.Input {
   &[data-size="lg"] {
     --Switch-slider-size: #{$font-size-lg};
     --Switch-font-size: #{$font-size-lg};
+  }
+
+  /*  Each color */
+  @each $name, $color in $colors {
+    &[data-variant~="#{$name}"] {
+      --Switch-checked: #{$color};
+      --Switch-outline: #{make-shadow-outlined($color, 0.15rem)};
+      --Switch-hover: #{make-color-variant($color, 75%)};
+    }
   }
 
   &[data-variant~="icon"] {
@@ -271,10 +306,8 @@ select.Input {
     }
   }
 
-  /*  Each color */
-  @each $name, $color in $colors {
-    &[data-variant~="#{$name}"] {
-      --Switch-checked: #{$color};
-    }
+  &[data-variant~="no-outline"] {
+    --Switch-outline: none !important;
+    --Switch-hover: var(--Switch-border) !important;
   }
 }
