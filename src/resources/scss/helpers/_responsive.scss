@@ -95,7 +95,7 @@
     // 100 - (12 / i - 1) * gap
     $after-gap: calc(100% - ((12 / #{$i} - 1) * #{$gap}));
     &[data-col~="#{$shorthand}-#{$i}"] {
-      display: unset;
+      // display: unset;
       // after-gap / 12
       flex: 0 0 calc((#{$after-gap} / 12) * #{$i});
       max-width: calc((#{$after-gap} / 12) * #{$i});

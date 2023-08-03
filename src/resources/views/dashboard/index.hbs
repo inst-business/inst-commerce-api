@@ -206,16 +206,50 @@
             <label for="gender" class="Field__label">Gender</label>
             <div class="Field-options" data-direction="row">
               <div class="Field__option">
-                <input type="radio" name="gender" value="male" id="gender-male">
+                <input type="radio" class="Check" data-variant="primary" name="gender" value="male" id="gender-male">
                 <label for="gender-male">Male</label>
               </div>
               <div class="Field__option">
-                <input type="radio" name="gender" value="female" id="gender-female">
+                <input type="radio" class="Check" data-variant="secondary" name="gender" value="female" id="gender-female">
                 <label for="gender-female">Female</label>
               </div>
               <div class="Field__option">
-                <input type="radio" name="gender" value="other" id="gender-other">
+                <input type="radio" class="Check" name="gender" value="other" id="gender-other" checked>
                 <label for="gender-other">Others</label>
+              </div>
+            </div>
+          </div>
+          <div class="Field">
+            <label for="country" class="Field__label">Country</label>
+            <select class="Field__input" id="country" name="country">
+              <option value="" disabled selected>-- Choose your country --</option>
+              <option value="fr" disabled>Franch</option>
+              <option value="jp">Japan</option>
+              <option value="kr">Korea</option>
+              <option value="sg">Singapore</option>
+              <option value="us" disabled>United States</option>
+              <option value="vn">Vietnam</option>
+            </select>
+            <span class="Field__response"></span>
+          </div>
+          <div class="Field">
+            <label for="hobbies" class="Field__label">Hobbies</label>
+            <div class="Field-options" data-direction="row">
+              <div class="Field__option">
+                <input type="checkbox" class="Check" name="hobbies" value="game" id="hobbies-game" checked>
+                <label for="hobbies-game">Game</label>
+              </div>
+              <div class="Field__option">
+                <input type="checkbox" class="Check" data-variant="danger" name="hobbies" value="music" id="hobbies-music">
+                <label for="hobbies-music">Music</label>
+              </div>
+              <div class="Field__option">
+                <input type="checkbox" class="Check" data-variant="success" name="hobbies" value="sleep" id="hobbies-sleep">
+                <label for="hobbies-sleep">Sleep</label>
+              </div>
+              <div class="Field__option">
+                <input type="checkbox" class="Check" data-variant="primary" name="hobbies" value="eat" id="hobbies-eat">
+                <label for="hobbies-eat">Eat</label>
               </div>
             </div>
           </div>
@@ -296,40 +330,6 @@
               <span class="Field__response"></span>
             </div>
           </div>
-          <div class="Field">
-            <label for="country" class="Field__label">Country</label>
-            <select class="Field__input" id="country" name="country">
-              <option value="" disabled selected>-- Choose your country --</option>
-              <option value="fr" disabled>Franch</option>
-              <option value="jp">Japan</option>
-              <option value="kr">Korea</option>
-              <option value="sg">Singapore</option>
-              <option value="us" disabled>United States</option>
-              <option value="vn">Vietnam</option>
-            </select>
-            <span class="Field__response"></span>
-          </div>
-          <div class="Field">
-            <label for="hobbies" class="Field__label">Hobbies</label>
-            <div class="Field-options" data-direction="row">
-              <div class="Field__option">
-                <input type="checkbox" class="Check" name="hobbies" value="game" id="hobbies-game">
-                <label for="hobbies-game">Game</label>
-              </div>
-              <div class="Field__option">
-                <input type="checkbox" class="Check" data-variant="danger" name="hobbies" value="music" id="hobbies-music">
-                <label for="hobbies-music">Music</label>
-              </div>
-              <div class="Field__option">
-                <input type="checkbox" class="Check" data-variant="success" name="hobbies" value="sleep" id="hobbies-sleep">
-                <label for="hobbies-sleep">Sleep</label>
-              </div>
-              <div class="Field__option">
-                <input type="checkbox" class="Check" data-variant="primary" name="hobbies" value="eat" id="hobbies-eat">
-                <label for="hobbies-eat">Eat</label>
-              </div>
-            </div>
-          </div>
         </div>
         <div class="Form__footer">
           <div class="Field">
@@ -339,12 +339,6 @@
                   <input type="checkbox" id="accept-term" name="accept-term">
                 </label>
                 <label for="accept-term">I have read and agree to APInst's terms of contract.</label>
-              </div>
-              <div class="Field__option" data-align="center">
-                <label class="Switch" for="accept-term-2" data-size="sm" data-variant="primary">
-                  <input type="checkbox" id="accept-term-2" name="accept-term-2">
-                </label>
-                <label for="accept-term-2">I have read and agree to APInst's terms of contract.</label>
               </div>
             </div>
             <span class="Field__response"></span>
