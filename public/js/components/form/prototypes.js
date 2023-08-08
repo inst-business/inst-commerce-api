@@ -1,14 +1,13 @@
 import validator from "./validator.js"
 
 validator.required = props => {
-  const { val, label, multiple } = props
+  const { val, label, inputs } = props
   const _label = label || 'This field'
-  let condition = !multiple ? val.trim() : false
+  let condition = !inputs ? val.trim() : false
 
-  if (multiple && ['radio', 'checkbox'].includes(multiple?.type)) {
-    // console.log(multiple)
-    for (let i = 0; i < multiple?.inputs.length; i++) {
-      if (multiple.inputs[i].checked) {
+  if (inputs) {
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i].checked) {
         condition = true
         break
       }

@@ -15,16 +15,21 @@ const validator = props => {
           rules = rule[1].split(' '),
           fieldElement = input.parentElement.closest(field),
           comparisonField = formElement.querySelector(inputNameRule(rule?.[2])),
-          responseElement = fieldElement.querySelector(response)
+          responseElement = fieldElement.querySelector(response),
+          inputs = (['radio', 'checkbox'].includes(type)) && 
+            Array.from(fieldElement.querySelectorAll(inputNameRule(name)))
     return {
       input, name, type, rules, fieldElement, responseElement,
+      ...(inputs && {inputs}),
       ...(comparisonField && {comparisonField})
     }
   }
 
   const validate = props => {
     const {
-      input, name, type, rules, fieldElement, responseElement, comparisonField
+      input, inputs,
+      name, type, rules,
+      fieldElement, responseElement, comparisonField
     } = props
     let result
 
@@ -35,16 +40,12 @@ const validator = props => {
         input: comparisonField,
         label: comparisonField.parentElement.closest(field).querySelector(label).innerText
       }
-      const multiple = (['radio', 'checkbox'].includes(type)) && {
-        type,
-        inputs: Array.from(fieldElement.querySelectorAll(inputNameRule(name)))
-      }
       let props = {
-        val: input.value,
         label: fieldElement.querySelector(label).innerText,
+        val: input.value,
         ...(comparisonField && {comparison}),
         ...(range && {range}),
-        ...(multiple && {multiple})
+        ...(inputs && {inputs})
       }
       result = validator[fnName]?.(props)
       // console.log(result)
@@ -81,7 +82,8 @@ const validator = props => {
       if (typeof submit === 'function') {
         let enableFields = formElement.querySelectorAll('[name]:not([disabled])')
         let inputsVal = Array.from(enableFields).reduce((vals, input, index, array) => {
-          switch (input.type) {
+          const type = input.type
+          switch (type) {
             case 'radio':
               if (input.checked) {
                 vals[input.name] = input.value
@@ -109,22 +111,24 @@ const validator = props => {
   rules.forEach(rule => {
     const props = validateProps(formElement, rule, response)
     if (!props) return
-    console.log(props)
-    console.log(document.querySelectorAll('#aaa'))
-    const { input, fieldElement, responseElement } = props
-    input.onblur = () => {
-      validate(props)
-    }
-    input.onchange = () => {
-      validate(props)
-    }
-    input.oninput = () => {
-      fieldElement.classList.remove('invalid')
-      fieldElement.removeAttribute('aria-invalid')
-      if (responseElement) {
-        responseElement.innerText = ''
+    // console.log(props)
+    const { input, inputs, fieldElement, responseElement } = props
+    const targets = inputs || [input]
+    targets.forEach(target => {
+      target.onblur = () => {
+        validate(props)
       }
-    }
+      target.onchange = () => {
+        validate(props)
+      }
+      target.oninput = () => {
+        fieldElement.classList.remove('invalid')
+        fieldElement.removeAttribute('aria-invalid')
+        if (responseElement) {
+          responseElement.innerText = ''
+        }
+      }
+    })
   })
 }
 
