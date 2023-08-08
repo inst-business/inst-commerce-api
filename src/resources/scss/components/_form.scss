@@ -81,9 +81,19 @@
     @include make-text-ellipsised();
     color: var(--base-color);
     transition: var(--Field-transition);
+    &::after {
+      content: " *";
+      color: var(--danger);
+      // visibility: hidden;
+    }
   }
   &__input {
     @extend .Input;
+    &:required ~ .Field__label {
+      &::after {
+        visibility: visible;
+      }
+    }
   }
   &__option {
     display: flex;
@@ -125,20 +135,29 @@
     transition: var(--Field-transition);
   }
 
-  &[aria-invalid="false"] {
+  &[aria-invalid="true"] {
     --Field-response: #{$color-danger};
-    #{$Field}-input {
+    #{$Field}__input {
       border-color: $color-danger !important;
       --Input-outline: #{make-shadow-outlined($color-danger)};
     }
   }
-  &[aria-invalid="true"] {
+  &[aria-invalid="false"] {
     --Field-response: #{$color-success};
-    #{$Field}-input {
+    #{$Field}__input {
       border-color: $color-success !important;
       --Input-outline: #{make-shadow-outlined($color-success)};
     }
   }
 
   @include make-field-12col(var(--Field-spacing));
+}
+
+.Fieldset {
+  @extend .Field-group;
+  legend,
+  .Fieldset-legend {
+    @extend .Field__label;
+    margin-bottom: calc(var(--Field-spacing) * -0.5);
+  }
 }

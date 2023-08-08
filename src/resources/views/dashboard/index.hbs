@@ -181,7 +181,7 @@
   <div class="Col lg-6 sm-12">
     <h2 class="Heading">Form</h2>
     <div class="Box Box-scrollable">
-      <form class="Form" action="" method="">
+      <form class="Form" action="" method="" id="instance-form">
         <div class="Form__header">
           <p class="Form__header-title">Form Validation</p>
           <p class="Form__header-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. A eos quia commodi.</p>
@@ -192,12 +192,17 @@
             <input type="text" class="Field__input" name="username" id="username">
             <span class="Field__response"></span>
           </div>
-          <div class="Field" aria-invalid="true">
+          <div class="Field">
             <label for="password" class="Field__label">Password</label>
             <input type="password" class="Field__input" name="password" id="password">
             <span class="Field__response"></span>
           </div>
-          <div class="Field" aria-invalid="false">
+          <div class="Field">
+            <label for="password-confirm" class="Field__label">Confirm Password</label>
+            <input type="password" class="Field__input" name="password-confirm" id="password-confirm">
+            <span class="Field__response"></span>
+          </div>
+          <div class="Field">
             <label for="tel" class="Field__label">Phone Number</label>
             <input type="number" class="Field__input" name="tel" id="tel">
             <span class="Field__response"></span>
@@ -214,10 +219,11 @@
                 <label for="gender-female">Female</label>
               </div>
               <div class="Field__option">
-                <input type="radio" class="Check" name="gender" value="other" id="gender-other" checked>
+                <input type="radio" class="Check" name="gender" value="other" id="gender-other">
                 <label for="gender-other">Others</label>
               </div>
             </div>
+            <span class="Field__response"></span>
           </div>
           <div class="Field">
             <label for="country" class="Field__label">Country</label>
@@ -236,7 +242,7 @@
             <label for="hobbies" class="Field__label">Hobbies</label>
             <div class="Field-options" data-direction="row">
               <div class="Field__option">
-                <input type="checkbox" class="Check" name="hobbies" value="game" id="hobbies-game" checked>
+                <input type="checkbox" class="Check" name="hobbies" value="game" id="hobbies-game">
                 <label for="hobbies-game">Game</label>
               </div>
               <div class="Field__option">
@@ -252,7 +258,30 @@
                 <label for="hobbies-eat">Eat</label>
               </div>
             </div>
+            <span class="Field__response"></span>
           </div>
+          <fieldset class="Fieldset">
+            <legend>Your day of birth</legend>
+            <div class="Field" data-col="df-4">
+              <label for="dobDay" class="Field__label">Day</label>
+              <select class="Field__input" id="dobDay" name="dobDay">
+                <option value="" disabled selected>DD</option>
+              </select>
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field" data-col="df-4">
+              <label for="dobMonth" class="Field__label">Month</label>
+              <select class="Field__input" id="dobMonth" name="dobMonth">
+                <option value="" disabled selected>MM</option>
+              </select>
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field" data-col="df-4">
+              <label for="dobYear" class="Field__label">Year</label>
+              <input type="text" class="Field__input" id="dobYear" name="dobYear" placeholder="YYYY">
+              <span class="Field__response"></span>
+            </div>
+          </fieldset>
           <div class="Field-group">
             <div class="Field" data-col="df-4" aria-invalid="">
               <label for="input-readonly" class="Field__label">Input readonly</label>
@@ -279,13 +308,13 @@
               <input type="text" class="Field__input" data-variant="secondary" name="input-variant-disabled" id="input-variant-disabled" value="Disabled" disabled>
               <span class="Field__response"></span>
             </div>
-            <div class="Field" data-col="df-6 lg-6 sm-4" aria-invalid="">
-              <label for="input1" class="Field__label">Input</label>
+            <div class="Field" data-col="df-6 lg-6 sm-4" aria-invalid="false">
+              <label for="input1" class="Field__label">Input valid</label>
               <input type="text" class="Field__input" name="input1" id="input1">
               <span class="Field__response"></span>
             </div>
-            <div class="Field" data-col="df-6 lg-6 sm-4" aria-invalid="">
-              <label for="input2" class="Field__label">Input</label>
+            <div class="Field" data-col="df-6 lg-6 sm-4" aria-invalid="true">
+              <label for="input2" class="Field__label">Input invalid</label>
               <input type="text" class="Field__input" name="input2" id="input2">
               <span class="Field__response"></span>
             </div>
@@ -353,3 +382,5 @@
     </div>
   </div>
 </section>
+
+<script src="/js/pages/dashboard/index.js" type="module"></script>

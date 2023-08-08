@@ -5,9 +5,10 @@ validator.required = props => {
   const _label = label || 'This field'
   let condition = !multiple ? val.trim() : false
 
-  if (multiple?.type && ['radio', 'checkbox'].includes(multiple.type)) {
-    for (let i = 0; i < multiple?.fields.length; i++) {
-      if (multiple.fields[i].checked) {
+  if (multiple && ['radio', 'checkbox'].includes(multiple?.type)) {
+    // console.log(multiple)
+    for (let i = 0; i < multiple?.inputs.length; i++) {
+      if (multiple.inputs[i].checked) {
         condition = true
         break
       }
