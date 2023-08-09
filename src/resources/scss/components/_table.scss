@@ -1,12 +1,14 @@
 .Table {
-  --Table-border-color: #{$strike-color};
-  --Table-hover-color: #{$table-hover-color};
+  --Table-color: var(--base-color);
+  --Table-border-color: var(--base-border);
+  --Table-hover-color: var(--base-hover-overlay);
   --Table-thead-cell-padding: #{$table-cell-padding-lg} #{$table-cell-padding};
   --Table-tbody-cell-padding: #{$table-cell-padding};
   --Table-border-width: 1px;
-  --Table-transition: all #{$transition-1-eio}, #{$transition-color-1};
   --Table-caption-position: top;
   --Table-alignment: inherit;
+  --Table-transition: all #{$transition-1-eio}, #{$transition-color-1},
+    box-shadow #{$transition-1-eio}, border #{$transition-1-ln};
 }
 
 @mixin cell-fit-content {
@@ -17,9 +19,11 @@
 .Table {
   width: 100%;
   vertical-align: top;
+  color: var(--Table-color);
   border-collapse: collapse;
   border-color: var(--Table-border-color);
   caption-side: var(--Table-caption-position);
+  transition: var(--Table-transition);
   &-responsive {
     overflow-x: auto;
   }
@@ -29,7 +33,8 @@
   th,
   thead,
   tr {
-    border-color: inherit;
+    color: var(--Table-color);
+    border-color: var(--Table-border-color);
     border-style: solid;
     border-width: 0;
     transition: var(--Table-transition);

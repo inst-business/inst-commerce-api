@@ -108,7 +108,7 @@ b {
       left: -0.625rem;
       width: calc(100% + 1.25rem);
       height: calc(100% + 0.25rem);
-      background-color: make-color-spread($color);
+      background-color: make-color-transparent($color, 10%);
       border-radius: $radius-xl;
       z-index: -1;
     }
