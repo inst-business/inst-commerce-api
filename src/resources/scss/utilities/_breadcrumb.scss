@@ -1,0 +1,44 @@
+.Breadcrumb {
+  --Breadcrumb-mb: 1rem;
+  --Breadcrumb-gap: 0.5rem;
+  --Breadcrumb-font-size: #{$font-size};
+  --Breadcrumb-font-weight: 600;
+  --Breadcrumb-font-weight-active: 500;
+  --Breadcrumb-color: var(--base-color-highlight);
+  --Breadcrumb-color-active: var(--base-color-muted);
+  --Breadcrumb-symbol: "/";
+  --Breadcrumb-transition: #{$transition-color-1};
+}
+.Breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--Breadcrumb-gap);
+  padding: 0;
+  margin-bottom: var(--Breadcrumb-mb);
+  font-size: var(--Breadcrumb-font-size);
+  font-weight: var(--Breadcrumb-font-weight);
+  list-style: none;
+  transition: var(--Breadcrumb-transition);
+
+  &__item {
+    color: var(--Breadcrumb-color);
+    transition: var(--Breadcrumb-transition);
+    & + &::before {
+      content: var(--Breadcrumb-symbol, "/");
+      float: left;
+      padding-right: var(--Breadcrumb-gap);
+      color: var(--Breadcrumb-color-active);
+      transition: inherit;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:is([aria-current="page"], .active) {
+      font-weight: var(--Breadcrumb-font-weight-active);
+      color: var(--Breadcrumb-color-active);
+      pointer-events: none;
+    }
+  }
+}

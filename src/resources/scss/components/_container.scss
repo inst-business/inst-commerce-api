@@ -48,6 +48,12 @@
 }
 
 .Container {
+  .Head {
+    display: flex;
+    flex-direction: column;
+    // gap: var(--Col-padding);
+    padding-bottom: calc(var(--Col-padding) * 2);
+  }
   .Row {
     display: flex;
     flex-wrap: wrap;

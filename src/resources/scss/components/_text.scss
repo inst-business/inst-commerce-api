@@ -19,7 +19,8 @@
 
 .Text-link,
 a {
-  color: $color-txt-dark;
+  // color: $color-txt-dark;
+  color: inherit;
   text-decoration: none;
   @include gen-text-properties;
 }

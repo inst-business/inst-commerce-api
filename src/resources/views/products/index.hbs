@@ -1,5 +1,83 @@
+{{!-- Head section --}}
+<nav class="Head" aria-label="breadcrumb">
+  <ol class="Breadcrumb">
+    <li class="Breadcrumb__item"><a href="/v1">Home</a></li>
+    <li class="Breadcrumb__item" aria-current="page">Products</li>
+  </ol>
+  <h1 class="Heading">Product management</h1>
+</nav>
+{{!-- End of Head section --}}
 
-<h1 class="Title">List of available Products</h1>
+{{!-- Available products --}}
+<section class="Row">
+  <div class="Col lg-12 sm-12">
+    <h2 class="Heading">Available products</h2>
+    <div class="Box Box-scrollable">
+      <table class="table Table Table-hover">
+        {{!-- <caption>List</caption> --}}
+        <thead>
+          <tr>
+            <th scope="col">
+              <input type="checkbox" id="">
+            </th>
+            <th>#</th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>Created</th>
+            <th>Updated</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each data}}
+            <tr class="Item">
+              <td scope="Row"><input type="checkbox" name="items[]" value="{{this._id}}"></td>
+              <td>{{increase @index 1}}</td>
+              <td class="Item__name" width="25%">
+                <p class="Text-limit-3">{{this.name}}</p>
+              </td>
+              <td class="Item__img">
+                <img src="/img/products/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">
+              </td>
+              <td class="Item__desc" width="25%">
+                <p class="Text-limit-3">{{this.desc}}</p>
+                {{!-- <div class="popover-content" data-content="popover" data-for="desc-popover" data-id="{{@index}}"></div> --}}
+                {{!-- <button popovertarget="desc-popover" data-trigger="popover" data-get="{{@index}}">...more</button> --}}
+              </td>
+              <td class="Item__time">
+                {{dateFormat this.createdAt 'date'}}
+                <br>
+                {{dateFormat this.createdAt 'time'}}
+              </td>
+              <td class="Item__time">
+                {{dateFormat this.updatedAt 'date'}}
+                <br>
+                {{dateFormat this.updatedAt 'time'}}
+              </td>
+              <td class="Item__actions">
+                <a href="/products{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="circle grey outline">
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </a>
+                <button class="Item__actions-delete Btn" data-size="sm" data-variant="outline circle danger" title="Delete '{{this.name}}'"
+                  data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+                  <i class="fa-regular fa-trash"></i>
+                </button>            
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+        <tfoot>
+          <th colspan="8">
+          </th>
+        </tfoot>
+        <div id="desc-popover" popover>
+        </div>
+      </table>
+    </div>
+  </div>
+</section>
+{{!-- End of Available products --}}
 
 <div class="Row mb-3">
   <nav class="Col d-flex">
@@ -21,67 +99,7 @@
 
 <section>
   <div class="Box Box-scrollable">
-    <table class="table Table Table-hover">
-      {{!-- <caption>List</caption> --}}
-      <thead>
-        <tr>
-          <th scope="col">
-            <input type="checkbox" id="">
-          </th>
-          <th>#</th>
-          <th>Name</th>
-          <th>Image</th>
-          <th>Description</th>
-          <th>Created</th>
-          <th>Updated</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each data}}
-          <tr class="Item">
-            <td scope="Row"><input type="checkbox" name="items[]" value="{{this._id}}"></td>
-            <td>{{increase @index 1}}</td>
-            <td class="Item__name" width="25%">
-              <p class="Text-limit-3">{{this.name}}</p>
-            </td>
-            <td class="Item__img">
-              <img src="/img/products/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">
-            </td>
-            <td class="Item__desc" width="25%">
-              <p class="Text-limit-3">{{this.desc}}</p>
-              {{!-- <div class="popover-content" data-content="popover" data-for="desc-popover" data-id="{{@index}}"></div> --}}
-              {{!-- <button popovertarget="desc-popover" data-trigger="popover" data-get="{{@index}}">...more</button> --}}
-            </td>
-            <td class="Item__time">
-              {{dateFormat this.createdAt 'date'}}
-              <br>
-              {{dateFormat this.createdAt 'time'}}
-            </td>
-            <td class="Item__time">
-              {{dateFormat this.updatedAt 'date'}}
-              <br>
-              {{dateFormat this.updatedAt 'time'}}
-            </td>
-            <td class="Item__actions">
-              <a href="/products{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="circle grey outline">
-                <i class="fa-regular fa-pen-to-square"></i>
-              </a>
-              <button class="Item__actions-delete Btn" data-size="sm" data-variant="outline circle danger" title="Delete '{{this.name}}'"
-                data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
-                <i class="fa-regular fa-trash"></i>
-              </button>            
-            </td>
-          </tr>
-        {{/each}}
-      </tbody>
-      <tfoot>
-        <th colspan="8">
-        </th>
-      </tfoot>
-      <div id="desc-popover" popover>
-      </div>
-    </table>
+    
   </div>
   {{!-- {{#each data}}
     <article class="col-sm-4 col-lg-3 mb-4">
