@@ -1,4 +1,5 @@
 .Header {
+  --Header-height: #{$header-height};
   --Header-padding: #{$header-padding};
   --Header-left-width: #{$sidebar-width - $header-padding};
   --Header-collapse-width: #{$sidebar-width-collapsed};
@@ -13,15 +14,15 @@
   justify-content: space-between;
   width: 100%;
   padding: var(--Header-padding) 0;
-  padding-bottom: var(--Header-padding) !important;
+  // padding-bottom: var(--Header-padding) !important;
   background-color: var(--base-box);
   border-bottom: 1px solid var(--base-border);
   transition: all $transition-1-eio, $transition-color-1;
 
   & > * {
     display: flex;
-    max-height: 3rem;
-    height: 3rem;
+    max-height: calc(var(--Header-height) - var(--Header-padding) * 2);
+    height: calc(var(--Header-height) - var(--Header-padding) * 2);
   }
 
   &__left {
@@ -70,12 +71,13 @@
     text-align: right;
     &-info {
       @include make-text-ellipsised(6rem);
+      margin-top: -0.15rem;
     }
     &-avt {
       height: 100%;
       border-radius: $radius-circle;
       border: solid 2px $color-primary;
-      padding: 1px;
+      padding: 2px;
       cursor: pointer;
       & img {
         object-fit: cover;

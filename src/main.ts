@@ -27,7 +27,7 @@ class Server {
     const app = express()
 
     // Connect to db
-    new Connect()
+    await new Connect()
 
     // Middleware
     app.use(express.urlencoded({ extended: true }))

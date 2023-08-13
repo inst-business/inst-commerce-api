@@ -22,7 +22,7 @@
         <thead>
           <tr>
             <th scope="col">
-              <input type="checkbox" id="">
+              <input type="checkbox" class="Check" name="item[]" value="" id="select-all">
             </th>
             <th>#</th>
             <th>Name</th>
@@ -36,7 +36,9 @@
         <tbody>
           {{#each data}}
             <tr class="Item">
-              <td scope="Row"><input type="checkbox" name="items[]" value="{{this._id}}"></td>
+              <td scope="Row">
+                <input type="checkbox" class="Check" name="items[]" value="{{this._id}}">
+              </td>
               <td>{{increase @index 1}}</td>
               <td class="Item__name" width="25%">
                 <p class="Text-limit-3">{{this.name}}</p>
@@ -60,7 +62,7 @@
                 {{dateFormat this.updatedAt 'time'}}
               </td>
               <td class="Item__actions">
-                <a href="/products{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="circle grey outline">
+                <a href="/v1/products{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="circle grey outline">
                   <i class="fa-regular fa-pen-to-square"></i>
                 </a>
                 <button class="Item__actions-delete Btn" data-size="sm" data-variant="outline circle danger" title="Delete '{{this.name}}'"
@@ -87,7 +89,7 @@
   <nav class="Col d-flex">
     <ul class="nav me-auto">
       <li class="nav-item">
-        <a class="btn btn-outline-success btn-sm" href="/products{{routeI 'create'}}">
+        <a class="btn btn-outline-success btn-sm" href="/v1/products{{routeI 'create'}}">
           <i class="fa-regular fa-circle-plus"></i> Add new
         </a>
       </li>

@@ -16,7 +16,9 @@ class Connect {
       const connectionString = this.ENV.DB_CONNSTR
       const dbname = this.ENV.DB_NAME
       const opts = {
-        retryWrites: true
+        retryWrites: true,
+        socketTimeoutMS: 5000,
+        connectTimeoutMS: 5000
       }
       await connect(`${connectionString}/${dbname}`, opts)
       console.log(`MongoDB connect to ${dbname} successfully!`)
