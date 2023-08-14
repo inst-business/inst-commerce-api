@@ -88,7 +88,12 @@ router.get(ROUTES.I.SHOW, _.routeAsync(async (req, res) => {
 ))
 
 router.get(ROUTES.I.INDEX, _.routeAsync(async () => {
-  const data: IProduct[] = await ProductController.getAll()
+  // const data: IProduct[] = await ProductController.getAll()
+  const fetchData = {
+    'items': ProductController.getAll(),
+    'deletedCount': ProductController.getDeletedAmount()
+  }
+  const data = _.asyncAllSettled(fetchData)
   return data
 }, _.renderView('products/index', pageData)
 ))

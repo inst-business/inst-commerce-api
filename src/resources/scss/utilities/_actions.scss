@@ -1,0 +1,14 @@
+.Actions {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  &-left {
+    display: flex;
+  }
+  &-right {
+    display: flex;
+    margin-left: auto;
+  }
+}

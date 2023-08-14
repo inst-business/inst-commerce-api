@@ -52,6 +52,12 @@ class ProductController {
     const data = await query
     return data
   }
+  
+  static async getDeletedAmount (): Promise<number> {
+    const query = Product.find({ isDeleted: true }).countDocuments()
+    const data = await query
+    return data
+  }
 
   static async getDeletedById (id: string): Promise<IProduct | null> {
     const query = Product.findOne({ _id: id, isDeleted: true }).lean()

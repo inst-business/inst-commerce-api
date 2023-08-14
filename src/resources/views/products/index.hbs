@@ -13,8 +13,17 @@
   <div class="Col lg-12 sm-12">
     <h2 class="Heading">Available products</h2>
     <div class="Actions">
-
-      
+      <div class="Actions-left">
+        <a href="/v1/products{{routeI 'create'}}" class="Btn" data-variant="primary" data-size="sm">
+          <i class="fa-regular fa-circle-plus"></i> Add new
+        </a>
+      </div>
+      <div class="Actions-right">
+        
+        <a href="/v1/products/deleted" class="Btn" data-variant="danger outline" data-size="sm">
+          <i class="fa-regular fa-trash"></i> Removed ({{data.deletedCount}})
+        </a>
+      </div>
     </div>
     <div class="Box Box-scrollable">
       <table class="table Table Table-hover">
@@ -34,7 +43,7 @@
           </tr>
         </thead>
         <tbody>
-          {{#each data}}
+          {{#each data.items}}
             <tr class="Item">
               <td scope="Row">
                 <input type="checkbox" class="Check" name="items[]" value="{{this._id}}">
