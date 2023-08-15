@@ -17,7 +17,6 @@
   text-overflow: ellipsis;
 }
 
-.Text-link,
 a {
   // color: $color-txt-dark;
   color: inherit;
@@ -87,6 +86,13 @@ b {
     position: relative;
     z-index: 1;
   }
+  &-link {
+    color: var(--base-color-highlight);
+    &:hover {
+      text-decoration: underline;
+      color: make-color-emphasis(var(--base-color-highlight), 80%);
+    }
+  }
 
   @for $i from 1 through 5 {
     &-limit-#{$i} {
@@ -98,6 +104,7 @@ b {
   }
 
   @each $name, $color in $colors {
+    &[data-variant~="#{$name}"],
     &-#{$name} {
       color: #{$color};
     }

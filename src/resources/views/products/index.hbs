@@ -14,14 +14,24 @@
     <h2 class="Heading">Available products</h2>
     <div class="Actions">
       <div class="Actions-left">
-        <a href="/v1/products{{routeI 'create'}}" class="Btn" data-variant="primary" data-size="sm">
-          <i class="fa-regular fa-circle-plus"></i> Add new
-        </a>
+        <div class="Field__option">
+          <input type="checkbox" class="Check" name="productItems[]" value="" id="select-all" data-select-all="select-all">
+          <label for="select-all">Select all</label>
+        </div>
+        <div class="Actions__seperate"></div>
+        <button class="Btn" data-size="sm" data-variant="outline danger" title="Delete selected"
+          data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+          <i class="fa-regular fa-trash"></i> Deleted
+        </button>
       </div>
       <div class="Actions-right">
-        
-        <a href="/v1/products/deleted" class="Btn" data-variant="danger outline" data-size="sm">
-          <i class="fa-regular fa-trash"></i> Removed ({{data.deletedCount}})
+        <a href="/v1/products/deleted" class="Text-link">
+          <i class="fa-regular fa-trash"></i>
+          Removed products ({{data.deletedCount}})
+        </a>
+        <div class="Actions__seperate"></div>
+        <a href="/v1/products{{routeI 'create'}}" class="Btn" data-variant="success" data-size="sm">
+          <i class="fa-regular fa-circle-plus"></i> Add new
         </a>
       </div>
     </div>
@@ -31,7 +41,7 @@
         <thead>
           <tr>
             <th scope="col">
-              <input type="checkbox" class="Check" name="item[]" value="" id="select-all">
+              {{!-- <input type="checkbox" class="Check" name="item[]" value="" id="select-all"> --}}
             </th>
             <th>#</th>
             <th>Name</th>
@@ -46,7 +56,7 @@
           {{#each data.items}}
             <tr class="Item">
               <td scope="Row">
-                <input type="checkbox" class="Check" name="items[]" value="{{this._id}}">
+                <input type="checkbox" class="Check" name="productItems[]" value="{{this._id}}" data-select-target="select-all">
               </td>
               <td>{{increase @index 1}}</td>
               <td class="Item__name" width="25%">
@@ -94,28 +104,7 @@
 </section>
 {{!-- End of Available products --}}
 
-<div class="Row mb-3">
-  <nav class="Col d-flex">
-    <ul class="nav me-auto">
-      <li class="nav-item">
-        <a class="btn btn-outline-success btn-sm" href="/v1/products{{routeI 'create'}}">
-          <i class="fa-regular fa-circle-plus"></i> Add new
-        </a>
-      </li>
-    </ul>
-    <div class="view-switcher" role="toolbar">
-      <div class="btn-group" role="group">
-        <button type="button" value="layout" class="btn btn-outline-secondary btn-sm">Layout</button>
-        <button type="button" value="list" class="btn btn-outline-secondary btn-sm">List</button>
-      </div>
-    </div>
-  </nav>
-</div>
-
 <section>
-  <div class="Box Box-scrollable">
-    
-  </div>
   {{!-- {{#each data}}
     <article class="col-sm-4 col-lg-3 mb-4">
       <div class="card product-item" style="width: 100%;">

@@ -36,12 +36,18 @@
   &:hover,
   &:focus-visible,
   &:active {
-    --Btn-color-main-hover: #{make-color-emphasis(var(--Btn-color-main), 80%)};
+    --Btn-color-main-hover: #{make-color-emphasis(
+        var(--Btn-color-main),
+        var(--Btn-intensity)
+      )};
     background: var(--Btn-color-main-hover);
     border-color: var(--Btn-color-main-hover);
   }
   &:disabled {
-    --Btn-color-main-disable: #{make-color-variant(var(--Btn-color-main), 80%)};
+    --Btn-color-main-disable: #{make-color-variant(
+        var(--Btn-color-main),
+        var(--Btn-intensity)
+      )};
     background: var(--Btn-color-main-disable);
     border-color: var(--Btn-color-main-disable);
     cursor: default;
