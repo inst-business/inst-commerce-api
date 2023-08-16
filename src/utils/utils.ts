@@ -60,7 +60,7 @@ class Utils {
     }
   }
 
-  renderView (view: string, page?: {}): ExpressCallbackProvider {
+  renderView (view: string, page?: {}, layout?: string): ExpressCallbackProvider {
     return !VIEWABLE
       ? (res) => {
         try {
@@ -72,7 +72,7 @@ class Utils {
       }
       : (res: express.Response, req?: express.Request): ExpressCallback => {
         return (data: any, err?: any) => {
-          const reception = { data, page }
+          const reception = { data, page, layout: layout || 'main.hbs' }
           res.render(view, reception)
         }
       }
@@ -134,6 +134,26 @@ class Utils {
   genHash (data: string) {
     // MD5 hashing algorithm
     return crypto.createHash('md5').update(data).digest('hex')
+  }
+  
+  genRandomString (length: number): string {
+    return crypto.randomBytes(Math.ceil(length / 2))
+      .toString('hex').slice(0, length)
+  }
+
+  genSalt () {
+  }
+
+  sha512 (password: string, salt: string) {
+    // sha512 hashing algorithm
+    let hash = crypto.createHmac('sha512', salt)
+    hash.update(password)
+    const value: string = hash.digest('hex')
+    // return {
+    //   salt: salt,
+    //   passwordHash: value
+    // }
+    return value
   }
 
 }

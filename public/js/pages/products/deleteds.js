@@ -1,12 +1,12 @@
 
 const dialogBtns = document.querySelectorAll('.Item__actions > button[data-action]')
 Array.from(dialogBtns).map(btn => btn.onclick = e => {
-  const target = e.target.dataset.dialogTarget,
-        action = e.target.dataset.action,
+  const target = btn.dataset.dialogTarget,
+        action = btn.dataset.action,
         dialog = document.querySelector(target)
   if (!dialog) return
-  const item = e.target.closest('.Item'),
-        _id = e.target.dataset.formId,
+  const item = btn.closest('.Item'),
+        _id = btn.dataset.formId,
         input = dialog.querySelector('input[name="ids[]"]'),
         name = item.querySelector('.Item__name').innerText,
         confirmBtn = dialog.querySelector('button.Dialog__confirm-button'),

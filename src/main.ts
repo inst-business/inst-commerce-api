@@ -43,7 +43,8 @@ class Server {
     // Template engine
     app.engine('hbs', engine({
       extname: '.hbs',
-      helpers: hbsHelpers
+      helpers: hbsHelpers,
+      defaultLayout: 'main.hbs'
     }))
     app.set('view engine', 'hbs')
     app.set('views', path.join(__dirname, '../src', 'resources', 'views'))

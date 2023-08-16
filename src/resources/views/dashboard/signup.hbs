@@ -1,0 +1,145 @@
+<section class="Row">
+  <div class="Col lg-4 olg-4">
+    <div class="Center">
+      <div class="Box Box-scrollable">
+        <form class="Form" action="/v1/u/e/signup" method="post" id="instance-form">
+          <div class="Form__header">
+            <p class="Form__header-title">Sign up</p>
+            <p class="Form__header-description">
+              <a href="/v1">Back to homepage</a>
+            </p>
+          </div>
+          <div class="Form__body">
+            <div class="Field-group">
+              <div class="Field" data-col="df-6" aria-invalid="">
+                <label for="username" class="Field__label">Username</label>
+                <input type="text" class="Field__input" name="username" id="username">
+                <span class="Field__response"></span>
+              </div>
+              <div class="Field" data-col="df-6" aria-invalid="">
+                <label for="email" class="Field__label">Email</label>
+                <input type="text" class="Field__input" name="email" id="email">
+                <span class="Field__response"></span>
+              </div>
+            </div>
+            <div class="Field-group">
+              <div class="Field" data-col="df-6">
+                <label for="password" class="Field__label">Password</label>
+                <input type="password" class="Field__input" name="password" id="password">
+                <span class="Field__response"></span>
+              </div>
+              <div class="Field" data-col="df-6">
+                <label for="confirm-password" class="Field__label">Confirm Password</label>
+                <input type="password" class="Field__input" name="confirm-password" id="confirm-password">
+                <span class="Field__response"></span>
+              </div>
+            </div>
+            <div class="Field-group">
+              <div class="Field" data-col="df-4">
+                <label for="firstname" class="Field__label">Firstname</label>
+                <input type="password" class="Field__input" name="firstname" id="firstname">
+                <span class="Field__response"></span>
+              </div>
+              <div class="Field" data-col="df-8">
+                <label for="lastname" class="Field__label">Lastname</label>
+                <input type="password" class="Field__input" name="lastname" id="lastname">
+                <span class="Field__response"></span>
+              </div>
+            </div>
+            <div class="Field">
+              <label for="gender" class="Field__label">Gender</label>
+              <div class="Field-options" data-direction="row">
+                <div class="Field__option">
+                  <input type="radio" class="Check" data-variant="primary" name="gender" value="male" id="gender-male">
+                  <label for="gender-male">Male</label>
+                </div>
+                <div class="Field__option">
+                  <input type="radio" class="Check" data-variant="secondary" name="gender" value="female" id="gender-female">
+                  <label for="gender-female">Female</label>
+                </div>
+                <div class="Field__option">
+                  <input type="radio" class="Check" name="gender" value="other" id="gender-other">
+                  <label for="gender-other">Other</label>
+                </div>
+              </div>
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field-group">
+              <div class="Field" data-col="df-8" aria-invalid="">
+                <label for="tel" class="Field__label">Mobile phone</label>
+                <input type="text" class="Field__input" name="tel" id="tel">
+                <span class="Field__response"></span>
+              </div>
+              <div class="Field" data-col="df-4" aria-invalid="">
+                <label for="birthday" class="Field__label">Birthday</label>
+                <input type="date" class="Field__input" name="birthday" id="birthday">
+                <span class="Field__response"></span>
+              </div>
+              <div class="Field" data-col="df-8" aria-invalid="">
+                <label for="address" class="Field__label">Address</label>
+                <input type="text" class="Field__input" name="address" id="address">
+                <span class="Field__response"></span>
+              </div>
+              <div class="Field" data-col="df-4" aria-invalid="">
+                <label for="country" class="Field__label">Country</label>
+                <select class="Field__input" id="country" name="country">
+                  <option value="" disabled selected>---</option>
+                  <option value="fr">Franch</option>
+                  <option value="jp">Japan</option>
+                  <option value="kr">Korea</option>
+                  <option value="sg">Singapore</option>
+                  <option value="us">United States</option>
+                  <option value="vn">Vietnam</option>
+                  <option value="other">(Other)</option>
+                </select>
+                <span class="Field__response"></span>
+              </div>
+            </div>
+            <div class="Field" data-col="" aria-invalid="">
+              <label for="bio" class="Field__label">Bio</label>
+              <textarea class="Field__input" name="bio" id="bio" rows="2"></textarea>
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field-group">
+              <div class="Field" data-col="df-6" aria-invalid="">
+                <label for="avatar" class="Field__label">Avatar image</label>
+                <input type="file" class="Field__input" name="avatar" id="avatar">
+                <span class="Field__response"></span>
+              </div>
+              <div class="Field" data-col="df-6" aria-invalid="">
+                <label for="cover" class="Field__label">Cover image</label>
+                <input type="file" class="Field__input" name="cover" id="cover">
+                <span class="Field__response"></span>
+              </div>
+            </div>
+          </div>
+          <div class="Form__footer">
+            <div class="Field">
+              <div class="Field-options" data-direction="row">
+                <div class="Field__option" data-align="center">
+                  <label class="Switch" for="accept-term" data-size="sm" data-variant="">
+                    <input type="checkbox" id="accept-term" name="accept-term">
+                  </label>
+                  <label for="accept-term">I have read and agree to APInst's terms of contract.</label>
+                </div>
+              </div>
+              <span class="Field__response"></span>
+            </div>
+            <div class="Field" aria-invalid="">
+              <button type="submit" class="Btn" name="submit" id="submit">
+                Sign up
+              </button>
+            </div>
+            <div class="Field">
+              <p>
+                Already have account?
+                <a href="/v1/e/login" class="Text-link"><strong>Login</strong></a>
+                right now.
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

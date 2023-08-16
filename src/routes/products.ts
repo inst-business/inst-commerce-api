@@ -20,7 +20,7 @@ router.post(ROUTES.I.STORE, _.routeAsync(async (req, res) => {
   const data = req.body
   const submittedProduct = await ProductController.insertOne(data)
   return submittedProduct
-}, _.redirectView(`/products${ROUTES.I.INDEX}`)
+}, _.redirectView(`/v1/products${ROUTES.I.INDEX}`)
 ))
 
 

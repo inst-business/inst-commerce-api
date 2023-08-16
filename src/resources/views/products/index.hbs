@@ -25,12 +25,14 @@
         </button>
       </div>
       <div class="Actions-right">
-        <a href="/v1/products{{routeI 'deleteds'}}" class="Text-link">
-          {{!-- <i class="fa-regular fa-trash"></i> --}}
-          <i class="fa-regular fa-circle-trash"></i>
-          Removed products ({{data.deletedCount}})
-        </a>
-        <div class="Actions__seperate"></div>
+        {{#if (when data.deletedCount 'gt' 0)}}
+          <a href="/v1/products{{routeI 'deleteds'}}" class="Text-link">
+            {{!-- <i class="fa-regular fa-trash"></i> --}}
+            <i class="fa-regular fa-circle-trash"></i>
+            Removed products ({{data.deletedCount}})
+          </a>
+          <div class="Actions__seperate"></div>
+        {{/if}}
         <a href="/v1/products{{routeI 'create'}}" class="Btn" data-variant="success" data-size="sm">
           <i class="fa-regular fa-circle-plus"></i> Add new
         </a>

@@ -17,4 +17,11 @@ router.get(ROUTES.I.INDEX, _.routeAsync(async () => {
 }, _.renderView('dashboard/index')
 ))
 
+router.get(ROUTES.E.LOGIN, _.routeAsync(async () => {
+}, _.renderView('dashboard/login', {}, 'no-partials.hbs')
+))
+router.get(ROUTES.E.SIGNUP, _.routeAsync(async () => {
+}, _.renderView('dashboard/signup', {}, 'no-partials.hbs')
+))
+
 export default router

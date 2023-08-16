@@ -112,7 +112,7 @@
 {{!-- Actions Modal --}}
 <dialog id="actions-dialog" class="Dialog">
   <form class="Dialog__form" method="POST">
-    <a href="/products/i/deleted" id="dialog-action" hidden></a>
+    <a href="/v1/products{{routeI 'deleteds'}}" id="dialog-action" hidden></a>
     <div class="Dialog__header">Confirmation</div>
     <div class="Dialog__body">
       You really want to perform this action?
@@ -120,7 +120,7 @@
     <div class="Dialog__footer">
       <input type="hidden" name="ids[]" value="">
       <button type="submit" class="btn btn-danger Dialog__confirm-button"></button>
-      <button type="reset" class="btn btn-secondary" formmethod="dialog">Cancel</button>
+      <button type="submit" class="btn btn-secondary" formmethod="dialog">Cancel</button>
     </div>
   </form>
 </dialog>
