@@ -1,6 +1,6 @@
 import { qs } from '../helpers/helpers.js'
 
-export const __DialogBtns = Array.from(qs.$a('[data-toggle = dialog]'))
+export const __DialogBtns = Array.from(qs.$a('[data-dialog-target]'))
 export const __Dialogs = Array.from(qs.$a('dialog.Dialog'))
 
 __DialogBtns.map(btn => btn.addEventListener('click', function toggleDialog () {

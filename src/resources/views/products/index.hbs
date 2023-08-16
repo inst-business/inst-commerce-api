@@ -20,7 +20,7 @@
         </div>
         <div class="Actions__seperate"></div>
         <button class="Btn" data-size="sm" data-variant="outline danger" title="Delete selected"
-          data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+          data-form-id="{{this._id}}">
           <i class="fa-regular fa-trash"></i> Deleted
         </button>
       </div>
@@ -81,11 +81,11 @@
                 {{dateFormat this.updatedAt 'time'}}
               </td>
               <td class="Item__actions">
-                <a href="/v1/products{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="circle grey outline">
+                <a href="/v1/products{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="grey outline">
                   <i class="fa-regular fa-pen-to-square"></i>
                 </a>
-                <button class="Item__actions-delete Btn" data-size="sm" data-variant="outline circle danger" title="Delete '{{this.name}}'"
-                  data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+                <button class="Item__actions-delete Btn" data-size="sm" data-variant="outline danger" title="Delete '{{this.name}}'"
+                  data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
                   <i class="fa-regular fa-trash"></i>
                 </button>            
               </td>
@@ -103,33 +103,6 @@
   </div>
 </section>
 {{!-- End of Available products --}}
-
-<section>
-  {{!-- {{#each data}}
-    <article class="col-sm-4 col-lg-3 mb-4">
-      <div class="card product-item" style="width: 100%;">
-        <a href="/products{{routeI 'show' this._id}}">
-          <img src="/img/products/{{this.img}}" class="card-img-top" alt="{{this.name}}">
-        </a>
-        <div class="card-body">
-          <a href="/products{{routeI 'show' this._id}}">
-            <h5 class="card-title product-item__title">{{this.name}}</h5>
-            <span></span>
-          </a>
-          <p class="card-text">{{this.desc}}</p>
-          <div class="d-flex justify-content-end gap-2">
-            <a href="/products{{routeI 'edit' this._id}}" class="btn btn-outline-primary btn-sm">
-              Edit
-            </a>
-            <button class="btn btn-outline-danger btn-sm delete-product" data-toggle="dialog" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
-              Delete
-            </button>
-          </div>
-        </div>
-      </div>
-    </article>
-  {{/each}} --}}
-</section>
 
 {{!-- Modal Delete --}}
 <dialog id="delete-dialog" class="Dialog">

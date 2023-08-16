@@ -10,19 +10,35 @@
   border-radius: 8px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   visibility: hidden;
-  transition: all 0.35s ease;
+  opacity: 0;
+  // transition: all 0.35s ease;
 
   &[open] {
-    opacity: 1;
     visibility: visible;
-  }
-  &::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
-    animation: hide-backdrop 0.35s ease forwards;
+    opacity: 1;
   }
   &[open]::backdrop {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: all 0.35s ease;
     animation: show-backdrop 0.35s ease forwards;
   }
+  // &[open]::after {
+  //   opacity: 0;
+  // }
+  // &::after {
+  //   content: '';
+  //   display: block;
+  //   position: fixed;
+  //   z-index: 1;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100vw;
+  //   height: 100vh;
+  //   background-color: rgba(0, 0, 0, 0.5);
+  //   // animation: hide-backdrop 0.35s ease forwards;
+  //   transition: all 0.35s ease;
+  // }
 
   &__header {
     font-size: 1.25rem;
@@ -54,6 +70,9 @@
   }
 }
 @keyframes hide-backdrop {
+  from {
+    opacity: 1;
+  }
   to {
     opacity: 0;
   }
