@@ -25,8 +25,9 @@
         </button>
       </div>
       <div class="Actions-right">
-        <a href="/v1/products/deleted" class="Text-link">
-          <i class="fa-regular fa-trash"></i>
+        <a href="/v1/products{{routeI 'deleteds'}}" class="Text-link">
+          {{!-- <i class="fa-regular fa-trash"></i> --}}
+          <i class="fa-regular fa-circle-trash"></i>
           Removed products ({{data.deletedCount}})
         </a>
         <div class="Actions__seperate"></div>

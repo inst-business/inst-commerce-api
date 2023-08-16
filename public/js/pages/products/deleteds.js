@@ -1,15 +1,15 @@
 
-const dialogBtns = document.querySelectorAll('.action-buttons > button[data-action]')
+const dialogBtns = document.querySelectorAll('.Item__actions > button[data-action]')
 Array.from(dialogBtns).map(btn => btn.onclick = e => {
   const target = e.target.dataset.dialogTarget,
         action = e.target.dataset.action,
         dialog = document.querySelector(target)
   if (!dialog) return
-  const item = e.target.closest('.product-item'),
+  const item = e.target.closest('.Item'),
         _id = e.target.dataset.formId,
         input = dialog.querySelector('input[name="ids[]"]'),
-        name = item.querySelector('.product-item__name').innerText,
-        confirmBtn = dialog.querySelector('button.dialog__confirm-button'),
+        name = item.querySelector('.Item__name').innerText,
+        confirmBtn = dialog.querySelector('button.Dialog__confirm-button'),
         url = new URL(dialog.querySelector('#dialog-action').href)
   let quote = ''
   switch (action) {
@@ -29,7 +29,7 @@ Array.from(dialogBtns).map(btn => btn.onclick = e => {
       break;
   }
   input.value = _id
-  dialog.querySelector('.dialog__body').innerHTML = quote
-  const form = dialog.querySelector('.dialog__form')
+  dialog.querySelector('.Dialog__body').innerHTML = quote
+  const form = dialog.querySelector('.Dialog__form')
   form.action = url
 })

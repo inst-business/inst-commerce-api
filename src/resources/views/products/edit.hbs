@@ -2,7 +2,7 @@
 <nav class="Head" aria-label="breadcrumb">
   <ol class="Breadcrumb">
     <li class="Breadcrumb__item"><a href="/v1">Home</a></li>
-    <li class="Breadcrumb__item"><a href="/v1/products">Products</a></li>
+    <li class="Breadcrumb__item"><a href="/v1/products{{routeI 'index'}}">Products</a></li>
     <li class="Breadcrumb__item"><a href="/v1/products{{routeI 'show' data._id}}">{{data.name}}</a></li>
     <li class="Breadcrumb__item" aria-current="page">Edit</li>
   </ol>
@@ -62,28 +62,11 @@
           </div>
         </div>
         <div class="Form__footer">
-          <div class="Field">
-            <div class="Field-options" data-direction="row">
-              <div class="Field__option" data-align="center">
-                <label class="Switch" for="accept-term" data-size="sm" data-variant="">
-                  <input type="checkbox" id="accept-term" name="accept-term">
-                </label>
-                <label for="accept-term">I have read and agree to APInst's terms of contract.</label>
-              </div>
-            </div>
-            <span class="Field__response"></span>
-          </div>
-          <div class="Field-options" aria-invalid="">
-            <button type="reset" class="Btn" data-variant="grey">Cancel</button>
+          <div class="Field-actions" data-align="end">
+            <button type="button" class="Btn" data-variant="grey" onclick="history.back()">Cancel</button>
+            <button type="reset" class="Btn" data-variant="dark">Reset</button>
             <button type="submit" class="Btn" data-variant="success">Update</button>
           </div>
-        </div>
-      </form>
-
-      <form action="/products{{routeI 'update' data._id}}?_method=PUT" method="post" class="row g-3">
-        <div class="col-12 mt-5 d-flex justify-content-end gap-2">
-          <button type="reset" class="btn btn-secondary">Cancel</button>
-          <button type="submit" class="btn btn-success">Update</button>
         </div>
       </form>
     </div>

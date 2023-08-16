@@ -126,6 +126,23 @@
       flex-wrap: wrap;
     }
   }
+  &-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--Field-spacing);
+    width: 100%;
+    transition: var(--Field-transition);
+    &[data-align~="full"] {
+      flex-direction: column;
+    }
+    &[data-align~="center"] {
+      justify-content: center;
+    }
+    &[data-align~="end"] {
+      justify-content: end;
+    }
+  }
   &-group {
     display: flex;
     flex-direction: row;
