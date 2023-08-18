@@ -1,3 +1,4 @@
+import { isNull } from 'lodash';
 import { Schema, model } from 'mongoose'
 import { GV, GENDER, ACCOUNT_STATUS, ACCOUNT_ROLE } from '@/config/global/const'
 import { TSoftDeleteQueryHelpers, withSoftDeletePlugin } from '@/utils/mongoose'
@@ -29,21 +30,21 @@ const UserSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true, lowercase: true, maxLength: 32 },
   email: { type: String, required: true, unique: true, maxLength: 50 },
   tel: { type: String, required: true, unique: true, maxLength: 20 },
-  password: { type: String, required: true, maxLength: 50 },
+  password: { type: String, required: true },
   firstname: { type: String, required: true, maxLength: 50 },
   lastname: { type: String, required: true, maxLength: 50 },
   gender: { type: String, required: true, default: 'other'},
-  birthday: { type: Date },
+  birthday: { type: Date, default: null },
   address: { type: String, maxLength: 128 },
   country: { type: String, maxLength: 64 },
-  bio: { type: String },
-  avatar: { type: String },
-  cover: { type: String },
+  bio: { type: String, default: null },
+  avatar: { type: String, default: null },
+  cover: { type: String, default: null },
   status: { type: String, required: true, default: 'pending' },
   role: { type: String, required: true, default: 'customer' },
-  token: { type: String },
+  token: { type: String, default: null },
   salt: { type: String, required: true, maxLength: GV.SALT_LENGTH },
-  verifiedAt: { type: Date },
+  verifiedAt: { type: Date, default: null },
 }, { timestamps: true })
 
 withSoftDeletePlugin(UserSchema)

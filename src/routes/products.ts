@@ -1,6 +1,7 @@
 import express from 'express'
 import ProductController from '@controllers/ProductController'
 import { IProduct } from '@models/Product'
+import Auth from '@middlewares/Authenticate'
 import { ROUTES } from '@/config/global/const'
 import _ from '@/utils/utils'
 
@@ -87,7 +88,7 @@ router.get(ROUTES.I.SHOW, _.routeAsync(async (req, res) => {
 }, _.renderView('products/detail')
 ))
 
-router.get(ROUTES.I.INDEX, _.routeAsync(async () => {
+router.get(ROUTES.I.INDEX, Auth.authToken(), _.routeAsync(async (req, res) => {
   // const data: IProduct[] = await ProductController.getAll()
   const fetchData = {
     'items': ProductController.getAll(),
@@ -95,7 +96,8 @@ router.get(ROUTES.I.INDEX, _.routeAsync(async () => {
   }
   const data = _.asyncAllSettled(fetchData)
   return data
-}, _.renderView('products/index', pageData)
+}
+// , _.renderView('products/index', pageData)
 ))
 
 

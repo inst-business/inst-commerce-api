@@ -33,6 +33,8 @@ export class ROUTES {
   static E = {
     LOGIN: '/e/login',  // POST
     SIGNUP: '/e/signup',  // POST
+    VERIFY: '/e/verify',  // POST
+    GEN_VERIFY: '/e/create-verify',  // POST
     INDEX: '/e',  // GET
     DETAIL: '/e/:slug',  // GET
   }
@@ -41,4 +43,6 @@ export class ROUTES {
 // Global variables
 export class GV {
   static SALT_LENGTH = 16
+  static JWT_EXPIRED = '15s'
+  static VERIFY_EXPIRED = '30s'
 }

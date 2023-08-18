@@ -1,14 +1,16 @@
 import express from 'express'
+import 'dotenv/config'
 import slugify from 'slugify'
 import uniqueSlug from 'unique-slug'
 // import CryptoJS from 'crypto-js'
 import crypto from 'crypto'
+import jwt from 'jsonwebtoken'
 import _ from 'lodash'
 import LogicError, { Primitives } from './logicError'
 import ERR from '@/config/global/error'
-import { VIEWABLE } from '@/config/global/const'
+import { GV, VIEWABLE } from '@/config/global/const'
 
-export type ExpressAsyncRequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<any>
+export type ExpressAsyncRequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<unknown>
 export type ExpressCallback = (data?: any, err?: any) => void
 export type ExpressCallbackProvider = (res: express.Response, req?: express.Request) => ExpressCallback
 
@@ -39,21 +41,27 @@ class Utils {
     }
   }
 
+  routeNextableAsync (reqHandler: ExpressAsyncRequestHandler, callbackProvider?: ExpressCallbackProvider): express.RequestHandler {
+    return (req, res, next) => {      
+      const cb = callbackProvider
+        ? callbackProvider(res, req)
+        : this.createServiceCallback(res)
+      reqHandler(req, res, next)
+        .then(data => data && cb(data))
+        .catch(err => cb(null, err))
+    }
+  }
+
   private createServiceCallback (res: express.Response): ExpressCallback {    
     return (data?: any, err?: any) => {
       const resData = data ? structuredClone(data) : {}
       res.statusCode = 200
       if (err) {
-        let errObj = { message: err, code: -7 }
-        let code
-        if (typeof err == 'object') {
-          errObj = structuredClone(err)
-          errObj.message = err.message
-          errObj.code = parseInt(err.code)
-          code = err.httpCode
-        }
-        res.statusCode = (typeof code === 'number' && !isNaN(code))
-          ? code : 500
+        const errJSON = typeof err.toJSON === 'function' ? err.toJSON() : err
+        const errObj = (typeof err === 'object')
+          ? structuredClone(errJSON) : { message: err, code: -7 }
+        const code = err.httpCode
+        res.statusCode = (typeof code === 'number' && !isNaN(code)) ? code : 500
         resData['err'] = errObj
       }
       res.send(resData)
@@ -106,6 +114,28 @@ class Utils {
     , route)
   }
 
+  genAccessToken = (user: any): string => {
+    const secretAccessToken = <string>process.env.ACCESS_TOKEN
+    const options = {
+      expiresIn: GV.JWT_EXPIRED
+    }
+    return jwt.sign(user, secretAccessToken, options)
+  }
+
+  genRefreshToken = (user: any): string => {
+    const secretRefreshToken = <string>process.env.REFRESH_TOKEN
+    return jwt.sign(user, secretRefreshToken)
+  }
+
+  genVerifyToken = (username: string): string => {
+    const secretAccessToken = <string>process.env.ACCESS_TOKEN
+    const secretKey = this.genHash(username + secretAccessToken)
+    const options = {
+      expiresIn: GV.VERIFY_EXPIRED
+    }
+    return jwt.sign({username}, secretKey, options)
+  }
+
   genUniqueSlug (title: string, code: string) {
     // const uniqueId = uniqueSlug(Date.now().toString())
     const uniqueId = uniqueSlug(code)
@@ -118,7 +148,7 @@ class Utils {
     return slug
   }
 
-  genOrderCode () {
+  genOrderCode = () => {
     const uniqueId = this.genUniqueId()
     // const uniqueId = id
     const timestamp = Date.now().toString()
@@ -127,16 +157,16 @@ class Utils {
     return `${hashString.substring(0, 8)}-${uniqueId}`
   }
 
-  genUniqueId () {
+  genUniqueId = () => {
     return crypto.randomUUID()
   }
 
-  genHash (data: string) {
+  genHash = (data: string) => {
     // MD5 hashing algorithm
     return crypto.createHash('md5').update(data).digest('hex')
   }
   
-  genRandomString (length: number): string {
+  genRandomString = (length: number): string => {
     return crypto.randomBytes(Math.ceil(length / 2))
       .toString('hex').slice(0, length)
   }
@@ -144,7 +174,7 @@ class Utils {
   genSalt () {
   }
 
-  sha512 (password: string, salt: string) {
+  sha512 = (password: string, salt: string) => {
     // sha512 hashing algorithm
     let hash = crypto.createHmac('sha512', salt)
     hash.update(password)

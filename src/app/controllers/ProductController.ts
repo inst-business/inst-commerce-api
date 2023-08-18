@@ -34,14 +34,14 @@ class ProductController {
   }
 
   static async updateOne (id: string, product: IProduct): Promise<IProduct | null> {
-    const formData = product
+    const formData = structuredClone(product)
     formData.slug = _.genUniqueSlug(product.name, id)
     const query = Product.findOneAndUpdate({ _id: id }, formData)
     const res = await query
     return res
   }
   
-  static async deleteOneOrMany (ids: string | string[]): Promise<Object> {
+  static async deleteOneOrMany (ids: string | string[]): Promise<Boolean> {
     const query = Product.find({ _id: ids }).softDelete()
     const res = await query
     return res
@@ -65,13 +65,12 @@ class ProductController {
     return data
   }
 
-  static async restoreOneOrMany (ids: string | string[]): Promise<Object> {
+  static async restoreOneOrMany (ids: string | string[]): Promise<Boolean> {
     const query = Product.find({ _id: ids, isDeleted: true }).restoreDeleted()
     const res = await query
     return res
   }
-
-  static async destroyOneOrMany (id: string | string[]): Promise<Object> {
+  static async destroyOneOrMany (id: string | string[]): Promise<Record<string, any>> {
     const query = Product.deleteOne({ _id: id, isDeleted: true })
     const res = await query
     return res
