@@ -1,4 +1,6 @@
-import express from 'express'
+import express, {
+  Request, Response, NextFunction, RequestHandler
+} from 'express'
 import 'dotenv/config'
 import slugify from 'slugify'
 import uniqueSlug from 'unique-slug'
@@ -11,9 +13,9 @@ import LogicError from './logicError'
 import ERR from '@/config/global/error'
 import { GV, Primitives } from '@/config/global/const'
 
-export type ExpressAsyncRequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<unknown>
+export type ExpressAsyncRequestHandler = (req: Request, res: Response, next: NextFunction) => Promise<unknown>
 export type ExpressCallback = (data?: any, err?: any) => void
-export type ExpressCallbackProvider = (res: express.Response, req?: express.Request) => ExpressCallback
+export type ExpressCallbackProvider = (res: Response, req?: Request) => ExpressCallback
 
 class Utils {
 
@@ -31,7 +33,7 @@ class Utils {
     return res
   }
 
-  routeAsync (reqHandler: ExpressAsyncRequestHandler, callbackProvider?: ExpressCallbackProvider): express.RequestHandler {
+  routeAsync (reqHandler: ExpressAsyncRequestHandler, callbackProvider?: ExpressCallbackProvider): RequestHandler {
     return (req, res, next) => {      
       const cb = callbackProvider
         ? callbackProvider(res, req)
@@ -42,7 +44,7 @@ class Utils {
     }
   }
 
-  routeNextableAsync (reqHandler: ExpressAsyncRequestHandler, callbackProvider?: ExpressCallbackProvider): express.RequestHandler {
+  routeNextableAsync (reqHandler: ExpressAsyncRequestHandler, callbackProvider?: ExpressCallbackProvider): RequestHandler {
     return (req, res, next) => {      
       const cb = callbackProvider
         ? callbackProvider(res, req)
@@ -53,8 +55,9 @@ class Utils {
     }
   }
 
-  private createServiceCallback (res: express.Response): ExpressCallback {    
+  private createServiceCallback (res: Response): ExpressCallback {    
     return (data?: any, err?: any) => {
+      // const resData = data ? JSON.parse(JSON.stringify(data)) : {}
       const resData = data ? structuredClone(data) : {}
       res.statusCode = 200
       if (err) {
@@ -63,7 +66,7 @@ class Utils {
           ? structuredClone(errJSON) : { message: err, code: -7 }
         const code = err.httpCode
         res.statusCode = (typeof code === 'number' && !isNaN(code)) ? code : 500
-        resData['err'] = errObj
+        resData['error'] = errObj
       }
       res.send(resData)
     }
@@ -80,7 +83,7 @@ class Utils {
           return this.createServiceCallback(res)
         }
       }
-      : (res: express.Response, req?: express.Request): ExpressCallback => {
+      : (res: Response, req?: Request): ExpressCallback => {
         return (data: any, err?: any) => {
           const reception = { data, page, layout: layout || 'main.hbs' }
           res.render(view, reception)
@@ -94,7 +97,7 @@ class Utils {
         console.warn('Rendering view rejected.')
         return this.createServiceCallback(res)
       }
-      : (res: express.Response, req?: express.Request): ExpressCallback => {
+      : (res: Response, req?: Request): ExpressCallback => {
         return (data: any, err?: any) => {
           const args = params.reduce((prev, cur) => 
             (req?.params[cur]) ? [...prev, req.params[cur]] : prev

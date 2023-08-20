@@ -4,14 +4,14 @@ export const env = {
     protocol: 'http',
     host: 'localhost:7543',
     port: 7543,
-    jwtSecret: 'wefwe53HelloIt"sme',
+    jwtSecret: '',
     bccEmail: "nguyenbaotoan2001@gmail.com",
     iat: {
       host: 'http://localhost:7543',
       reset_pwd_url: 'http://localhost:7543/reset-password', 
       reset_pwd_url_internal: 'http://localhost:7543/internal/reset-password', 
       register_url: 'http://localhost:7543/register/continue',
-      AES_passphase: '^%Fhwefwe53hx*^dsdf',
+      AES_passphase: '',
       AES_passphase_internal: '',
     },
     mongodb: {
@@ -40,8 +40,8 @@ export const env = {
     },
     twilio: {
       host: 'https://api.authy.com',
-      accountSid: 'ACc04b5d353e8c21bf1b6cd4b94fa9edc4',
-      authToken: '1975b33e0665121af61dbc46d93bafff'
+      accountSid: '',
+      authToken: ''
     },
     nodemailer: {
       username: "",

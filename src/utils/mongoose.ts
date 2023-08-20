@@ -2,22 +2,27 @@ import _ from '@/utils/utils'
 import mongoose, {
   Schema, Document, Query, Model, MongooseError,
   QueryWithHelpers, HydratedDocument, MongooseDefaultQueryMiddleware,
+  Types
 } from 'mongoose'
 import ERR from '@/config/global/error'
-
 
 
 // Handle errors
 export const mongoError = (err: MongooseError, stackAllowed?: boolean) => {
   const { name, message, stack } = err
   const pars = (<any>err).errors
-  const error = (stackAllowed ? _.stackError : _.logicError)(name, message, 500, ERR.INVALID_DATA, pars)
+  const error = (stackAllowed ? _.stackError : _.logicError)
+    (name, message, 500, ERR.INVALID_DATA, pars)
   throw error
 }
 
 // Handle querying
-export const handleQuery = <T>(res: Promise<T>) => 
-  res.then(data => data).catch(e => mongoError(e))
+export const handleQuery = <T>(res: Promise<T>, cb?: (data: T) => void): Promise<T> => 
+  res.then(data => {
+    cb && cb(data)
+    // structuredClone() doesnt clone non-built-in classes => ObjectId crashed
+    return JSON.parse(JSON.stringify(data))
+  }).catch(e => mongoError(e))
 
 
 // Soft delete
@@ -26,7 +31,6 @@ export type TWithSoftDeleted = {
   deletedAt: Date | null
 }
 type TDocument = Document & TWithSoftDeleted
-
 type TQueryWithHelpers = QueryWithHelpers<Boolean, TDocument | TDocument[]>
 export interface ISoftDeleteQueryHelpers<T> extends Model<T> {
   softDelete(): TQueryWithHelpers,
@@ -92,7 +96,6 @@ export const withSoftDeletePlugin = (schema: Schema) => {
     })
   })
 
-
   const setDocumentDeletion = (doc: TDocument, isDeleted: boolean) => {
     doc.isDeleted = isDeleted
     doc.deletedAt = isDeleted ? new Date() : null
@@ -107,9 +110,7 @@ export const withSoftDeletePlugin = (schema: Schema) => {
 
   const QueryHelpers = {
     // Remove (soft deletes) document
-    softDelete: async function (
-      this: TDocumentWithQueryHelpers
-    ) {
+    softDelete: async function (this: TDocumentWithQueryHelpers) {
       this.where({ isDeleted: false })
       const doc = await this
       if (_.isNull(doc)) return false
@@ -120,9 +121,7 @@ export const withSoftDeletePlugin = (schema: Schema) => {
       }
       return setDocumentDeletion(doc, true)
     },
-    restoreDeleted: async function (
-      this: TDocumentWithQueryHelpers
-    ) {
+    restoreDeleted: async function (this: TDocumentWithQueryHelpers) {
       this.where({ isDeleted: true })
       const doc = await this
       if (_.isNull(doc)) return false

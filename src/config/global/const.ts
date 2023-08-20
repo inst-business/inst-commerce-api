@@ -12,8 +12,14 @@ export type TNullableRes<T extends (...args: any[]) => any> =
   Awaited<ReturnType<T>>
 
 export type Primitives = string | number | boolean
+export type TProps<T> = {
+  [K in keyof T]: T[K] extends Primitives | Record<string, Primitives> ? K : never
+}[keyof T]
 
 export type ITF_TYPE = 'I' | 'E'
+// export type ROUTE_TYPE = 'INT' | 'EXT' | 'CRUD' | 'AUTH'
+export type ROUTE_TYPE = TProps<typeof R>
+
 export type GENDER = 'male' | 'female' | 'other'
 export type ITEM_STATUS = 'hidden' | 'pending' | 'active'
 export type ORDER_STATUS = 'declined' | 'pending' | 'approved'
@@ -26,8 +32,13 @@ export const ACCOUNT_STATUS_ARR = {
 }
 export type ACCOUNT_ROLE = 'guess' | 'customer' | 'manager' | 'admin'
 
-export class ROUTES {
-  static I = {
+export class R {
+
+  static INT = '/i'
+  static EXT = '/e'
+
+  // CRUD routes
+  static CRUD = {
     TEST: '/test',  // test ROUTE
     INDEX: '/',  // GET
     CREATE: '/create',  // GET
@@ -40,15 +51,16 @@ export class ROUTES {
     EDIT: '/:id/edit',  // GET
     UPDATE: '/:id',  // PUT
     DELETE: '/',  // PATCH
+    DETAIL: '/:slug',  // GET
   }
 
-  static E = {
-    LOGIN: '/e/login',  // POST
-    SIGNUP: '/e/signup',  // POST
-    VERIFY: '/e/verify',  // POST
-    GEN_VERIFY: '/e/create-verify',  // POST
-    INDEX: '/e',  // GET
-    DETAIL: '/e/:slug',  // GET
+  // Authentication routes
+  static AUTH = {
+    LOGIN: '/login',  // POST
+    SIGNUP: '/signup',  // POST
+    VERIFY: '/verify',  // POST
+    GEN_VERIFY: '/create-verify',  // POST
+    INDEX: '/',  // GET
   }
 }
 
@@ -57,6 +69,6 @@ export class GV {
   static CONNECT_TIMEOUT = 5000
   static VIEW_ENGINE = true
   static SALT_LENGTH = 16
-  static JWT_EXPIRED = '15s'
-  static VERIFY_EXPIRED = '30s'
+  static JWT_EXPIRED = '1m'
+  static VERIFY_EXPIRED = '5m'
 }

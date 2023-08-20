@@ -1,14 +1,21 @@
-import express from 'express'
+import express, { RequestHandler } from 'express'
 import 'dotenv/config'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 import _ from '@/utils/utils'
-import { GV, ROUTES, ACCOUNT_STATUS, ACCOUNT_STATUS_ARR } from '@/config/global/const'
+import { GV, R, ACCOUNT_STATUS, ACCOUNT_STATUS_ARR } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 class Auth {
+
+  static absoluteDeny (): RequestHandler {
+    return _.routeNextableAsync(async (req, res, next) => {
+      throw _.logicError('Forbidden', 'You don\'t have permission.', 403, ERR.FORBIDDEN)
+      // next()
+    })
+  }
   
-  static authToken (): express.RequestHandler {
+  static reqAccessToken (): RequestHandler {
     return _.routeNextableAsync(async (req, res, next) => {
       const authHeader = req.headers.authorization
       const token = authHeader && authHeader.split(' ')[1]
@@ -17,7 +24,7 @@ class Auth {
       }
       jwt.verify(token, <string>process.env.ACCESS_TOKEN, (err, user) => {
         if (err) {
-          throw _.logicError('Expired', 'Request has expired', 401, ERR.REQUEST_EXPIRED)
+          throw _.logicError('Expired', 'Request has expired.', 401, ERR.REQUEST_EXPIRED)
         }
         (<any>req).user = user
         next()
@@ -26,7 +33,7 @@ class Auth {
     })
   }
 
-  static authStatus (): express.RequestHandler {
+  static authStatus (): RequestHandler {
     return  _.routeNextableAsync(async (req, res, next) => {
       // const authHeader = req.headers.authorization
       // const token = authHeader && authHeader.split(' ')[1]

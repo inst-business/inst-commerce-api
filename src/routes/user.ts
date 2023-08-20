@@ -2,7 +2,7 @@ import express from 'express'
 import UserController from '@controllers/UserController'
 import { IUser } from '@models/User'
 import Validate from '@middlewares/Validate'
-import { GV, ROUTES, ACCOUNT_STATUS, ACCOUNT_STATUS_ARR } from '@/config/global/const'
+import { GV, R, ACCOUNT_STATUS_ARR } from '@/config/global/const'
 import UserValidator from '@/resources/validators/user'
 import ERR from '@/config/global/error'
 import _ from '@/utils/utils'
@@ -10,15 +10,12 @@ import jwt from 'jsonwebtoken'
 
 const router = express.Router()
 
-/** 
- *  INTERNAL APIs
-*/
-
 
 /** 
  *  EXTERNAL APIs
 */
-router.post(ROUTES.E.LOGIN,
+
+router.post(R.EXT + R.AUTH.LOGIN,
   Validate.formData(UserValidator.login),
   _.routeAsync(async (req, res) => {
     const { userInfo, password } = req.body
@@ -44,8 +41,8 @@ router.post(ROUTES.E.LOGIN,
 ))
 
 
-router.post(ROUTES.E.SIGNUP,
-  // Validate.formData(UserValidator.signup),
+router.post(R.EXT + R.AUTH.SIGNUP,
+  Validate.formData(UserValidator.signup),
   _.routeAsync(async (req, res) => {
     const { email, username } = req.body
     const isExisting = await UserController.checkUserExists(email, username)
@@ -63,8 +60,7 @@ router.post(ROUTES.E.SIGNUP,
       }
       const newUser = await UserController.insertNewUser(data)
       const verifyToken = _.genVerifyToken(newUser.username)
-      return newUser
-      // return { username: newUser.username, verifyToken }
+      return { username: newUser.username, verifyToken }
     }
     else {
       throw _.logicError('Signup failed', 'User already exist', 400, ERR.USER_ALREADY_EXIST, <any>isExisting.pars)
@@ -73,10 +69,14 @@ router.post(ROUTES.E.SIGNUP,
 ))
 
 
-router.post(ROUTES.E.VERIFY,
+router.post(R.EXT + R.AUTH.VERIFY,
   _.routeAsync(async (req, res) => {
-    const { token } = req.query
     const { username } = req.body
+    const isVerified = await UserController.checkUserVerified(username)
+    if (isVerified) {
+      throw isVerified && _.logicError('Verified', 'User is verified', 400, ERR.ALREADY_VERIFIED, username)
+    }
+    const { token } = req.query
     if (_.isEmpty(token) || !token) {
       console.log(token)
       throw _.logicError('Invalid', 'Invalid verify token', 400, ERR.INVALID_DATA, <string>token)
@@ -96,7 +96,7 @@ router.post(ROUTES.E.VERIFY,
 ))
 
 
-router.post(ROUTES.E.GEN_VERIFY,
+router.post(R.EXT + R.AUTH.GEN_VERIFY,
   _.routeAsync(async (req, res) => {
     const { username } = req.body
     const isExisting = await UserController.checkUserExists(username, username)
@@ -113,5 +113,11 @@ router.post(ROUTES.E.GEN_VERIFY,
     }
   }
 ))
+
+
+/** 
+ *  INTERNAL APIs
+*/
+
 
 export default router

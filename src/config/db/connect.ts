@@ -28,7 +28,7 @@ class Connect {
     }
     await connect(`${connectionString}/${dbname}`, opts)
       .then(res => console.log(`MongoDB connect to ${dbname} successfully!`))
-      // .catch(err => console.dir(err))
+      // .catch(err => console.log(err))
       .catch(err => mongoError(err))
   }
 }

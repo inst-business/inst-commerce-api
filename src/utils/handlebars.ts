@@ -1,11 +1,12 @@
-import { ROUTES, ITF_TYPE } from "@/config/global/const"
+import { R, ROUTE_TYPE } from "@/config/global/const"
 import _ from "lodash"
 import moment from "moment"
 
 const activeAnchor = (title: string, target: string) => title === target ? 'active' : ''
 
 const routeParseParams = (type: string, act: string, ...args: any[]): string => {
-  const _type = ROUTES[<ITF_TYPE>type.toUpperCase()]
+  // const _type = R[<ITF_TYPE>type.toUpperCase()]
+  const _type = R[<ROUTE_TYPE>type.toUpperCase()]
   const _act = act.toUpperCase()
   if (!_type[<keyof typeof _type>_act]) {
     return '#'

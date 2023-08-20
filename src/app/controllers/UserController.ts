@@ -1,7 +1,7 @@
 import User, { IUser } from '@models/User'
 import { GV, IResultWithPars } from '@/config/global/const'
 import _ from '@/utils/utils'
-import { handleQuery, mongoError } from '@/utils/mongoose'
+import { handleQuery } from '@/utils/mongoose'
 import ERR from '@/config/global/error'
 
 class UserController {
@@ -13,18 +13,18 @@ class UserController {
   }
 
   static async getUserByEmailOrUsername (email: string, username: string): Promise<IUser | null> {
-    const query = User.findOne({
+    const q = User.findOne({
       $or: [{ username: username }, { email: email }]
     }).lean()
-    const data = await query
+    const data = await handleQuery(q)
     return data
   }
 
   static async checkUserExists (email: string, username: string): Promise<IResultWithPars> {
-    const queryEmail = User.where({ email }).countDocuments(),
-          queryUsername = User.where({ username }).countDocuments()
-    const isEmailExists = await queryEmail,
-          isUsernameExists = await queryUsername,
+    const qEmail = User.where({ email }).countDocuments(),
+          qUsername = User.where({ username }).countDocuments()
+    const isEmailExists = await handleQuery(qEmail),
+          isUsernameExists = await handleQuery(qUsername),
           result = isEmailExists > 0 || isUsernameExists > 0
     const data = {
       result,
@@ -39,12 +39,12 @@ class UserController {
   }
 
   static async checkUserVerified (username: string): Promise<boolean> {
-    const query = User.where({
+    const q = User.where({
       username,
       status: { $nin: [ 'pending' ] },
       verifiedAt: { $exists: true, $nin: [ null ] }
     }).countDocuments()
-    const data = await query
+    const data = await handleQuery(q)
     return data > 0 ? true : false
   }
 
@@ -53,15 +53,15 @@ class UserController {
       status: 'active',
       verifiedAt: Date.now()
     }
-    const query = User.findOneAndUpdate({ username }, update)
-    const res = await query
+    const q = User.findOneAndUpdate({ username }, update)
+    const res = await handleQuery(q)
     return res ? true : false
   }
 
   static async insertNewUser (user: IUser): Promise<IUser> {
     // const formData = structuredClone(user)
-    const query = User.create(user)
-    const res = await handleQuery<IUser>(query)
+    const q = User.create(user)
+    const res = await handleQuery(q)
     return res
   }
   
