@@ -1,0 +1,34 @@
+.Actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  &-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  &-right {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__seperate {
+    padding: 0 0.5rem;
+    width: 0;
+    height: 1rem;
+    &::before {
+      content: "";
+      display: block;
+      width: 1px;
+      height: 100%;
+      background-color: var(--base-color-muted);
+      border-radius: $radius-lg;
+      transition: $transition-color-1;
+    }
+  }
+}

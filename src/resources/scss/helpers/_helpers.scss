@@ -1,0 +1,39 @@
+@function map-get-next($map, $currentVal, $getVal: false) {
+  // get list of keys from map array
+  $keys: map-keys($map);
+  // find index of current value and add 1
+  $nextIndex: (index($keys, $currentVal)) + 1;
+  @if $nextIndex > length($map) {
+    @return null;
+  }
+  // get key from map with new index
+  $nextKey: nth($keys, $nextIndex);
+  $result: $nextKey;
+  @if $getVal {
+    $result: map-get($map, $nextKey);
+  }
+  @return $result;
+}
+
+// src: https://kittygiraudel.com/2013/08/08/advanced-sass-list-functions/#reverse-a-list
+@function reverse($list, $recursive: false) {
+  $result: ();
+  @for $i from length($list) * -1 through -1 {
+    @if type-of(nth($list, abs($i))) == list and $recursive {
+      $result: append($result, reverse(nth($list, abs($i)), $recursive));
+    } @else {
+      $result: append($result, nth($list, abs($i)));
+    }
+  }
+  @return $result;
+}
+
+@function direct-parent($parent) {
+  $selector: nth($parent, 1);
+  $direct-parent: nth($selector, length($selector));
+  @return $direct-parent;
+}
+
+@function get1() {
+  @return ".Demo";
+}

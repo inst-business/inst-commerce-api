@@ -1,0 +1,126 @@
+{{!-- Head section --}}
+<nav class="Head" aria-label="breadcrumb">
+  <ol class="Breadcrumb">
+    <li class="Breadcrumb__item"><a href="/v1">Home</a></li>
+    <li class="Breadcrumb__item" aria-current="page">Products</li>
+  </ol>
+  <h1 class="Heading">Product management</h1>
+</nav>
+{{!-- End of Head section --}}
+
+{{!-- Available products --}}
+<section class="Row">
+  <div class="Col lg-12 sm-12">
+    <h2 class="Heading">Available products</h2>
+    <div class="Actions">
+      <div class="Actions-left">
+        <div class="Field__option">
+          <input type="checkbox" class="Check" name="productItems[]" value="" id="select-all" data-select-all="select-all">
+          <label for="select-all">Select all</label>
+        </div>
+        <div class="Actions__seperate"></div>
+        <button class="Btn" data-size="sm" data-variant="outline danger" title="Delete selected"
+          data-form-id="{{this._id}}">
+          <i class="fa-regular fa-trash"></i> Deleted
+        </button>
+      </div>
+      <div class="Actions-right">
+        {{#if (when data.deletedCount 'gt' 0)}}
+          <a href="/v1/products{{routeI 'deleteds'}}" class="Text-link">
+            {{!-- <i class="fa-regular fa-trash"></i> --}}
+            <i class="fa-regular fa-circle-trash"></i>
+            Removed products ({{data.deletedCount}})
+          </a>
+          <div class="Actions__seperate"></div>
+        {{/if}}
+        <a href="/v1/products{{routeI 'create'}}" class="Btn" data-variant="success" data-size="sm">
+          <i class="fa-regular fa-circle-plus"></i> Add new
+        </a>
+      </div>
+    </div>
+    <div class="Box Box-scrollable">
+      <table class="table Table Table-hover">
+        {{!-- <caption>List</caption> --}}
+        <thead>
+          <tr>
+            <th scope="col">
+              {{!-- <input type="checkbox" class="Check" name="item[]" value="" id="select-all"> --}}
+            </th>
+            <th>#</th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>Created</th>
+            <th>Updated</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each data.items}}
+            <tr class="Item">
+              <td scope="Row">
+                <input type="checkbox" class="Check" name="productItems[]" value="{{this._id}}" data-select-target="select-all">
+              </td>
+              <td>{{increase @index 1}}</td>
+              <td class="Item__name" width="25%">
+                <p class="Text-limit-3">{{this.name}}</p>
+              </td>
+              <td class="Item__img">
+                <img src="/img/products/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">
+              </td>
+              <td class="Item__desc" width="25%">
+                <p class="Text-limit-3">{{this.desc}}</p>
+                {{!-- <div class="popover-content" data-content="popover" data-for="desc-popover" data-id="{{@index}}"></div> --}}
+                {{!-- <button popovertarget="desc-popover" data-trigger="popover" data-get="{{@index}}">...more</button> --}}
+              </td>
+              <td class="Item__time">
+                {{dateFormat this.createdAt 'date'}}
+                <br>
+                {{dateFormat this.createdAt 'time'}}
+              </td>
+              <td class="Item__time">
+                {{dateFormat this.updatedAt 'date'}}
+                <br>
+                {{dateFormat this.updatedAt 'time'}}
+              </td>
+              <td class="Item__actions">
+                <a href="/v1/products{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="grey outline">
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </a>
+                <button class="Item__actions-delete Btn" data-size="sm" data-variant="outline danger" title="Delete '{{this.name}}'"
+                  data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+                  <i class="fa-regular fa-trash"></i>
+                </button>            
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+        <tfoot>
+          <th colspan="8">
+          </th>
+        </tfoot>
+        <div id="desc-popover" popover>
+        </div>
+      </table>
+    </div>
+  </div>
+</section>
+{{!-- End of Available products --}}
+
+{{!-- Modal Delete --}}
+<dialog id="delete-dialog" class="Dialog">
+  <form class="Dialog__form" method="POST">
+    <div class="Dialog__header">Confirmation</div>
+    <div class="Dialog__body">
+      You really want to perform this action?
+    </div>
+    <div class="Dialog__footer">
+      <input type="hidden" name="ids[]" value="">
+      <button type="submit" class="btn btn-danger">Yes, delete it!</button>
+      <button type="submit" class="btn btn-secondary" formmethod="dialog">Cancel</button>
+    </div>
+  </form>
+</dialog>
+{{!-- End of Modal Delete --}}
+
+<script src="/js/pages/products/index.js"></script>

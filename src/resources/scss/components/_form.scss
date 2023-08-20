@@ -1,0 +1,180 @@
+@use "../helpers/helpers";
+@use "../helpers/responsive";
+
+/*  Initial */
+.Form {
+  --Form-gap: #{$spacing-4};
+  --Form-padding: 0;
+  --Form-background: transparent;
+  --Form-transition: all #{$transition-1-eio}, #{$transition-color-1};
+  --Field-spacing: 0.75rem;
+  --Field-response: var(--base-color-variant);
+  --Field-transition: all #{$transition-1-eio}, #{$transition-color-1};
+}
+
+.Form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--Form-gap);
+  width: 100%;
+  padding: var(--Form-padding);
+  background-color: var(--Form-background);
+  border-radius: $radius-md;
+  transition: var(--Form-transition);
+
+  &__header {
+    --Form-header-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &-title {
+      color: var(--base-color-variant);
+      font-size: $font-size-lg;
+      font-weight: 700;
+      line-height: $line-height;
+      margin: 0;
+    }
+    &-description {
+      color: var(--base-color-muted);
+      font-size: $font-size;
+      line-height: $line-height;
+      margin: 0;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--Field-spacing);
+    transition: var(--Form-transition);
+  }
+
+  &__footer {
+    --Form-footer-align: left;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: var(--Field-spacing);
+  }
+}
+
+@mixin make-field-12col($gap: 0.75rem) {
+  @include responsive.make-data-12col(null, $gap);
+  @include responsive.make-responsive-down(sm, md, lg, xl) using ($breakpoint) {
+    @include responsive.make-data-12col($breakpoint, $gap);
+  }
+}
+
+.Field {
+  $Field: helpers.direct-parent(&);
+  display: flex;
+  flex-direction: column;
+  // flex-grow: 3;
+  transition: var(--Field-transition);
+
+  &__label {
+    width: 100%;
+    margin-bottom: 0.25rem;
+    font-size: $font-size-sm;
+    line-height: $line-height-sm;
+    @include make-text-ellipsised();
+    color: var(--base-color);
+    transition: var(--Field-transition);
+    &::after {
+      content: " *";
+      color: var(--danger);
+      // visibility: hidden;
+    }
+  }
+  &__input {
+    @extend .Input;
+    &:required ~ .Field__label {
+      &::after {
+        visibility: visible;
+      }
+    }
+  }
+  &__option {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    label {
+      color: var(--base-color);
+      transition: var(--Field-transition);
+    }
+    &[data-align="center"] {
+      align-items: center;
+    }
+  }
+  &__response {
+    width: 100%;
+    margin: 2px 0 0;
+    font-size: 0.75rem;
+    line-height: 0.75rem;
+    color: var(--Field-response);
+    transition: var(--Field-transition);
+  }
+  &-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0 var(--Field-spacing);
+    width: 100%;
+    transition: var(--Field-transition);
+    &[data-direction="row"] {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+  &-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--Field-spacing);
+    width: 100%;
+    transition: var(--Field-transition);
+    &[data-align~="full"] {
+      flex-direction: column;
+    }
+    &[data-align~="center"] {
+      justify-content: center;
+    }
+    &[data-align~="end"] {
+      justify-content: end;
+    }
+  }
+  &-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--Field-spacing);
+    width: 100%;
+    transition: var(--Field-transition);
+  }
+
+  &[aria-invalid="true"] {
+    --Field-response: #{$color-danger};
+    #{$Field}__input {
+      border-color: $color-danger !important;
+      --Input-outline: #{make-shadow-outlined($color-danger)};
+    }
+  }
+  &[aria-invalid="false"] {
+    --Field-response: #{$color-success};
+    #{$Field}__input {
+      border-color: $color-success !important;
+      --Input-outline: #{make-shadow-outlined($color-success)};
+    }
+  }
+
+  @include make-field-12col(var(--Field-spacing));
+}
+
+.Fieldset {
+  @extend .Field-group;
+  legend,
+  .Fieldset-legend {
+    @extend .Field__label;
+    margin-bottom: calc(var(--Field-spacing) * -0.5);
+  }
+}

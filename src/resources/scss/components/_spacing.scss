@@ -1,0 +1,59 @@
+$spacing-0: 0;
+$spacing-1: 0.25rem;
+$spacing-2: $spacing-1 * 2;
+$spacing-3: $spacing-2 * 2;
+$spacing-4: $spacing-3 + $spacing-2;
+$spacing-5: $spacing-4 + $spacing-2;
+
+$spacings: (
+  0: 0,
+  1: $spacing-1,
+  2: $spacing-1 * 2,
+  3: $spacing-2 * 2,
+  4: $spacing-3 + $spacing-2,
+  5: $spacing-4 + $spacing-2,
+);
+
+$directions: (
+  't': top,
+  'l': left,
+  'r': right,
+  'b': bottom,
+);
+
+@mixin make-other-directions($name, $num, $type) {
+  $spacing: map-get($spacings, $num);
+  #{$name}-y-#{$num} {
+    #{$type}-top: $spacing;
+    #{$type}-bottom: $spacing;
+  }
+  #{$name}-x-#{$num} {
+    #{$type}-left: $spacing;
+    #{$type}-right: $spacing;
+  }
+}
+
+@function get-spacing($num) {
+  $result: spacing-#{$num};
+  @return $result;
+}
+
+@for $i from 0 through 5 {
+  $spacing: map-get($spacings, $i);
+  .M {
+    @each $name, $direction in $directions {
+      &-#{$name}-#{$i} {
+        margin-#{$direction}: $spacing;
+      }
+    }
+  }
+  @include make-other-directions('.M', $i, margin);
+  .P {
+    @each $name, $direction in $directions {
+      &-#{$name}-#{$i} {
+        padding: $spacing;
+      }
+    }
+  }
+  @include make-other-directions('.P', $i, padding);
+}

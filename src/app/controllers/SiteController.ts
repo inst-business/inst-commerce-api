@@ -1,11 +1,11 @@
 class SiteController {
 
-  // GET: /courses
+  // GET: /products
   static index (req: any, res: any) {
-    res.render('home')
+    res.render('dashboard.index')
   }
 
-  // GET: /courses/:slug
+  // GET: /products/:slug
   static search (req: any, res: any) {
     console.log(req.query)
     res.render('search')

@@ -1,0 +1,134 @@
+@mixin gen-text-properties {
+  margin-top: 0;
+  margin-bottom: 0;
+  // line-height: $line-height;
+  transition: $transition-color-1;
+}
+@mixin gen-heading-properties {
+  margin-top: 0;
+  padding-bottom: 0;
+  // line-height: $line-height;
+}
+
+@mixin make-text-ellipsised($max-width: 100%) {
+  max-width: $max-width;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+a {
+  // color: $color-txt-dark;
+  color: inherit;
+  text-decoration: none;
+  @include gen-text-properties;
+}
+.Text-h1,
+h1 {
+  color: var(--base-color);
+  font-weight: 800;
+  font-size: $font-size-xl;
+  @include gen-text-properties;
+}
+.Text-h2,
+h2 {
+  color: var(--base-color);
+  font-weight: 600;
+  font-size: $font-size-lg;
+  @include gen-text-properties;
+}
+.Text-h3,
+h3 {
+  color: var(--base-color-variant);
+  font-weight: 500;
+  font-size: $font-size-sm;
+  @include gen-text-properties;
+}
+.Text-small,
+small {
+  color: var(--base-color-variant);
+  font-size: $font-size-xs;
+  @include gen-text-properties;
+}
+p {
+  color: var(--base-color-variant);
+  font-size: $font-size;
+  // color: $color-txt-grey;
+  @include gen-text-properties;
+}
+b {
+  color: var(--base-color);
+  // color: $color-txt-dark;
+  @include gen-text-properties;
+}
+// span, strong, ins {
+//   @include gen-text-properties;
+// }
+
+.Text {
+  color: inherit;
+  font-size: $font-size;
+  font-weight: inherit;
+  @include gen-text-properties;
+
+  &-brand {
+    font-weight: 900;
+  }
+  &-muted {
+    color: $color-txt-muted;
+  }
+  &-status {
+    // max-width: fit-content;
+    // block-size: fit-content;
+    width: fit-content;
+    font-weight: 700;
+    font-size: calc(#{$font-size} * 0.75);
+    position: relative;
+    z-index: 1;
+  }
+  &-link {
+    color: var(--base-color-highlight);
+    &:hover {
+      text-decoration: underline;
+      color: make-color-emphasis(var(--base-color-highlight), 80%);
+    }
+  }
+
+  @for $i from 1 through 5 {
+    &-limit-#{$i} {
+      display: -webkit-box;
+      -webkit-line-clamp: $i;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  @each $name, $color in $colors {
+    &[data-variant~="#{$name}"],
+    &-#{$name} {
+      color: #{$color};
+    }
+    &-status#{&}-#{$name}::before {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      top: -0.125rem;
+      left: -0.625rem;
+      width: calc(100% + 1.25rem);
+      height: calc(100% + 0.25rem);
+      background-color: make-color-transparent($color, 10%);
+      border-radius: $radius-xl;
+      z-index: -1;
+    }
+  }
+
+  &-left {
+    text-align: left;
+  }
+  &-center {
+    text-align: center;
+  }
+  &-right {
+    text-align: right;
+  }
+}

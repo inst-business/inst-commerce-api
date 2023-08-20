@@ -1,0 +1,194 @@
+/*  Initial */
+.Btn {
+  --Btn-padding: #{$btn-padding};
+  --Btn-font-size: #{$btn-font-size};
+  --Btn-font-weight: #{$btn-font-weight};
+  --Btn-line-height: #{$btn-line-height};
+  --Btn-color-main: #{$color-primary};
+  --Btn-radius: #{$radius-sm};
+  --Btn-color-side: #fff;
+  --Btn-intensity: 80%;
+  --Btn-transition: all #{$transition-1-eio}, #{$transition-color-1};
+}
+
+.Btn {
+  appearance: none;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  padding: var(--Btn-padding);
+  font-size: var(--Btn-font-size);
+  font-weight: var(--Btn-font-weight);
+  line-height: var(--Btn-line-height);
+  border-radius: var(--Btn-radius);
+  border: 1px solid;
+  border-color: var(--Btn-color-main);
+  background-color: var(--Btn-color-main);
+  color: var(--Btn-color-side);
+  transition: var(--Btn-transition);
+}
+
+.Btn {
+  $self: #{&};
+  /*  Default */
+  &:hover,
+  &:focus-visible,
+  &:active {
+    --Btn-color-main-hover: #{make-color-emphasis(
+        var(--Btn-color-main),
+        var(--Btn-intensity)
+      )};
+    background: var(--Btn-color-main-hover);
+    border-color: var(--Btn-color-main-hover);
+  }
+  &:disabled {
+    --Btn-color-main-disable: #{make-color-variant(
+        var(--Btn-color-main),
+        var(--Btn-intensity)
+      )};
+    background: var(--Btn-color-main-disable);
+    border-color: var(--Btn-color-main-disable);
+    cursor: default;
+  }
+
+  /*  Sizes */
+  &[data-size="sm"] {
+    --Btn-padding: #{$btn-padding-sm};
+    --Btn-font-size: #{$btn-font-size-sm};
+    --Btn-radius: #{$radius-sm};
+  }
+  &[data-size="lg"] {
+    --Btn-padding: #{$btn-padding-lg};
+    --Btn-font-size: #{$btn-font-size-lg};
+    --Btn-radius: #{$radius-lg};
+  }
+
+  /*  Outline */
+  &[data-variant~="outline"] {
+    --Btn-color-main: transparent;
+    --Btn-color-side: #{$color-primary};
+    border-color: var(--Btn-color-side);
+
+    &:hover,
+    &:focus-visible {
+      color: #fff;
+      background-color: var(--Btn-color-side);
+      border-color: var(--Btn-color-side);
+    }
+    &:active {
+      --Btn-color-side-active: color-mix(
+        in srgb,
+        var(--Btn-color-side) var(--Btn-intensity),
+        #000
+      );
+      background-color: var(--Btn-color-side-active);
+      border-color: var(--Btn-color-side-active);
+    }
+  }
+
+  /*  Each color */
+  @each $name, $color in $colors {
+    &[data-variant~="#{$name}"],
+    %Btn-#{$name} {
+      --Btn-color-main: #{$color};
+    }
+    &[data-variant~="#{$name}"][data-variant~="outline"],
+    %Btn-#{$name}-outline {
+      --Btn-color-main: transparent;
+      --Btn-color-side: #{$color};
+    }
+  }
+
+  &[data-variant~="circle"],
+  %Btn-circle {
+    --Btn-radius: #{$radius-circle};
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    > i {
+      width: var(--Btn-font-size);
+      font-size: var(--Btn-font-size);
+      text-align: center;
+    }
+  }
+
+  &[data-variant~="unstyled"] {
+    @extend .Btn, [data-variant~="circle"];
+    // --Btn-radius: #{$radius-circle};
+    --Btn-color-main: transparent;
+    --Btn-color-side: inherit;
+    border: none;
+    position: relative;
+    z-index: 1;
+    &:hover,
+    &:focus-visible {
+      background-color: rgba(149, 157, 165, 0.15);
+      color: make-color-variant(inherit);
+    }
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      z-index: -1;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(149, 157, 165, 0.5);
+      border-radius: $radius-circle;
+      transition: $transition-3;
+      opacity: 0;
+    }
+    &:active::after {
+      opacity: 1;
+      height: 0;
+      width: 0;
+      transition: 0s;
+    }
+  }
+
+  // &__group {
+  //   background-color: var(--txt-light);
+  //   display: flex;
+  //   justify-content: space-between;
+  //   align-items: center;
+  //   border-radius: $radius-rounded;
+  //   cursor: pointer;
+  //   #{$self} {
+  //     @extend .Btn-unstyled;
+  //     padding: 0.3rem;
+  //     margin: 0.2rem;
+  //     &.active,
+  //     &[aria-current="true"] {
+  //       border-radius: $radius-circle;
+  //       background-color: $color-primary;
+  //       color: $color-light;
+  //       &::after {
+  //         display: none;
+  //       }
+  //     }
+  //   }
+  // }
+
+  &-viewmore {
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0;
+    text-align: center;
+    --Btn-color-main: transparent;
+    --Btn-color-side: #{$color-primary};
+    border: unset;
+    font-size: #{$btn-font-size-sm};
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+      background-color: transparent;
+    }
+  }
+
+  &-spacing-0 {
+    --Btn-padding: 0;
+  }
+}

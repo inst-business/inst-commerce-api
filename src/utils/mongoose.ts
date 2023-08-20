@@ -94,7 +94,9 @@ const withSoftDeletePlugin = (schema: Schema) => {
       const doc = await this
       if (isNull(doc)) return false
       if (isArray(doc)) {
-        return doc.reduce((prev, cur) => [...prev, setDocumentDeletion(cur, true)], <Object[]>[])
+        return doc.reduce((prev, cur) =>
+          [...prev, setDocumentDeletion(cur, true)]
+        , <Promise<unknown>[]>[])
       }
       return setDocumentDeletion(doc, true)
     },
@@ -105,7 +107,9 @@ const withSoftDeletePlugin = (schema: Schema) => {
       const doc = await this
       if (isNull(doc)) return false
       if (isArray(doc)) {
-        return doc.reduce((prev, cur) => [...prev, setDocumentDeletion(cur, false)], <Object[]>[])
+        return doc.reduce((prev, cur) =>
+          [...prev, setDocumentDeletion(cur, false)]
+        , <Promise<unknown>[]>[])
       }
       return setDocumentDeletion(doc, false)
     }

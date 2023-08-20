@@ -1,0 +1,57 @@
+// Analyze box
+.Analyze {
+  @extend .Box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+
+  &__info {
+    padding-left: 0.5rem;
+    &-title {
+      width: 12ch;
+      font-size: $font-size;
+    }
+    &-content {
+      font-size: $font-size-lg;
+      font-weight: 800;
+    }
+  }
+
+  &__progress {
+    --progress-width: 5rem;
+    width: var(--progress-width);
+    height: var(--progress-width);
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: $radius-circle;
+    & svg {
+      width: var(--progress-width);
+      height: var(--progress-width);
+      position: relative;
+      & circle {
+        --stroke-width: 0.5rem;
+        // --excess-width: calc(var(--stroke-width) / 2);
+        fill: none;
+        stroke-width: var(--stroke-width);
+        stroke-linecap: round;
+        stroke-dashoffset: -30;
+        stroke-dasharray: 200;
+        // transform: translate(var(--excess-width), var(--excess-width));
+      }
+    }
+    &-percentage {
+      position: absolute;
+      font-size: $font-size-sm;
+    }
+    @each $name, $color in $colors {
+      &-#{$name} svg circle,
+      svg#{&}-#{$name} circle {
+        stroke: #{$color};
+      }
+    }
+  }
+}

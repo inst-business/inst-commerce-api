@@ -1,0 +1,325 @@
+/*  Initial */
+.Input {
+  --Input-padding: #{$spacing-2};
+  --Input-font-size: #{$font-size};
+  --Input-line-height: #{$line-height-sm};
+  --Input-background: var(--base-box);
+  --Input-color: var(--base-color);
+  --Input-border: var(--base-border);
+  --Input-hover: var(--base-border-highlighted);
+  --Input-outline: var(--base-outlined);
+  --Input-radius: #{$radius-sm};
+  --Input-transition: #{$transition-color-1}, box-shadow #{$transition-1-eio},
+    border #{$transition-1-ln};
+}
+
+.Input {
+  width: 100%;
+  padding: var(--Input-padding);
+  font-size: var(--Input-font-size);
+  line-height: var(--Input-line-height);
+  border-radius: var(--Input-radius);
+  border: 1px solid var(--Input-border);
+  color: var(--Input-color);
+  background-color: var(--Input-background);
+  transition: var(--Input-transition);
+  &:hover,
+  &:focus-visible {
+    --Input-border: var(--Input-hover);
+  }
+  &:focus {
+    box-shadow: var(--Input-outline);
+    z-index: 1;
+    position: sticky;
+  }
+  &:disabled {
+    --Input-color: var(--base-color-muted);
+    // color: initial;
+    --Input-background: var(--base-hover-overlay) !important;
+    --Input-hover: var(--base-border) !important;
+    cursor: default;
+    &[readonly] {
+      --Input-color: var(--base-color);
+    }
+  }
+
+  /*  Each color */
+  @each $name, $color in $colors {
+    &[data-variant="#{$name}"] {
+      --Input-hover: #{$color};
+      --Input-outline: #{make-shadow-outlined($color)};
+      &[data-highlight="true"] {
+        --Input-border: #{make-color-spread($color, 25%)};
+      }
+    }
+  }
+
+  &[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+  }
+  &__spinners[type="number"]:focus::-webkit-inner-spin-button {
+    appearance: auto !important;
+  }
+}
+
+select.Input {
+  --Input-line-height: normal;
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: linear-gradient(
+      45deg,
+      transparent 50%,
+      $color-lightgrey 50%
+    ),
+    linear-gradient(135deg, $color-lightgrey 50%, transparent 50%),
+    linear-gradient(to right, $color-lightgrey, $color-lightgrey);
+  background-position: calc(100% - 1rem) 50%, calc(100% - 0.75rem) 50%,
+    calc(100% - 2rem) 50%;
+  background-size: 0.25rem 0.25rem, 0.25rem 0.25rem, 0.5px 1.5em;
+  background-repeat: no-repeat;
+  transition: var(--Input-transition), background-image $transition-1-ln;
+  option[value=""]:disabled {
+    display: none;
+  }
+}
+
+/* Form's Check */
+.Check {
+  --Check-size: #{$font-size};
+  --Check-font-size: #{$font-size};
+  --Check-mt: 0.2rem;
+  --Check-background: transparent;
+  --Check-checked: var(--grey);
+  --Check-border: var(--base-border-highlighted);
+  --Check-border-focused: var(--Check-border);
+  --Check-outline: var(--base-outlined-sm);
+  // --Check-outline-checked: var(--base-outlined-sm);
+  --Check-transition: #{$transition-color-1}, box-shadow #{$transition-1-eio},
+    border #{$transition-1-ln};
+  &[type="checkbox"] {
+    --Check-radius: #{$radius-sm};
+    --Check-symbol: polygon(
+      17% 54%,
+      28% 43%,
+      38% 54%,
+      70% 22%,
+      81% 33%,
+      38% 75%,
+      17% 54%
+    );
+    --Check-symbol-color: #fff;
+    --Check-background-checked: var(--Check-checked);
+  }
+  &[type="radio"] {
+    --Check-radius: #{$radius-circle};
+    --Check-symbol: none;
+    --Check-symbol-color: var(--Check-checked);
+    --Check-background-checked: transparent;
+  }
+}
+.Check {
+  appearance: none;
+  display: inline-block;
+  position: sticky;
+  z-index: 1;
+  width: var(--Check-size);
+  height: var(--Check-size);
+  margin-top: var(--Check-mt);
+  background-color: var(--Check-background);
+  border-radius: var(--Check-radius) !important;
+  border: 1px solid var(--Check-border);
+  transition: var(--Check-transition);
+  &::before {
+    content: "";
+    display: inline;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--Check-symbol-color);
+    box-shadow: inset 0 0 0 2px var(--base-box);
+    border-radius: var(--Check-radius);
+    clip-path: var(--Check-symbol);
+    visibility: hidden;
+    opacity: 0;
+    transition: all $transition-1-eio;
+  }
+  &:focus {
+    border-color: var(--Check-border-focused);
+    box-shadow: var(--Check-outline);
+  }
+  &:checked {
+    border-color: var(--Check-checked);
+    background-color: var(--Check-background-checked);
+    &:focus {
+      border-color: var(--Check-border-focused);
+    }
+    &::before {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  /*  Sizes */
+  &[data-size="sm"] {
+    --Check-size: #{$font-size-sm};
+    --Check-font-size: #{$font-size-sm};
+    --Check-mt: 0.25rem;
+  }
+  &[data-size="lg"] {
+    --Check-size: #{$font-size-lg};
+    --Check-font-size: #{$font-size-lg};
+    --Check-mt: 0;
+  }
+
+  /*  Each color */
+  @each $name, $color in $colors {
+    &[data-variant~="#{$name}"] {
+      --Check-checked: #{$color};
+      --Check-outline: #{make-shadow-outlined($color, 0.15rem)};
+      --Check-border-focused: #{make-color-variant($color, 75%)};
+    }
+  }
+
+  &[data-variant~="no-outline"] {
+    --Check-outline: none !important;
+    --Check-border-focused: var(--Check-border) !important;
+  }
+}
+
+/* Switch */
+.Switch {
+  --Switch-slider-size: #{$font-size};
+  --Switch-font-size: #{$font-size};
+  --Switch-padding: 2px;
+  --Switch-width: calc(
+    var(--Switch-slider-size) * 2 + var(--Switch-padding) * 3
+  );
+  --Switch-height: calc(var(--Switch-slider-size) + var(--Switch-padding) * 2);
+  --Switch-radius: #{$radius-xl};
+  --Switch-color: var(--base-border-highlighted);
+  --Switch-background: var(--base-box);
+  --Switch-checked: var(--grey);
+  --Switch-border: var(--base-border-highlighted);
+  --Switch-border-focused: var(--Switch-border);
+  --Switch-outline: var(--base-outlined-sm);
+  --Switch-transition: all #{$transition-1-eio}, #{$transition-color-1},
+    border #{$transition-1-ln};
+}
+.Switch {
+  /*  Default */
+  position: relative;
+  display: inline-flex;
+  min-width: var(--Switch-width);
+  min-height: var(--Switch-height);
+  justify-content: space-between;
+  align-items: center;
+  gap: calc(var(--Switch-padding) * 2);
+  font-size: var(--Switch-font-size);
+
+  input[type="checkbox"] {
+    position: relative;
+    width: 0;
+    height: 0;
+    min-height: var(--Switch-height);
+    margin: 0 var(--Switch-width) 0 0;
+    &::before {
+      content: "";
+      position: absolute;
+      z-index: 3;
+      top: var(--Switch-padding);
+      left: var(--Switch-padding);
+      width: var(--Switch-slider-size);
+      height: var(--Switch-slider-size);
+      border-radius: $radius-circle;
+      background-color: var(--Switch-color);
+      transition: var(--Switch-transition);
+      cursor: pointer;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      min-width: var(--Switch-width);
+      min-height: var(--Switch-height);
+      border: 1px solid var(--Switch-border);
+      border-radius: var(--Switch-radius);
+      background-color: var(--Switch-background);
+      transition: var(--Switch-transition);
+      cursor: pointer;
+    }
+    &:focus {
+      &::after {
+        border-color: var(--Switch-border-focused);
+        box-shadow: var(--Switch-outline);
+      }
+    }
+    &:checked {
+      &::before {
+        background-color: var(--light);
+        transform: translateX(calc(100% + var(--Switch-padding)));
+      }
+      &::after {
+        background-color: var(--Switch-checked);
+        border-color: var(--Switch-checked);
+      }
+    }
+  }
+
+  /*  Sizes */
+  &[data-size="sm"] {
+    --Switch-slider-size: #{$font-size-xs};
+    --Switch-font-size: #{$font-size-xs};
+  }
+  &[data-size="lg"] {
+    --Switch-slider-size: #{$font-size-lg};
+    --Switch-font-size: #{$font-size-lg};
+  }
+
+  /*  Each color */
+  @each $name, $color in $colors {
+    &[data-variant~="#{$name}"] {
+      --Switch-checked: #{$color};
+      --Switch-outline: #{make-shadow-outlined($color, 0.15rem)};
+      --Switch-border-focused: #{make-color-variant($color, 75%)};
+    }
+  }
+
+  &[data-variant~="icon"] {
+    --Switch-color: var(--light);
+    --Switch-background: var(--Switch-checked);
+    // --Switch-background: var(--base-color);
+    input[type="checkbox"] {
+      &::after {
+        background-color: var(--Switch-background) !important;
+        border: none !important;
+      }
+    }
+    span {
+      content: "";
+      position: absolute;
+      inset: var(--Switch-padding) var(--Switch-padding);
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--Switch-slider-size);
+      height: var(--Switch-slider-size);
+      font-size: calc(var(--Switch-font-size) - var(--Switch-padding) * 3);
+      // color: var(--Switch-color);
+      cursor: pointer;
+    }
+    span:nth-of-type(2) {
+      z-index: 2;
+      transform: translateX(calc(100% + var(--Switch-padding)));
+    }
+  }
+
+  &[data-variant~="no-outline"] {
+    --Switch-outline: none !important;
+    --Switch-border-focused: var(--Switch-border) !important;
+  }
+}

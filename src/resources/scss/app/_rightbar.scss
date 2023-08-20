@@ -1,0 +1,144 @@
+@use "../helpers/responsive";
+
+.Rightbar {
+  --Rightbar-width: #{$rightbar-width};
+  --Rightbar-width-collapsed: #{$rightbar-width-collapsed};
+  --Rightbar-padding: 1rem 0.5rem;
+  // --Rightbar-logo-size: 2rem;
+  // --Rightbar-link-height: 3rem;
+  // --Rightbar-link-transition: all .3s ease;
+  // --Rightbar-font-size: #{$font-size};
+}
+
+.Rightbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: inherit;
+  max-width: var(--Rightbar-width);
+  height: 100%;
+  padding: var(--Rightbar-padding);
+  transition: var(--Sidebar-transition);
+  overflow-x: visible;
+  // margin-left: 100%;
+
+  $self: #{&};
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    // padding-bottom: .75rem;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: var(--Rightbar-padding);
+    height: calc(
+      100vh - var(--Rightbar-padding) * 3 - var(--Rightbar-logo-size)
+    );
+    padding-top: var(--Rightbar-padding);
+    padding-bottom: var(--Rightbar-padding);
+    background-color: var(--bg-section);
+    box-shadow: var(--shadow-1);
+    border-radius: var(--radius-md);
+    transition: var(--transition-1-eio);
+    overflow: hidden;
+    overflow-y: auto;
+
+    &:hover,
+    &:focus-visible {
+      box-shadow: none;
+    }
+  }
+
+  &__link {
+    --link-padding: 1.5rem;
+    font-size: var(--Rightbar-font-size);
+    display: flex;
+    align-items: center;
+    color: var(--txt-grey);
+    height: var(--Rightbar-link-height);
+    gap: 0.75rem;
+    position: relative;
+    padding-left: var(--link-padding);
+    padding-right: var(--link-padding);
+    transition: var(--Rightbar-link-transition);
+    @include make-text-ellipsised;
+    // white-space: nowrap;
+
+    & > * {
+      display: initial;
+    }
+
+    &:last-child {
+      margin-top: auto;
+      // position: absolute;
+      // bottom: 1rem;
+      width: 100%;
+    }
+
+    &-icon {
+      // color: var(--txt-primary);
+      width: calc(var(--Rightbar-font-size) * 1.25);
+      text-align: center;
+      & > * {
+        min-width: 100%;
+      }
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--primary);
+      padding-left: calc(var(--link-padding) * 1.25);
+      padding-right: calc(var(--link-padding) * 0.75);
+    }
+
+    &.active {
+      cursor: none;
+      pointer-events: none;
+      color: var(--primary);
+      background-color: var(--light);
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 2px;
+        height: 100%;
+        background-color: var(--color-primary);
+      }
+    }
+  }
+}
+
+@include responsive.make-range-responsive(sm, lg) {
+  .Rightbar {
+    --Rightbar-width: var(--Rightbar-width-collapsed);
+    // min-width: fit-content;
+    &__main {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
+    &__toggle {
+      justify-content: center;
+      &-brand {
+        display: none;
+      }
+    }
+    &__link {
+      --link-padding: 0;
+      justify-content: center;
+      > *:not(#{&}-icon) {
+        display: none;
+      }
+      &:last-child {
+        position: static;
+        // bottom: 1rem;
+        // width: 100%;
+      }
+    }
+  }
+}

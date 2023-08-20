@@ -1,9 +1,12 @@
 .vscode/
 
+.env
+src/config/env.ts
+
 node_modules/
 dist/
 
-public/css/
+public/styles/
 
 package-lock.json
 yarn.lock
