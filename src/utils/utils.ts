@@ -2,13 +2,14 @@ import express from 'express'
 import 'dotenv/config'
 import slugify from 'slugify'
 import uniqueSlug from 'unique-slug'
-// import CryptoJS from 'crypto-js'
+import Ajv from 'ajv'
+import addFormats from 'ajv-formats'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 import _ from 'lodash'
-import LogicError, { Primitives } from './logicError'
+import LogicError from './logicError'
 import ERR from '@/config/global/error'
-import { GV, VIEWABLE } from '@/config/global/const'
+import { GV, Primitives } from '@/config/global/const'
 
 export type ExpressAsyncRequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<unknown>
 export type ExpressCallback = (data?: any, err?: any) => void
@@ -69,12 +70,13 @@ class Utils {
   }
 
   renderView (view: string, page?: {}, layout?: string): ExpressCallbackProvider {
-    return !VIEWABLE
+    return !GV.VIEW_ENGINE
       ? (res) => {
         try {
           throw this.logicError('REJECTED', 'Rendering view has been refused', 406, ERR.RENDER_VIEW_REJECTED, view)
         } catch (e: any) {
-          this.errorMsg(e)
+          // this.errorMsg(e)
+          console.warn('Rendering view rejected - ', view)
           return this.createServiceCallback(res)
         }
       }
@@ -87,20 +89,27 @@ class Utils {
   }
 
   redirectView (route: string, ...params: any[]): ExpressCallbackProvider {
-    return (res: express.Response, req?: express.Request): ExpressCallback => {
-      return (data: any, err?: any) => {
-        const args = params.reduce((prev, cur) => 
-          (req?.params[cur]) ? [...prev, req.params[cur]] : prev
-        , [])
-        const url = this.routeParseParams(route, ...args)        
-        res.redirect(url)
+    return !GV.VIEW_ENGINE
+      ? (res) => {
+        console.warn('Rendering view rejected.')
+        return this.createServiceCallback(res)
       }
-    }
+      : (res: express.Response, req?: express.Request): ExpressCallback => {
+        return (data: any, err?: any) => {
+          const args = params.reduce((prev, cur) => 
+            (req?.params[cur]) ? [...prev, req.params[cur]] : prev
+          , [])
+          const url = this.routeParseParams(route, ...args)        
+          res.redirect(url)
+        }
+      }
   }
 
-  logicError (title: string, message: string, httpError: number, errorCode: number, ...pars: Primitives[]): LogicError { 
-    return new LogicError(title, message, httpError, errorCode, ...pars)
-  }
+  logicError = (title: string, message: string, httpError: number, errorCode: number, ...pars: Primitives[]): LogicError => 
+    new LogicError(title, message, httpError, errorCode, ...pars)
+
+  stackError = (title: string, message: string, httpError: number, errorCode: number, ...pars: Primitives[]): LogicError =>
+    new LogicError(title, message, httpError, errorCode, ...pars).withStack()
 
   errorMsg (e: LogicError) {
     console.error(`${e.title}: ${e.message}\n`, `{http: ${e.httpCode}, error: ${e.errorCode}}\n`, e.pars)
@@ -112,6 +121,12 @@ class Utils {
       (_.isString(val) || _.isNumber(val) || val.constructor.name === 'ObjectId')
         ? prev.replace(regex, val?.toString()) : prev
     , route)
+  }
+  
+  validate = (schema: Record<string, unknown>) => {
+    const ajv = new Ajv()
+    addFormats(ajv)
+    return ajv.compile(schema)
   }
 
   genAccessToken = (user: any): string => {

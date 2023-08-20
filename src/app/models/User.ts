@@ -1,5 +1,5 @@
-import { isNull } from 'lodash';
-import { Schema, model } from 'mongoose'
+import mongoose, { Schema, model } from 'mongoose'
+// import withJsonSchema from 'mongoose-schema-jsonschema'
 import { GV, GENDER, ACCOUNT_STATUS, ACCOUNT_ROLE } from '@/config/global/const'
 import { TSoftDeleteQueryHelpers, withSoftDeletePlugin } from '@/utils/mongoose'
 
@@ -35,20 +35,25 @@ const UserSchema = new Schema<IUser>({
   lastname: { type: String, required: true, maxLength: 50 },
   gender: { type: String, required: true, default: 'other'},
   birthday: { type: Date, default: null },
-  address: { type: String, maxLength: 128 },
-  country: { type: String, maxLength: 64 },
-  bio: { type: String, default: null },
-  avatar: { type: String, default: null },
-  cover: { type: String, default: null },
+  address: { type: String, maxLength: 128, default: '' },
+  country: { type: String, maxLength: 32, default: '' },
+  bio: { type: String, default: '' },
+  avatar: { type: String, default: '' },
+  cover: { type: String, default: '' },
   status: { type: String, required: true, default: 'pending' },
   role: { type: String, required: true, default: 'customer' },
-  token: { type: String, default: null },
+  token: { type: String, default: '' },
   salt: { type: String, required: true, maxLength: GV.SALT_LENGTH },
   verifiedAt: { type: Date, default: null },
 }, { timestamps: true })
 
-withSoftDeletePlugin(UserSchema)
+// withJsonSchema(mongoose)
+// const UserJSONSchema = (<any>UserSchema).jsonSchema()
 
+withSoftDeletePlugin(UserSchema)
 const User = model<IUser, TSoftDeleteQueryHelpers<IUser>>('User', UserSchema)
 
+export {
+  // UserJSONSchema as UserSchema
+}
 export default User

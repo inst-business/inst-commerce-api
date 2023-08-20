@@ -1,6 +1,8 @@
 import User, { IUser } from '@models/User'
-import { GV } from '@/config/global/const'
+import { GV, IResultWithPars } from '@/config/global/const'
 import _ from '@/utils/utils'
+import { handleQuery, mongoError } from '@/utils/mongoose'
+import ERR from '@/config/global/error'
 
 class UserController {
 
@@ -18,17 +20,28 @@ class UserController {
     return data
   }
 
-  static async checkUserExist (email: string, username: string): Promise<boolean> {
-    const query = User.where({
-      $or: [{ username: username }, { email: email }]
-    }).countDocuments()
-    const data = await query
-    return data > 0 ? true : false
+  static async checkUserExists (email: string, username: string): Promise<IResultWithPars> {
+    const queryEmail = User.where({ email }).countDocuments(),
+          queryUsername = User.where({ username }).countDocuments()
+    const isEmailExists = await queryEmail,
+          isUsernameExists = await queryUsername,
+          result = isEmailExists > 0 || isUsernameExists > 0
+    const data = {
+      result,
+      ...(result && {
+        pars: [
+          ...isEmailExists > 0 ? [email] : [],
+          ...isUsernameExists > 0 ? [username] : [],
+        ]
+      }),
+    }
+    return data
   }
 
   static async checkUserVerified (username: string): Promise<boolean> {
     const query = User.where({
       username,
+      status: { $nin: [ 'pending' ] },
       verifiedAt: { $exists: true, $nin: [ null ] }
     }).countDocuments()
     const data = await query
@@ -36,7 +49,10 @@ class UserController {
   }
 
   static async verifyUser (username: string): Promise<boolean> {
-    const update = { verifiedAt: Date.now() }
+    const update = {
+      status: 'active',
+      verifiedAt: Date.now()
+    }
     const query = User.findOneAndUpdate({ username }, update)
     const res = await query
     return res ? true : false
@@ -45,7 +61,7 @@ class UserController {
   static async insertNewUser (user: IUser): Promise<IUser> {
     // const formData = structuredClone(user)
     const query = User.create(user)
-    const res = await query
+    const res = await handleQuery<IUser>(query)
     return res
   }
   

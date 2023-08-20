@@ -1,6 +1,26 @@
-import { isArray, isNull } from 'lodash'
-import mongoose, { Schema, Document, Query, Model, QueryWithHelpers, HydratedDocument, MongooseDefaultQueryMiddleware } from 'mongoose'
+import _ from '@/utils/utils'
+import mongoose, {
+  Schema, Document, Query, Model, MongooseError,
+  QueryWithHelpers, HydratedDocument, MongooseDefaultQueryMiddleware,
+} from 'mongoose'
+import ERR from '@/config/global/error'
 
+
+
+// Handle errors
+export const mongoError = (err: MongooseError, stackAllowed?: boolean) => {
+  const { name, message, stack } = err
+  const pars = (<any>err).errors
+  const error = (stackAllowed ? _.stackError : _.logicError)(name, message, 500, ERR.INVALID_DATA, pars)
+  throw error
+}
+
+// Handle querying
+export const handleQuery = <T>(res: Promise<T>) => 
+  res.then(data => data).catch(e => mongoError(e))
+
+
+// Soft delete
 export type TWithSoftDeleted = {
   isDeleted: boolean
   deletedAt: Date | null
@@ -14,7 +34,7 @@ export interface ISoftDeleteQueryHelpers<T> extends Model<T> {
 }
 export type TSoftDeleteQueryHelpers<T> = Model<T, ISoftDeleteQueryHelpers<T>>
 
-const withSoftDeletePlugin = (schema: Schema) => {
+export const withSoftDeletePlugin = (schema: Schema) => {
   schema.add({
     isDeleted: {
       type: Boolean,
@@ -92,8 +112,8 @@ const withSoftDeletePlugin = (schema: Schema) => {
     ) {
       this.where({ isDeleted: false })
       const doc = await this
-      if (isNull(doc)) return false
-      if (isArray(doc)) {
+      if (_.isNull(doc)) return false
+      if (_.isArray(doc)) {
         return doc.reduce((prev, cur) =>
           [...prev, setDocumentDeletion(cur, true)]
         , <Promise<unknown>[]>[])
@@ -105,8 +125,8 @@ const withSoftDeletePlugin = (schema: Schema) => {
     ) {
       this.where({ isDeleted: true })
       const doc = await this
-      if (isNull(doc)) return false
-      if (isArray(doc)) {
+      if (_.isNull(doc)) return false
+      if (_.isArray(doc)) {
         return doc.reduce((prev, cur) =>
           [...prev, setDocumentDeletion(cur, false)]
         , <Promise<unknown>[]>[])
@@ -117,9 +137,4 @@ const withSoftDeletePlugin = (schema: Schema) => {
   
   // Query Helpers
   schema.query = QueryHelpers
-
-}
-
-export {
-  withSoftDeletePlugin,
 }

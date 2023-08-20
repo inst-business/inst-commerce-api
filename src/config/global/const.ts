@@ -1,6 +1,18 @@
 
 export const VIEWABLE = true
 
+export interface IResultWithPars {
+  result: boolean,
+  pars?: Array<unknown> | Record<string, unknown>
+}
+
+export type TRes<T extends (...args: any[]) => any> =
+  NonNullable<Awaited<ReturnType<T>>>
+export type TNullableRes<T extends (...args: any[]) => any> =
+  Awaited<ReturnType<T>>
+
+export type Primitives = string | number | boolean
+
 export type ITF_TYPE = 'I' | 'E'
 export type GENDER = 'male' | 'female' | 'other'
 export type ITEM_STATUS = 'hidden' | 'pending' | 'active'
@@ -42,6 +54,8 @@ export class ROUTES {
 
 // Global variables
 export class GV {
+  static CONNECT_TIMEOUT = 5000
+  static VIEW_ENGINE = true
   static SALT_LENGTH = 16
   static JWT_EXPIRED = '15s'
   static VERIFY_EXPIRED = '30s'

@@ -17,11 +17,13 @@ router.get(ROUTES.I.CREATE, _.routeAsync(async (req, res) => {
 }, _.renderView('products/create')
 ))
 
-router.post(ROUTES.I.STORE, _.routeAsync(async (req, res) => {
-  const data = req.body
-  const submittedProduct = await ProductController.insertOne(data)
-  return submittedProduct
-}, _.redirectView(`/v1/products${ROUTES.I.INDEX}`)
+router.post(ROUTES.I.STORE,
+  _.routeAsync(async (req, res) => {
+    const data = req.body
+    const submittedProduct = await ProductController.insertOne(data)
+    return submittedProduct
+  },
+  // _.redirectView(`/v1/products${ROUTES.I.INDEX}`)
 ))
 
 
@@ -88,16 +90,18 @@ router.get(ROUTES.I.SHOW, _.routeAsync(async (req, res) => {
 }, _.renderView('products/detail')
 ))
 
-router.get(ROUTES.I.INDEX, Auth.authToken(), _.routeAsync(async (req, res) => {
-  // const data: IProduct[] = await ProductController.getAll()
-  const fetchData = {
-    'items': ProductController.getAll(),
-    'deletedCount': ProductController.getDeletedAmount()
-  }
-  const data = _.asyncAllSettled(fetchData)
-  return data
-}
-// , _.renderView('products/index', pageData)
+router.get(ROUTES.I.INDEX,
+  // Auth.authToken(),
+  _.routeAsync(async (req, res) => {
+    // const data: IProduct[] = await ProductController.getAll()
+    const fetchData = {
+      'items': ProductController.getAll(),
+      'deletedCount': ProductController.getDeletedAmount()
+    }
+    const data = _.asyncAllSettled(fetchData)
+    return data
+  },
+  _.renderView('products/index', pageData)
 ))
 
 

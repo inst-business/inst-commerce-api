@@ -1,12 +1,12 @@
-import ERR from "@/config/global/error"
+import { Primitives } from '@/config/global/const'
 
-export type Primitives = string | number | boolean
 
 class LogicError extends Error {
   title: string
   message: string
   httpCode: number
   errorCode: number
+  stack?: string
   pars: Primitives[]
 
   constructor (title: string, message: string, httpCode: number, errorCode: number, ...pars: Primitives[]) {
@@ -15,17 +15,23 @@ class LogicError extends Error {
     this.message = message
     this.httpCode = httpCode
     this.errorCode = errorCode
+    this.stack = undefined
     this.pars = pars
-    // this.stack = (new Error(message)).stack
   }
 
-  toJSON () {
-    return {
+  withStack () {
+    this.stack = (new Error(this.message)).stack
+    return this
+  }
+
+  toJSON (): Record<string, unknown> {
+    return <any>{
       httpCode: this.httpCode,
       code: this.errorCode,
       title: this.title,
       message: this.message,
       pars: this.pars,
+      ...(this.stack && {stack: this.stack})
     }
   }
 }

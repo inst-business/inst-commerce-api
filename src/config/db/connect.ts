@@ -1,4 +1,8 @@
-import { connect } from "mongoose"
+import { connect } from 'mongoose'
+import { GV } from '@/config/global/const'
+import _ from '@/utils/utils'
+import ERR from '@/config/global/error'
+import { mongoError } from '@/utils/mongoose'
 
 class Connect {
 
@@ -12,20 +16,20 @@ class Connect {
   }
 
   public async configureConnections () {
-    try {
-      const connectionString = this.ENV.DB_CONNSTR
-      const dbname = this.ENV.DB_NAME
-      const opts = {
-        retryWrites: true,
-        socketTimeoutMS: 5000,
-        connectTimeoutMS: 5000
-      }
-      await connect(`${connectionString}/${dbname}`, opts)
-      console.log(`MongoDB connect to ${dbname} successfully!`)
+    const connectionString = this.ENV.DB_CONNSTR
+    const dbname = this.ENV.DB_NAME
+    const timeOut = GV.CONNECT_TIMEOUT
+    const opts = {
+      retryWrites: true,
+      socketTimeoutMS: timeOut,
+      connectTimeoutMS: timeOut,
+      serverSelectionTimeoutMS: timeOut,
+      heartbeatFrequencyMS: timeOut,
     }
-    catch (err) {
-      console.log('MongoDB connect failure: ', err)
-    }
+    await connect(`${connectionString}/${dbname}`, opts)
+      .then(res => console.log(`MongoDB connect to ${dbname} successfully!`))
+      // .catch(err => console.dir(err))
+      .catch(err => mongoError(err))
   }
 }
 
