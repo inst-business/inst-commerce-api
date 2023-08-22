@@ -10,8 +10,10 @@ import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 import _ from 'lodash'
 import LogicError from './logicError'
+import {
+  GV, PropsKey, RecursiveArray, ErrPars
+} from '@/config/global/const'
 import ERR from '@/config/global/error'
-import { GV, Primitives } from '@/config/global/const'
 
 export type ExpressAsyncRequestHandler = (req: Request, res: Response, next: NextFunction) => Promise<unknown>
 export type ExpressCallback = (data?: any, err?: any) => void
@@ -108,10 +110,10 @@ class Utils {
       }
   }
 
-  logicError = (title: string, message: string, httpError: number, errorCode: number, ...pars: Primitives[]): LogicError => 
+  logicError = (title: string, message: string, httpError: number, errorCode: number, ...pars: ErrPars): LogicError => 
     new LogicError(title, message, httpError, errorCode, ...pars)
 
-  stackError = (title: string, message: string, httpError: number, errorCode: number, ...pars: Primitives[]): LogicError =>
+  stackError = (title: string, message: string, httpError: number, errorCode: number, ...pars: ErrPars): LogicError =>
     new LogicError(title, message, httpError, errorCode, ...pars).withStack()
 
   errorMsg (e: LogicError) {
@@ -131,6 +133,33 @@ class Utils {
     addFormats(ajv)
     return ajv.compile(schema)
   }
+
+  pickProps = <T extends {}, K extends keyof T>
+    (obj: T, ...keys: RecursiveArray<K | PropsKey>) => {
+      // better performance than Array.flat() but [depth = 1]
+      // flattenKeys = (keys instanceof Array ? [].concat(...<[]>keys) : keys)
+      const flattenKeys = (<K[]>keys).flat(Infinity)
+      return Object.fromEntries(
+        flattenKeys.filter(key => key in obj).map(key => [key, obj[<K>key]])
+      ) as Pick<T, K>
+    }
+  
+  inclusivePickProps = <T extends {}, K extends PropsKey>
+    (obj: T, ...keys: RecursiveArray<K>) => {
+      const flattenKeys = (<K[]>keys).flat(Infinity)
+      return Object.fromEntries(
+        flattenKeys.map(key => [key, obj[<keyof T>(<unknown>key)]])
+      ) as {[key in K]: key extends keyof T ? T[key] : undefined}
+    }
+  
+  omitProps = <T extends {}, K extends keyof T>
+    (obj: T, ...keys: RecursiveArray<K | PropsKey>) => {
+      const flattenKeys = (<K[]>keys).flat(Infinity)
+      return Object.fromEntries(
+        Object.entries(obj)
+          .filter(([key]) => !flattenKeys.includes(key as K))
+      ) as Omit<T, K>
+    }
 
   genAccessToken = (user: any): string => {
     const secretAccessToken = <string>process.env.ACCESS_TOKEN

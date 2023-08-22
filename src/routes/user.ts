@@ -48,16 +48,15 @@ router.post(R.EXT + R.AUTH.SIGNUP,
     const isExisting = await UserController.checkUserExists(email, username)
     
     if (!isExisting.result) {
-      const {
-        password, firstname, lastname, gender, tel,
-        birthday, address, country, bio, avatar, cover
-      } = req.body
-      const salt = _.genRandomString(GV.SALT_LENGTH),
-            hashedPassword = _.sha512(password, salt)
-      const data = <IUser>{
-        email, username, password: hashedPassword, firstname, lastname,
-        gender, tel, birthday, address, country, bio, avatar, cover, salt
-      }
+      const keys = [
+        'email', 'username', 'password', 'tel',
+        'firstname', 'lastname', 'gender', 'birthday',
+        'address', 'country', 'bio', 'avatar', 'cover'
+      ],
+      data = _.pickProps(<IUser>req.body, keys)
+      data.salt = _.genRandomString(GV.SALT_LENGTH)
+      data.password = _.sha512(data.password, data.salt)
+
       const newUser = await UserController.insertNewUser(data)
       const verifyToken = _.genVerifyToken(newUser.username)
       return { username: newUser.username, verifyToken }
@@ -78,7 +77,6 @@ router.post(R.EXT + R.AUTH.VERIFY,
     }
     const { token } = req.query
     if (_.isEmpty(token) || !token) {
-      console.log(token)
       throw _.logicError('Invalid', 'Invalid verify token', 400, ERR.INVALID_DATA, <string>token)
     }
     const secretKey = _.genHash(username + <string>process.env.ACCESS_TOKEN)

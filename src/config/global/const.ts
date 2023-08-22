@@ -1,6 +1,4 @@
 
-export const VIEWABLE = true
-
 export interface IResultWithPars {
   result: boolean,
   pars?: Array<unknown> | Record<string, unknown>
@@ -11,10 +9,14 @@ export type TRes<T extends (...args: any[]) => any> =
 export type TNullableRes<T extends (...args: any[]) => any> =
   Awaited<ReturnType<T>>
 
+export type Many<T> = T | ReadonlyArray<T>
 export type Primitives = string | number | boolean
+export type PropsKey = string | number | symbol
+export type RecursiveArray<T> = Array<RecursiveArray<T> | T>
 export type TProps<T> = {
   [K in keyof T]: T[K] extends Primitives | Record<string, Primitives> ? K : never
 }[keyof T]
+export type ErrPars = Array<Primitives | Record<PropsKey, unknown>>
 
 export type ITF_TYPE = 'I' | 'E'
 // export type ROUTE_TYPE = 'INT' | 'EXT' | 'CRUD' | 'AUTH'
@@ -32,6 +34,7 @@ export const ACCOUNT_STATUS_ARR = {
 }
 export type ACCOUNT_ROLE = 'guess' | 'customer' | 'manager' | 'admin'
 
+// Routes
 export class R {
 
   static INT = '/i'

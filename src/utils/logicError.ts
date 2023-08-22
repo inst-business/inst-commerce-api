@@ -1,5 +1,4 @@
-import { Primitives } from '@/config/global/const'
-
+import { ErrPars } from '@/config/global/const'
 
 class LogicError extends Error {
   title: string
@@ -7,9 +6,10 @@ class LogicError extends Error {
   httpCode: number
   errorCode: number
   stack?: string
-  pars: Primitives[]
+  // pars: Primitives[]
+  pars: ErrPars
 
-  constructor (title: string, message: string, httpCode: number, errorCode: number, ...pars: Primitives[]) {
+  constructor (title: string, message: string, httpCode: number, errorCode: number, ...pars: ErrPars) {
     super()
     this.title = title
     this.message = message

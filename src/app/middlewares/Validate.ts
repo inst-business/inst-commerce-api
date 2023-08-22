@@ -13,9 +13,9 @@ class Validate {
         return next()
       }
       else {
-        const err = validate.errors
+        const err: any = validate.errors
         // res.status(400).json({ error: err })
-        throw _.logicError('Validation failed', 'The provided data is invalid.', 400, ERR.INVALID_DATA, <any>err)
+        throw _.logicError('Validation failed', 'The provided data is invalid.', 400, ERR.INVALID_DATA, ...err)
       }
       // next()
     })
