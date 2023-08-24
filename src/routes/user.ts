@@ -51,7 +51,7 @@ router.post(R.EXT + R.AUTH.SIGNUP,
       const keys = [
         'email', 'username', 'password', 'tel',
         'firstname', 'lastname', 'gender', 'birthday',
-        'address', 'country', 'bio', 'avatar', 'cover'
+        'address', 'country', 'bio', 'avatar', 'cover',
       ],
       data = _.pickProps(<IUser>req.body, keys)
       data.salt = _.genRandomString(GV.SALT_LENGTH)

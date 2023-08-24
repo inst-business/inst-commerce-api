@@ -1,7 +1,6 @@
 import express, {
   Request, Response, NextFunction, RequestHandler
 } from 'express'
-import 'dotenv/config'
 import slugify from 'slugify'
 import uniqueSlug from 'unique-slug'
 import Ajv from 'ajv'
@@ -11,7 +10,7 @@ import jwt from 'jsonwebtoken'
 import _ from 'lodash'
 import LogicError from './logicError'
 import {
-  GV, PropsKey, RecursiveArray, ErrPars
+  ENV, GV, Many, TProps, PropsKey, RecursiveArray, Primitives, ErrPars
 } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
@@ -20,6 +19,18 @@ export type ExpressCallback = (data?: any, err?: any) => void
 export type ExpressCallbackProvider = (res: Response, req?: Request) => ExpressCallback
 
 class Utils {
+
+  env (name: string, replacement?: Primitives): Primitives {
+    const variable = ENV[name]
+    if (variable == null) {
+      if (replacement != null) return replacement
+      const title = 'Internal Server Error'
+      const message = 'An unexpected issue occurred.'
+      console.error('Environment variable "%d" is missing.', name)
+      throw this.logicError(title, message, 500, ERR.ENV_VARIABLE_MISSING)
+    }
+    return variable
+  }
 
   async asyncAllSettled (records: Record<string, Promise<any>>) {
     const promises = Object.values(records)
@@ -114,7 +125,7 @@ class Utils {
     new LogicError(title, message, httpError, errorCode, ...pars)
 
   stackError = (title: string, message: string, httpError: number, errorCode: number, ...pars: ErrPars): LogicError =>
-    new LogicError(title, message, httpError, errorCode, ...pars).withStack()
+    this.logicError(title, message, httpError, errorCode, ...pars).withStack()
 
   errorMsg (e: LogicError) {
     console.error(`${e.title}: ${e.message}\n`, `{http: ${e.httpCode}, error: ${e.errorCode}}\n`, e.pars)
@@ -162,7 +173,7 @@ class Utils {
     }
 
   genAccessToken = (user: any): string => {
-    const secretAccessToken = <string>process.env.ACCESS_TOKEN
+    const secretAccessToken = <string>this.env('ACCESS_TOKEN')
     const options = {
       expiresIn: GV.JWT_EXPIRED
     }
@@ -170,12 +181,12 @@ class Utils {
   }
 
   genRefreshToken = (user: any): string => {
-    const secretRefreshToken = <string>process.env.REFRESH_TOKEN
+    const secretRefreshToken = <string>this.env('REFRESH_TOKEN')
     return jwt.sign(user, secretRefreshToken)
   }
 
   genVerifyToken = (username: string): string => {
-    const secretAccessToken = <string>process.env.ACCESS_TOKEN
+    const secretAccessToken = <string>this.env('ACCESS_TOKEN')
     const secretKey = this.genHash(username + secretAccessToken)
     const options = {
       expiresIn: GV.VERIFY_EXPIRED

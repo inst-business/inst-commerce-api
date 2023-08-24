@@ -133,7 +133,7 @@ router.get(R.CRUD.SHOW,
 ))
 
 router.get(R.CRUD.INDEX,
-  // Auth.absoluteDeny(),
+  Auth.absoluteDeny,
   _.routeAsync(async (req, res) => {
     // const data: IProduct[] = await ProductController.getAll()
     const fetchData = {

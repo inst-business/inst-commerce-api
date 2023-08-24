@@ -21,6 +21,8 @@ const ERR = {
   USER_NOT_EXIST: -107,
   EMAIL_NOT_EXIST: -108,
   INVALID_PASSWORD: -109,
+
+  ENV_VARIABLE_MISSING: -500,
 }
 
 Object.freeze(ERR)

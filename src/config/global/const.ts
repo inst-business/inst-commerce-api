@@ -1,4 +1,6 @@
 
+export const ENV = process.env
+
 export interface IResultWithPars {
   result: boolean,
   pars?: Array<unknown> | Record<string, unknown>
@@ -69,9 +71,18 @@ export class R {
 
 // Global variables
 export class GV {
+  static _1S = 1000
+  static _1M = 60 * this._1S
+  static _1H = 60 * this._1M
+  static _1D = 24 * this._1H
+  static _1W = 24 * this._1D
+
+  static COOKIE_SECURE = ENV.COOKIE_SECURE === 'true' ? true : false
   static CONNECT_TIMEOUT = 5000
-  static VIEW_ENGINE = true
-  static SALT_LENGTH = 16
   static JWT_EXPIRED = '1m'
   static VERIFY_EXPIRED = '5m'
+  static SESSION_EXPIRED = 5 * this._1M
+  static VIEW_ENGINE = true
+
+  static SALT_LENGTH = 16
 }
