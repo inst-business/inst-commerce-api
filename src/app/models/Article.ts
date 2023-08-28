@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose'
 import { ITEM_STATUS } from '@/config/global/const'
-import { TSoftDeleteQueryHelpers, withSoftDeletePlugin } from '@/utils/mongoose'
+import { ISoftDeleteQueryHelpers, TSoftDeleteQueryHelpers, withSoftDeletePlugin } from '@/utils/mongoose'
 
-export interface IProduct {
+export interface IArticle {
   name: string,
   desc: string,
   img: string,
@@ -12,7 +12,7 @@ export interface IProduct {
   updatedAt?: Date,
 }
 
-const ProductSchema = new Schema<IProduct>({
+const ArticleSchema = new Schema<IArticle>({
   name: { type: String, required: true, maxLength: 255 },
   desc: { type: String },
   img: { type: String, required: true },
@@ -20,8 +20,8 @@ const ProductSchema = new Schema<IProduct>({
   status: { type: String, required: true, default: 'hidden' },
 }, { timestamps: true })
 
-withSoftDeletePlugin(ProductSchema)
+withSoftDeletePlugin(ArticleSchema)
 
-const Product = model<IProduct, TSoftDeleteQueryHelpers<IProduct>>('Product', ProductSchema)
+const Article = model<IArticle, TSoftDeleteQueryHelpers<IArticle>>('Article', ArticleSchema)
 
-export default Product
+export default Article

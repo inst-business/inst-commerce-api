@@ -6,6 +6,8 @@ export interface IResultWithPars {
   pars?: Array<unknown> | Record<string, unknown>
 }
 
+export type Anycase<T extends string> = Uppercase<T> | Lowercase<T>
+
 export type TRes<T extends (...args: any[]) => any> =
   NonNullable<Awaited<ReturnType<T>>>
 export type TNullableRes<T extends (...args: any[]) => any> =
@@ -20,7 +22,8 @@ export type TProps<T> = {
 }[keyof T]
 export type ErrPars = Array<Primitives | Record<PropsKey, unknown>>
 
-export type ITF_TYPE = 'I' | 'E'
+// export type ITF_TYPE = 'I' | 'E'
+export type PRIVACY_TYPE = Anycase<'I' | 'E'>
 // export type ROUTE_TYPE = 'INT' | 'EXT' | 'CRUD' | 'AUTH'
 export type ROUTE_TYPE = TProps<typeof R>
 
@@ -36,6 +39,7 @@ export const ACCOUNT_STATUS_ARR = {
 }
 export type ACCOUNT_ROLE = 'guess' | 'customer' | 'manager' | 'admin'
 
+
 // Routes
 export class R {
 
@@ -45,29 +49,39 @@ export class R {
   // CRUD routes
   static CRUD = {
     TEST: '/test',  // test ROUTE
-    INDEX: '/',  // GET
+    
     CREATE: '/create',  // GET
-    STORE: '/',  // POST
-    DELETEDS: '/deleted',  // GET
-    DELETED: '/deleted/:id',  // GET
-    RESTORE: '/deleted',  // PATCH
-    DESTROY: '/deleted',  // DELETE
-    SHOW: '/:id',  // GET
     EDIT: '/:id/edit',  // GET
-    UPDATE: '/:id',  // PUT
-    DELETE: '/',  // PATCH
-    DETAIL: '/:slug',  // GET
+
+    GET_ONE_DELETED: '/d/:id',  // GET
+    GET_ALL_DELETED: '/d',  // GET
+    RESTORE_ONE: '/d',  // PATCH
+    DESTROY_ONE: '/d',  // DELETE
+
+    GET_ONE: '/:id',  // GET
+    UPDATE_ONE: '/:id',  // PUT
+    GET_ONE_BYSLUG: '/:slug',  // GET
+    UPDATE_ONE_BYSLUG: '/:slug',  // PUT
+    GET_ALL: '/',  // GET
+    STORE_ONE: '/',  // POST
+    DELETE_ONE: '/',  // DELETE
   }
 
   // Authentication routes
   static AUTH = {
     LOGIN: '/login',  // POST
     SIGNUP: '/signup',  // POST
+    LOGOUT: '/logout',  // GET
+
     VERIFY: '/verify',  // POST
     GEN_VERIFY: '/create-verify',  // POST
+    CHANGE_PASSWORD: '/change-password',  // PATCH
+    FORGOT_PASSWORD: '/forgot-password',  // POST
+    RESET_PASSWORD: '/reset-password',  // PATCH
     INDEX: '/',  // GET
   }
 }
+
 
 // Global variables
 export class GV {
@@ -77,12 +91,12 @@ export class GV {
   static _1D = 24 * this._1H
   static _1W = 24 * this._1D
 
+  static VIEW_ENGINE = true
   static COOKIE_SECURE = ENV.COOKIE_SECURE === 'true' ? true : false
   static CONNECT_TIMEOUT = 5000
   static JWT_EXPIRED = '1m'
   static VERIFY_EXPIRED = '5m'
   static SESSION_EXPIRED = 5 * this._1M
-  static VIEW_ENGINE = true
 
   static SALT_LENGTH = 16
 }

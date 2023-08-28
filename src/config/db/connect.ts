@@ -18,7 +18,7 @@ class Connect {
   private async configureConnections () {
     const connectionString = _.env('DB_CONNSTR')
     const dbname = _.env('DB_NAME')
-    const timeOut: number = GV.CONNECT_TIMEOUT
+    const timeOut = GV.CONNECT_TIMEOUT
     const opts = {
       retryWrites: true,
       socketTimeoutMS: timeOut,
@@ -34,7 +34,7 @@ class Connect {
 
   private async configureCache () {
     const client = createClient()
-    client.on('error', e => console.log('Redis Client Error', e))
+    client.on('error', e => console.error('Redis Client Error', e))
   }
 
 }

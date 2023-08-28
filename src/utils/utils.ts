@@ -1,4 +1,4 @@
-import express, {
+import {
   Request, Response, NextFunction, RequestHandler
 } from 'express'
 import slugify from 'slugify'
@@ -71,13 +71,13 @@ class Utils {
   private createServiceCallback (res: Response): ExpressCallback {    
     return (data?: any, err?: any) => {
       // const resData = data ? JSON.parse(JSON.stringify(data)) : {}
-      const resData = data ? structuredClone(data) : {}
+      const resData = data != null ? structuredClone(data) : {}
       res.statusCode = 200
       if (err) {
         const errJSON = typeof err.toJSON === 'function' ? err.toJSON() : err
-        const errObj = (typeof err === 'object')
+        const errObj = (typeof errJSON === 'object')
           ? structuredClone(errJSON) : { message: err, code: -7 }
-        const code = err.httpCode
+        const code = errObj.httpCode
         res.statusCode = (typeof code === 'number' && !isNaN(code)) ? code : 500
         resData['error'] = errObj
       }
@@ -121,17 +121,19 @@ class Utils {
       }
   }
 
-  logicError = (title: string, message: string, httpError: number, errorCode: number, ...pars: ErrPars): LogicError => 
-    new LogicError(title, message, httpError, errorCode, ...pars)
+  logicError (title: string, message: string, httpError: number, errorCode: number, ...pars: ErrPars): LogicError {
+    return new LogicError(title, message, httpError, errorCode, ...pars)
+  }
 
-  stackError = (title: string, message: string, httpError: number, errorCode: number, ...pars: ErrPars): LogicError =>
-    this.logicError(title, message, httpError, errorCode, ...pars).withStack()
+  stackError (title: string, message: string, httpError: number, errorCode: number, ...pars: ErrPars): LogicError {
+    return this.logicError(title, message, httpError, errorCode, ...pars).withStack()
+  }
 
   errorMsg (e: LogicError) {
     console.error(`${e.title}: ${e.message}\n`, `{http: ${e.httpCode}, error: ${e.errorCode}}\n`, e.pars)
   }
   
-  routeParseParams = (route: string, ...args: any[]): string => {
+  routeParseParams (route: string, ...args: any[]): string {
     const regex = new RegExp(":\\w+")
     return args.reduce((prev, val) =>
       (_.isString(val) || _.isNumber(val) || val.constructor.name === 'ObjectId')
@@ -139,14 +141,14 @@ class Utils {
     , route)
   }
   
-  validate = (schema: Record<string, unknown>) => {
+  validate (schema: Record<string, unknown>) {
     const ajv = new Ajv()
     addFormats(ajv)
     return ajv.compile(schema)
   }
 
-  pickProps = <T extends {}, K extends keyof T>
-    (obj: T, ...keys: RecursiveArray<K | PropsKey>) => {
+  pickProps <T extends {}, K extends keyof T>
+    (obj: T, ...keys: RecursiveArray<K | PropsKey>) {
       // better performance than Array.flat() but [depth = 1]
       // flattenKeys = (keys instanceof Array ? [].concat(...<[]>keys) : keys)
       const flattenKeys = (<K[]>keys).flat(Infinity)
@@ -155,16 +157,16 @@ class Utils {
       ) as Pick<T, K>
     }
   
-  inclusivePickProps = <T extends {}, K extends PropsKey>
-    (obj: T, ...keys: RecursiveArray<K>) => {
+  inclusivePickProps <T extends {}, K extends PropsKey>
+    (obj: T, ...keys: RecursiveArray<K>) {
       const flattenKeys = (<K[]>keys).flat(Infinity)
       return Object.fromEntries(
         flattenKeys.map(key => [key, obj[<keyof T>(<unknown>key)]])
       ) as {[key in K]: key extends keyof T ? T[key] : undefined}
     }
   
-  omitProps = <T extends {}, K extends keyof T>
-    (obj: T, ...keys: RecursiveArray<K | PropsKey>) => {
+  omitProps <T extends {}, K extends keyof T>
+    (obj: T, ...keys: RecursiveArray<K | PropsKey>) {
       const flattenKeys = (<K[]>keys).flat(Infinity)
       return Object.fromEntries(
         Object.entries(obj)
@@ -172,7 +174,7 @@ class Utils {
       ) as Omit<T, K>
     }
 
-  genAccessToken = (user: any): string => {
+  genAccessToken (user: any): string {
     const secretAccessToken = <string>this.env('ACCESS_TOKEN')
     const options = {
       expiresIn: GV.JWT_EXPIRED
@@ -180,12 +182,12 @@ class Utils {
     return jwt.sign(user, secretAccessToken, options)
   }
 
-  genRefreshToken = (user: any): string => {
+  genRefreshToken (user: any): string {
     const secretRefreshToken = <string>this.env('REFRESH_TOKEN')
     return jwt.sign(user, secretRefreshToken)
   }
 
-  genVerifyToken = (username: string): string => {
+  genVerifyToken (username: string): string {
     const secretAccessToken = <string>this.env('ACCESS_TOKEN')
     const secretKey = this.genHash(username + secretAccessToken)
     const options = {
@@ -206,7 +208,7 @@ class Utils {
     return slug
   }
 
-  genOrderCode = () => {
+  genOrderCode () {
     const uniqueId = this.genUniqueId()
     // const uniqueId = id
     const timestamp = Date.now().toString()
@@ -215,16 +217,16 @@ class Utils {
     return `${hashString.substring(0, 8)}-${uniqueId}`
   }
 
-  genUniqueId = () => {
+  genUniqueId () {
     return crypto.randomUUID()
   }
 
-  genHash = (data: string) => {
+  genHash (data: string) {
     // MD5 hashing algorithm
     return crypto.createHash('md5').update(data).digest('hex')
   }
   
-  genRandomString = (length: number): string => {
+  genRandomString (length: number): string {
     return crypto.randomBytes(Math.ceil(length / 2))
       .toString('hex').slice(0, length)
   }
@@ -232,9 +234,9 @@ class Utils {
   genSalt () {
   }
 
-  sha512 = (password: string, salt: string) => {
+  sha512 (password: string, salt: string) {
     // sha512 hashing algorithm
-    let hash = crypto.createHmac('sha512', salt)
+    const hash = crypto.createHmac('sha512', salt)
     hash.update(password)
     const value: string = hash.digest('hex')
     // return {

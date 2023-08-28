@@ -1,5 +1,5 @@
 
-const ERR = {
+const ERR = Object.freeze({
   UNKNOWN: -1,
   UNAUTHORIZED: -2,
   FORBIDDEN: -3,
@@ -23,8 +23,8 @@ const ERR = {
   INVALID_PASSWORD: -109,
 
   ENV_VARIABLE_MISSING: -500,
-}
+})
 
-Object.freeze(ERR)
+// Object.freeze(ERR)
 
 export default ERR

@@ -6,7 +6,7 @@ import ProductController from '@controllers/ProductController'
 
 const router = express.Router()
 
-router.get(R.CRUD.INDEX,
+router.get(R.CRUD.GET_ALL,
   _.routeAsync(async () => {
     const fetchRecords = {
       'orders': OrderController.getAll(),

@@ -9,7 +9,7 @@ import path from 'path'
 import { engine } from 'express-handlebars'
 import route from '@/routes'
 // import jsonServer from 'json-server'
-import hbsHelpers from '@/utils/handlebars'
+import { hbsHelpers } from '@/utils/viewEngine'
 import methodOverride from 'method-override'
 
 class Server {
