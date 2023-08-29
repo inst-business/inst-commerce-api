@@ -26,20 +26,20 @@
       </div>
       <div class="Actions-right">
         {{#if (when data.deletedCount 'gt' 0)}}
-          <a href="/v1/products{{routeI 'get_all_deleted'}}" class="Text-link">
+          <a href="/v1/products{{routeI 'crud.get_all_deleted'}}" class="Text-link">
             {{!-- <i class="fa-regular fa-trash"></i> --}}
             <i class="fa-regular fa-circle-trash"></i>
             Removed products ({{data.deletedCount}})
           </a>
           <div class="Actions__seperate"></div>
         {{/if}}
-        <a href="/v1/products{{routeI 'create'}}" class="Btn" data-variant="success" data-size="sm">
+        <a href="/v1/products{{routeI 'crud.create'}}" class="Btn" data-variant="success" data-size="sm">
           <i class="fa-regular fa-circle-plus"></i> Add new
         </a>
       </div>
     </div>
     <div class="Box Box-scrollable">
-      <table class="table Table Table-hover">
+      <table class="Table Table-hover">
         {{!-- <caption>List</caption> --}}
         <thead>
           <tr>
@@ -61,9 +61,9 @@
               <td scope="Row">
                 <input type="checkbox" class="Check" name="productItems[]" value="{{this._id}}" data-select-target="select-all">
               </td>
-              <td>{{increase @index 1}}</td>
+              <td><p>{{increase @index 1}}</p></td>
               <td class="Item__name" width="25%">
-                <p class="Text-limit-3">{{this.name}}</p>
+                <span class="Text-limit-3">{{this.name}}</span>
               </td>
               <td class="Item__img">
                 <img src="/img/products/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">
@@ -84,7 +84,7 @@
                 {{dateFormat this.updatedAt 'time'}}
               </td>
               <td class="Item__actions">
-                <a href="/v1/products{{routeI 'edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="grey outline">
+                <a href="/v1/products{{routeI 'crud.edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="grey outline">
                   <i class="fa-regular fa-pen-to-square"></i>
                 </a>
                 <button class="Item__actions-delete Btn" data-size="sm" data-variant="outline danger" title="Delete '{{this.name}}'"

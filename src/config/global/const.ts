@@ -27,6 +27,7 @@ export type PRIVACY_TYPE = Anycase<'I' | 'E'>
 // export type ROUTE_TYPE = 'INT' | 'EXT' | 'CRUD' | 'AUTH'
 export type ROUTE_TYPE = TProps<typeof R>
 
+export type SORT_ORDER = 'asc' | 'desc'
 export type GENDER = 'male' | 'female' | 'other'
 export type ITEM_STATUS = 'hidden' | 'pending' | 'active'
 export type ORDER_STATUS = 'declined' | 'pending' | 'approved'
@@ -99,4 +100,11 @@ export class GV {
   static SESSION_EXPIRED = 5 * this._1M
 
   static SALT_LENGTH = 16
+}
+
+
+// Global RegExs
+export class REGEX {
+  static VALID_VAR_NAME = /^[a-zA-Z_$][\w$]*$/i
+  static VALID_PROP_CALL = /^([a-zA-Z_$][\w$]*)\.([a-zA-Z_$][\w$]*)$/i
 }

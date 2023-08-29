@@ -33,23 +33,24 @@ router.get(R.EXT + R.CRUD.GET_ALL,
 */
 
 
-// // Insert routes
-// router.get(R.CRUD.CREATE,
-//   // Auth.absoluteDeny(),
-//   _.routeAsync(async (req, res) => {},
-//     _.renderView('products/create')
-//   )
-// )
-// // Edit routes
-// router.get(R.CRUD.EDIT,
-//   // Auth.absoluteDeny(),
-//   _.routeAsync(async (req, res) => {
-//     const { id } = req.params
-//     const data: IProduct | null = await ProductController.getOneById(id)
-//     return data
-//   },
-//   _.renderView('products/edit')
-// ))
+// Insert one (view only)
+router.get(R.CRUD.CREATE,
+  // Auth.absoluteDeny(),
+  _.routeAsync(async (req, res) => {},
+    _.renderView('products/create')
+  )
+)
+
+// Edit one (view only)
+router.get(R.CRUD.EDIT,
+  // Auth.absoluteDeny(),
+  _.routeAsync(async (req, res) => {
+    const { id } = req.params
+    const data: IProduct | null = await ProductController.getOneById(id)
+    return data
+  },
+  _.renderView('products/edit')
+))
 
 
 // Get one deleted
@@ -121,7 +122,7 @@ router.get(R.CRUD.GET_ALL,
   _.routeAsync(async (req, res) => {
     // const data: IProduct[] = await ProductController.getAll()
     const fetchData = {
-      'items': ProductController.getAll(),
+      'items': ProductController.getMany(),
       'deletedCount': ProductController.getDeletedAmount()
     }
     const data = _.asyncAllSettled(fetchData)

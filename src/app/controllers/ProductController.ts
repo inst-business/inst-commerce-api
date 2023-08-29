@@ -1,11 +1,25 @@
 import Product, { IProduct } from '@models/Product'
 import _ from '@/utils/utils'
 import { handleQuery } from '@/utils/mongoose'
+import { SORT_ORDER } from '@/config/global/const'
 
 class ProductController {
 
   static async getAll (): Promise<IProduct[]> {
     const q = Product.find({}).lean()
+    const data = await handleQuery(q)
+    return data
+  }
+
+  static async getMany (
+    limit: number = 15,
+    offset: number = 0,
+    sort: SORT_ORDER = 'desc',
+    sortBy: string = 'createdAt'
+  ): Promise<IProduct[]> {
+    const q = Product.find({})
+      .sort({ [sortBy]: sort }).skip(offset).limit(limit)
+      .lean()
     const data = await handleQuery(q)
     return data
   }
@@ -49,6 +63,19 @@ class ProductController {
 
   static async getAllDeleted (): Promise<IProduct[]> {
     const q = Product.find({ isDeleted: true }).lean()
+    const data = await handleQuery(q)
+    return data
+  }
+
+  static async getManyDeleted (
+    limit: number = 15,
+    offset: number = 0,
+    sort: SORT_ORDER = 'desc',
+    sortBy: string = 'deletedAt'
+  ): Promise<IProduct[]> {
+    const q = Product.find({ isDeleted: true })
+      .sort({ [sortBy]: sort }).skip(offset).limit(limit)
+      .lean()
     const data = await handleQuery(q)
     return data
   }

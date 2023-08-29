@@ -1,4 +1,6 @@
-import { R, Anycase, ROUTE_TYPE, PRIVACY_TYPE } from '@/config/global/const'
+import {
+  R, Anycase, Primitives, PRIVACY_TYPE, REGEX
+} from '@/config/global/const'
 // import _ from 'lodash'
 import moment from 'moment'
 
@@ -8,18 +10,22 @@ type DateFormatType = 'detailed' | 'date' | 'time' | 'datetime'
 
 export const hbsHelpers = Object.freeze({
   routeParseParams (privacy: PRIVACY_TYPE, act: string, ...args: any[]): string {
-    // const _type = R[<ITF_TYPE>type.toUpperCase()]
-    const _privacy = privacy.toLowerCase() === 'e' ? R.EXT : ''
-    const _act = act.toUpperCase()
-    if (!R[<ROUTE_TYPE>_act]) {
-      return '#'
+    let route
+    if (REGEX.VALID_VAR_NAME.test(act)) {
+      route = (<any>R)[act.toUpperCase()]
     }
-    const route = _privacy[<keyof typeof _privacy>_act]
-    const regex = new RegExp(":\\w+")
+    if (REGEX.VALID_PROP_CALL.test(act)) {
+      const routeInfos = act.split('.', 2).map(a => a.toUpperCase())
+      route = (<any>R)[routeInfos[0]][routeInfos[1]]
+    }
+    // console.log(act, route, args)
+    if (!route) return '#'
+    const _privacy = privacy.toUpperCase() === 'E' ? R.EXT : ''
+    const ParamsRegex = new RegExp(":\\w+")
     return args.reduce((prev, val) =>
       (['string', 'number'].includes(typeof val) || val.constructor.name === 'ObjectId')
-        ? prev.replace(regex, val?.toString()) : prev
-    , route)
+        ? prev.replace(ParamsRegex, val?.toString()) : prev
+    , _privacy + route)
   },
 
   activeAnchor (title: string, target: string) {
@@ -60,7 +66,8 @@ export const hbsHelpers = Object.freeze({
       time: 'LT',
     }
     const formatString = !format ? formatTypes.datetime : formatTypes[format]
-    return moment(timestamp).format(formatString)
+    // console.log(timestamp, timestamp.toLocaleString())
+    return moment(timestamp.toLocaleString()).format(formatString)
   },
 
   stylingStatus (status: string) {

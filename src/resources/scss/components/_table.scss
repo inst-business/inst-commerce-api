@@ -1,4 +1,5 @@
 .Table {
+  --Table-margin: #{$spacing-3};
   --Table-color: var(--base-color);
   --Table-border-color: var(--base-border);
   --Table-hover-color: var(--base-hover-overlay);
@@ -6,7 +7,8 @@
   --Table-tbody-cell-padding: #{$table-cell-padding};
   --Table-border-width: 1px;
   --Table-caption-position: top;
-  --Table-alignment: inherit;
+  --Table-text-alignment: inherit;
+  --Table-vertical-alignment: top;
   --Table-transition: all #{$transition-1-eio}, #{$transition-color-1},
     box-shadow #{$transition-1-eio}, border #{$transition-1-ln};
 }
@@ -18,8 +20,9 @@
 
 .Table {
   width: 100%;
-  vertical-align: top;
+  margin-bottom: var(--Table-margin);
   color: var(--Table-color);
+  vertical-align: var(--Table-vertical-alignment);
   border-collapse: collapse;
   border-color: var(--Table-border-color);
   caption-side: var(--Table-caption-position);
@@ -43,7 +46,7 @@
     > tr > th,
     > tr > td {
       padding: var(--Table-thead-cell-padding);
-      text-align: var(--Table-alignment);
+      text-align: var(--Table-text-alignment);
     }
   }
   tbody {
@@ -51,7 +54,8 @@
     > tr > td {
       padding: var(--Table-tbody-cell-padding);
       border-bottom-width: var(--Table-border-width);
-      text-align: var(--Table-alignment);
+      text-align: var(--Table-text-alignment);
+      vertical-align: var(--Table-vertical-alignment);
     }
   }
   &-hover > tbody > tr:hover,
@@ -59,13 +63,14 @@
     background-color: var(--Table-hover-color);
   }
 
-  &-sm {
+  &-sm,
+  &[data-size="sm"] {
     --Table-thead-cell-padding: #{$table-cell-padding} #{$table-cell-padding-sm};
     --Table-tbody-cell-padding: #{$table-cell-padding-sm};
   }
 
   &-center {
-    --Table-alignment: center;
+    --Table-text-alignment: center;
   }
 }
 
