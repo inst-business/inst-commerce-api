@@ -27,6 +27,7 @@ export type PRIVACY_TYPE = Anycase<'I' | 'E'>
 // export type ROUTE_TYPE = 'INT' | 'EXT' | 'CRUD' | 'AUTH'
 export type ROUTE_TYPE = TProps<typeof R>
 
+export type AVAILABLE_LANGS = 'en' | 'vi'
 export type SORT_ORDER = 'asc' | 'desc'
 export type GENDER = 'male' | 'female' | 'other'
 export type ITEM_STATUS = 'hidden' | 'pending' | 'active'
@@ -92,6 +93,7 @@ export class GV {
   static _1D = 24 * this._1H
   static _1W = 24 * this._1D
 
+  static DEFAULT_LANG: AVAILABLE_LANGS = 'en'
   static VIEW_ENGINE = true
   static COOKIE_SECURE = ENV.COOKIE_SECURE === 'true' ? true : false
   static CONNECT_TIMEOUT = 5000

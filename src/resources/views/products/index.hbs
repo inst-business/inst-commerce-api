@@ -50,8 +50,8 @@
             <th>Name</th>
             <th>Image</th>
             <th>Description</th>
-            <th>Created</th>
-            <th>Updated</th>
+            <th>Added at</th>
+            <th>Modified at</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -63,7 +63,7 @@
               </td>
               <td><p>{{increase @index 1}}</p></td>
               <td class="Item__name" width="25%">
-                <span class="Text-limit-3">{{this.name}}</span>
+                <a href="/v1/products{{routeI 'crud.get_one' this._id}}" class="Text-limit-3">{{this.name}}</a>
               </td>
               <td class="Item__img">
                 <img src="/img/products/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">

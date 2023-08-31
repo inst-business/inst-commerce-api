@@ -48,8 +48,9 @@
             <th>Name</th>
             <th>Image</th>
             <th>Description</th>
-            <th>Created</th>
-            <th>Updated</th>
+            <th>Added at</th>
+            <th>Modified at</th>
+            <th>Removed at</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -80,6 +81,11 @@
                 {{dateFormat this.updatedAt 'date'}}
                 <br>
                 {{dateFormat this.updatedAt 'time'}}
+              </td>
+              <td class="Item__time">
+                {{dateFormat this.deletedAt 'date'}}
+                <br>
+                {{dateFormat this.deletedAt 'time'}}
               </td>
               <td class="Item__actions">
                 <button class="Item__actions-restore Btn" data-size="sm" data-variant="outline primary" title="Restore '{{this.name}}'"

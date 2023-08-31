@@ -84,18 +84,18 @@
     }
     &__img img {
       width: auto;
-      height: 3rem;
+      height: $spacing-5 * 2;
       object-fit: cover;
       overflow: hidden;
       font-size: 0.75rem;
-      color: grey;
+      color: var(--grey);
       word-wrap: break-word;
       cursor: pointer;
     }
     &__time {
-      font-size: 0.85rem !important;
-      line-height: 1.15;
-      color: grey;
+      font-size: $font-size-sm !important;
+      line-height: $line-height;
+      color: var(--grey);
       font-style: italic;
       white-space: nowrap;
     }

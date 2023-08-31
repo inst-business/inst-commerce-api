@@ -1,14 +1,15 @@
 import {
-  R, Anycase, Primitives, PRIVACY_TYPE, REGEX
+  R, Anycase, Primitives, AVAILABLE_LANGS, PRIVACY_TYPE, REGEX
 } from '@/config/global/const'
 // import _ from 'lodash'
-import moment from 'moment'
+// import moment from 'moment'
 
 
 type compareOperator = 'et' | 'net' | 'gt' | 'gte' | 'lt' | 'lte' | 'or' | 'and'
 type DateFormatType = 'detailed' | 'date' | 'time' | 'datetime'
 
 export const hbsHelpers = Object.freeze({
+
   routeParseParams (privacy: PRIVACY_TYPE, act: string, ...args: any[]): string {
     let route
     if (REGEX.VALID_VAR_NAME.test(act)) {
@@ -58,16 +59,38 @@ export const hbsHelpers = Object.freeze({
       // ? options.fn(this) : options.inverse(this)
   },
 
-  dateFormat (timestamp: Date, format?: DateFormatType) {
-    const formatTypes = {
-      detailed: 'DD-MM-YY LT (Z)',
-      datetime: 'DD-MM-YY LT',
-      date: 'DD-MM-YY',
-      time: 'LT',
-    }
-    const formatString = !format ? formatTypes.datetime : formatTypes[format]
-    // console.log(timestamp, timestamp.toLocaleString())
-    return moment(timestamp.toLocaleString()).format(formatString)
+  // dateFormat (timestamp: Date, format?: DateFormatType, local: string = 'vi') {
+  //   const types = {
+  //     detailed: 'DD-MM-YY LT (Z)',
+  //     datetime: 'DD-MM-YY LT',
+  //     date: 'DD-MM-YY',
+  //     time: 'LT',
+  //   }
+  //   const pattern = !format ? types.datetime : types[format]
+  //   // console.log(timestamp, timestamp.toLocaleString())
+  //   return moment(timestamp.toLocaleString()).format(pattern)
+  // },
+  
+  dateFormat (timestamp: Date, format: DateFormatType, local: AVAILABLE_LANGS, options: any) {
+    local = (local != null || typeof local !== 'string') ? 'vi' : local
+    const types = {
+      detailed: { dateStyle: 'long', timeStyle: 'long' },
+      datetime: { dateStyle: 'medium', timeStyle: 'medium' },
+      date: {
+        // dateStyle: 'long',
+        weekday: 'narrow', day: 'numeric',
+        month: 'short', year: 'numeric',
+      },
+      time: {
+        // timeStyle: 'long', hour12: true,
+        hour: '2-digit', minute: '2-digit',
+        second: '2-digit', timeZoneName: 'short'
+      },
+    } 
+    const pattern = (format != null || typeof format !== 'string')
+      ? types[format] : types.datetime
+    const formatter = new Intl.DateTimeFormat(local, <any>pattern)
+    return formatter.format(new Date(timestamp))
   },
 
   stylingStatus (status: string) {
