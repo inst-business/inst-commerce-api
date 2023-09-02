@@ -76,6 +76,7 @@ export class R {
     LOGOUT: '/logout',  // GET
 
     VERIFY: '/verify',  // POST
+    RESET: '/reset',  // POST
     GEN_VERIFY: '/create-verify',  // POST
     CHANGE_PASSWORD: '/change-password',  // PATCH
     FORGOT_PASSWORD: '/forgot-password',  // POST

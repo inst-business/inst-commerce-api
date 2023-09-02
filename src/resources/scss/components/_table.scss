@@ -9,8 +9,9 @@
   --Table-caption-position: top;
   --Table-text-alignment: inherit;
   --Table-vertical-alignment: top;
-  --Table-transition: all #{$transition-1-eio}, #{$transition-color-1},
-    box-shadow #{$transition-1-eio}, border #{$transition-1-ln};
+  --Table-transition: all #{$transition-1-eio},
+    background-color #{$transition-1-ln}, box-shadow #{$transition-1-eio},
+    border #{$transition-1-ln};
 }
 
 @mixin cell-fit-content {
@@ -85,11 +86,10 @@
     &__img img {
       width: auto;
       height: $spacing-5 * 2;
+      aspect-ratio: 16/10;
       object-fit: cover;
-      overflow: hidden;
-      font-size: 0.75rem;
+      font-size: $font-size-ss;
       color: var(--grey);
-      word-wrap: break-word;
       cursor: pointer;
     }
     &__time {

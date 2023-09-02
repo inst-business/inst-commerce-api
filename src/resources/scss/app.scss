@@ -7,6 +7,7 @@
 @import "components/input";
 @import "components/form";
 @import "components/table";
+@import "components/image";
 @import "components/dialog";
 @import "components/utilities";
 
@@ -23,7 +24,7 @@
   text-decoration: none;
   // appearance: none;
   outline: none;
-  // transition: color 0.15s linear;
+  // transition: color $transition-1-ln;
   // transition: background-color 10s linear;
 
   &::selection {
@@ -136,9 +137,10 @@ body {
 }
 
 img {
-  display: block;
+  // display: block;
   width: 100%;
   object-fit: cover;
+  vertical-align: middle;
 }
 
 // p, b, strong, span {

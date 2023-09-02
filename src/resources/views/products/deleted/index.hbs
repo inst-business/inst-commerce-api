@@ -20,24 +20,24 @@
           <label for="select-all">Select all</label>
         </div>
         <div class="Actions__seperate"></div>
-        <button class="Btn" data-size="sm" data-variant="outline primary" title="Delete selected"
+        <button class="Btn" data-size="sm" data-variant="outline success" title="Delete selected"
           data-form-id="{{this._id}}">
           <i class="fa-regular fa-clock-rotate-left"></i> Restore
         </button>
-        <button class="Btn" data-size="sm" data-variant="outline dark" title="Delete selected"
+        <button class="Btn" data-size="sm" data-variant="outline danger" title="Delete selected"
           data-form-id="{{this._id}}">
           <i class="fa-regular fa-file-slash"></i> Destroy
         </button>
       </div>
       <div class="Actions-right">
-        <a href="/v1/products{{routeI 'index'}}" class="Text-link">
+        <a href="/v1/products{{routeI 'crud.get_all'}}" class="Text-link">
           <i class="fa-regular fa-circle-check"></i>
           Available products
         </a>
       </div>
     </div>
     <div class="Box Box-scrollable">
-      <table class="table Table Table-hover">
+      <table class="Table Table-hover">
         {{!-- <caption>List</caption> --}}
         <thead>
           <tr>
@@ -61,13 +61,13 @@
                 <input type="checkbox" class="Check" name="productItems[]" value="{{this._id}}" data-select-target="select-all">
               </td>
               <td>{{increase @index 1}}</td>
-              <td class="Item__name" width="25%">
+              <td class="Item__name" width="22.5%">
                 <p class="Text-limit-3">{{this.name}}</p>
               </td>
               <td class="Item__img">
-                <img src="/img/products/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">
+                <img src="/img/products/{{this.img}}" class="Img-thumbnail" alt="{{this.name}}" title="{{this.name}}">
               </td>
-              <td class="Item__desc" width="25%">
+              <td class="Item__desc" width="22.5%">
                 <p class="Text-limit-3">{{this.desc}}</p>
                 {{!-- <div class="popover-content" data-content="popover" data-for="desc-popover" data-id="{{@index}}"></div> --}}
                 {{!-- <button popovertarget="desc-popover" data-trigger="popover" data-get="{{@index}}">...more</button> --}}
@@ -88,13 +88,13 @@
                 {{dateFormat this.deletedAt 'time'}}
               </td>
               <td class="Item__actions">
-                <button class="Item__actions-restore Btn" data-size="sm" data-variant="outline primary" title="Restore '{{this.name}}'"
+                <button class="Item__actions-restore Btn" data-size="sm" data-variant="outline success" title="Restore '{{this.name}}'"
                   data-action="restore" data-dialog-target="#actions-dialog" data-form-id="{{this._id}}">
                   <i class="fa-regular fa-clock-rotate-left"></i>
                   {{!-- <i class="fa-regular fa-trash-can-undo"></i> --}}
                   {{!-- <i class="fa-regular fa-trash-can-arrow-up"></i> --}}
                 </button>
-                <button class="Item__actions-destroy Btn" data-size="sm" data-variant="outline dark" title="Destroy '{{this.name}}'"
+                <button class="Item__actions-destroy Btn" data-size="sm" data-variant="outline danger" title="Destroy '{{this.name}}'"
                   data-action="destroy" data-dialog-target="#actions-dialog" data-form-id="{{this._id}}">
                   {{!-- <i class="fa-regular fa-circle-xmark"></i> --}}
                   <i class="fa-regular fa-file-slash"></i>
@@ -125,39 +125,11 @@
     </div>
     <div class="Dialog__footer">
       <input type="hidden" name="ids[]" value="">
-      <button type="submit" class="btn btn-danger Dialog__confirm-button"></button>
-      <button type="submit" class="btn btn-secondary" formmethod="dialog">Cancel</button>
+      <button type="submit" class="Btn Dialog__confirm-button" data-variant="danger"></button>
+      <button type="submit" class="Btn" data-variant="grey" formmethod="dialog">Cancel</button>
     </div>
   </form>
 </dialog>
 {{!-- End of Actions Modal --}}
 
 <script src="/js/pages/products/deleteds.js"></script>
-
-
-{{!-- <section class="view-area row mb-3">
-  {{#each data}}
-    <article class="col-sm-4 col-lg-3 mb-4">
-      <div class="card product-item" style="width: 100%;">
-        <a href="/products{{routeI 'deleted' this._id}}">
-          <img src="/img/products/{{this.img}}" class="card-img-top" alt="{{this.name}}">
-        </a>
-        <div class="card-body">
-          <a href="/products{{routeI 'deleted' this._id}}">
-            <h5 class="card-title product-item__name">{{this.name}}</h5>
-            <span></span>
-          </a>
-          <p class="card-text">{{this.desc}}</p>
-          <div class="d-flex justify-content-end gap-2 action-buttons">
-            <button class="btn btn-outline-primary btn-sm restore-product" data-toggle="dialog" data-action="restore" data-dialog-target="#actions-dialog" data-form-id="{{this._id}}">
-              Restore
-            </button>
-            <button class="btn btn-outline-danger btn-sm destroy-product" data-toggle="dialog" data-action="destroy" data-dialog-target="#actions-dialog" data-form-id="{{this._id}}">
-              Destroy
-            </button>
-          </div>
-        </div>
-      </div>
-    </article>
-  {{/each}}
-</section> --}}

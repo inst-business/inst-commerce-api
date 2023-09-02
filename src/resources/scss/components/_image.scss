@@ -1,0 +1,79 @@
+// img {
+//   vertical-align: middle;
+// }
+
+@mixin gen-img-placeholder {
+  --Img-placeholder-padding: #{$spacing-1};
+  --Img-placeholder-icon-path: url(../../../../assets/svgs/image-slash.svg);
+  --Img-placeholder-transition: #{$transition-color-1},
+    box-shadow #{$transition-1-eio}, border #{$transition-1-ln};
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    display: block;
+    width: 1.5em;
+    height: 1.5em;
+    margin-top: -0.75em;
+    color: var(--base-color-muted);
+    // background-image: var(--Img-placeholder-icon-path);
+    // background-repeat: no-repeat;
+    background-color: var(--base-color-muted);
+    -webkit-mask: var(--Img-placeholder-icon-path) no-repeat 50% 50%;
+    mask: var(--Img-placeholder-icon-path) no-repeat 50% 50%;
+    transition: var(--Img-placeholder-transition);
+  }
+  &::after {
+    // content: attr(alt);
+    content: "Failed to load!";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    // aspect-ratio: attr(data-ratio);
+    padding: 1rem var(--Img-placeholder-padding) 0;
+    text-align: center;
+    line-height: 1;
+    color: var(--base-color-muted);
+    background-color: var(--base-body);
+    transition: var(--Img-placeholder-transition);
+  }
+}
+
+.Img {
+  --Img-transition: all #{$transition-1-eio}, #{$transition-color-1},
+    box-shadow #{$transition-1-eio}, border #{$transition-1-ln};
+}
+
+.Img {
+  @include gen-img-placeholder;
+
+  &-thumbnail {
+    --Img-thumbnail-padding: #{$spacing-1};
+    --Img-thumbnail-font-size: #{$font-size-ss};
+    --Img-thumbnail-transition: #{$transition-color-1},
+      box-shadow #{$transition-1-eio}, border #{$transition-1-ln};
+    position: relative;
+    display: block;
+    max-width: 100%;
+    height: 100%;
+    min-height: 5em;
+    padding: var(--Img-thumbnail-padding);
+    font-size: var(--Img-thumbnail-font-size);
+    background-color: var(--base-body);
+    border: 1px solid var(--base-border);
+    border-radius: $radius-sm;
+    transition: var(--Img-thumbnail-transition);
+    @include gen-img-placeholder;
+
+    &[data-ratio] {
+      aspect-ratio: attr(data-ratio);
+    }
+  }
+}

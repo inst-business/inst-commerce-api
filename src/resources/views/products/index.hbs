@@ -66,7 +66,8 @@
                 <a href="/v1/products{{routeI 'crud.get_one' this._id}}" class="Text-limit-3">{{this.name}}</a>
               </td>
               <td class="Item__img">
-                <img src="/img/products/{{this.img}}" class="img-fluid img-thumbnail" alt="{{this.name}}">
+                <img src="/img/products/{{this.img}}" class="Img-thumbnail" alt="{{this.name}}"
+                  title="{{this.name}}" data-dialog-target="#imgviewing-dialog">
               </td>
               <td class="Item__desc" width="25%">
                 <p class="Text-limit-3">{{this.desc}}</p>
@@ -84,7 +85,7 @@
                 {{dateFormat this.updatedAt 'time'}}
               </td>
               <td class="Item__actions">
-                <a href="/v1/products{{routeI 'crud.edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="grey outline">
+                <a href="/v1/products{{routeI 'crud.edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="info outline">
                   <i class="fa-regular fa-pen-to-square"></i>
                 </a>
                 <button class="Item__actions-delete Btn" data-size="sm" data-variant="outline danger" title="Delete '{{this.name}}'"
@@ -107,6 +108,16 @@
 </section>
 {{!-- End of Available products --}}
 
+{{!-- Image viewing Modal --}}
+<dialog id="imgviewing-dialog" class="Dialog" data-size="lg">
+  <form class="Dialog__form" id="imgviewing-dialog-form">
+    <div class="Dialog__header"></div>
+    <img class="Dialog__img Img-thumbnail" src="" alt="">
+  </form>
+  <button class="Dialog__close" formmethod="dialog" form="imgviewing-dialog-form"></button>
+</dialog>
+{{!-- End of Image viewing Modal --}}
+
 {{!-- Modal Delete --}}
 <dialog id="delete-dialog" class="Dialog">
   <form class="Dialog__form" method="POST">
@@ -116,8 +127,8 @@
     </div>
     <div class="Dialog__footer">
       <input type="hidden" name="ids[]" value="">
-      <button type="submit" class="btn btn-danger">Yes, delete it!</button>
-      <button type="submit" class="btn btn-secondary" formmethod="dialog">Cancel</button>
+      <button type="submit" class="Btn" data-variant="danger">Yes, delete it!</button>
+      <button type="submit" class="Btn" data-variant="grey" formmethod="dialog">Cancel</button>
     </div>
   </form>
 </dialog>
