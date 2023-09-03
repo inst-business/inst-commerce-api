@@ -2,20 +2,20 @@
 <nav class="Head" aria-label="breadcrumb">
   <ol class="Breadcrumb">
     <li class="Breadcrumb__item"><a href="/v1">Home</a></li>
-    <li class="Breadcrumb__item" aria-current="page">Products</li>
+    <li class="Breadcrumb__item" aria-current="page">Categories</li>
   </ol>
-  <h1 class="Heading">Product management</h1>
+  <h1 class="Heading">Category management</h1>
 </nav>
 {{!-- End of Head section --}}
 
-{{!-- Available products --}}
+{{!-- Available categories --}}
 <section class="Row">
   <div class="Col lg-12 sm-12">
-    <h2 class="Heading">Available products</h2>
+    <h2 class="Heading">Available categories</h2>
     <div class="Actions">
       <div class="Actions-left">
         <div class="Field__option">
-          <input type="checkbox" class="Check" name="productItems[]" value="" id="select-all" data-select-all="select-all">
+          <input type="checkbox" class="Check" name="categoryItems[]" value="" id="select-all" data-select-all="select-all">
           <label for="select-all">Select all</label>
         </div>
         <div class="Actions__seperate"></div>
@@ -26,14 +26,14 @@
       </div>
       <div class="Actions-right">
         {{#if (when data.deletedCount 'gt' 0)}}
-          <a href="/v1/products{{routeI 'crud.get_all_deleted'}}" class="Text-link">
+          <a href="/v1/categories{{routeI 'crud.get_all_deleted'}}" class="Text-link">
             {{!-- <i class="fa-regular fa-trash"></i> --}}
             <i class="fa-regular fa-circle-trash"></i>
-            Removed products ({{data.deletedCount}})
+            Removed categories ({{data.deletedCount}})
           </a>
           <div class="Actions__seperate"></div>
         {{/if}}
-        <a href="/v1/products{{routeI 'crud.create'}}" class="Btn" data-variant="success" data-size="sm">
+        <a href="/v1/categories{{routeI 'crud.create'}}" class="Btn" data-variant="success" data-size="sm">
           <i class="fa-regular fa-circle-plus"></i> Add new
         </a>
       </div>
@@ -59,20 +59,18 @@
           {{#each data.items}}
             <tr class="Item">
               <td scope="Row">
-                <input type="checkbox" class="Check" name="productItems[]" value="{{this._id}}" data-select-target="select-all">
+                <input type="checkbox" class="Check" name="categoryItems[]" value="{{this._id}}" data-select-target="select-all">
               </td>
               <td><p>{{increase @index 1}}</p></td>
               <td class="Item__name" width="25%">
-                <a href="/v1/products{{routeI 'crud.get_one' this._id}}" class="Text-limit-3">{{this.name}}</a>
+                <a href="/v1/categories{{routeI 'crud.get_one' this._id}}" class="Text-limit-3">{{this.name}}</a>
               </td>
               <td class="Item__img">
-                <img src="/img/products/{{this.img}}" class="Img" data-variant="thumbnail" alt="{{this.name}}"
+                <img src="/img/categories/{{this.img}}" class="Img" data-variant="thumbnail" alt="{{this.name}}"
                   title="{{this.name}}" data-dialog-target="#imgviewing-dialog">
               </td>
               <td class="Item__desc" width="25%">
                 <p class="Text-limit-3">{{this.desc}}</p>
-                {{!-- <div class="popover-content" data-content="popover" data-for="desc-popover" data-id="{{@index}}"></div> --}}
-                {{!-- <button popovertarget="desc-popover" data-trigger="popover" data-get="{{@index}}">...more</button> --}}
               </td>
               <td class="Item__time">
                 {{dateFormat this.createdAt 'date'}}
@@ -85,13 +83,14 @@
                 {{dateFormat this.updatedAt 'time'}}
               </td>
               <td class="Item__actions">
-                <a href="/v1/products{{routeI 'crud.edit' this._id}}" title="Edit '{{this.name}}'" class="Btn" data-size="sm" data-variant="info outline">
+                <a href="/v1/categories{{routeI 'crud.edit' this._id}}" title="Edit '{{this.name}}'"
+                  class="Btn" data-size="sm" data-variant="info outline">
                   <i class="fa-regular fa-pen-to-square"></i>
                 </a>
-                <button class="Item__actions-delete Btn" data-size="sm" data-variant="outline danger" title="Delete '{{this.name}}'"
-                  data-dialog-target="#delete-dialog" data-form-id="{{this._id}}">
+                <button title="Delete '{{this.name}}'" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}"
+                  class="Item__actions-delete Btn" data-size="sm" data-variant="outline danger">
                   <i class="fa-regular fa-trash"></i>
-                </button>            
+                </button>
               </td>
             </tr>
           {{/each}}
@@ -106,7 +105,7 @@
     </div>
   </div>
 </section>
-{{!-- End of Available products --}}
+{{!-- End of Available categories --}}
 
 {{!-- Image viewing Modal --}}
 <dialog id="imgviewing-dialog" class="Dialog" data-size="lg">
@@ -134,4 +133,4 @@
 </dialog>
 {{!-- End of Modal Delete --}}
 
-<script src="/js/pages/products/index.js"></script>
+<script src="/js/pages/categories/index.js"></script>

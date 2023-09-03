@@ -7,7 +7,7 @@ import { ENV, GV } from '@/config/global/const'
 import morgan from 'morgan'
 import path from 'path'
 import { engine } from 'express-handlebars'
-import route from '@/routes'
+import routes from '@/routes'
 // import jsonServer from 'json-server'
 import { hbsHelpers } from '@/utils/viewEngine'
 import methodOverride from 'method-override'
@@ -80,7 +80,7 @@ class Server {
     })
     
     // Configure routes
-    route(app)
+    app.use(routes)
 
     // Start server
     app.listen(ENV.PORT, () =>

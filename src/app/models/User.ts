@@ -1,7 +1,7 @@
 import mongoose, { Schema, model } from 'mongoose'
 // import withJsonSchema from 'mongoose-schema-jsonschema'
 import { GV, GENDER, ACCOUNT_STATUS, ACCOUNT_ROLE } from '@/config/global/const'
-import { TSoftDeleteQueryHelpers, withSoftDeletePlugin } from '@/utils/mongoose'
+import { TSuspendableDocument, withSoftDeletePlugin } from '@/utils/mongoose'
 
 export interface IUser {
   username: string,
@@ -51,7 +51,7 @@ const UserSchema = new Schema<IUser>({
 // const UserJSONSchema = (<any>UserSchema).jsonSchema()
 
 withSoftDeletePlugin(UserSchema)
-const User = model<IUser, TSoftDeleteQueryHelpers<IUser>>('User', UserSchema)
+const User = model<IUser, TSuspendableDocument<IUser>>('User', UserSchema)
 
 export {
   // UserJSONSchema as UserSchema

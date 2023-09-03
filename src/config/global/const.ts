@@ -64,6 +64,7 @@ export class R {
     UPDATE_ONE: '/:id',  // PUT
     GET_ONE_BYSLUG: '/:slug',  // GET
     UPDATE_ONE_BYSLUG: '/:slug',  // PUT
+    GET_MANY: '/',  // GET
     GET_ALL: '/',  // GET
     STORE_ONE: '/',  // POST
     DELETE_ONE: '/',  // DELETE
@@ -101,8 +102,9 @@ export class GV {
   static JWT_EXPIRED = '1m'
   static VERIFY_EXPIRED = '5m'
   static SESSION_EXPIRED = 5 * this._1M
-
   static SALT_LENGTH = 16
+
+  static DEFAULT_STATUS = 'pending'
 }
 
 

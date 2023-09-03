@@ -5,11 +5,12 @@ import OrderController from '@controllers/OrderController'
 import ProductController from '@controllers/ProductController'
 
 const router = express.Router()
+const OrderCtrl = new OrderController
 
 router.get(R.CRUD.GET_ALL,
   _.routeAsync(async () => {
     const fetchRecords = {
-      'orders': OrderController.getAll(),
+      'orders': OrderCtrl.getAll(),
       'products': ProductController.getAll()
     }
     const data = _.asyncAllSettled(fetchRecords)

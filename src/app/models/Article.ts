@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose'
-import { ITEM_STATUS } from '@/config/global/const'
-import { ISoftDeleteQueryHelpers, TSoftDeleteQueryHelpers, withSoftDeletePlugin } from '@/utils/mongoose'
+import { Schema, model, ObjectId } from 'mongoose'
+import { GV, ITEM_STATUS } from '@/config/global/const'
+import { ISoftDeleteQueryHelpers, TSuspendableDocument, withSoftDeletePlugin } from '@/utils/mongoose'
 
 export interface IArticle {
   name: string,
@@ -8,6 +8,9 @@ export interface IArticle {
   img: string,
   slug: string,
   status: ITEM_STATUS,
+  authorId: ObjectId,
+  categoryId: ObjectId,
+  productId: ObjectId,
   createdAt?: Date,
   updatedAt?: Date,
 }
@@ -17,11 +20,14 @@ const ArticleSchema = new Schema<IArticle>({
   desc: { type: String },
   img: { type: String, required: true },
   slug: { type: String, required: true, maxLength: 255 },
-  status: { type: String, required: true, default: 'hidden' },
+  status: { type: String, required: true, default: 'pending' },
+  authorId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  categoryId: { type: Schema.Types.ObjectId, ref: 'Category', default: null },
+  productId: { type: Schema.Types.ObjectId, ref: 'Product', default: null },
 }, { timestamps: true })
 
 withSoftDeletePlugin(ArticleSchema)
 
-const Article = model<IArticle, TSoftDeleteQueryHelpers<IArticle>>('Article', ArticleSchema)
+const Article = model<IArticle, TSuspendableDocument<IArticle>>('Article', ArticleSchema)
 
 export default Article

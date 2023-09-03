@@ -30,13 +30,13 @@ export type TWithSoftDeleted = {
   isDeleted: boolean
   deletedAt: Date | null
 }
-type TDocument = Document & TWithSoftDeleted
+export type TDocument = Document & TWithSoftDeleted
 type TQueryWithHelpers = QueryWithHelpers<Boolean, TDocument | TDocument[]>
 export interface ISoftDeleteQueryHelpers<T> extends Model<T> {
   softDelete(): TQueryWithHelpers,
   restoreDeleted(): TQueryWithHelpers,
 }
-export type TSoftDeleteQueryHelpers<T> = Model<T, ISoftDeleteQueryHelpers<T>>
+export type TSuspendableDocument<T> = Model<T, ISoftDeleteQueryHelpers<T>>
 
 export const withSoftDeletePlugin = (schema: Schema) => {
   schema.add({
