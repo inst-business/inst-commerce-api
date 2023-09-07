@@ -1,6 +1,7 @@
 import { Schema, model, ObjectId } from 'mongoose'
-import { GV, ITEM_STATUS } from '@/config/global/const'
-import { ISoftDeleteQueryHelpers, TSuspendableDocument, withSoftDeletePlugin } from '@/utils/mongoose'
+import { SuspendableModel } from './Model'
+import { ITEM_STATUS } from '@/config/global/const'
+import { TSuspendableDocument, withSoftDeletePlugin } from '@/utils/mongoose'
 
 export interface IArticle {
   name: string,
@@ -27,7 +28,15 @@ const ArticleSchema = new Schema<IArticle>({
 }, { timestamps: true })
 
 withSoftDeletePlugin(ArticleSchema)
-
 const Article = model<IArticle, TSuspendableDocument<IArticle>>('Article', ArticleSchema)
 
-export default Article
+
+class ArticleModel extends SuspendableModel<IArticle> {
+
+  constructor () {
+    super(Article)
+  }
+  
+}
+
+export default ArticleModel

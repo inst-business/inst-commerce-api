@@ -10,9 +10,9 @@ import {
 const __SwitchThemeBtn = qs.$o('#Switch-theme-btn')
 
 document.onload = [
-  loadingScreen(),
   loadTheme(__SwitchThemeBtn),
-  loadSidebarState()
+  loadSidebarState(),
+  loadingScreen(),
 ]
 
 switchTheme(__SwitchThemeBtn)

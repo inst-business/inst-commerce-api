@@ -1,0 +1,47 @@
+{{!-- Head section --}}
+<nav class="Head" aria-label="breadcrumb">
+  <ol class="Breadcrumb">
+    <li class="Breadcrumb__item"><a href="/v1">Home</a></li>
+    <li class="Breadcrumb__item"><a href="/v1/categories{{routeI 'index'}}">Categories</a></li>
+    <li class="Breadcrumb__item" aria-current="page">Create</li>
+  </ol>
+  <h1 class="Heading">Create new Category</h1>
+</nav>
+{{!-- End of Head section --}}
+
+{{!-- Create new Category --}}
+<section class="Row">
+  <div class="Col lg-12 sm-12">
+    <div class="Box Box-scrollable">
+      <form class="Form" action="/v1/categories{{routeI 'crud.store_one'}}" method="post" enctype="multipart/form-data">
+        <div class="Form__header">
+          <p class="Form__header-title">New category</p>
+        </div>
+        <div class="Form__body">
+          <div class="Field" data-col="" aria-invalid="">
+            <label for="name" class="Field__label">Name</label>
+            <input type="text" class="Field__input" name="name" id="name">
+            <span class="Field__response"></span>
+          </div>
+          <div class="Field" data-col="" aria-invalid="">
+            <label for="desc" class="Field__label">Description</label>
+            <textarea class="Field__input" id="desc" name="desc" rows="5"></textarea>
+            <span class="Field__response"></span>
+          </div>
+          <div class="Field" data-col="" aria-invalid="">
+            <label for="img" class="Field__label">Image</label>
+            <input type="file" accept=".jpg,.jpeg,.png" class="Field__input" name="img" id="img">
+            <span class="Field__response"></span>
+          </div>
+        </div>
+        <div class="Form__footer">
+          <div class="Field-actions" data-align="end">
+            <button type="button" class="Btn" data-variant="grey" onclick="history.back()">Cancel</button>
+            <button type="submit" class="Btn" data-variant="success">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{{!-- End of Create new Category --}}

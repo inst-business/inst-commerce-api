@@ -1,35 +1,50 @@
-import Controller, { IndelibleController } from './Controller'
-import Order, { IOrder } from '@models/Order'
+import OrderModel, { IOrder } from '@models/Order'
 import _ from '@/utils/utils'
-import { handleQuery } from '@/utils/mongoose'
 import ERR from '@/config/global/error'
 
-class OrderController extends IndelibleController<IOrder> {
+const Order = new OrderModel()
 
-  constructor () {
-    super(Order)
-  }
+class OrderCtrl {
 
-  // static async getOneById (id: string): Promise<IOrder | null> {
-  //   const query = Order.findOne({ _id: id }).lean()
-  //   const data = await handleQuery(query)
-  //   return data
-  // }
+  static getOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: IOrder | null = await Order.getOneById(id)
+      return data
+    },
+    _.renderView('app/orders/detail')
+  )}
 
-  async getOneByCode (code: String): Promise<IOrder | null> {
-    const query = Order.findOne({ code: code }).lean()
-    const data = await handleQuery(query)
-    return data
-  }
-  
-  // static async insertOne (order: IOrder): Promise<IOrder> {
-  //   const formData = structuredClone(order)
-  //   formData.code = _.genOrderCode()
-  //   const query = Order.create(formData)
-  //   const res = await handleQuery(query)
-  //   return res
-  // }
+  static getMany () {
+    return _.routeAsync(async (req, res) => {
+      const data = Order.getMany()
+      return data
+    },
+    _.renderView('app/orders/index')
+  )}
 
 }
+export default OrderCtrl
 
-export default OrderController
+
+/** 
+ *  EXTERNAL
+*/
+export class OrderExtCtrl {
+
+  static getMany () {
+    return _.routeAsync(async (req, res) => {
+      const data: IOrder[] = await Order.getMany()
+      return data
+    })
+  }
+
+  static getOneBySlug () {
+    return _.routeAsync(async (req, res) => {
+      const { slug } = req.params
+      const data: IOrder | null = await Order.getOneBySlug(slug)
+      return data
+    })
+  }
+
+}

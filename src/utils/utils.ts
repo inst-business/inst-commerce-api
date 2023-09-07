@@ -1,13 +1,13 @@
 import {
   Request, Response, NextFunction, RequestHandler
 } from 'express'
+import _ from 'lodash'
 import slugify from 'slugify'
 import uniqueSlug from 'unique-slug'
 import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
-import _ from 'lodash'
 import LogicError from './logicError'
 import {
   ENV, GV, Many, TProps, PropsKey, RecursiveArray, Primitives, ErrPars
@@ -20,16 +20,15 @@ export type ExpressCallbackProvider = (res: Response, req?: Request) => ExpressC
 
 class Utils {
 
-  env (name: string, replacement?: Primitives): Primitives {
-    const variable = ENV[name]
-    if (variable == null) {
+  env (name: string, replacement?: Primitives) {
+    if (ENV[name] == null) {
       if (replacement != null) return replacement
       const title = 'Internal Server Error'
       const message = 'An unexpected issue occurred.'
       console.error('Environment variable "%d" is missing.', name)
       throw this.logicError(title, message, 500, ERR.ENV_VARIABLE_MISSING)
     }
-    return variable
+    return ENV[name]
   }
 
   async asyncAllSettled (records: Record<string, Promise<any>>) {
@@ -86,7 +85,7 @@ class Utils {
   }
 
   renderView (view: string, page?: {}, layout?: string): ExpressCallbackProvider {
-    return !GV.VIEW_ENGINE
+    return !GV.ALLOW_VIEW_ENGINE
       ? (res) => {
         try {
           throw this.logicError('REJECTED', 'Rendering view has been refused', 406, ERR.RENDER_VIEW_REJECTED, view)
@@ -105,7 +104,7 @@ class Utils {
   }
 
   redirectView (route: string, ...params: any[]): ExpressCallbackProvider {
-    return !GV.VIEW_ENGINE
+    return !GV.ALLOW_VIEW_ENGINE
       ? (res) => {
         console.warn('Rendering view rejected.')
         return this.createServiceCallback(res)

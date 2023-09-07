@@ -1,81 +1,132 @@
-import Article, { IArticle } from '@models/Article'
+import ArticleModel, { IArticle } from '@models/Article'
 import _ from '@/utils/utils'
-import { handleQuery } from '@/utils/mongoose'
 
-class ArticleController {
+const Article = new ArticleModel()
 
-  static async getAll (): Promise<IArticle[]> {
-    const q = Article.find({}).lean()
-    const data = await handleQuery(q)
-    return data
-  }
+class ArticleCtrl {
 
-  static async getOneById (id: string): Promise<IArticle | null> {
-    const q = Article.findOne({ _id: id }).lean()
-    const data = await handleQuery(q)
-    return data
-  }
+  static createOne () {
+    return _.routeAsync(async () => {},
+    _.renderView('app/categories/create')
+  )}
 
-  static async getOneBySlug (slug: String): Promise<IArticle | null> {
-    const q = Article.findOne({ slug: slug }).lean()
-    const data = await handleQuery(q)
-    return data
-  }
+  static storeOne () {
+    return _.routeAsync(async (req, res) => {
+      const data = req.body
+      const submittedArticle = await Article.insertOne(data)
+      return submittedArticle
+    },
+    _.redirectView('/v1/articles')
+  )}
   
-  static async insertOne (product: IArticle): Promise<IArticle> {
-    const formData = structuredClone(product)
-    formData.slug = product.name
-    const q = Article.create(formData)
-    const res = await handleQuery(q, data => {
-      data.slug = _.genUniqueSlug(product.name, data._id.toString())
-      data.save()
-    })
-    return res
-  }
+  static getOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: IArticle | null = await Article.getOneById(id)
+      return data
+    },
+    _.renderView('app/articles/detail')
+  )}
 
-  static async updateOne (id: string, product: IArticle): Promise<IArticle | null> {
-    const formData = structuredClone(product)
-    formData.slug = _.genUniqueSlug(product.name, id)
-    const q = Article.findOneAndUpdate({ _id: id }, formData)
-    const res = await handleQuery(q)
-    return res
-  }
+  static getMany () {
+    return _.routeAsync(async (req, res) => {
+      const resources = {
+        'items': Article.getMany(),
+        'deletedCount': Article.getDeletedAmount()
+      }
+      const data = _.asyncAllSettled(resources)
+      return data
+    },
+    _.renderView('app/articles/index')
+  )}
+
+  static editOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: IArticle | null = await Article.getOneById(id)
+      return data
+    },
+    _.renderView('app/articles/create')
+  )}
+
+  static updateOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data = req.body
+      data.slug = _.genUniqueSlug(data.name, id)
+      const updatedArticle = await Article.updateOne(id, data)
+      return updatedArticle
+    },
+    _.redirectView('/articles/:id', 'id')
+  )}
+
+  static getOneDeleted () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: IArticle | null = await Article.getDeletedById(id)
+      return data
+    },
+    _.renderView('app/articles/deleted/detail')
+  )}
+
+  static getManyDeleted () {
+    return _.routeAsync(async () => {
+      const data: IArticle[] = await Article.getManyDeleted()
+      return data
+    },
+    _.renderView('app/articles/deleted/index')
+  )}
+
+  static deleteOneOrMany () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.body
+      const result = await Article.deleteOneOrMany(id)
+      return result
+    },
+    _.redirectView('back')
+  )}
   
-  static async deleteOneOrMany (ids: string | string[]): Promise<Boolean> {
-    const q = Article.find({ _id: ids }).softDelete()
-    const res = await handleQuery(q)
-    return res
-  }
+  static restoreOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.body
+      const restoredArticle = await Article.restoreOneOrMany(id)
+      return restoredArticle
+    },
+    _.redirectView('back')
+  )}
 
-  static async getAllDeleted (): Promise<IArticle[]> {
-    const q = Article.find({ isDeleted: true }).lean()
-    const data = await handleQuery(q)
-    return data
-  }
-  
-  static async getDeletedAmount (): Promise<number> {
-    const q = Article.find({ isDeleted: true }).countDocuments()
-    const data = await handleQuery(q)
-    return data
-  }
-
-  static async getDeletedById (id: string): Promise<IArticle | null> {
-    const q = Article.findOne({ _id: id, isDeleted: true }).lean()
-    const data = await handleQuery(q)
-    return data
-  }
-
-  static async restoreOneOrMany (ids: string | string[]): Promise<Boolean> {
-    const q = Article.find({ _id: ids, isDeleted: true }).restoreDeleted()
-    const res = await handleQuery(q)
-    return res
-  }
-  static async destroyOneOrMany (id: string | string[]): Promise<Record<string, any>> {
-    const q = Article.deleteOne({ _id: id, isDeleted: true })
-    const res = await handleQuery(q)
-    return res
-  }
+  static destroyOneOrMany () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.body
+      const result = await Article.destroyOneOrMany(id)
+      return result
+    },
+    _.redirectView('back')
+  )}
 
 }
 
-export default ArticleController
+export default ArticleCtrl
+
+
+/** 
+ *  EXTERNAL
+*/
+export class ArticleExtCtrl {
+
+  static getMany () {
+    return _.routeAsync(async (req, res) => {
+      const data: IArticle[] = await Article.getMany()
+      return data
+    })
+  }
+
+  static getOneBySlug () {
+    return _.routeAsync(async (req, res) => {
+      const { slug } = req.params
+      const data: IArticle | null = await Article.getOneBySlug(slug)
+      return data
+    })
+  }
+
+}

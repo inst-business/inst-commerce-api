@@ -57,7 +57,7 @@ class Server {
     app.set('views', path.join(__dirname, '../src', 'resources', 'views'))
 
     app.all('*', (req, res, next) => {
-      console.log(`URL: ${req.url}`)
+      // console.log(`URL: ${req.url}`)
       if (!req.body === null) {
         console.log(JSON.stringify(req.body, null, 2))
       }

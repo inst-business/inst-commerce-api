@@ -1,32 +1,34 @@
 import express from 'express'
 import { R } from '@/config/global/const'
 import _ from '@/utils/utils'
-import OrderController from '@controllers/OrderController'
-import ProductController from '@controllers/ProductController'
+import ProductModel from '@models/Product'
+import OrderModel from '@models/Order'
 
 const router = express.Router()
-const OrderCtrl = new OrderController
 
-router.get(R.CRUD.GET_ALL,
+const Product = new ProductModel()
+const Order= new OrderModel()
+
+router.get('/',
   _.routeAsync(async () => {
     const fetchRecords = {
-      'orders': OrderCtrl.getAll(),
-      'products': ProductController.getAll()
+      'orders': Order.getMany(),
+      'products': Product.getMany()
     }
     const data = _.asyncAllSettled(fetchRecords)
     return data
   },
-  _.renderView('dashboard/index')
+  _.renderView('app/dashboard/index')
 ))
 
-router.get(R.AUTH.LOGIN,
+router.get('/login',
   _.routeAsync(async () => {},
-  _.renderView('dashboard/login', {}, 'no-partials.hbs')
+  _.renderView('app/auth/login', {}, 'no-partials.hbs')
 ))
 
-router.get(R.AUTH.SIGNUP,
+router.get('/signup',
   _.routeAsync(async () => {},
-  _.renderView('dashboard/signup', {}, 'no-partials.hbs')
+  _.renderView('app/auth/signup', {}, 'no-partials.hbs')
 ))
 
 export default router

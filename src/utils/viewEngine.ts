@@ -72,7 +72,7 @@ export const hbsHelpers = Object.freeze({
   // },
   
   dateFormat (timestamp: Date, format: DateFormatType, local: AVAILABLE_LANGS, options: any) {
-    local = (local != null || typeof local !== 'string') ? 'vi' : local
+    local = (local != null && typeof local === 'string') ? local : 'vi'
     const types = {
       detailed: { dateStyle: 'long', timeStyle: 'long' },
       datetime: { dateStyle: 'medium', timeStyle: 'medium' },
@@ -91,6 +91,14 @@ export const hbsHelpers = Object.freeze({
       ? types[format] : types.datetime
     const formatter = new Intl.DateTimeFormat(local, <any>pattern)
     return formatter.format(new Date(timestamp))
+  },
+
+  webpFormat (path: string, options: any) {
+    path = (path != null && typeof path === 'string') ? path : ''
+    // const regex = /\.[^.]+$/
+    const webpPath = path.replace(REGEX.FILE_EXTENSION, '.webp')
+    console.log('paths: ', path, webpPath)
+    return webpPath
   },
 
   stylingStatus (status: string) {

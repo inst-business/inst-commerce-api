@@ -44,10 +44,10 @@
     --Layout-sidebar-width: #{$sidebar-width-collapsed};
   }
   @include responsive.make-responsive-up(xs) using ($breakpoint) {
-    layout-template-columns: 1fr;
-    layout-template-rows: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
     gap: var(--Layout-spacing) 0;
-    layout-template-areas: "header" "main" "footer";
+    grid-template-areas: "header" "main" "footer";
   }
 
   &__header {
@@ -128,4 +128,30 @@
       }
     }
   }
+}
+
+.grid {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  gap: 1rem;
+  grid-template-areas:
+    "sidebar header header header"
+    "sidebar main main main"
+    "sidebar footer footer footer";
+}
+
+.header {
+  grid-area: header;
+}
+.sidebar {
+  grid-area: sidebar;
+}
+.main {
+  grid-area: main;
+}
+.footer {
+  grid-area: footer;
 }

@@ -46,7 +46,7 @@
             <th scope="col">
               {{!-- <input type="checkbox" class="Check" name="item[]" value="" id="select-all"> --}}
             </th>
-            <th>#</th>
+            {{!-- <th>#</th> --}}
             <th>Name</th>
             <th>Image</th>
             <th>Description</th>
@@ -61,13 +61,17 @@
               <td scope="Row">
                 <input type="checkbox" class="Check" name="categoryItems[]" value="{{this._id}}" data-select-target="select-all">
               </td>
-              <td><p>{{increase @index 1}}</p></td>
+              {{!-- <td><p>{{increase @index 1}}</p></td> --}}
               <td class="Item__name" width="25%">
                 <a href="/v1/categories{{routeI 'crud.get_one' this._id}}" class="Text-limit-3">{{this.name}}</a>
               </td>
-              <td class="Item__img">
-                <img src="/img/categories/{{this.img}}" class="Img" data-variant="thumbnail" alt="{{this.name}}"
-                  title="{{this.name}}" data-dialog-target="#imgviewing-dialog">
+              <td class="Item__img">                  
+                <picture>
+                  <source srcset="/uploads/categories/{{webpFormat this.img}}" type="image/webp">
+                  <img src="/uploads/categories/{{this.img}}" alt="{{this.name}}" title="{{this.name}}"
+                    loading="lazy" decoding="async" fetchpriority="true"
+                    class="Img" data-variant="thumbnail" data-dialog-target="#imgviewing-dialog">
+                </picture>
               </td>
               <td class="Item__desc" width="25%">
                 <p class="Text-limit-3">{{this.desc}}</p>

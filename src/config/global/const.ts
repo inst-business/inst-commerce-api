@@ -96,7 +96,8 @@ export class GV {
   static _1W = 24 * this._1D
 
   static DEFAULT_LANG: AVAILABLE_LANGS = 'en'
-  static VIEW_ENGINE = true
+  static ALLOW_VIEW_ENGINE = true
+  static ALLOW_LOCAL_STORING = true
   static COOKIE_SECURE = ENV.COOKIE_SECURE === 'true' ? true : false
   static CONNECT_TIMEOUT = 5000
   static JWT_EXPIRED = '1m'
@@ -105,6 +106,8 @@ export class GV {
   static SALT_LENGTH = 16
 
   static DEFAULT_STATUS = 'pending'
+  static IMG_EXT_ALLOWED = 'jpg'
+  static IMG_EXT_REDUCED = 'webp'
 }
 
 
@@ -112,4 +115,6 @@ export class GV {
 export class REGEX {
   static VALID_VAR_NAME = /^[a-zA-Z_$][\w$]*$/i
   static VALID_PROP_CALL = /^([a-zA-Z_$][\w$]*)\.([a-zA-Z_$][\w$]*)$/i
+
+  static FILE_EXTENSION = /\.[^.]+$/
 }

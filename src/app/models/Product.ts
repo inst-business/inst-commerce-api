@@ -1,8 +1,9 @@
 import { Schema, model, ObjectId } from 'mongoose'
-import { IUser } from './User'
-import { ICategory } from './Category'
+import { SuspendableModel } from './Model'
 import { ITEM_STATUS } from '@/config/global/const'
 import { TSuspendableDocument, withSoftDeletePlugin } from '@/utils/mongoose'
+import _ from '@/utils/utils'
+import { handleQuery } from '@/utils/mongoose'
 
 export interface IProduct {
   name: string,
@@ -29,7 +30,32 @@ const ProductSchema = new Schema<IProduct>({
 }, { timestamps: true })
 
 withSoftDeletePlugin(ProductSchema)
-
 const Product = model<IProduct, TSuspendableDocument<IProduct>>('Product', ProductSchema)
 
-export default Product
+
+class ProductModel extends SuspendableModel<IProduct> {
+
+  constructor () {
+    super(Product)
+  }
+
+  async insertOne (product: IProduct): Promise<IProduct> {
+    Object.assign(product, { slug: product.name })
+    const q = Product.create(product)
+    const res = await handleQuery(q, data => {
+      data.slug = _.genUniqueSlug(product.name, data._id.toString())
+      data.save()
+    })
+    return res.toObject()
+  }
+  
+  // async updateOne (id: string, product: IProduct): Promise<IProduct | null> {
+  //   product.slug = _.genUniqueSlug(product.name, id)
+  //   const q = Product.findOneAndUpdate({ _id: id }, product)
+  //   const res = await handleQuery(q)
+  //   return res as I | null
+  // }
+  
+}
+
+export default ProductModel

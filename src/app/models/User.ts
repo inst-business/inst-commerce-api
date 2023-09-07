@@ -1,7 +1,12 @@
 import mongoose, { Schema, model } from 'mongoose'
+// import { SuspendableModel } from './Model'
 // import withJsonSchema from 'mongoose-schema-jsonschema'
-import { GV, GENDER, ACCOUNT_STATUS, ACCOUNT_ROLE } from '@/config/global/const'
-import { TSuspendableDocument, withSoftDeletePlugin } from '@/utils/mongoose'
+import {
+  GV, GENDER, ACCOUNT_STATUS, ACCOUNT_ROLE, IResultWithPars
+} from '@/config/global/const'
+import {
+  TSuspendableDocument, withSoftDeletePlugin, handleQuery
+} from '@/utils/mongoose'
 
 export interface IUser {
   username: string,
@@ -49,11 +54,67 @@ const UserSchema = new Schema<IUser>({
 
 // withJsonSchema(mongoose)
 // const UserJSONSchema = (<any>UserSchema).jsonSchema()
+// export { UserJSONSchema as UserSchema }
 
 withSoftDeletePlugin(UserSchema)
 const User = model<IUser, TSuspendableDocument<IUser>>('User', UserSchema)
 
-export {
-  // UserJSONSchema as UserSchema
+
+class UserModel {
+
+  async getUserByEmailOrUsername (email: string, username: string): Promise<IUser | null> {
+    const q = User.findOne({
+      $or: [{ username: username }, { email: email }]
+    }).lean()
+    const data = await handleQuery(q)
+    return data
+  }
+
+  async checkUserExists (email: string, username: string): Promise<IResultWithPars> {
+    const qEmail = User.where({ email }).countDocuments(),
+          qUsername = User.where({ username }).countDocuments()
+    const isEmailExists = await handleQuery(qEmail),
+          isUsernameExists = await handleQuery(qUsername),
+          result = isEmailExists > 0 || isUsernameExists > 0
+    const data = {
+      result,
+      ...(result && {
+        pars: [
+          ...isEmailExists > 0 ? [email] : [],
+          ...isUsernameExists > 0 ? [username] : [],
+        ]
+      }),
+    }
+    return data
+  }
+
+  async checkUserVerified (username: string): Promise<boolean> {
+    const q = User.where({
+      username,
+      status: { $nin: [ 'pending' ] },
+      verifiedAt: { $exists: true, $nin: [ null ] }
+    }).countDocuments()
+    const data = await handleQuery(q)
+    return data > 0 ? true : false
+  }
+
+  async verifyUser (username: string): Promise<boolean> {
+    const update = {
+      status: 'active',
+      verifiedAt: Date.now()
+    }
+    const q = User.findOneAndUpdate({ username }, update)
+    const res = await handleQuery(q)
+    return res ? true : false
+  }
+
+  async insertNewUser (user: IUser): Promise<IUser> {
+    // const formData = structuredClone(user)
+    const q = User.create(user)
+    const res = await handleQuery(q)
+    return res
+  }
+  
 }
-export default User
+
+export default UserModel

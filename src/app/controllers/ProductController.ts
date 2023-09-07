@@ -1,108 +1,132 @@
-import Product, { IProduct } from '@models/Product'
+import ProductModel, { IProduct } from '@models/Product'
 import _ from '@/utils/utils'
-import { handleQuery } from '@/utils/mongoose'
-import { SORT_ORDER } from '@/config/global/const'
 
-class ProductController {
+const Product = new ProductModel()
 
-  static async getAll (): Promise<IProduct[]> {
-    const q = Product.find({}).lean()
-    const data = await handleQuery(q)
-    return data
-  }
-
-  static async getMany (
-    limit: number = 15,
-    offset: number = 0,
-    sort: SORT_ORDER = 'desc',
-    sortBy: string = 'createdAt'
-  ): Promise<IProduct[]> {
-    const q = Product.find({})
-      .sort({ [sortBy]: sort }).skip(offset).limit(limit)
-      .lean()
-    const data = await handleQuery(q)
-    return data
-  }
-
-  static async getOneById (id: string): Promise<IProduct | null> {
-    const q = Product.findOne({ _id: id }).lean()
-    const data = await handleQuery(q)
-    return data
-  }
-
-  static async getOneBySlug (slug: String): Promise<IProduct | null> {
-    const q = Product.findOne({ slug: slug }).lean()
-    const data = await handleQuery(q)
-    return data
-  }
+class ProductCtrl {
   
-  static async insertOne (product: IProduct): Promise<IProduct> {
-    const formData = structuredClone(product)
-    formData.slug = product.name
-    const q = Product.create(formData)
-    const res = await handleQuery(q, data => {
-      data.slug = _.genUniqueSlug(product.name, data._id.toString())
-      data.save()
-    })
-    return res
-  }
+  static createOne () {
+    return _.routeAsync(async () => {},
+    _.renderView('app/categories/create')
+  )}
 
-  static async updateOne (id: string, product: IProduct): Promise<IProduct | null> {
-    const formData = structuredClone(product)
-    formData.slug = _.genUniqueSlug(product.name, id)
-    const q = Product.findOneAndUpdate({ _id: id }, formData)
-    const res = await handleQuery(q)
-    return res
-  }
+  static storeOne () {
+    return _.routeAsync(async (req, res) => {
+      const data = req.body
+      const submittedProduct = await Product.insertOne(data)
+      return submittedProduct
+    },
+    _.redirectView('/v1/products')
+  )}
   
-  static async deleteOneOrMany (ids: string | string[]): Promise<Boolean> {
-    const q = Product.find({ _id: ids }).softDelete()
-    const res = await handleQuery(q)
-    return res
-  }
+  static getOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: IProduct | null = await Product.getOneById(id)
+      return data
+    },
+    _.renderView('app/products/detail')
+  )}
 
-  static async getAllDeleted (): Promise<IProduct[]> {
-    const q = Product.find({ isDeleted: true }).lean()
-    const data = await handleQuery(q)
-    return data
-  }
+  static getMany () {
+    return _.routeAsync(async (req, res) => {
+      const resources = {
+        'items': Product.getMany(),
+        'deletedCount': Product.getDeletedAmount()
+      }
+      const data = _.asyncAllSettled(resources)
+      return data
+    },
+    _.renderView('app/products/index')
+  )}
 
-  static async getManyDeleted (
-    limit: number = 15,
-    offset: number = 0,
-    sort: SORT_ORDER = 'desc',
-    sortBy: string = 'deletedAt'
-  ): Promise<IProduct[]> {
-    const q = Product.find({ isDeleted: true })
-      .sort({ [sortBy]: sort }).skip(offset).limit(limit)
-      .lean()
-    const data = await handleQuery(q)
-    return data
-  }
+  static editOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: IProduct | null = await Product.getOneById(id)
+      return data
+    },
+    _.renderView('app/products/create')
+  )}
+
+  static updateOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data = req.body
+      data.slug = _.genUniqueSlug(data.name, id)
+      const updatedProduct = await Product.updateOne(id, data)
+      return updatedProduct
+    },
+    _.redirectView('/products/:id', 'id')
+  )}
+
+  static getOneDeleted () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: IProduct | null = await Product.getDeletedById(id)
+      return data
+    },
+    _.renderView('app/products/deleted/detail')
+  )}
+
+  static getManyDeleted () {
+    return _.routeAsync(async () => {
+      const data: IProduct[] = await Product.getManyDeleted()
+      return data
+    },
+    _.renderView('app/products/deleted/index')
+  )}
+
+  static deleteOneOrMany () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.body
+      const result = await Product.deleteOneOrMany(id)
+      return result
+    },
+    _.redirectView('back')
+  )}
   
-  static async getDeletedAmount (): Promise<number> {
-    const q = Product.find({ isDeleted: true }).countDocuments()
-    const data = await handleQuery(q)
-    return data
-  }
+  static restoreOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.body
+      const restoredProduct = await Product.restoreOneOrMany(id)
+      return restoredProduct
+    },
+    _.redirectView('back')
+  )}
 
-  static async getDeletedById (id: string): Promise<IProduct | null> {
-    const q = Product.findOne({ _id: id, isDeleted: true }).lean()
-    const data = await handleQuery(q)
-    return data
-  }
-
-  static async restoreOneOrMany (ids: string | string[]): Promise<Boolean> {
-    const q = Product.find({ _id: ids, isDeleted: true }).restoreDeleted()
-    const res = await handleQuery(q)
-    return res
-  }
-  static async destroyOneOrMany (id: string | string[]): Promise<Record<string, any>> {
-    const q = Product.deleteOne({ _id: id, isDeleted: true })
-    const res = await handleQuery(q)
-    return res
-  }
+  static destroyOneOrMany () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.body
+      const result = await Product.destroyOneOrMany(id)
+      return result
+    },
+    _.redirectView('back')
+  )}
 
 }
 
-export default ProductController
+export default ProductCtrl
+
+
+/** 
+ *  EXTERNAL
+*/
+export class ProductExtCtrl {
+
+  static getMany () {
+    return _.routeAsync(async (req, res) => {
+      const data: IProduct[] = await Product.getMany()
+      return data
+    })
+  }
+
+  static getOneBySlug () {
+    return _.routeAsync(async (req, res) => {
+      const { slug } = req.params
+      const data: IProduct | null = await Product.getOneBySlug(slug)
+      return data
+    })
+  }
+
+}
