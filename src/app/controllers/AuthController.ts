@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
-import { GV } from '@/config/global/const'
+import { GV, ACCOUNT_STATUS_ARR, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 const User = new UserModel()
@@ -12,6 +12,32 @@ class AuthCtrl {
     const salt = _.genRandomString(GV.SALT_LENGTH)
     const passwordData = _.sha512(userpassword, salt)
     return passwordData
+  }
+
+  static authenticateUser () {
+    return _.routeAsync(async (req, res) => {
+      const { userInfo, password } = req.body
+      const user = await User.getUserByEmailOrUsername(userInfo, userInfo)
+      if (user != null) {
+        if (user.status === ACCOUNT_STATUS_ARR.PENDING || !user.verifiedAt) {
+          throw _.logicError('ERROR', 'User is not verified', 400, ERR.UNVERIFIED, userInfo)
+        }
+        if (user.password !== _.sha512(password, user.salt)) {
+          throw _.logicError('Login failed', 'Password is not correct', 400, ERR.INVALID_PASSWORD)
+        }
+        const
+          { username, email, tel, firstname, lastname, role, permissions } = user,
+          userSign: USER_SIGN = {
+            username, email, tel, name: { firstname, lastname }, role, permissions
+          },
+          accessToken = _.genAccessToken(userSign),
+          refreshToken = _.genRefreshToken(userSign)
+        return { accessToken, refreshToken }
+      }
+      else {
+        throw _.logicError('Login failed', 'User information does not exist', 400, ERR.USER_NOT_EXIST, userInfo)
+      }
+    })
   }
   
   static createNewUser () {
@@ -32,7 +58,7 @@ class AuthCtrl {
         return { username: newUser.username, verifyToken }
       }
       else {
-        throw _.logicError('Signup failed', 'User already exist', 400, ERR.USER_ALREADY_EXIST, <any>isExisting.pars)
+        throw _.logicError('Signup failed', 'User already exists', 400, ERR.USER_ALREADY_EXIST, <any>isExisting.pars)
       }
     },
     _.redirectView('/v1/categories/d')
@@ -46,7 +72,7 @@ class AuthCtrl {
         throw isVerified && _.logicError('Verified', 'User is verified', 400, ERR.ALREADY_VERIFIED, username)
       }
       const { token } = req.query
-      if (_.isEmpty(token) || !token) {
+      if (token == null || token === '') {
         throw _.logicError('Invalid', 'Invalid verify token', 400, ERR.INVALID_DATA, <string>token)
       }
       const secretKey = _.genHash(username + <string>process.env.ACCESS_TOKEN)

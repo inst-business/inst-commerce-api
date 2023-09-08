@@ -1,34 +1,35 @@
-import mongoose, { Schema, model } from 'mongoose'
+import mongoose, { Schema, Document, model } from 'mongoose'
 // import { SuspendableModel } from './Model'
 // import withJsonSchema from 'mongoose-schema-jsonschema'
 import {
-  GV, GENDER, ACCOUNT_STATUS, ACCOUNT_ROLE, IResultWithPars
+  GV, GENDER, ACCOUNT_STATUS, ROLE, ROLES, ALL_RULES, IResultWithPars
 } from '@/config/global/const'
 import {
   TSuspendableDocument, withSoftDeletePlugin, handleQuery
 } from '@/utils/mongoose'
 
-export interface IUser {
-  username: string,
-  email: string,
-  tel: string,
-  password: string,
-  firstname: string,
-  lastname: string,
-  gender: GENDER,
-  birthday?: Date,
-  address?: string;
-  country?: string;
-  bio?: string,
-  avatar?: string,
-  cover?: string,
-  status: ACCOUNT_STATUS,
-  role: ACCOUNT_ROLE,
-  token?: string,
-  salt: string,
-  verifiedAt?: Date,
-  createdAt?: Date,
-  updatedAt?: Date,
+export interface IUser extends Document {
+  username: string
+  email: string
+  tel: string
+  password: string
+  firstname: string
+  lastname: string
+  gender: GENDER
+  birthday?: Date
+  address?: string
+  country?: string
+  bio?: string
+  avatar?: string
+  cover?: string
+  status: ACCOUNT_STATUS
+  role: ROLE
+  permissions: (ALL_RULES | null)[]
+  token?: string
+  salt: string
+  verifiedAt?: Date
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 const UserSchema = new Schema<IUser>({
@@ -46,7 +47,8 @@ const UserSchema = new Schema<IUser>({
   avatar: { type: String, default: '' },
   cover: { type: String, default: '' },
   status: { type: String, required: true, default: 'pending' },
-  role: { type: String, required: true, default: 'customer' },
+  role: { type: String, required: true, default: ROLES.USER },
+  permissions: { type: Array, required: true, default: [] },
   token: { type: String, default: '' },
   salt: { type: String, required: true, maxLength: GV.SALT_LENGTH },
   verifiedAt: { type: Date, default: null },
@@ -57,10 +59,16 @@ const UserSchema = new Schema<IUser>({
 // export { UserJSONSchema as UserSchema }
 
 withSoftDeletePlugin(UserSchema)
-const User = model<IUser, TSuspendableDocument<IUser>>('User', UserSchema)
+export const User = model<IUser, TSuspendableDocument<IUser>>('User', UserSchema)
 
 
 class UserModel {
+
+  async getUserByUsername (username: string): Promise<IUser | null> {
+    const q = User.findOne({ username: username }).lean()
+    const data = await handleQuery(q)
+    return data
+  }
 
   async getUserByEmailOrUsername (email: string, username: string): Promise<IUser | null> {
     const q = User.findOne({

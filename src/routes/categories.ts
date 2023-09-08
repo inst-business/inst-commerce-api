@@ -2,6 +2,8 @@ import express from 'express'
 import CategoryCtrl, { CategoryExtCtrl } from '@controllers/CategoryController'
 import Auth from '@middlewares/Authenticate'
 import _ from '@/utils/utils'
+import { ROLES } from '@/config/global/const'
+import { upload } from '@/services/UploadService'
 
 const router = express.Router()
 
@@ -25,17 +27,38 @@ router.route('/d')
   .delete(CategoryCtrl.destroyOneOrMany())
 
 // (view only)
-router.get('/create', CategoryCtrl.createOne())
-router.get('/:id/edit', CategoryCtrl.editOne())
+router.get('/create',
+  Auth.reqUser(), Auth.reqRole(ROLES.MANAGER),
+  CategoryCtrl.createOne()
+)
+router.get('/:id/edit',
+  Auth.reqUser(), Auth.reqRole(ROLES.MANAGER),
+  CategoryCtrl.editOne()
+)
 
 router.route('/:id')
-  .get(CategoryCtrl.getOne())
-  .put(CategoryCtrl.updateOne())
+  .get(
+    Auth.reqUser(), Auth.reqRole(ROLES.MANAGER),
+    CategoryCtrl.getOne()
+  )
+  .put(
+    Auth.reqUser(), Auth.reqRole(ROLES.MANAGER),
+    upload, CategoryCtrl.updateOne()
+  )
   
 router.route('/')
-  .get(Auth.reqUser(), CategoryCtrl.getMany())
-  .post(Auth.reqUser(), CategoryCtrl.storeOne())
-  .delete(Auth.reqUser(), CategoryCtrl.deleteOneOrMany())
+  .get(
+    Auth.reqUser(), Auth.reqRole(ROLES.MANAGER),
+    CategoryCtrl.getMany()
+  )
+  .post(
+    Auth.reqUser(), Auth.reqRole(ROLES.MANAGER),
+    upload, CategoryCtrl.storeOne()
+  )
+  .delete(
+    Auth.reqUser(), Auth.reqRole(ROLES.MANAGER),
+    CategoryCtrl.deleteOneOrMany()
+  )
 
 
 export default router

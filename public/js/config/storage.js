@@ -43,8 +43,8 @@ const storeSidebarState = (state) => {
 }
 export const loadSidebarState = () => {
   const state = localStorage.getItem('sidebarExpanded')
-  if (state) {
-    const Sidebar = qs.$o('#Sidebar')
+  const Sidebar = qs.$o('#Sidebar')
+  if (state && Sidebar) {
     Sidebar.setAttribute('aria-expanded', state)
   }
 }

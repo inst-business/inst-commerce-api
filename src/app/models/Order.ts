@@ -4,10 +4,10 @@ import { ORDER_STATUS } from '@/config/global/const'
 import { handleQuery } from '@/utils/mongoose'
 
 export interface IOrder {
-  code: string,
-  amount: string,
-  payment: number,
-  status: ORDER_STATUS,
+  code: string
+  amount: string
+  payment: number
+  status: ORDER_STATUS
   createdAt: Date
 }
 

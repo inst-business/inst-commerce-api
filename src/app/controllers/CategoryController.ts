@@ -1,7 +1,12 @@
 import CategoryModel, { ICategory } from '@models/Category'
+import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
+import { USER_SIGN } from '@/config/global/const'
+import ERR from '@/config/global/error'
+
 
 const Category = new CategoryModel()
+const User = new UserModel()
 
 class CategoryCtrl {
 
@@ -12,11 +17,19 @@ class CategoryCtrl {
 
   static storeOne () {
     return _.routeAsync(async (req, res) => {
-      const data = req.body
+      const
+        keys = ['name', 'desc'],
+        data = _.pickProps(<ICategory>req.body, keys),
+        userSign: USER_SIGN = (<any>req).user,
+        user = await User.getUserByUsername(userSign.username)
+        if (user == null) {
+          throw _.logicError('Error', 'Unauthorized', 401, ERR.UNAUTHORIZED)
+        }
+      data.authorId = user._id
       const submittedCategory = await Category.insertOne(data)
       return submittedCategory
     },
-    _.redirectView('/v1/categories')
+    // _.redirectView('/v1/categories')
   )}
   
   static getOne () {

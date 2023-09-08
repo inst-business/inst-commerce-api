@@ -39,8 +39,36 @@ export const ACCOUNT_STATUS_ARR = {
   PENDING: 'pending',
   ACTIVE: 'active',
 }
-export type ACCOUNT_ROLE = 'guess' | 'customer' | 'manager' | 'admin'
 
+export type ROLE = 'guess' | 'user' | 'manager' | 'admin'
+export interface RULE {
+  ADMIN: 'view_admin' | 'modify_admin' | 'remove_admin'
+  MANAGER: 'view_manager' | 'modify_manager' | 'remove_manager'
+  SELLER: 'view_seller' | 'ban_seller' | 'remove_seller'
+  USER: 'view_user' | 'ban_user'
+  PRODUCT: 'view_product' | 'modify_product' | 'view_removed_product' | 'modify_removed_product'
+  CATEGORY: 'view_category' | 'modify_category' | 'view_removed_category' | 'modify_removed_category'
+  ARTICLE: 'view_article' | 'modify_article' | 'view_removed_article' | 'modify_removed_article'
+}
+export const ROLES: Record<string, ROLE> = Object.freeze({
+  ADMIN: 'admin',
+  MANAGER: 'manager',
+  USER: 'user',
+  GUESS: 'guess',
+})
+export type ALL_RULES = RULE[keyof RULE]
+
+export interface USER_SIGN {
+  username: string
+  email: string
+  tel: string
+  name: {
+    firstname: string
+    lastname: string
+  }
+  role: ROLE
+  permissions: (ALL_RULES | null)[]
+}
 
 // Routes
 export class R {
@@ -100,7 +128,7 @@ export class GV {
   static ALLOW_LOCAL_STORING = true
   static COOKIE_SECURE = ENV.COOKIE_SECURE === 'true' ? true : false
   static CONNECT_TIMEOUT = 5000
-  static JWT_EXPIRED = '1m'
+  static ACCESS_TOKEN_EXPIRED = '48h'
   static VERIFY_EXPIRED = '5m'
   static SESSION_EXPIRED = 5 * this._1M
   static SALT_LENGTH = 16

@@ -3,17 +3,17 @@ import { SuspendableModel } from './Model'
 import { ITEM_STATUS } from '@/config/global/const'
 import { TSuspendableDocument, withSoftDeletePlugin } from '@/utils/mongoose'
 
-export interface IArticle {
-  name: string,
-  desc: string,
-  img: string,
-  slug: string,
-  status: ITEM_STATUS,
-  authorId: ObjectId,
-  categoryId: ObjectId,
-  productId: ObjectId,
-  createdAt?: Date,
-  updatedAt?: Date,
+export interface IArticle extends Document {
+  name: string
+  desc: string
+  img: string
+  slug: string
+  status: ITEM_STATUS
+  authorId: ObjectId
+  categoryId: ObjectId
+  productId: ObjectId
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 const ArticleSchema = new Schema<IArticle>({

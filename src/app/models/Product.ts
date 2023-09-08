@@ -6,17 +6,17 @@ import _ from '@/utils/utils'
 import { handleQuery } from '@/utils/mongoose'
 
 export interface IProduct {
-  name: string,
-  desc: string,
-  img: string,
-  slug: string,
-  status: ITEM_STATUS,
-  authorId: ObjectId,
-  categoryId: ObjectId,
-  isDeleted?: boolean,
-  createdAt?: Date,
-  updatedAt?: Date,
-  deletedAt?: Date,
+  name: string
+  desc: string
+  img: string
+  slug: string
+  status: ITEM_STATUS
+  authorId: ObjectId
+  categoryId: ObjectId
+  isDeleted?: boolean
+  createdAt?: Date
+  updatedAt?: Date
+  deletedAt?: Date
 }
 
 const ProductSchema = new Schema<IProduct>({
@@ -41,6 +41,7 @@ class ProductModel extends SuspendableModel<IProduct> {
 
   async insertOne (product: IProduct): Promise<IProduct> {
     Object.assign(product, { slug: product.name })
+    product.slug = product.name
     const q = Product.create(product)
     const res = await handleQuery(q, data => {
       data.slug = _.genUniqueSlug(product.name, data._id.toString())

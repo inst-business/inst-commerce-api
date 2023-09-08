@@ -79,7 +79,7 @@ export const withSoftDeletePlugin = (schema: Schema) => {
 
   // Exclude deleted document(s)
   findQueries.forEach(method => {
-    schema.pre(<MongooseDefaultQueryMiddleware>method, function (next): void {
+    schema.pre(<MongooseDefaultQueryMiddleware>method, function (next) {
       const query = this.getQuery()
       if (!('isDeleted' in query && query.isDeleted === true)) {
         this.where({ isDeleted: false })
@@ -90,7 +90,7 @@ export const withSoftDeletePlugin = (schema: Schema) => {
 
   // Delete queries for available document(s)
   deleteQueries.forEach((method) => {
-    schema.pre(<MongooseDefaultQueryMiddleware>method, function (next): void {
+    schema.pre(<MongooseDefaultQueryMiddleware>method, function (next) {
       this.where({ isDeleted: true })
       next()
     })

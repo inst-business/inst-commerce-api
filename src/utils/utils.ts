@@ -10,7 +10,7 @@ import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 import LogicError from './logicError'
 import {
-  ENV, GV, Many, TProps, PropsKey, RecursiveArray, Primitives, ErrPars
+  ENV, GV, USER_SIGN, Many, TProps, PropsKey, RecursiveArray, Primitives, ErrPars
 } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
@@ -46,7 +46,7 @@ class Utils {
   }
 
   routeAsync (reqHandler: ExpressAsyncRequestHandler, callbackProvider?: ExpressCallbackProvider): RequestHandler {
-    return (req, res, next) => {      
+    return (req, res, next) => {
       const cb = callbackProvider
         ? callbackProvider(res, req)
         : this.createServiceCallback(res)
@@ -176,7 +176,7 @@ class Utils {
   genAccessToken (user: any): string {
     const secretAccessToken = <string>this.env('ACCESS_TOKEN')
     const options = {
-      expiresIn: GV.JWT_EXPIRED
+      expiresIn: GV.ACCESS_TOKEN_EXPIRED
     }
     return jwt.sign(user, secretAccessToken, options)
   }

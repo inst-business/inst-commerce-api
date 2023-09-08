@@ -14,7 +14,7 @@ const router = express.Router()
 
 router.post('/e/login',
   Validate.formData(UserValidator.login),
-  Auth.authUser()
+  AuthCtrl.authenticateUser()
 )
 router.post('/e/signup',
   Validate.formData(UserValidator.signup),
