@@ -11,11 +11,14 @@ export interface IProduct {
   img: string
   slug: string
   status: ITEM_STATUS
-  authorId: ObjectId
-  categoryId: ObjectId
-  isDeleted?: boolean
-  createdAt?: Date
+  tags?: ObjectId[]
+  categorizedBy: ObjectId
+  createdBy: ObjectId
+  createdAt: Date
+  // updatedBy?: ObjectId
   updatedAt?: Date
+  isDeleted?: boolean
+  deletedBy?: ObjectId
   deletedAt?: Date
 }
 
@@ -25,11 +28,12 @@ const ProductSchema = new Schema<IProduct>({
   img: { type: String, required: true },
   slug: { type: String, required: true, maxLength: 255 },
   status: { type: String, required: true, default: 'pending' },
-  authorId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  categoryId: { type: Schema.Types.ObjectId, ref: 'Category', default: null },
+  // tags: { type: [Schema.Types.ObjectId], ref: 'Tag', default: [] },
+  categorizedBy: { type: Schema.Types.ObjectId, ref: 'Category', default: null },
+  createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 }, { timestamps: true })
 
-withSoftDeletePlugin(ProductSchema)
+withSoftDeletePlugin(ProductSchema, 'User')
 const Product = model<IProduct, TSuspendableDocument<IProduct>>('Product', ProductSchema)
 
 
@@ -47,7 +51,7 @@ class ProductModel extends SuspendableModel<IProduct> {
       data.slug = _.genUniqueSlug(product.name, data._id.toString())
       data.save()
     })
-    return res.toObject()
+    return res
   }
   
   // async updateOne (id: string, product: IProduct): Promise<IProduct | null> {

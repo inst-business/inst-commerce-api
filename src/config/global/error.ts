@@ -24,6 +24,8 @@ const ERR = Object.freeze({
   INVALID_PASSWORD: -109,
 
   ENV_VARIABLE_MISSING: -500,
+
+  SERVICE_ERROR: -600,
 })
 
 // Object.freeze(ERR)

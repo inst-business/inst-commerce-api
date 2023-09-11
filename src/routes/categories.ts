@@ -3,7 +3,7 @@ import CategoryCtrl, { CategoryExtCtrl } from '@controllers/CategoryController'
 import Auth from '@middlewares/Authenticate'
 import _ from '@/utils/utils'
 import { ROLES } from '@/config/global/const'
-import { upload } from '@/services/UploadService'
+import { uploadOneImage } from '@/services/UploadService'
 
 const router = express.Router()
 
@@ -43,7 +43,7 @@ router.route('/:id')
   )
   .put(
     Auth.reqUser(), Auth.reqRole(ROLES.MANAGER),
-    upload, CategoryCtrl.updateOne()
+    CategoryCtrl.updateOne()
   )
   
 router.route('/')
@@ -53,7 +53,8 @@ router.route('/')
   )
   .post(
     Auth.reqUser(), Auth.reqRole(ROLES.MANAGER),
-    upload, CategoryCtrl.storeOne()
+    uploadOneImage('img', 'categories', 'upload-cat'),
+    CategoryCtrl.storeOne()
   )
   .delete(
     Auth.reqUser(), Auth.reqRole(ROLES.MANAGER),

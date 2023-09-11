@@ -26,7 +26,7 @@
       </div>
       <div class="Actions-right">
         {{#if (when data.deletedCount 'gt' 0)}}
-          <a href="/v1/categories{{routeI 'crud.get_all_deleted'}}" class="Text-link">
+          <a href="/v1/categories{{routeI 'crud.get_many_deleted'}}" class="Text-link">
             {{!-- <i class="fa-regular fa-trash"></i> --}}
             <i class="fa-regular fa-circle-trash"></i>
             Removed categories ({{data.deletedCount}})
@@ -50,6 +50,7 @@
             <th>Name</th>
             <th>Image</th>
             <th>Description</th>
+            <th>Added by</th>
             <th>Added at</th>
             <th>Modified at</th>
             <th>Actions</th>
@@ -65,7 +66,10 @@
               <td class="Item__name" width="25%">
                 <a href="/v1/categories{{routeI 'crud.get_one' this._id}}" class="Text-limit-3">{{this.name}}</a>
               </td>
-              <td class="Item__img">                  
+              {{!-- <td class="Item__name">
+                <a href="#" class="Text-link">{{this.createdBy.username}}</a>
+              </td> --}}
+              <td class="Item__img">
                 <picture>
                   <source srcset="/uploads/categories/{{webpFormat this.img}}" type="image/webp">
                   <img src="/uploads/categories/{{this.img}}" alt="{{this.name}}" title="{{this.name}}"
@@ -76,15 +80,14 @@
               <td class="Item__desc" width="25%">
                 <p class="Text-limit-3">{{this.desc}}</p>
               </td>
-              <td class="Item__time">
-                {{dateFormat this.createdAt 'date'}}
-                <br>
-                {{dateFormat this.createdAt 'time'}}
+              <td class="">
+                <a href="#" class="Text-link">{{this.createdBy.username}}</a>
               </td>
               <td class="Item__time">
-                {{dateFormat this.updatedAt 'date'}}
-                <br>
-                {{dateFormat this.updatedAt 'time'}}
+                {{dateFormat this.createdAt 'dateShort'}}<br>{{dateFormat this.createdAt 'timeMedium'}}
+              </td>
+              <td class="Item__time">
+                {{dateFormat this.updatedAt 'dateShort'}}<br>{{dateFormat this.updatedAt 'timeMedium'}}
               </td>
               <td class="Item__actions">
                 <a href="/v1/categories{{routeI 'crud.edit' this._id}}" title="Edit '{{this.name}}'"
@@ -111,6 +114,7 @@
 </section>
 {{!-- End of Available categories --}}
 
+
 {{!-- Image viewing Modal --}}
 <dialog id="imgviewing-dialog" class="Dialog" data-size="lg">
   <form class="Dialog__form" id="imgviewing-dialog-form">
@@ -129,7 +133,7 @@
       You really want to perform this action?
     </div>
     <div class="Dialog__footer">
-      <input type="hidden" name="ids[]" value="">
+      <input type="hidden" name="id[]" value="">
       <button type="submit" class="Btn" data-variant="danger">Yes, delete it!</button>
       <button type="submit" class="Btn" data-variant="grey" formmethod="dialog">Cancel</button>
     </div>

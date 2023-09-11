@@ -1,7 +1,7 @@
-import mongoose from 'mongoose'
+import mongoose, { Document, ObjectId } from 'mongoose'
 import { TSuspendableDocument, handleQuery } from '@/utils/mongoose'
 import _ from '@/utils/utils'
-import { SORT_ORDER } from '@/config/global/const'
+import { ExcludeKeys, SORT_ORDER } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 class Model<I> {
@@ -18,10 +18,8 @@ class Model<I> {
   }
 
   async getMany (
-    limit: number = 15,
-    offset: number = 0,
-    sort: SORT_ORDER = 'desc',
-    sortBy: string = 'createdAt'
+    limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
+    sortBy: ExcludeKeys<I, Document> = 'createdAt' as any
   ): Promise<I[]> {
     const q = this.model.find({})
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
@@ -45,7 +43,8 @@ class Model<I> {
   async insertOne (data: Partial<I>): Promise<I> {
     const q = this.model.create(data)
     const res = await handleQuery(q)
-    return res.toObject()
+    return res
+    // return res.toObject()
   }
 
   async updateOne (id: string, data: Partial<I>): Promise<I | null> {
@@ -61,10 +60,8 @@ class Model<I> {
   }
 
   async getManyDeleted (
-    limit: number = 15,
-    offset: number = 0,
-    sort: SORT_ORDER = 'desc',
-    sortBy: string = 'deletedAt'
+    limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
+    sortBy: ExcludeKeys<I, Document> = 'deletedAt' as any
   ): Promise<I[]> {
     const q = this.model.find({ isDeleted: true })
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
@@ -103,8 +100,8 @@ export class SuspendableModel<I> extends Model<I> {
     this.suspendableModel = model
   }
 
-  async deleteOneOrMany (id: string | string[]): Promise<Boolean> {
-    const q = this.suspendableModel.find({ _id: id }).softDelete()
+  async deleteOneOrMany (id: string | string[], deletedBy: ObjectId): Promise<Boolean> {
+    const q = this.suspendableModel.find({ _id: id }).softDelete(deletedBy)
     const res = await handleQuery(q)
     return res
   }
@@ -120,7 +117,7 @@ export class SuspendableModel<I> extends Model<I> {
 export class IndelibleModel<I> extends Model<I> {
 
   private errTitle: string = 'Access denied'
-  private errMessage: string = 'You do not have permission.'
+  private errMessage: string = 'You do not have permission to perform this action.'
   private err: Error = _.logicError(this.errTitle, this.errMessage, 403, ERR.ACTION_REJECTED)
 
   getAllDeleted (): any {

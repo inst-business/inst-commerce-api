@@ -195,6 +195,15 @@ class Utils {
     return jwt.sign({username}, secretKey, options)
   }
 
+  genSlug (content: string) {
+    const options = {
+      replacement: '-',
+      remove: /[*+~.()'"!:@]/g,
+      lower: true, 
+    }
+    return slugify(content, options)
+  }
+
   genUniqueSlug (title: string, code: string) {
     // const uniqueId = uniqueSlug(Date.now().toString())
     const uniqueId = uniqueSlug(code)
@@ -207,13 +216,35 @@ class Utils {
     return slug
   }
 
-  genOrderCode () {
-    const uniqueId = this.genUniqueId()
-    // const uniqueId = id
-    const timestamp = Date.now().toString()
-    // const codeString = uniqueId + timestamp
-    const hashString = this.genHash(uniqueId + timestamp)
-    return `${hashString.substring(0, 8)}-${uniqueId}`
+  genUniqueCode (prefix = 'IA') {
+    const timestamp = Math.floor(Date.now() / 1000).toString()
+    let uniqueCode = prefix.toUpperCase()
+
+    const
+      beginStr = timestamp.substring(0, 4),
+      beginDigits = beginStr.split('').map(Number)
+    for (let i = 0; i < beginDigits.length; i += 2) {
+      const variant = (i + 1) * 2
+      // e.g: 1694 -> {1+6+2}{9+4+6} -> 919
+      const sum = (beginDigits[i] || 0) + (beginDigits[i + 1] || 0) + variant
+      uniqueCode += sum.toString()
+    }
+    
+    let restStr = timestamp.substring(4)
+    restStr += (restStr.length % 2 !== 0) ? '0' : ''
+    const
+      numbers = restStr.match(/.{2}/g) || [],
+      length = numbers.length,
+      randomLettersString = this.genRandomLetters(length, 'upper'),
+      letters = randomLettersString.match(/.{1}/g) || []
+      
+    for (let i = 0; i < length; i++) {
+      const variant = (i + 1) * 2
+      const n = (variant * Number(numbers[i])).toString().slice(-2)
+      uniqueCode += letters[i] + n
+    }
+    
+    return uniqueCode
   }
 
   genUniqueId () {
@@ -228,6 +259,20 @@ class Utils {
   genRandomString (length: number): string {
     return crypto.randomBytes(Math.ceil(length / 2))
       .toString('hex').slice(0, length)
+  }
+  
+  genRandomLetters (length: number, toCase?: 'upper' | 'lower'): string {
+    let charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    if (toCase != null && ['upper', 'lower'].includes(toCase))
+      charset = toCase === 'lower' ? charset.toLowerCase() : charset
+    else charset += charset.toLowerCase()
+    const randomBytes = crypto.randomBytes(length)
+    let randomLetterString = ''
+    for (let i = 0; i < length; i++) {
+      const randomIndex = randomBytes[i] % charset.length
+      randomLetterString += charset[randomIndex]
+    }
+    return randomLetterString
   }
 
   genSalt () {

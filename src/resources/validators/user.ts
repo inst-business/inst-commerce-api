@@ -1,5 +1,5 @@
 import express from 'express'
-import { GV, GENDER, ACCOUNT_STATUS, ACCOUNT_ROLE } from '@/config/global/const'
+import { GV, GENDER, ACCOUNT_STATUS, ROLE } from '@/config/global/const'
 import _ from '@/utils/utils'
 
 class UserValidator {

@@ -24,7 +24,7 @@ export interface IUser extends Document {
   cover?: string
   status: ACCOUNT_STATUS
   role: ROLE
-  permissions: (ALL_RULES | null)[]
+  permissions: ALL_RULES[]
   token?: string
   salt: string
   verifiedAt?: Date
@@ -48,7 +48,7 @@ const UserSchema = new Schema<IUser>({
   cover: { type: String, default: '' },
   status: { type: String, required: true, default: 'pending' },
   role: { type: String, required: true, default: ROLES.USER },
-  permissions: { type: Array, required: true, default: [] },
+  permissions: { type: [String], default: [] },
   token: { type: String, default: '' },
   salt: { type: String, required: true, maxLength: GV.SALT_LENGTH },
   verifiedAt: { type: Date, default: null },
@@ -58,22 +58,29 @@ const UserSchema = new Schema<IUser>({
 // const UserJSONSchema = (<any>UserSchema).jsonSchema()
 // export { UserJSONSchema as UserSchema }
 
-withSoftDeletePlugin(UserSchema)
+// withSoftDeletePlugin(UserSchema, 'User')
 export const User = model<IUser, TSuspendableDocument<IUser>>('User', UserSchema)
 
 
 class UserModel {
 
+
   async getUserByUsername (username: string): Promise<IUser | null> {
-    const q = User.findOne({ username: username }).lean()
+    const q = User.findOne({ username }).lean()
     const data = await handleQuery(q)
     return data
   }
 
   async getUserByEmailOrUsername (email: string, username: string): Promise<IUser | null> {
     const q = User.findOne({
-      $or: [{ username: username }, { email: email }]
+      $or: [{ username }, { email }]
     }).lean()
+    const data = await handleQuery(q)
+    return data
+  }
+  
+  async getAuthorizedUserByUsername (username: string, role: ROLE): Promise<IUser | null> {
+    const q = User.findOne({ username, role }).lean()
     const data = await handleQuery(q)
     return data
   }

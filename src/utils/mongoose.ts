@@ -1,6 +1,6 @@
 import _ from '@/utils/utils'
 import mongoose, {
-  Schema, Document, Query, Model, MongooseError,
+  Schema, Document, Query, Model, ObjectId, MongooseError,
   QueryWithHelpers, HydratedDocument, MongooseDefaultQueryMiddleware,
   Types
 } from 'mongoose'
@@ -28,27 +28,22 @@ export const handleQuery = <T>(res: Promise<T>, cb?: (data: T) => void): Promise
 // Soft delete
 export type TWithSoftDeleted = {
   isDeleted: boolean
-  deletedAt: Date | null
+  deletedBy?: ObjectId | null
+  deletedAt?: Date | null
 }
 export type TDocument = Document & TWithSoftDeleted
 type TQueryWithHelpers = QueryWithHelpers<Boolean, TDocument | TDocument[]>
 export interface ISoftDeleteQueryHelpers<T> extends Model<T> {
-  softDelete(): TQueryWithHelpers,
+  softDelete(deletedBy: ObjectId): TQueryWithHelpers,
   restoreDeleted(): TQueryWithHelpers,
 }
 export type TSuspendableDocument<T> = Model<T, ISoftDeleteQueryHelpers<T>>
 
-export const withSoftDeletePlugin = (schema: Schema) => {
+export const withSoftDeletePlugin = (schema: Schema, ref: string) => {
   schema.add({
-    isDeleted: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    deletedAt: {
-      type: Date,
-      default: null,
-    },
+    isDeleted: { type: Boolean, required: true, default: false },
+    deletedBy: { type: Schema.Types.ObjectId, ref, default: null },
+    deletedAt: { type: Date, default: null },
   })
 
   const findQueries = [
@@ -96,8 +91,9 @@ export const withSoftDeletePlugin = (schema: Schema) => {
     })
   })
 
-  const setDocumentDeletion = (doc: TDocument, isDeleted: boolean) => {
+  const setDocumentDeletion = (doc: TDocument, isDeleted: boolean, deletedBy?: ObjectId) => {
     doc.isDeleted = isDeleted
+    doc.deletedBy = (isDeleted && deletedBy != null) ? deletedBy : null
     doc.deletedAt = isDeleted ? new Date() : null
     doc.$isDeleted(isDeleted)
     return doc.save().then(res => [true, res.toObject()]).catch(err => false)
@@ -110,13 +106,13 @@ export const withSoftDeletePlugin = (schema: Schema) => {
 
   const QueryHelpers = {
     // Remove (soft deletes) document
-    softDelete: async function (this: TDocumentWithQueryHelpers) {
+    softDelete: async function (this: TDocumentWithQueryHelpers, deletedBy: ObjectId) {
       this.where({ isDeleted: false })
       const doc = await this
       if (_.isNull(doc)) return false
       if (_.isArray(doc)) {
         return doc.reduce((prev, cur) =>
-          [...prev, setDocumentDeletion(cur, true)]
+          [...prev, setDocumentDeletion(cur, true, deletedBy)]
         , <Promise<unknown>[]>[])
       }
       return setDocumentDeletion(doc, true)

@@ -1,9 +1,8 @@
 import CategoryModel, { ICategory } from '@models/Category'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
-import { USER_SIGN } from '@/config/global/const'
+import { ROLES, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
-
 
 const Category = new CategoryModel()
 const User = new UserModel()
@@ -18,14 +17,20 @@ class CategoryCtrl {
   static storeOne () {
     return _.routeAsync(async (req, res) => {
       const
+        sign: USER_SIGN = (<any>req).user,
+        user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
+      if (user == null) {
+        throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      }
+      const
         keys = ['name', 'desc'],
-        data = _.pickProps(<ICategory>req.body, keys),
-        userSign: USER_SIGN = (<any>req).user,
-        user = await User.getUserByUsername(userSign.username)
-        if (user == null) {
-          throw _.logicError('Error', 'Unauthorized', 401, ERR.UNAUTHORIZED)
-        }
-      data.authorId = user._id
+        data = _.pickProps(<ICategory>req.body, keys)
+      data.createdBy = user._id
+      if ((<any>req).errorUpload) {
+        throw (<any>req).errorUpload
+      }
+      data.img = (req.file != null && req.file.fieldname === 'img')
+        ? req.file.filename : ''
       const submittedCategory = await Category.insertOne(data)
       return submittedCategory
     },
@@ -91,8 +96,14 @@ class CategoryCtrl {
 
   static deleteOneOrMany () {
     return _.routeAsync(async (req, res) => {
+      const
+        sign: USER_SIGN = (<any>req).user,
+        user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
+      if (user == null) {
+        throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      }
       const { id } = req.body
-      const result = await Category.deleteOneOrMany(id)
+      const result = await Category.deleteOneOrMany(id, user._id)
       return result
     },
     _.redirectView('back')

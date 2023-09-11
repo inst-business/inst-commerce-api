@@ -9,11 +9,15 @@ export interface IArticle extends Document {
   img: string
   slug: string
   status: ITEM_STATUS
-  authorId: ObjectId
-  categoryId: ObjectId
-  productId: ObjectId
-  createdAt?: Date
+  tags?: ObjectId[]
+  categorizedBy: ObjectId
+  createdBy: ObjectId
+  createdAt: Date
+  // updatedBy?: ObjectId
   updatedAt?: Date
+  isDeleted?: boolean
+  deletedBy?: ObjectId
+  deletedAt?: Date
 }
 
 const ArticleSchema = new Schema<IArticle>({
@@ -22,12 +26,12 @@ const ArticleSchema = new Schema<IArticle>({
   img: { type: String, required: true },
   slug: { type: String, required: true, maxLength: 255 },
   status: { type: String, required: true, default: 'pending' },
-  authorId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  categoryId: { type: Schema.Types.ObjectId, ref: 'Category', default: null },
-  productId: { type: Schema.Types.ObjectId, ref: 'Product', default: null },
+  // tags: { type: [Schema.Types.ObjectId], ref: 'Tag', default: [] },
+  categorizedBy: { type: Schema.Types.ObjectId, ref: 'Category', default: null },
+  createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true })
 
-withSoftDeletePlugin(ArticleSchema)
+withSoftDeletePlugin(ArticleSchema, 'User')
 const Article = model<IArticle, TSuspendableDocument<IArticle>>('Article', ArticleSchema)
 
 

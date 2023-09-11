@@ -6,7 +6,7 @@ import {
 
 
 type compareOperator = 'et' | 'net' | 'gt' | 'gte' | 'lt' | 'lte' | 'or' | 'and'
-type DateFormatType = 'detailed' | 'date' | 'time' | 'datetime'
+type DateFormatType = 'detailed' | 'medium' | 'date' | 'time' | 'datetime'
 
 export const hbsHelpers = Object.freeze({
 
@@ -75,12 +75,15 @@ export const hbsHelpers = Object.freeze({
     local = (local != null && typeof local === 'string') ? local : 'vi'
     const types = {
       detailed: { dateStyle: 'long', timeStyle: 'long' },
+      medium: { dateStyle: 'short', timeStyle: 'medium' },
       datetime: { dateStyle: 'medium', timeStyle: 'medium' },
       date: {
         // dateStyle: 'long',
         weekday: 'narrow', day: 'numeric',
         month: 'short', year: 'numeric',
       },
+      dateShort: { dateStyle: 'short' },
+      timeMedium: { timeStyle: 'medium' },
       time: {
         // timeStyle: 'long', hour12: true,
         hour: '2-digit', minute: '2-digit',

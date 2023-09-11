@@ -16,6 +16,7 @@ export type TNullableRes<T extends (...args: any[]) => any> =
 export type Many<T> = T | ReadonlyArray<T>
 export type Primitives = string | number | boolean
 export type PropsKey = string | number | symbol
+export type ExcludeKeys<T, K> = Exclude<keyof T, keyof K>
 export type RecursiveArray<T> = Array<RecursiveArray<T> | T>
 export type TProps<T> = {
   [K in keyof T]: T[K] extends Primitives | Record<string, Primitives> ? K : never
@@ -67,7 +68,7 @@ export interface USER_SIGN {
     lastname: string
   }
   role: ROLE
-  permissions: (ALL_RULES | null)[]
+  permissions: ALL_RULES[]
 }
 
 // Routes
@@ -84,9 +85,10 @@ export class R {
     EDIT: '/:id/edit',  // GET
 
     GET_ONE_DELETED: '/d/:id',  // GET
+    GET_MANY_DELETED: '/d',  // GET
     GET_ALL_DELETED: '/d',  // GET
-    RESTORE_ONE: '/d',  // PATCH
-    DESTROY_ONE: '/d',  // DELETE
+    RESTORE: '/d',  // PATCH
+    DESTROY: '/d',  // DELETE
 
     GET_ONE: '/:id',  // GET
     UPDATE_ONE: '/:id',  // PUT
@@ -95,7 +97,7 @@ export class R {
     GET_MANY: '/',  // GET
     GET_ALL: '/',  // GET
     STORE_ONE: '/',  // POST
-    DELETE_ONE: '/',  // DELETE
+    DELETE: '/',  // DELETE
   }
 
   // Authentication routes
@@ -135,6 +137,8 @@ export class GV {
 
   static DEFAULT_STATUS = 'pending'
   static IMG_EXT_ALLOWED = 'jpg'
+  static IMG_MIMETYPES_ALLOWED = ['image/jpeg', 'image/png']
+  static IMG_EXTENSIONS_ALLOWED = ['.jpeg', '.jpg', '.png']
   static IMG_EXT_REDUCED = 'webp'
 }
 

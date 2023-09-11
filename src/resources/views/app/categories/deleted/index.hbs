@@ -2,21 +2,21 @@
 <nav class="Head" aria-label="breadcrumb">
   <ol class="Breadcrumb">
     <li class="Breadcrumb__item"><a href="/v1">Home</a></li>
-    <li class="Breadcrumb__item"><a href="/v1/products{{routeI 'index'}}">Products</a></li>
+    <li class="Breadcrumb__item"><a href="/v1/categories{{routeI 'crud.get_many'}}">Categories</a></li>
     <li class="Breadcrumb__item" aria-current="page">Removed</li>
   </ol>
-  <h1 class="Heading">Product management</h1>
+  <h1 class="Heading">Removed category management</h1>
 </nav>
 {{!-- End of Head section --}}
 
-{{!-- Available products --}}
+{{!-- Available categories --}}
 <section class="Row">
   <div class="Col lg-12 sm-12">
-    <h2 class="Heading">Removed products</h2>
+    <h2 class="Heading">Removed categories</h2>
     <div class="Actions">
       <div class="Actions-left">
         <div class="Field__option">
-          <input type="checkbox" class="Check" name="productItems[]" value="" id="select-all" data-select-all="select-all">
+          <input type="checkbox" class="Check" name="categoryItems[]" value="" id="select-all" data-select-all="select-all">
           <label for="select-all">Select all</label>
         </div>
         <div class="Actions__seperate"></div>
@@ -30,9 +30,9 @@
         </button>
       </div>
       <div class="Actions-right">
-        <a href="/v1/products{{routeI 'crud.get_all'}}" class="Text-link">
+        <a href="/v1/categories{{routeI 'crud.get_many'}}" class="Text-link">
           <i class="fa-regular fa-circle-check"></i>
-          Available products
+          Available categories
         </a>
       </div>
     </div>
@@ -48,9 +48,8 @@
             <th>Name</th>
             <th>Image</th>
             <th>Description</th>
-            <th>Added at</th>
-            <th>Modified at</th>
-            <th>Removed at</th>
+            <th>Added by</th>
+            <th>Removed by</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -58,45 +57,42 @@
           {{#each data}}
             <tr class="Item">
               <td scope="Row">
-                <input type="checkbox" class="Check" name="productItems[]" value="{{this._id}}" data-select-target="select-all">
+                <input type="checkbox" class="Check" name="categoryItems[]" value="{{this._id}}" data-select-target="select-all">
               </td>
               <td>{{increase @index 1}}</td>
               <td class="Item__name" width="22.5%">
                 <p class="Text-limit-3">{{this.name}}</p>
               </td>
               <td class="Item__img">
-                <img src="/uploads/products/{{this.img}}" class="Img" data-variant="thumbnail" alt="{{this.name}}" title="{{this.name}}">
+                <picture>
+                  <source srcset="/uploads/categories/{{webpFormat this.img}}" type="image/webp">
+                  <img src="/uploads/categories/{{this.img}}" alt="{{this.name}}" title="{{this.name}}"
+                    loading="lazy" decoding="async" fetchpriority="true"
+                    class="Img" data-variant="thumbnail" data-dialog-target="#imgviewing-dialog">
+                </picture>
               </td>
               <td class="Item__desc" width="22.5%">
                 <p class="Text-limit-3">{{this.desc}}</p>
-                {{!-- <div class="popover-content" data-content="popover" data-for="desc-popover" data-id="{{@index}}"></div> --}}
-                {{!-- <button popovertarget="desc-popover" data-trigger="popover" data-get="{{@index}}">...more</button> --}}
               </td>
-              <td class="Item__time">
-                {{dateFormat this.createdAt 'date'}}
-                <br>
-                {{dateFormat this.createdAt 'time'}}
+              <td class="">
+                <a href="#" class="Text-link">{{this.createdBy.username}}</a>
+                <p class="Item__time">
+                  {{dateFormat this.createdAt 'dateShort'}}<br>{{dateFormat this.createdAt 'timeMedium'}}
+                </p>
               </td>
-              <td class="Item__time">
-                {{dateFormat this.updatedAt 'date'}}
-                <br>
-                {{dateFormat this.updatedAt 'time'}}
-              </td>
-              <td class="Item__time">
-                {{dateFormat this.deletedAt 'date'}}
-                <br>
-                {{dateFormat this.deletedAt 'time'}}
+              <td class="">
+                <a href="#" class="Text-link">{{this.deletedBy.username}}</a>
+                <p class="Item__time">
+                  {{dateFormat this.deletedAt 'dateShort'}}<br>{{dateFormat this.deletedAt 'timeMedium'}}
+                </p>
               </td>
               <td class="Item__actions">
                 <button class="Item__actions-restore Btn" data-size="sm" data-variant="outline success" title="Restore '{{this.name}}'"
                   data-action="restore" data-dialog-target="#actions-dialog" data-form-id="{{this._id}}">
                   <i class="fa-regular fa-clock-rotate-left"></i>
-                  {{!-- <i class="fa-regular fa-trash-can-undo"></i> --}}
-                  {{!-- <i class="fa-regular fa-trash-can-arrow-up"></i> --}}
                 </button>
                 <button class="Item__actions-destroy Btn" data-size="sm" data-variant="outline danger" title="Destroy '{{this.name}}'"
                   data-action="destroy" data-dialog-target="#actions-dialog" data-form-id="{{this._id}}">
-                  {{!-- <i class="fa-regular fa-circle-xmark"></i> --}}
                   <i class="fa-regular fa-file-slash"></i>
                 </button>            
               </td>
@@ -113,23 +109,34 @@
     </div>
   </div>
 </section>
-{{!-- End of Available products --}}
+{{!-- End of Available categories --}}
+
+
+{{!-- Image viewing Modal --}}
+<dialog id="imgviewing-dialog" class="Dialog" data-size="lg">
+  <form class="Dialog__form" id="imgviewing-dialog-form">
+    <div class="Dialog__header"></div>
+    <img class="Dialog__img Img" data-variant="thumbnail" src="" alt="">
+  </form>
+  <button class="Dialog__close" formmethod="dialog" form="imgviewing-dialog-form"></button>
+</dialog>
+{{!-- End of Image viewing Modal --}}
 
 {{!-- Actions Modal --}}
 <dialog id="actions-dialog" class="Dialog">
   <form class="Dialog__form" method="POST">
-    <a href="/v1/products{{routeI 'deleteds'}}" id="dialog-action" hidden></a>
+    <a href="/v1/categories{{routeI 'crud.get_many_deleted'}}" id="dialog-action" hidden></a>
     <div class="Dialog__header">Confirmation</div>
     <div class="Dialog__body">
       You really want to perform this action?
     </div>
     <div class="Dialog__footer">
       <input type="hidden" name="id[]" value="">
-      <button type="submit" class="Btn Dialog__confirm-button" data-variant="danger"></button>
+      <button type="submit" class="Btn Dialog__confirm-button" data-variant=""></button>
       <button type="submit" class="Btn" data-variant="grey" formmethod="dialog">Cancel</button>
     </div>
   </form>
 </dialog>
 {{!-- End of Actions Modal --}}
 
-<script src="/js/pages/products/deleteds.js"></script>
+<script src="/js/pages/categories/deleteds.js"></script>

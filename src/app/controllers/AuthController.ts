@@ -16,14 +16,16 @@ class AuthCtrl {
 
   static authenticateUser () {
     return _.routeAsync(async (req, res) => {
-      const { userInfo, password } = req.body
-      const user = await User.getUserByEmailOrUsername(userInfo, userInfo)
+      const
+        errTitle = 'Login Failed',
+        { userInfo, password } = req.body,
+        user = await User.getUserByEmailOrUsername(userInfo, userInfo)
       if (user != null) {
         if (user.status === ACCOUNT_STATUS_ARR.PENDING || !user.verifiedAt) {
-          throw _.logicError('ERROR', 'User is not verified', 400, ERR.UNVERIFIED, userInfo)
+          throw _.logicError(errTitle, 'User is not verified', 400, ERR.UNVERIFIED, userInfo)
         }
         if (user.password !== _.sha512(password, user.salt)) {
-          throw _.logicError('Login failed', 'Password is not correct', 400, ERR.INVALID_PASSWORD)
+          throw _.logicError(errTitle, 'Password is not correct', 400, ERR.INVALID_PASSWORD)
         }
         const
           { username, email, tel, firstname, lastname, role, permissions } = user,
@@ -35,7 +37,7 @@ class AuthCtrl {
         return { accessToken, refreshToken }
       }
       else {
-        throw _.logicError('Login failed', 'User information does not exist', 400, ERR.USER_NOT_EXIST, userInfo)
+        throw _.logicError(errTitle, 'User information does not exist', 400, ERR.USER_NOT_EXIST, userInfo)
       }
     })
   }
@@ -58,7 +60,7 @@ class AuthCtrl {
         return { username: newUser.username, verifyToken }
       }
       else {
-        throw _.logicError('Signup failed', 'User already exists', 400, ERR.USER_ALREADY_EXIST, <any>isExisting.pars)
+        throw _.logicError('Signup Failed', 'User already exists', 400, ERR.USER_ALREADY_EXIST, <any>isExisting.pars)
       }
     },
     _.redirectView('/v1/categories/d')
@@ -66,23 +68,25 @@ class AuthCtrl {
 
   static verifyUser () {
     return _.routeAsync(async (req, res) => {
-      const { username } = req.body
-      const isVerified = await User.checkUserVerified(username)
+      const
+        errTitle = 'Rejected',
+        { username } = req.body,
+        isVerified = await User.checkUserVerified(username)
       if (isVerified) {
-        throw isVerified && _.logicError('Verified', 'User is verified', 400, ERR.ALREADY_VERIFIED, username)
+        throw isVerified && _.logicError(errTitle, 'User is verified', 400, ERR.ALREADY_VERIFIED, username)
       }
       const { token } = req.query
       if (token == null || token === '') {
-        throw _.logicError('Invalid', 'Invalid verify token', 400, ERR.INVALID_DATA, <string>token)
+        throw _.logicError(errTitle, 'Invalid verify token', 400, ERR.INVALID_DATA, <string>token)
       }
       const secretKey = _.genHash(username + <string>process.env.ACCESS_TOKEN)
       return jwt.verify(<string>token, secretKey, async err => {
         if (err) {
-          throw _.logicError('Expired', 'Token has expired', 400, ERR.REQUEST_EXPIRED, <string>token)
+          throw _.logicError(errTitle, 'Token has expired', 400, ERR.REQUEST_EXPIRED, <string>token)
         }
         const verifyUser = await User.verifyUser(username)
         if (!verifyUser) {
-          throw _.logicError('Verified', 'User is verified', 400, ERR.ALREADY_VERIFIED, username)
+          throw _.logicError(errTitle, 'User is verified', 400, ERR.ALREADY_VERIFIED, username)
         }
         return verifyUser
       })
@@ -96,13 +100,13 @@ class AuthCtrl {
       if (isExisting.result) {
         const isVerified = await User.checkUserVerified(username)
         if (isVerified) {
-          throw _.logicError('Verified', 'User is verified', 400, ERR.ALREADY_VERIFIED, username)
+          throw _.logicError('Rejected', 'User is verified', 400, ERR.ALREADY_VERIFIED, username)
         }
         const verifyToken = _.genVerifyToken(username)
         return { verifyToken }
       }
       else {
-        throw _.logicError('Not found', 'User does not exist', 400, ERR.USER_NOT_EXIST, username)
+        throw _.logicError('Not Found', 'User does not exist', 400, ERR.USER_NOT_EXIST, username)
       }
     }
   )}
