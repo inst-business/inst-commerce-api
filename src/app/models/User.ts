@@ -5,7 +5,7 @@ import {
   GV, GENDER, ACCOUNT_STATUS, ROLE, ROLES, ALL_RULES, IResultWithPars
 } from '@/config/global/const'
 import {
-  TSuspendableDocument, withSoftDeletePlugin, handleQuery
+  TSuspendableDocument, withSoftDelete, handleQuery
 } from '@/utils/mongoose'
 
 export interface IUser extends Document {
@@ -58,7 +58,7 @@ const UserSchema = new Schema<IUser>({
 // const UserJSONSchema = (<any>UserSchema).jsonSchema()
 // export { UserJSONSchema as UserSchema }
 
-// withSoftDeletePlugin(UserSchema, 'User')
+// withSoftDelete(UserSchema, 'User')
 export const User = model<IUser, TSuspendableDocument<IUser>>('User', UserSchema)
 
 
@@ -78,7 +78,7 @@ class UserModel {
     const data = await handleQuery(q)
     return data
   }
-  
+
   async getAuthorizedUserByUsername (username: string, role: ROLE): Promise<IUser | null> {
     const q = User.findOne({ username, role }).lean()
     const data = await handleQuery(q)

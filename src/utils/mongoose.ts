@@ -25,11 +25,20 @@ export const handleQuery = <T>(res: Promise<T>, cb?: (data: T) => void): Promise
   }).catch(e => mongoError(e))
 
 
+// edited details plugin
+export const withEditedDetails = (schema: Schema, ref: string) => {
+  schema.add({
+    editedBy: { type: Schema.Types.ObjectId, ref },
+    editedAt: { type: Date },
+  })
+}
+
+
 // Soft delete
 export type TWithSoftDeleted = {
   isDeleted: boolean
-  deletedBy?: ObjectId | null
-  deletedAt?: Date | null
+  deletedBy?: ObjectId
+  deletedAt?: Date
 }
 export type TDocument = Document & TWithSoftDeleted
 type TQueryWithHelpers = QueryWithHelpers<Boolean, TDocument | TDocument[]>
@@ -39,11 +48,12 @@ export interface ISoftDeleteQueryHelpers<T> extends Model<T> {
 }
 export type TSuspendableDocument<T> = Model<T, ISoftDeleteQueryHelpers<T>>
 
-export const withSoftDeletePlugin = (schema: Schema, ref: string) => {
+// soft delete plugin
+export const withSoftDelete = (schema: Schema, ref: string) => {
   schema.add({
     isDeleted: { type: Boolean, required: true, default: false },
-    deletedBy: { type: Schema.Types.ObjectId, ref, default: null },
-    deletedAt: { type: Date, default: null },
+    deletedBy: { type: Schema.Types.ObjectId, ref },
+    deletedAt: { type: Date },
   })
 
   const findQueries = [
@@ -93,8 +103,8 @@ export const withSoftDeletePlugin = (schema: Schema, ref: string) => {
 
   const setDocumentDeletion = (doc: TDocument, isDeleted: boolean, deletedBy?: ObjectId) => {
     doc.isDeleted = isDeleted
-    doc.deletedBy = (isDeleted && deletedBy != null) ? deletedBy : null
-    doc.deletedAt = isDeleted ? new Date() : null
+    doc.deletedBy = isDeleted ? deletedBy : undefined
+    doc.deletedAt = isDeleted ? new Date() : undefined
     doc.$isDeleted(isDeleted)
     return doc.save().then(res => [true, res.toObject()]).catch(err => false)
   }

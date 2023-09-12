@@ -1,5 +1,5 @@
 import {
-  R, Anycase, Primitives, AVAILABLE_LANGS, PRIVACY_TYPE, REGEX
+  GV, R, Anycase, Primitives, AVAILABLE_LANGS, PRIVACY_TYPE, REGEX
 } from '@/config/global/const'
 // import _ from 'lodash'
 // import moment from 'moment'
@@ -9,6 +9,11 @@ type compareOperator = 'et' | 'net' | 'gt' | 'gte' | 'lt' | 'lte' | 'or' | 'and'
 type DateFormatType = 'detailed' | 'medium' | 'date' | 'time' | 'datetime'
 
 export const hbsHelpers = Object.freeze({
+
+  section (this: any, name: string, options: any) {
+    if (this._sections == null) this._sections = new Object()
+    this._sections[name] = options.fn(this)
+  },
 
   routeParseParams (privacy: PRIVACY_TYPE, act: string, ...args: any[]): string {
     let route
@@ -72,26 +77,26 @@ export const hbsHelpers = Object.freeze({
   // },
   
   dateFormat (timestamp: Date, format: DateFormatType, local: AVAILABLE_LANGS, options: any) {
-    local = (local != null && typeof local === 'string') ? local : 'vi'
+    local = (local != null && typeof local === 'string') ? local : GV.DEFAULT_LANG
     const types = {
-      detailed: { dateStyle: 'long', timeStyle: 'long' },
       medium: { dateStyle: 'short', timeStyle: 'medium' },
       datetime: { dateStyle: 'medium', timeStyle: 'medium' },
-      date: {
-        // dateStyle: 'long',
-        weekday: 'narrow', day: 'numeric',
-        month: 'short', year: 'numeric',
-      },
       dateShort: { dateStyle: 'short' },
       timeMedium: { timeStyle: 'medium' },
       time: {
-        // timeStyle: 'long', hour12: true,
-        hour: '2-digit', minute: '2-digit',
-        second: '2-digit', timeZoneName: 'short'
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false, timeZoneName: 'short'
+      },
+      date: {
+        weekday: 'narrow', day: 'numeric',
+        month: 'short', year: 'numeric',
+      },
+      get detailed () {
+        return { ...this.date, ...this.time, }
       },
     } 
     const pattern = (format != null || typeof format !== 'string')
-      ? types[format] : types.datetime
+      ? types[format] : types.medium
     const formatter = new Intl.DateTimeFormat(local, <any>pattern)
     return formatter.format(new Date(timestamp))
   },

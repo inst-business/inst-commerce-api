@@ -1,7 +1,11 @@
 import ArticleModel, { IArticle } from '@models/Article'
+import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
+import { ROLES, USER_SIGN } from '@/config/global/const'
+import ERR from '@/config/global/error'
 
 const Article = new ArticleModel()
+const User = new UserModel()
 
 class ArticleCtrl {
 
@@ -79,8 +83,14 @@ class ArticleCtrl {
 
   static deleteOneOrMany () {
     return _.routeAsync(async (req, res) => {
+      const
+        sign: USER_SIGN = (<any>req).user,
+        user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
+      if (user == null) {
+        throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      }
       const { id } = req.body
-      const result = await Article.deleteOneOrMany(id)
+      const result = await Article.deleteOneOrMany(id, user._id)
       return result
     },
     _.redirectView('back')

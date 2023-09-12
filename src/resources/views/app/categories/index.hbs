@@ -1,10 +1,14 @@
+{{#section 'title'}}Category Management{{/section}}
+{{#section 'current'}}categories{{/section}}
+
+
 {{!-- Head section --}}
 <nav class="Head" aria-label="breadcrumb">
   <ol class="Breadcrumb">
     <li class="Breadcrumb__item"><a href="/v1">Home</a></li>
     <li class="Breadcrumb__item" aria-current="page">Categories</li>
   </ol>
-  <h1 class="Heading">Category management</h1>
+  <h1 class="Heading">Category Management</h1>
 </nav>
 {{!-- End of Head section --}}
 
@@ -87,7 +91,11 @@
                 {{dateFormat this.createdAt 'dateShort'}}<br>{{dateFormat this.createdAt 'timeMedium'}}
               </td>
               <td class="Item__time">
-                {{dateFormat this.updatedAt 'dateShort'}}<br>{{dateFormat this.updatedAt 'timeMedium'}}
+                {{#if this.editedAt}}
+                  {{dateFormat this.editedAt 'dateShort'}}<br>{{dateFormat this.editedAt 'timeMedium'}}
+                {{else}}
+                  -
+                {{/if}}
               </td>
               <td class="Item__actions">
                 <a href="/v1/categories{{routeI 'crud.edit' this._id}}" title="Edit '{{this.name}}'"
@@ -119,7 +127,9 @@
 <dialog id="imgviewing-dialog" class="Dialog" data-size="lg">
   <form class="Dialog__form" id="imgviewing-dialog-form">
     <div class="Dialog__header"></div>
-    <img class="Dialog__img Img" data-variant="thumbnail" src="" alt="">
+    <div class="Dialog__body">
+      <img class="Dialog__img Img" data-variant="thumbnail" src="" alt="">
+    </div>
   </form>
   <button class="Dialog__close" formmethod="dialog" form="imgviewing-dialog-form"></button>
 </dialog>

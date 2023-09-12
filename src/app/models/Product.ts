@@ -1,9 +1,10 @@
 import { Schema, model, ObjectId } from 'mongoose'
 import { SuspendableModel } from './Model'
-import { ITEM_STATUS } from '@/config/global/const'
-import { TSuspendableDocument, withSoftDeletePlugin } from '@/utils/mongoose'
 import _ from '@/utils/utils'
-import { handleQuery } from '@/utils/mongoose'
+import {
+  handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
+} from '@/utils/mongoose'
+import { ITEM_STATUS } from '@/config/global/const'
 
 export interface IProduct {
   name: string
@@ -12,12 +13,13 @@ export interface IProduct {
   slug: string
   status: ITEM_STATUS
   tags?: ObjectId[]
-  categorizedBy: ObjectId
+  categorizedBy?: ObjectId
   createdBy: ObjectId
   createdAt: Date
-  // updatedBy?: ObjectId
-  updatedAt?: Date
-  isDeleted?: boolean
+  updatedAt: Date
+  editedBy?: ObjectId
+  editedAt?: Date
+  isDeleted: boolean
   deletedBy?: ObjectId
   deletedAt?: Date
 }
@@ -29,11 +31,12 @@ const ProductSchema = new Schema<IProduct>({
   slug: { type: String, required: true, maxLength: 255 },
   status: { type: String, required: true, default: 'pending' },
   // tags: { type: [Schema.Types.ObjectId], ref: 'Tag', default: [] },
-  categorizedBy: { type: Schema.Types.ObjectId, ref: 'Category', default: null },
+  categorizedBy: { type: Schema.Types.ObjectId, ref: 'Category' },
   createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 }, { timestamps: true })
 
-withSoftDeletePlugin(ProductSchema, 'User')
+withEditedDetails(ProductSchema, 'User')
+withSoftDelete(ProductSchema, 'User')
 const Product = model<IProduct, TSuspendableDocument<IProduct>>('Product', ProductSchema)
 
 

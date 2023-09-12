@@ -117,7 +117,7 @@ export class SuspendableModel<I> extends Model<I> {
 export class IndelibleModel<I> extends Model<I> {
 
   private errTitle: string = 'Access denied'
-  private errMessage: string = 'You do not have permission to perform this action.'
+  private errMessage: string = 'This action is not allowed.'
   private err: Error = _.logicError(this.errTitle, this.errMessage, 403, ERR.ACTION_REJECTED)
 
   getAllDeleted (): any {

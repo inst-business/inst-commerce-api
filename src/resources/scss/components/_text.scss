@@ -46,38 +46,50 @@ h3 {
   font-size: $font-size-sm;
   @include gen-text-properties;
 }
+.Text-sm {
+  color: var(--base-color-variant);
+  font-size: $font-size-sm;
+  @include gen-text-properties;
+}
 .Text-small,
 small {
   color: var(--base-color-variant);
   font-size: $font-size-xs;
   @include gen-text-properties;
 }
+p.P1,
+b {
+  color: var(--base-color);
+  // color: $color-txt-dark;
+  @include gen-text-properties;
+}
+p.P2,
 p {
   color: var(--base-color-variant);
   font-size: $font-size;
   // color: $color-txt-grey;
   @include gen-text-properties;
 }
-b {
-  color: var(--base-color);
-  // color: $color-txt-dark;
-  @include gen-text-properties;
+.Text-muted,
+p.P3 {
+  color: $color-txt-muted;
 }
 // span, strong, ins {
 //   @include gen-text-properties;
 // }
-
 .Text {
   color: inherit;
   font-size: $font-size;
   font-weight: inherit;
   @include gen-text-properties;
 
+  &-firstupper {
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
   &-brand {
     font-weight: 900;
-  }
-  &-muted {
-    color: $color-txt-muted;
   }
   &-status {
     // max-width: fit-content;

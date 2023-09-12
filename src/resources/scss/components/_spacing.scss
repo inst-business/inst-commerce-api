@@ -15,10 +15,10 @@ $spacings: (
 );
 
 $directions: (
-  't': top,
-  'l': left,
-  'r': right,
-  'b': bottom,
+  "t": top,
+  "l": left,
+  "r": right,
+  "b": bottom,
 );
 
 @mixin make-other-directions($name, $num, $type) {
@@ -43,17 +43,17 @@ $directions: (
   .M {
     @each $name, $direction in $directions {
       &-#{$name}-#{$i} {
-        margin-#{$direction}: $spacing;
+        margin-#{$direction}: $spacing !important;
       }
     }
   }
-  @include make-other-directions('.M', $i, margin);
+  @include make-other-directions(".M", $i, margin);
   .P {
     @each $name, $direction in $directions {
       &-#{$name}-#{$i} {
-        padding: $spacing;
+        padding: $spacing !important;
       }
     }
   }
-  @include make-other-directions('.P', $i, padding);
+  @include make-other-directions(".P", $i, padding);
 }

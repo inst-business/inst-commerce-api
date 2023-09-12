@@ -1,3 +1,7 @@
+{{#section 'title'}}Edit Category: {{data.name}}{{/section}}
+{{#section 'current'}}categories{{/section}}
+
+
 {{!-- Head section --}}
 <nav class="Head" aria-label="breadcrumb">
   <ol class="Breadcrumb">
@@ -6,7 +10,7 @@
     <li class="Breadcrumb__item"><a href="/v1/categories{{routeI 'crud.get_one' data._id}}">{{data.name}}</a></li>
     <li class="Breadcrumb__item" aria-current="page">Edit</li>
   </ol>
-  <h1 class="Heading">Category editing</h1>
+  <h1 class="Heading">Category Editing</h1>
 </nav>
 {{!-- End of Head section --}}
 
@@ -15,7 +19,7 @@
   <div class="Col lg-12 sm-12">
     {{!-- <h2 class="Heading">{{data.name}}</h2> --}}
     <div class="Box Box-scrollable">
-      <form class="Form" action="/categories{{routeI 'crud.update_one' data._id}}?_method=PUT" method="post">
+      <form class="Form" action="/v1/categories{{routeI 'crud.update_one' data._id}}?_method=PUT" method="post">
         <div class="Form__header">
           <p class="Form__header-title">{{data.name}}</p>
           {{!-- <p class="Form__header-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. A eos quia commodi.</p> --}}
@@ -24,17 +28,17 @@
           <div class="Field-group">
             <div class="Field" data-col="df-4" aria-invalid="">
               <label for="id" class="Field__label">Id</label>
-              <input type="text" class="Field__input" name="id" id="id" value="{{data._id}}" readonly>
+              <input type="text" class="Field__input" name="id" id="id" value="{{data._id}}" readonly disabled>
               <span class="Field__response"></span>
             </div>
             <div class="Field" data-col="df-4" aria-invalid="">
               <label for="createdAt" class="Field__label">Created at</label>
-              <input type="text" class="Field__input" name="createdAt" id="createdAt" value="{{dateFormat data.createdAt}}" readonly>
+              <input type="text" class="Field__input" name="createdAt" id="createdAt" value="{{dateFormat data.createdAt}}" readonly disabled>
               <span class="Field__response"></span>
             </div>
             <div class="Field" data-col="df-4" aria-invalid="">
               <label for="updatedAt" class="Field__label">Updated at</label>
-              <input type="text" class="Field__input" name="updatedAt" id="updatedAt" value="{{dateFormat data.updatedAt}}" readonly>
+              <input type="text" class="Field__input" name="updatedAt" id="updatedAt" value="{{dateFormat data.updatedAt}}" readonly disabled>
               <span class="Field__response"></span>
             </div>
           </div>
@@ -46,7 +50,7 @@
             </div>
             <div class="Field" data-col="df-6" aria-invalid="">
               <label for="slug" class="Field__label">Slug</label>
-              <input type="text" class="Field__input" name="slug" id="slug" value="{{data.slug}}" readonly>
+              <input type="text" class="Field__input" name="slug" id="slug" value="{{data.slug}}" readonly disabled>
               <span class="Field__response"></span>
             </div>
           </div>
@@ -57,7 +61,7 @@
           </div>
           <div class="Field" data-col="" aria-invalid="">
             <label for="img" class="Field__label">Image</label>
-            <input type="text" class="Field__input" name="img" id="img" value="{{data.img}}">
+            <input type="file" accept=".jpg,.jpeg,.png" class="Field__input" name="img" id="img" value="{{data.img}}">
             <span class="Field__response"></span>
           </div>
         </div>

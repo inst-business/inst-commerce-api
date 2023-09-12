@@ -22,19 +22,19 @@ class CategoryCtrl {
       if (user == null) {
         throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
       }
-      const
-        keys = ['name', 'desc'],
-        data = _.pickProps(<ICategory>req.body, keys)
-      data.createdBy = user._id
       if ((<any>req).errorUpload) {
         throw (<any>req).errorUpload
       }
+      const
+        keys = ['name', 'desc'],
+        data = _.pickProps(<ICategory>req.body, keys)
       data.img = (req.file != null && req.file.fieldname === 'img')
         ? req.file.filename : ''
+      data.createdBy = user._id
       const submittedCategory = await Category.insertOne(data)
       return submittedCategory
     },
-    // _.redirectView('/v1/categories')
+    _.redirectView('/v1/categories')
   )}
   
   static getOne () {
@@ -60,27 +60,41 @@ class CategoryCtrl {
 
   static editOne () {
     return _.routeAsync(async (req, res) => {
-      const { id } = req.params
-      const data: ICategory | null = await Category.getOneById(id)
+      const data: ICategory | null = await Category.getOneById(req.params.id)
       return data
     },
-    _.renderView('app/categories/create')
+    _.renderView('app/categories/edit')
   )}
 
   static updateOne () {
     return _.routeAsync(async (req, res) => {
-      const { id } = req.params
-      const data = req.body
-      const updatedCategory = await Category.updateOne(id, data)
+      const
+        sign: USER_SIGN = (<any>req).user,
+        user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
+      if (user == null) {
+        throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      }
+      if ((<any>req).errorUpload) {
+        throw (<any>req).errorUpload
+      }
+      const
+        keys = ['name', 'desc', 'img'],
+        data = _.pickProps(<ICategory>req.body, keys)
+      data.img = (req.file != null && req.file.fieldname === 'img')
+        ? req.file.filename : data.img
+      data.editedBy = user._id
+      data.editedAt = new Date()
+      const updatedCategory = await Category.updateOne(req.params.id, data)
+      // Category.updateOne(req.params.id, data)
       return updatedCategory
     },
-    _.redirectView('/v1/categories/:id', 'id')
+    // _.redirectView('/v1/categories/:id', 'id')
+    _.redirectView('back')
   )}
 
   static getOneDeleted () {
     return _.routeAsync(async (req, res) => {
-      const { id } = req.params
-      const data: ICategory | null = await Category.getDeletedById(id)
+      const data: ICategory | null = await Category.getDeletedById(req.params.id)
       return data
     },
     _.renderView('app/categories/deleted/detail')

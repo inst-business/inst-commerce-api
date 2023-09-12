@@ -84,7 +84,7 @@ class Utils {
     }
   }
 
-  renderView (view: string, page?: {}, layout?: string): ExpressCallbackProvider {
+  renderView (view: string, referer = false, layout?: string): ExpressCallbackProvider {
     return !GV.ALLOW_VIEW_ENGINE
       ? (res) => {
         try {
@@ -97,7 +97,11 @@ class Utils {
       }
       : (res: Response, req?: Request): ExpressCallback => {
         return (data: any, err?: any) => {
-          const reception = { data, page, layout: layout || 'main.hbs' }
+          const reception = {
+            data,
+            layout: layout || 'main.hbs',
+            ...((referer && req?.headers.referer) && {referer: req.headers.referer}),
+          }
           res.render(view, reception)
         }
       }

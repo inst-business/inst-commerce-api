@@ -23,12 +23,12 @@ router.get('/',
 
 router.get('/login',
   _.routeAsync(async () => {},
-  _.renderView('app/auth/login', {}, 'no-partials.hbs')
+  _.renderView('app/auth/login', false, 'no-partials.hbs')
 ))
 
 router.get('/signup',
   _.routeAsync(async () => {},
-  _.renderView('app/auth/signup', {}, 'no-partials.hbs')
+  _.renderView('app/auth/signup', false, 'no-partials.hbs')
 ))
 
 export default router

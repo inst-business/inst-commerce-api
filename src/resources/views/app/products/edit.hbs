@@ -1,3 +1,7 @@
+{{#section 'title'}}Edit Product: {{data.name}}{{/section}}
+{{#section 'current'}}products{{/section}}
+
+
 {{!-- Head section --}}
 <nav class="Head" aria-label="breadcrumb">
   <ol class="Breadcrumb">
@@ -6,7 +10,7 @@
     <li class="Breadcrumb__item"><a href="/v1/products{{routeI 'show' data._id}}">{{data.name}}</a></li>
     <li class="Breadcrumb__item" aria-current="page">Edit</li>
   </ol>
-  <h1 class="Heading">Product editing</h1>
+  <h1 class="Heading">Product Editing</h1>
 </nav>
 {{!-- End of Head section --}}
 

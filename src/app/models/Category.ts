@@ -1,9 +1,11 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
 import { SuspendableModel } from './Model'
 import { User } from './User'
-import { ExcludeKeys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
 import _ from '@/utils/utils'
-import { handleQuery, TSuspendableDocument, withSoftDeletePlugin } from '@/utils/mongoose'
+import {
+  handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
+} from '@/utils/mongoose'
+import { ExcludeKeys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
 
 export interface ICategory extends Document {
   name: string
@@ -13,9 +15,10 @@ export interface ICategory extends Document {
   status: ITEM_STATUS
   createdBy: ObjectId
   createdAt: Date
-  // updatedBy?: ObjectId
-  updatedAt?: Date
-  isDeleted?: boolean
+  updatedAt: Date
+  editedBy?: ObjectId
+  editedAt?: Date
+  isDeleted: boolean
   deletedBy?: ObjectId
   deletedAt?: Date
 }
@@ -27,7 +30,6 @@ const CategorySchema = new Schema<ICategory>({
   slug: { type: String, required: true, maxLength: 255 },
   status: { type: String, required: true, default: 'pending' },
   createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
-  // updatedBy: { type: Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true })
 
 // CategorySchema.virtual('author', {
@@ -37,7 +39,8 @@ const CategorySchema = new Schema<ICategory>({
 //   justOne: true
 // })
 
-withSoftDeletePlugin(CategorySchema, 'User')
+withEditedDetails(CategorySchema, 'User')
+withSoftDelete(CategorySchema, 'User')
 const Category = model<ICategory, TSuspendableDocument<ICategory>>('Category', CategorySchema)
 
 
@@ -57,6 +60,24 @@ class CategoryModel extends SuspendableModel<ICategory> {
       .lean()
     const data = await handleQuery(q)
     return data as ICategory[]
+  }
+
+  async getOneById (id: string): Promise<ICategory | null> {
+    const q = Category.findOne({ _id: id })
+      .populate({ path: 'createdBy', select: 'username -_id' })
+      .populate({ path: 'editedBy', select: 'username -_id' })
+      .lean()
+    const data = await handleQuery(q)
+    return data as ICategory | null
+  }
+
+  async getOneBySlug (slug: String): Promise<ICategory | null> {
+    const q = Category.findOne({ slug: slug })
+      .populate({ path: 'createdBy', select: 'username -_id' })
+      .populate({ path: 'editedBy', select: 'username -_id' })
+      .lean()
+    const data = await handleQuery(q)
+    return data as ICategory | null
   }
 
   async insertOne (category: ICategory): Promise<ICategory> {
