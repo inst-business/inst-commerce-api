@@ -28,9 +28,10 @@ class AuthCtrl {
           throw _.logicError(errTitle, 'Password is not correct', 400, ERR.INVALID_PASSWORD)
         }
         const
-          { username, email, tel, firstname, lastname, role, permissions } = user,
+          { username, email, tel, firstname, lastname, avatar, role, permissions } = user,
           userSign: USER_SIGN = {
-            username, email, tel, name: { firstname, lastname }, role, permissions
+            username, email, tel, name: { firstname, lastname },
+            avatar, role, permissions
           },
           accessToken = _.genAccessToken(userSign),
           refreshToken = _.genRefreshToken(userSign)

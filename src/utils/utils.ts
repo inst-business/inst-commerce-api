@@ -84,11 +84,11 @@ class Utils {
     }
   }
 
-  renderView (view: string, referer = false, layout?: string): ExpressCallbackProvider {
+  renderView (view: string, view404 = false, layout?: string): ExpressCallbackProvider {
     return !GV.ALLOW_VIEW_ENGINE
       ? (res) => {
         try {
-          throw this.logicError('REJECTED', 'Rendering view has been refused', 406, ERR.RENDER_VIEW_REJECTED, view)
+          throw this.logicError('Rejected', 'Rendering view has been refused', 406, ERR.RENDER_VIEW_REJECTED, view)
         } catch (e: any) {
           // this.errorMsg(e)
           console.warn('Rendering view rejected - ', view)
@@ -100,9 +100,13 @@ class Utils {
           const reception = {
             data,
             layout: layout || 'main.hbs',
-            ...((referer && req?.headers.referer) && {referer: req.headers.referer}),
+            ...((req && (<any>req)?.user) && { sign: (<any>req).user }),
+            // ...((referer && req?.headers.referer) && { referer: req.headers.referer }),
           }
-          res.render(view, reception)
+          if (view404 && (data == null || data.length <= 0)) {
+            res.render('app/notfound', { layout: 'no-partials' })
+          }
+          else res.render(view, reception)
         }
       }
   }

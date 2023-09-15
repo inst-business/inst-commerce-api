@@ -29,23 +29,18 @@ class Auth {
       }
       jwt.verify(token, <string>_.env('ACCESS_TOKEN'), (err, user) => {
         if (err) {
-          throw _.logicError('Session Expired', 'Your session has expired, please log in again.', 401, ERR.REQUEST_EXPIRED)
+          throw _.logicError('Session Expired', 'Your session has expired.', 401, ERR.REQUEST_EXPIRED)
         }
-        // (<any>req).user = user
-        Object.assign(req, { user })
+        // Object.assign(req, { user })
+        (<any>req).user = user
         next()
       })
-      // next()
     })
   }
 
   static reqRole (role: ROLE): RequestHandler {
     return _.routeNextableAsync(async (req, res, next) => {
       const user: USER_SIGN = (<any>req).user
-      // console.log(user, role)     
-      if (user == null) {
-        throw _.logicError('Unauthorized', 'Login required.', 401, ERR.UNAUTHORIZED)
-      }
       if (user.role !== role) {
         throw _.logicError('Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
       }
@@ -53,12 +48,25 @@ class Auth {
     })
   }
 
-  // static reqUserByRole (role: ROLE) {
-  //   return () => {
-  //     this.reqUser()
-  //     this.reqRole(role)
-  //   }
-  // }
+  static reqUserByRole (role: ROLE): RequestHandler {
+    return _.routeNextableAsync(async (req, res, next) => {
+      const authHeader = req.headers.authorization
+      const token = authHeader && authHeader.split(' ')[1]
+      if (token == null || token === '') {
+        throw _.logicError('Unauthorized', 'Login required.', 401, ERR.UNAUTHORIZED)
+      }
+      jwt.verify(token, <string>_.env('ACCESS_TOKEN'), (err, user) => {
+        if (err) {
+          throw _.logicError('Session Expired', 'Your session has expired.', 401, ERR.REQUEST_EXPIRED)
+        }
+        if ((<any>user).role !== role) {
+          throw _.logicError('Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+        }
+        (<any>req).user = user
+        next()
+      })
+    })
+  }
   
   static reqRules (rules: ALL_RULES[]): RequestHandler {
     return _.routeNextableAsync(async (req, res, next) => {

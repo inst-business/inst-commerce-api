@@ -28,17 +28,19 @@
           <div class="Field-group">
             <div class="Field" data-col="df-4" aria-invalid="">
               <label for="id" class="Field__label">Id</label>
-              <input type="text" class="Field__input" name="id" id="id" value="{{data._id}}" readonly disabled>
+              <input type="password" class="Field__input" id="id" value="{{data._id}}" readonly disabled>
               <span class="Field__response"></span>
             </div>
             <div class="Field" data-col="df-4" aria-invalid="">
-              <label for="createdAt" class="Field__label">Created at</label>
-              <input type="text" class="Field__input" name="createdAt" id="createdAt" value="{{dateFormat data.createdAt}}" readonly disabled>
+              <label for="addedAt" class="Field__label">Added at</label>
+              <input type="text" class="Field__input" id="addedAt"
+                value="{{dateFormat data.createdAt 'medium'}} - by {{data.createdBy.username}}" readonly disabled>
               <span class="Field__response"></span>
             </div>
             <div class="Field" data-col="df-4" aria-invalid="">
-              <label for="updatedAt" class="Field__label">Updated at</label>
-              <input type="text" class="Field__input" name="updatedAt" id="updatedAt" value="{{dateFormat data.updatedAt}}" readonly disabled>
+              <label for="modifiedAt" class="Field__label">Modified at</label>
+              <input type="text" class="Field__input" id="modifiedAt"
+                value="{{dateFormat data.editedAt 'medium'}} - by {{data.editedBy.username}}" readonly disabled>
               <span class="Field__response"></span>
             </div>
           </div>

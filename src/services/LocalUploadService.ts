@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import fs from 'fs'
 import path from 'path'
 import multer, { diskStorage, MulterError } from 'multer'
 import sharp from 'sharp'
@@ -23,7 +24,7 @@ const uploadImage = (dest: string, prefix: string, maxSize?: number) =>
     },
     // dest: path.join('../upload'),
     storage: diskStorage({
-      destination: path.join('public/uploads', dest),
+      destination: path.join(GV.UPLOADED_PATH, dest),
       filename: function (req, file, cb) {
         const name = _.genSlug(_.genUniqueCode(prefix) + '-' + req.body.name)
         const ext = path.extname(file.originalname)
@@ -48,3 +49,10 @@ export const uploadOneImage = (fieldName: string, dest: string, prefix: string, 
     })
     next()
   })
+
+export const removeOneImage = async (dir: string, name: string) => {
+  const dest = path.join(GV.UPLOADED_PATH, dir, name)
+  await new Promise(() => fs.unlinkSync(dest)).catch(err => {
+    throw _.logicError(err.name, err.message, 404, ERR.OBJECT_NOT_FOUND, err.path)
+  })
+}

@@ -101,11 +101,16 @@ export const hbsHelpers = Object.freeze({
     return formatter.format(new Date(timestamp))
   },
 
+  capitalizeFirst (str: string) {
+    const f = str.charAt(0).toUpperCase()
+    return f + str.slice(1)
+  },
+
   webpFormat (path: string, options: any) {
     path = (path != null && typeof path === 'string') ? path : ''
     // const regex = /\.[^.]+$/
     const webpPath = path.replace(REGEX.FILE_EXTENSION, '.webp')
-    console.log('paths: ', path, webpPath)
+    // console.log('paths: ', path, webpPath)
     return webpPath
   },
 

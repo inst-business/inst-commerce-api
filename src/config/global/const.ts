@@ -67,6 +67,7 @@ export interface USER_SIGN {
     firstname: string
     lastname: string
   }
+  avatar?: string
   role: ROLE
   permissions: ALL_RULES[]
 }
@@ -140,6 +141,8 @@ export class GV {
   static IMG_MIMETYPES_ALLOWED = ['image/jpeg', 'image/png']
   static IMG_EXTENSIONS_ALLOWED = ['.jpeg', '.jpg', '.png']
   static IMG_EXT_REDUCED = 'webp'
+
+  static UPLOADED_PATH = 'public/uploads/'
 }
 
 

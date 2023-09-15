@@ -1,6 +1,7 @@
 import CategoryModel, { ICategory } from '@models/Category'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
+import { removeOneImage } from '@/services/LocalUploadService'
 import { ROLES, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
@@ -8,6 +9,12 @@ const Category = new CategoryModel()
 const User = new UserModel()
 
 class CategoryCtrl {
+
+  // static test() {
+  //   return _.routeAsync(async (req, res) => {
+  //     return await Category.findImgById(req.params.id)
+  //   })
+  // }
 
   static createOne () {
     return _.routeAsync(async () => {},
@@ -28,13 +35,17 @@ class CategoryCtrl {
       const
         keys = ['name', 'desc'],
         data = _.pickProps(<ICategory>req.body, keys)
-      data.img = (req.file != null && req.file.fieldname === 'img')
-        ? req.file.filename : ''
       data.createdBy = user._id
+      data.img = req.file != null && req.file.fieldname === 'img'
+        ? req.file.filename : ''
       const submittedCategory = await Category.insertOne(data)
+        .catch(err => {
+          removeOneImage('categories', data.img).catch(err => console.error(err?.message))
+          throw err
+        })
       return submittedCategory
     },
-    _.redirectView('/v1/categories')
+    // _.redirectView('/v1/categories')
   )}
   
   static getOne () {
@@ -60,15 +71,17 @@ class CategoryCtrl {
 
   static editOne () {
     return _.routeAsync(async (req, res) => {
-      const data: ICategory | null = await Category.getOneById(req.params.id)
+      const { id } = req.params
+      const data: ICategory | null = await Category.getOneById(id)
       return data
     },
-    _.renderView('app/categories/edit')
+    _.renderView('app/categories/edit', true)
   )}
 
   static updateOne () {
     return _.routeAsync(async (req, res) => {
       const
+        { id } = req.params,
         sign: USER_SIGN = (<any>req).user,
         user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
       if (user == null) {
@@ -84,8 +97,7 @@ class CategoryCtrl {
         ? req.file.filename : data.img
       data.editedBy = user._id
       data.editedAt = new Date()
-      const updatedCategory = await Category.updateOne(req.params.id, data)
-      // Category.updateOne(req.params.id, data)
+      const updatedCategory = await Category.updateOne(id, data)
       return updatedCategory
     },
     // _.redirectView('/v1/categories/:id', 'id')
@@ -94,7 +106,8 @@ class CategoryCtrl {
 
   static getOneDeleted () {
     return _.routeAsync(async (req, res) => {
-      const data: ICategory | null = await Category.getDeletedById(req.params.id)
+      const { id } = req.params
+      const data: ICategory | null = await Category.getDeletedById(id)
       return data
     },
     _.renderView('app/categories/deleted/detail')
@@ -135,7 +148,13 @@ class CategoryCtrl {
   static destroyOneOrMany () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.body
+      const data = await Category.findImgOfDeletedById(id)
       const result = await Category.destroyOneOrMany(id)
+        .then(() => {
+          if (data?.img != null) {
+            removeOneImage('categories', data.img).catch(err => console.error(err?.message))
+          }
+        })
       return result
     },
     _.redirectView('back')

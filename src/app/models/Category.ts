@@ -59,25 +59,25 @@ class CategoryModel extends SuspendableModel<ICategory> {
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
       .lean()
     const data = await handleQuery(q)
-    return data as ICategory[]
+    return data
   }
 
   async getOneById (id: string): Promise<ICategory | null> {
-    const q = Category.findOne({ _id: id })
+    const q = Category.findById(id)
       .populate({ path: 'createdBy', select: 'username -_id' })
       .populate({ path: 'editedBy', select: 'username -_id' })
       .lean()
     const data = await handleQuery(q)
-    return data as ICategory | null
+    return data
   }
 
   async getOneBySlug (slug: String): Promise<ICategory | null> {
-    const q = Category.findOne({ slug: slug })
+    const q = Category.findOne({ slug })
       .populate({ path: 'createdBy', select: 'username -_id' })
       .populate({ path: 'editedBy', select: 'username -_id' })
       .lean()
     const data = await handleQuery(q)
-    return data as ICategory | null
+    return data
   }
 
   async insertOne (category: ICategory): Promise<ICategory> {
@@ -100,7 +100,13 @@ class CategoryModel extends SuspendableModel<ICategory> {
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
       .lean()
     const data = await handleQuery(q)
-    return data as ICategory[]
+    return data
+  }
+  
+  async findImgOfDeletedById (id: string): Promise<Pick<ICategory, 'img'> | null> {
+    const q = Category.findOne({ _id: id, isDeleted: true }).select('img -_id').lean()
+    const data = await handleQuery(q)
+    return data
   }
   
 }

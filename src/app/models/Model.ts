@@ -83,7 +83,7 @@ class Model<I> {
   }
 
   async destroyOneOrMany (id: string | string[]): Promise<Record<string, any>> {
-    const q = this.model.deleteOne({ _id: id, isDeleted: true })
+    const q = this.model.deleteMany({ _id: id, isDeleted: true })
     const res = await handleQuery(q)
     return res
   }
