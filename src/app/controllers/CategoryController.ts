@@ -36,11 +36,12 @@ class CategoryCtrl {
         keys = ['name', 'desc'],
         data = _.pickProps(<ICategory>req.body, keys)
       data.createdBy = user._id
-      data.img = req.file != null && req.file.fieldname === 'img'
-        ? req.file.filename : ''
+      if (req.file != null && req.file.fieldname === 'img') {
+        data.img = req.file.filename
+      }
       const submittedCategory = await Category.insertOne(data)
         .catch(err => {
-          removeOneImage('categories', data.img).catch(err => console.error(err?.message))
+          removeOneImage('categories', data.img).catch(e => console.error(e?.message))
           throw err
         })
       return submittedCategory
@@ -91,17 +92,28 @@ class CategoryCtrl {
         throw (<any>req).errorUpload
       }
       const
-        keys = ['name', 'desc', 'img'],
-        data = _.pickProps(<ICategory>req.body, keys)
-      data.img = (req.file != null && req.file.fieldname === 'img')
-        ? req.file.filename : data.img
+        keys = ['name', 'desc'],
+        data = _.pickProps(<ICategory>req.body, keys),
+        prevData = await Category.findImgById(id)
+      if (req.file != null && req.file.fieldname === 'img') {
+        data.img = req.file.filename
+      }
       data.editedBy = user._id
       data.editedAt = new Date()
       const updatedCategory = await Category.updateOne(id, data)
+        .then(async (updatedData) => {
+          if (data.img != null && prevData?.img != null) {
+            removeOneImage('categories', prevData.img).catch(e => console.error(e?.message))
+          }
+          return updatedData
+        })
+        .catch(() => {
+          removeOneImage('categories', data.img).catch(e => console.error(e?.message))
+        })
       return updatedCategory
     },
     // _.redirectView('/v1/categories/:id', 'id')
-    _.redirectView('back')
+    // _.redirectView('back')
   )}
 
   static getOneDeleted () {
@@ -148,12 +160,11 @@ class CategoryCtrl {
   static destroyOneOrMany () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.body
-      const data = await Category.findImgOfDeletedById(id)
+      const prevData = await Category.findImgOfDeletedById(id)
       const result = await Category.destroyOneOrMany(id)
-        .then(() => {
-          if (data?.img != null) {
-            removeOneImage('categories', data.img).catch(err => console.error(err?.message))
-          }
+        .then(data => {
+          if (prevData?.img == null) return data
+          removeOneImage('categories', prevData.img).catch(e => console.error(e?.message))
         })
       return result
     },

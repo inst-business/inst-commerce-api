@@ -131,7 +131,8 @@ export class GV {
   static ALLOW_LOCAL_STORING = true
   static COOKIE_SECURE = ENV.COOKIE_SECURE === 'true' ? true : false
   static CONNECT_TIMEOUT = 5000
-  static ACCESS_TOKEN_EXPIRED = '48h'
+  static ACCESS_TOKEN_EXPIRED = '96h'
+  static REFRESH_TOKEN_EXPIRED = '24h'
   static VERIFY_EXPIRED = '5m'
   static SESSION_EXPIRED = 5 * this._1M
   static SALT_LENGTH = 16

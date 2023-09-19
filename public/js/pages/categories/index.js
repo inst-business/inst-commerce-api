@@ -26,6 +26,9 @@ Array.from(dialogImgToggle).map(img => img.addEventListener('click', e => {
   if (!dialog) return
   dialog.querySelector('.Dialog__header').innerText = img.alt
   const dialogImg = dialog.querySelector('.Dialog__img')
+  if (!dialogImg) {
+    return
+  }
   dialogImg.src = img.src
   dialogImg.alt = img.alt
 }))

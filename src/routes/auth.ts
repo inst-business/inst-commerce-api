@@ -12,14 +12,8 @@ const router = express.Router()
  *  EXTERNAL APIs
 */
 
-router.post('/e/login',
-  Validate.formData(UserValidator.login),
-  AuthCtrl.authenticateUser()
-)
-router.post('/e/signup',
-  Validate.formData(UserValidator.signup),
-  AuthCtrl.createNewUser()
-)
+router.post('/e/login', Validate.formData(UserValidator.login), AuthCtrl.authenticateUser())
+router.post('/e/signup', Validate.formData(UserValidator.signup), AuthCtrl.createNewUser())
 router.post('/e/verify', AuthCtrl.verifyUser())
 router.post('/e/create-verify', AuthCtrl.createVerifyToken())
 

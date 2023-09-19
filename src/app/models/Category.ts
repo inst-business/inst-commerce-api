@@ -26,7 +26,7 @@ export interface ICategory extends Document {
 const CategorySchema = new Schema<ICategory>({
   name: { type: String, required: true, maxLength: 255 },
   desc: { type: String },
-  img: { type: String, required: true, default: '' },
+  img: { type: String, required: true },
   slug: { type: String, required: true, maxLength: 255 },
   status: { type: String, required: true, default: 'pending' },
   createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -103,6 +103,12 @@ class CategoryModel extends SuspendableModel<ICategory> {
     return data
   }
   
+  async findImgById (id: string): Promise<Pick<ICategory, 'img'> | null> {
+    const q = Category.findOne({ _id: id }).select('img -_id').lean()
+    const data = await handleQuery(q)
+    return data
+  }
+
   async findImgOfDeletedById (id: string): Promise<Pick<ICategory, 'img'> | null> {
     const q = Category.findOne({ _id: id, isDeleted: true }).select('img -_id').lean()
     const data = await handleQuery(q)

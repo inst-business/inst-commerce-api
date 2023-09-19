@@ -102,6 +102,7 @@ export class SuspendableModel<I> extends Model<I> {
 
   async deleteOneOrMany (id: string | string[], deletedBy: ObjectId): Promise<Boolean> {
     const q = this.suspendableModel.find({ _id: id }).softDelete(deletedBy)
+    console.log(await this.suspendableModel.find({ _id: id }).lean())
     const res = await handleQuery(q)
     return res
   }

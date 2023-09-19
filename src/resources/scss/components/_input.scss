@@ -20,6 +20,7 @@
   line-height: var(--Input-line-height);
   border-radius: var(--Input-radius);
   border: 1px solid var(--Input-border);
+  font-family: inherit;
   color: var(--Input-color);
   background-color: var(--Input-background);
   transition: var(--Input-transition);
@@ -59,6 +60,42 @@
   }
   &__spinners[type="number"]:focus::-webkit-inner-spin-button {
     appearance: auto !important;
+  }
+
+  &[type="file"] {
+    cursor: pointer;
+    // &::file-selector-button {
+    &::-webkit-file-upload-button {
+      // display: block;
+      // height: 100%;
+      padding: var(--Input-padding) var(--Input-padding) var(--Input-padding) 0;
+      margin: calc(var(--Input-padding) * -1) var(--Input-padding)
+        calc(var(--Input-padding) * -1) 0;
+      font-family: inherit;
+      color: var(--base-color);
+      background-color: var(--base-hover-overlay);
+      border: none;
+      border-right: 1px solid var(--Input-border);
+      box-shadow: var(--base-hover-overlay) calc(var(--Input-padding) * -1) 0 0
+        var(--Input-padding);
+      border-radius: var(--Input-radius) 0 0 var(--Input-radius);
+      transition: var(--Input-transition);
+    }
+    &:hover::-webkit-file-upload-button {
+      background-color: var(--base-border);
+      box-shadow: var(--base-border) calc(var(--Input-padding) * -1) 0 0
+        var(--Input-padding);
+    }
+  }
+
+  &[data-variant~="unstyled"] {
+    padding-left: 0;
+    padding-right: 0;
+    background-color: transparent;
+    border: 1px solid transparent;
+    &:focus {
+      box-shadow: none;
+    }
   }
 }
 

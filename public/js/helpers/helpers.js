@@ -13,15 +13,17 @@ export const isValidFnName = name => {
 }
 
 export const splitOutFnName = (str, all = false) => {
-  const opts = !all ? 'i' : 'ig',
-        regex = new RegExp('[$A-Z_][0-9A-Z_$]*', opts),
-        result = str.match(regex)
+  const
+    opts = !all ? 'i' : 'ig',
+    regex = new RegExp('[$A-Z_][0-9A-Z_$]*', opts),
+    result = str.match(regex)
   return all ? result : result[0]
 }
 
 export const getFnValue = (str, all = false) => {
-  const opts = !all ? 'i' : 'ig',
-        regex = new RegExp('(?<![\\w$])\\d+(?![\\w])', opts),
-        result = str.match(regex)
+  const
+    opts = !all ? 'i' : 'ig',
+    regex = new RegExp('(?<![\\w$])\\d+(?![\\w])', opts),
+    result = str.match(regex)
   return all ? result : result[0]
 }

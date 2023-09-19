@@ -51,7 +51,7 @@ $directions: (
   .P {
     @each $name, $direction in $directions {
       &-#{$name}-#{$i} {
-        padding: $spacing !important;
+        padding-#{$direction}: $spacing !important;
       }
     }
   }

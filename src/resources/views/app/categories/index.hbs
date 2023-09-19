@@ -85,7 +85,7 @@
                 <p class="Text-limit-3">{{this.desc}}</p>
               </td>
               <td class="">
-                <a href="#" class="Text-link">{{this.createdBy.username}}</a>
+                <a href="/v1/u/{{this.createdBy.username}}" class="Text-link">{{this.createdBy.username}}</a>
               </td>
               <td class="Item__time">
                 {{dateFormat this.createdAt 'dateShort'}}<br>{{dateFormat this.createdAt 'timeMedium'}}

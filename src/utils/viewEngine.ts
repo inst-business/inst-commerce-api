@@ -8,14 +8,14 @@ import {
 type compareOperator = 'et' | 'net' | 'gt' | 'gte' | 'lt' | 'lte' | 'or' | 'and'
 type DateFormatType = 'detailed' | 'medium' | 'date' | 'time' | 'datetime'
 
-export const hbsHelpers = Object.freeze({
+export const hbsHelpers = (() => {
 
-  section (this: any, name: string, options: any) {
+  function section (this: any, name: string, options: any) {
     if (this._sections == null) this._sections = new Object()
     this._sections[name] = options.fn(this)
-  },
+  }
 
-  routeParseParams (privacy: PRIVACY_TYPE, act: string, ...args: any[]): string {
+  function routeParseParams (privacy: PRIVACY_TYPE, act: string, ...args: any[]): string {
     let route
     if (REGEX.VALID_VAR_NAME.test(act)) {
       route = (<any>R)[act.toUpperCase()]
@@ -32,24 +32,24 @@ export const hbsHelpers = Object.freeze({
       (['string', 'number'].includes(typeof val) || val.constructor.name === 'ObjectId')
         ? prev.replace(ParamsRegex, val?.toString()) : prev
     , _privacy + route)
-  },
+  }
 
-  activeAnchor (title: string, target: string) {
+  function activeAnchor (title: string, target: string) {
     return title === target ? 'active' : ''
-  },
+  }
 
-  routeI (...args: any[]) {
-    return hbsHelpers.routeParseParams('i', <string>args[0], ...args.slice(1))
-  },
-  routeE (...args: any[]) {
-    return hbsHelpers.routeParseParams('e', <string>args[0], ...args.slice(1))
-  },
+  function routeI (...args: any[]) {
+    return routeParseParams('i', <string>args[0], ...args.slice(1))
+  }
+  function routeE (...args: any[]) {
+    return routeParseParams('e', <string>args[0], ...args.slice(1))
+  }
 
-  equals (arg1: string | number, arg2: string | number, options: any): boolean {
+  function equals (this: any, arg1: string | number, arg2: string | number, options: any): boolean {
     return arg1 === arg2 ? options.fn(this) : options.inverse(this)
-  },
+  }
   
-  when (arg1: string | number, operator: compareOperator, arg2: string | number, options: any) {
+  function when (arg1: string | number, operator: compareOperator, arg2: string | number, options: any) {
     const conditions = {
       'et': () => arg1 === arg2,
       'net': () => arg1 !== arg2,
@@ -62,7 +62,7 @@ export const hbsHelpers = Object.freeze({
     }
     return conditions[operator]()
       // ? options.fn(this) : options.inverse(this)
-  },
+  }
 
   // dateFormat (timestamp: Date, format?: DateFormatType, local: string = 'vi') {
   //   const types = {
@@ -76,7 +76,8 @@ export const hbsHelpers = Object.freeze({
   //   return moment(timestamp.toLocaleString()).format(pattern)
   // },
   
-  dateFormat (timestamp: Date, format: DateFormatType, local: AVAILABLE_LANGS, options: any) {
+  function dateFormat (timestamp: Date, format: DateFormatType, local: AVAILABLE_LANGS, options: any) {
+    if (!timestamp) return ''
     local = (local != null && typeof local === 'string') ? local : GV.DEFAULT_LANG
     const types = {
       medium: { dateStyle: 'short', timeStyle: 'medium' },
@@ -99,34 +100,52 @@ export const hbsHelpers = Object.freeze({
       ? types[format] : types.medium
     const formatter = new Intl.DateTimeFormat(local, <any>pattern)
     return formatter.format(new Date(timestamp))
-  },
+  }
 
-  capitalizeFirst (str: string) {
+  function capitalizeFirst (str: string) {
     const f = str.charAt(0).toUpperCase()
     return f + str.slice(1)
-  },
+  }
 
-  webpFormat (path: string, options: any) {
+  function prefix (str: string, prefix: string) {
+    return str ? prefix + str : ''
+  }
+
+  function webpFormat (path: string, options: any) {
     path = (path != null && typeof path === 'string') ? path : ''
     // const regex = /\.[^.]+$/
     const webpPath = path.replace(REGEX.FILE_EXTENSION, '.webp')
     // console.log('paths: ', path, webpPath)
     return webpPath
-  },
+  }
 
-  stylingStatus (status: string) {
+  function stylingStatus (status: string) {
     switch (status) {
       case 'approved': return 'success'
       case 'declined': return 'danger'
       case 'pending': return 'warning'
       default: return 'primary'
     }
-  },
+  }
 
-  increase (n: number, offset: number) {
+  function increase (n: number, offset: number) {
     return n + offset
-  },
+  }
 
-})
+  return {
+    section,
+    routeI,
+    routeE,
+    equals,
+    when,
+    dateFormat,
+    capitalizeFirst,
+    prefix,
+    webpFormat,
+    stylingStatus,
+    increase,
+  }
+
+})()
 
 // export default viewEngineHelpers

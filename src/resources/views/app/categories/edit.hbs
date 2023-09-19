@@ -19,63 +19,86 @@
   <div class="Col lg-12 sm-12">
     {{!-- <h2 class="Heading">{{data.name}}</h2> --}}
     <div class="Box Box-scrollable">
-      <form class="Form" action="/v1/categories{{routeI 'crud.update_one' data._id}}?_method=PUT" method="post">
-        <div class="Form__header">
-          <p class="Form__header-title">{{data.name}}</p>
-          {{!-- <p class="Form__header-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. A eos quia commodi.</p> --}}
+      <div class="Row">
+        <div class="Col lg-9 P-b-0">
+          <form class="Form" action="/v1/categories{{routeI 'crud.update_one' data._id}}?_method=PUT" method="post" enctype="multipart/form-data" id="form-edit">
+            <div class="Form__header">
+              <p class="Form__header-title">{{data.name}}</p>
+              {{!-- <p class="Form__header-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. A eos quia commodi.</p> --}}
+            </div>
+            <div class="Form__body">
+              <div class="Field-group">
+                <div class="Field" data-col="df-4" aria-invalid="">
+                  <label for="id" class="Field__label">Id</label>
+                  <input type="password" class="Field__input" id="id" value="{{data._id}}" data-variant="unstyled" readonly disabled>
+                  <span class="Field__response"></span>
+                </div>
+                <div class="Field" data-col="df-4" aria-invalid="">
+                  <label for="addedAt" class="Field__label">Added at</label>
+                  <input type="text" class="Field__input" id="addedAt" placeholder="-"
+                    value="{{dateFormat data.createdAt 'medium'}}{{prefix data.createdBy.username ' - by '}}" data-variant="unstyled" readonly disabled>
+                  <span class="Field__response"></span>
+                </div>
+                <div class="Field" data-col="df-4" aria-invalid="">
+                  <label for="modifiedAt" class="Field__label">Modified at</label>
+                  <input type="text" class="Field__input" id="modifiedAt" placeholder="-"
+                    value="{{dateFormat data.editedAt 'medium'}}{{prefix data.editedBy.username ' - by '}}" data-variant="unstyled" readonly disabled>
+                  <span class="Field__response"></span>
+                </div>
+              </div>
+              <div class="Field-group">
+                <div class="Field" data-col="df-6" aria-invalid="">
+                  <label for="name" class="Field__label">Name</label>
+                  <input type="text" class="Field__input" name="name" id="name" value="{{data.name}}">
+                  <span class="Field__response"></span>
+                </div>
+                <div class="Field" data-col="df-6" aria-invalid="">
+                  <label for="slug" class="Field__label">Slug</label>
+                  <input type="text" class="Field__input" name="slug" id="slug" value="{{data.slug}}" readonly disabled>
+                  <span class="Field__response"></span>
+                </div>
+              </div>
+              <div class="Field" data-col="" aria-invalid="">
+                <label for="desc" class="Field__label">Description</label>
+                <textarea class="Field__input" id="desc" name="desc" rows="5" spellcheck="false">{{data.desc}}</textarea>
+                <span class="Field__response"></span>
+              </div>
+              <div class="Field" data-col="" aria-invalid="">
+                <label for="img" class="Field__label">New Image</label>
+                <input type="file" accept=".jpg,.jpeg,.png" name="img" id="img"
+                  class="Field__input" data-previewer-target="#preview-img">
+                <span class="Field__response"></span>
+              </div>
+            </div>
+            <div class="Form__footer">
+              <div class="Field-actions" data-align="end">
+                <button type="button" class="Btn" data-variant="grey" onclick="history.back()">Cancel</button>
+                <button type="reset" class="Btn" data-variant="dark">Reset</button>
+                <button type="submit" class="Btn" data-variant="success">Update</button>
+              </div>
+            </div>
+          </form>
         </div>
-        <div class="Form__body">
-          <div class="Field-group">
-            <div class="Field" data-col="df-4" aria-invalid="">
-              <label for="id" class="Field__label">Id</label>
-              <input type="password" class="Field__input" id="id" value="{{data._id}}" readonly disabled>
-              <span class="Field__response"></span>
-            </div>
-            <div class="Field" data-col="df-4" aria-invalid="">
-              <label for="addedAt" class="Field__label">Added at</label>
-              <input type="text" class="Field__input" id="addedAt"
-                value="{{dateFormat data.createdAt 'medium'}} - by {{data.createdBy.username}}" readonly disabled>
-              <span class="Field__response"></span>
-            </div>
-            <div class="Field" data-col="df-4" aria-invalid="">
-              <label for="modifiedAt" class="Field__label">Modified at</label>
-              <input type="text" class="Field__input" id="modifiedAt"
-                value="{{dateFormat data.editedAt 'medium'}} - by {{data.editedBy.username}}" readonly disabled>
-              <span class="Field__response"></span>
-            </div>
-          </div>
-          <div class="Field-group">
-            <div class="Field" data-col="df-6" aria-invalid="">
-              <label for="name" class="Field__label">Name</label>
-              <input type="text" class="Field__input" name="name" id="name" value="{{data.name}}">
-              <span class="Field__response"></span>
-            </div>
-            <div class="Field" data-col="df-6" aria-invalid="">
-              <label for="slug" class="Field__label">Slug</label>
-              <input type="text" class="Field__input" name="slug" id="slug" value="{{data.slug}}" readonly disabled>
-              <span class="Field__response"></span>
-            </div>
-          </div>
-          <div class="Field" data-col="" aria-invalid="">
-            <label for="desc" class="Field__label">Description</label>
-            <textarea class="Field__input" id="desc" name="desc" rows="5">{{data.desc}}</textarea>
-            <span class="Field__response"></span>
-          </div>
-          <div class="Field" data-col="" aria-invalid="">
-            <label for="img" class="Field__label">Image</label>
-            <input type="file" accept=".jpg,.jpeg,.png" class="Field__input" name="img" id="img" value="{{data.img}}">
-            <span class="Field__response"></span>
-          </div>
+        <div class="Col lg-3 P-b-0">
+          <img src="/uploads/categories/{{data.img}}" class="Img Previewer" id="preview-img"
+            data-variant="thumbnail" data-dialog-target="#imgviewing-dialog" data-default-src="/uploads/categories/{{data.img}}">
         </div>
-        <div class="Form__footer">
-          <div class="Field-actions" data-align="end">
-            <button type="button" class="Btn" data-variant="grey" onclick="history.back()">Cancel</button>
-            <button type="reset" class="Btn" data-variant="dark">Reset</button>
-            <button type="submit" class="Btn" data-variant="success">Update</button>
-          </div>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </section>
 {{!-- End of Product editing --}}
+
+{{!-- Image viewing Modal --}}
+<dialog id="imgviewing-dialog" class="Dialog" data-size="lg">
+  <form class="Dialog__form" id="imgviewing-dialog-form">
+    <div class="Dialog__header"></div>
+    <div class="Dialog__body">
+      <img class="Dialog__img Img" data-variant="thumbnail" src="/uploads/categories/{{data.img}}" alt="">
+    </div>
+  </form>
+  <button class="Dialog__close" formmethod="dialog" form="imgviewing-dialog-form"></button>
+</dialog>
+{{!-- End of Image viewing Modal --}}
+
+<script src="/js/pages/categories/edit.js"></script>
