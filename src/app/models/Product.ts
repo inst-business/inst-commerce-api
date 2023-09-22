@@ -1,12 +1,13 @@
-import { Schema, model, ObjectId } from 'mongoose'
+import { Schema, Document, model, ObjectId } from 'mongoose'
 import { SuspendableModel } from './Model'
 import _ from '@/utils/utils'
 import {
-  handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
+  ArgumentId, handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
 } from '@/utils/mongoose'
 import { ITEM_STATUS } from '@/config/global/const'
 
 export interface IProduct {
+  _id: ObjectId
   name: string
   desc: string
   img: string
@@ -23,6 +24,8 @@ export interface IProduct {
   deletedBy?: ObjectId
   deletedAt?: Date
 }
+
+type TProductDocument = IProduct & Document
 
 const ProductSchema = new Schema<IProduct>({
   name: { type: String, required: true, maxLength: 255 },
@@ -57,7 +60,7 @@ class ProductModel extends SuspendableModel<IProduct> {
     return res
   }
   
-  // async updateOne (id: string, product: IProduct): Promise<IProduct | null> {
+  // async updateOne (id: ArgumentId, product: IProduct): Promise<IProduct | null> {
   //   product.slug = _.genUniqueSlug(product.name, id)
   //   const q = Product.findOneAndUpdate({ _id: id }, product)
   //   const res = await handleQuery(q)

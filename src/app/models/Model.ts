@@ -1,7 +1,7 @@
-import mongoose, { Document, ObjectId } from 'mongoose'
-import { TSuspendableDocument, handleQuery } from '@/utils/mongoose'
+import mongoose, { Document } from 'mongoose'
+import { TSuspendableDocument, ArgumentId, handleQuery } from '@/utils/mongoose'
 import _ from '@/utils/utils'
-import { ExcludeKeys, SORT_ORDER } from '@/config/global/const'
+import { Keys, Many, IResultWithPars, ExcludeKeys, SORT_ORDER } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 class Model<I> {
@@ -19,7 +19,7 @@ class Model<I> {
 
   async getMany (
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
-    sortBy: ExcludeKeys<I, Document> = 'createdAt' as any
+    sortBy: Keys<I> = 'createdAt' as any
   ): Promise<I[]> {
     const q = this.model.find({})
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
@@ -28,7 +28,7 @@ class Model<I> {
     return data as I[]
   }
 
-  async getOneById (id: string): Promise<I | null> {
+  async getOneById (id: ArgumentId): Promise<I | null> {
     const q = this.model.findOne({ _id: id }).lean()
     const data = await handleQuery(q)
     return data as I | null
@@ -47,7 +47,7 @@ class Model<I> {
     // return res.toObject()
   }
 
-  async updateOne (id: string, data: Partial<I>): Promise<I | null> {
+  async updateOne (id: ArgumentId, data: Partial<I>): Promise<I | null> {
     const q = this.model.findOneAndUpdate({ _id: id }, data)
     const res = await handleQuery(q)
     return res as I | null
@@ -61,7 +61,7 @@ class Model<I> {
 
   async getManyDeleted (
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
-    sortBy: ExcludeKeys<I, Document> = 'deletedAt' as any
+    sortBy: Keys<I> = 'deletedAt' as any
   ): Promise<I[]> {
     const q = this.model.find({ isDeleted: true })
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
@@ -76,13 +76,13 @@ class Model<I> {
     return data
   }
 
-  async getDeletedById (id: string): Promise<I | null> {
+  async getDeletedById (id: ArgumentId): Promise<I | null> {
     const q = this.model.findOne({ _id: id, isDeleted: true }).lean()
     const data = await handleQuery(q)
     return data as I | null
   }
 
-  async destroyOneOrMany (id: string | string[]): Promise<Record<string, any>> {
+  async destroyOneOrMany (id: Many<ArgumentId>): Promise<Record<string, any>> {
     const q = this.model.deleteMany({ _id: id, isDeleted: true })
     const res = await handleQuery(q)
     return res
@@ -100,14 +100,13 @@ export class SuspendableModel<I> extends Model<I> {
     this.suspendableModel = model
   }
 
-  async deleteOneOrMany (id: string | string[], deletedBy: ObjectId): Promise<Boolean> {
+  async deleteOneOrMany (id: Many<ArgumentId>, deletedBy: ArgumentId): Promise<IResultWithPars> {
     const q = this.suspendableModel.find({ _id: id }).softDelete(deletedBy)
-    console.log(await this.suspendableModel.find({ _id: id }).lean())
     const res = await handleQuery(q)
     return res
   }
 
-  async restoreOneOrMany (id: string | string[]): Promise<Boolean> {
+  async restoreOneOrMany (id: Many<ArgumentId>): Promise<IResultWithPars> {
     const q = this.suspendableModel.find({ _id: id, isDeleted: true }).restoreDeleted()
     const res = await handleQuery(q)
     return res

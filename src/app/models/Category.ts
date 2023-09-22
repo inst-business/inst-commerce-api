@@ -1,13 +1,13 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
 import { SuspendableModel } from './Model'
-import { User } from './User'
 import _ from '@/utils/utils'
 import {
-  handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
+  ArgumentId, handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
 } from '@/utils/mongoose'
-import { ExcludeKeys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
+import { Keys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
 
-export interface ICategory extends Document {
+export interface ICategory {
+  _id: ObjectId
   name: string
   desc: string
   img: string
@@ -22,6 +22,8 @@ export interface ICategory extends Document {
   deletedBy?: ObjectId
   deletedAt?: Date
 }
+
+type TCategoryDocument = ICategory & Document
 
 const CategorySchema = new Schema<ICategory>({
   name: { type: String, required: true, maxLength: 255 },
@@ -52,7 +54,7 @@ class CategoryModel extends SuspendableModel<ICategory> {
 
   async getMany (
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
-    sortBy: ExcludeKeys<ICategory, Document> = 'createdAt'
+    sortBy: Keys<ICategory> = 'createdAt'
   ): Promise<ICategory[]> {
     const q = Category.find({})
       .populate({ path: 'createdBy', select: 'username -_id' })
@@ -62,7 +64,7 @@ class CategoryModel extends SuspendableModel<ICategory> {
     return data
   }
 
-  async getOneById (id: string): Promise<ICategory | null> {
+  async getOneById (id: ArgumentId): Promise<ICategory | null> {
     const q = Category.findById(id)
       .populate({ path: 'createdBy', select: 'username -_id' })
       .populate({ path: 'editedBy', select: 'username -_id' })
@@ -92,7 +94,7 @@ class CategoryModel extends SuspendableModel<ICategory> {
   
   async getManyDeleted (
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
-    sortBy: ExcludeKeys<ICategory, Document> = 'deletedAt'
+    sortBy: Keys<ICategory> = 'deletedAt'
   ): Promise<ICategory[]> {
     const q = Category.find({ isDeleted: true })
       .populate({ path: 'createdBy', select: 'username -_id' })
@@ -103,13 +105,13 @@ class CategoryModel extends SuspendableModel<ICategory> {
     return data
   }
   
-  async findImgById (id: string): Promise<Pick<ICategory, 'img'> | null> {
+  async findImgById (id: ArgumentId): Promise<Pick<ICategory, 'img'> | null> {
     const q = Category.findOne({ _id: id }).select('img -_id').lean()
     const data = await handleQuery(q)
     return data
   }
 
-  async findImgOfDeletedById (id: string): Promise<Pick<ICategory, 'img'> | null> {
+  async findImgOfDeletedById (id: ArgumentId): Promise<Pick<ICategory, 'img'> | null> {
     const q = Category.findOne({ _id: id, isDeleted: true }).select('img -_id').lean()
     const data = await handleQuery(q)
     return data

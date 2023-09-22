@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, model } from 'mongoose'
+import { Schema, Document, model, ObjectId } from 'mongoose'
 // import { SuspendableModel } from './Model'
 // import withJsonSchema from 'mongoose-schema-jsonschema'
 import {
@@ -9,6 +9,7 @@ import {
 } from '@/utils/mongoose'
 
 export interface IUser extends Document {
+  _id: ObjectId
   username: string
   email: string
   tel: string
@@ -31,6 +32,8 @@ export interface IUser extends Document {
   createdAt?: Date
   updatedAt?: Date
 }
+
+type TUserDocument = IUser & Document
 
 const UserSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true, lowercase: true, maxLength: 32 },
@@ -63,7 +66,6 @@ export const User = model<IUser, TSuspendableDocument<IUser>>('User', UserSchema
 
 
 class UserModel {
-
 
   async getUserByUsername (username: string): Promise<IUser | null> {
     const q = User.findOne({ username }).lean()

@@ -1,25 +1,20 @@
 import 'dotenv/config'
-import express from 'express'
-import session from 'express-session'
 import 'module-alias/register'
-import Connect from '@/config/db/connect'
-import { ENV, GV } from '@/config/global/const'
+import express from 'express'
+// import bodyParser from 'body-parser'
+import session from 'express-session'
+import methodOverride from 'method-override'
+import { engine } from 'express-handlebars'
 import morgan from 'morgan'
 import path from 'path'
-import { engine } from 'express-handlebars'
+import Connect from '@/config/db/connect'
 import routes from '@/routes'
 // import jsonServer from 'json-server'
 import { hbsHelpers } from '@/utils/viewEngine'
-import methodOverride from 'method-override'
+import { ENV, GV } from '@/config/global/const'
 
 class Server {
   public static async run () {
-    // try {
-    //   const { env } = require('@/config/env')
-    //   ENV = (<any>env)[process.env.NODE_ENV ? process.env.NODE_ENV! : 'development']
-    // } catch {
-    //   ENV = process.env
-    // }
     const app = express()
 
     // Connect to db
@@ -28,6 +23,8 @@ class Server {
     // Middleware
     app.use(express.urlencoded({ extended: true }))
     app.use(express.json())
+    // app.use(bodyParser.urlencoded({ extended: true }))
+    // app.use(bodyParser.json())
     app.use(methodOverride('_method'))
     app.use(express.static(path.join(__dirname, '../public')))
     app.use(express.static(path.join(__dirname, '../node_modules/bootstrap')))
@@ -81,6 +78,11 @@ class Server {
     
     // Configure routes
     app.use(routes)
+
+    // Fallback
+    app.use('*', (req, res) => {
+      res.status(404).end()
+    })
 
     // Start server
     app.listen(ENV.PORT, () =>

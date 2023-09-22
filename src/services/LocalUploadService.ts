@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import multer, { diskStorage, MulterError } from 'multer'
 import sharp from 'sharp'
+import slugify from 'slugify'
 import _ from '@/utils/utils'
 import LogicError from '@/utils/logicError'
 import { GV } from '@/config/global/const'
@@ -26,8 +27,11 @@ const uploadImage = (dest: string, prefix: string, maxSize?: number) =>
     storage: diskStorage({
       destination: path.join(GV.UPLOADED_PATH, dest),
       filename: function (req, file, cb) {
-        const name = _.genSlug(_.genUniqueCode(prefix) + '-' + req.body.name)
-        const ext = path.extname(file.originalname)
+        // console.log('- body: ', req.body)
+        const
+          ext = path.extname(file.originalname),
+          originalName = req.body.name || path.basename(file.originalname, ext),
+          name = _.genSlug(_.genUniqueCode(prefix) + '-' + originalName)
         cb(null, name + ext)
       }
     })
@@ -51,8 +55,10 @@ export const uploadOneImage = (fieldName: string, dest: string, prefix: string, 
   })
 
 export const removeOneImage = async (dir: string, name: string) => {
-  const dest = path.join(GV.UPLOADED_PATH, dir, name)
-  await new Promise(() => fs.unlinkSync(dest)).catch(err => {
+  await new Promise(() => {
+    const dest = path.join(GV.UPLOADED_PATH, dir || '', name || '')
+    fs.unlinkSync(dest)
+  }).catch(err => {
     throw _.logicError(err.name, err.message, 404, ERR.OBJECT_NOT_FOUND, err.path)
   })
 }

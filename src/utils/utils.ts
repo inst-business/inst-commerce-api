@@ -73,9 +73,10 @@ class Utils {
       const resData = data != null ? structuredClone(data) : {}
       res.statusCode = 200
       if (err) {
+        console.error(err)
         const errJSON = typeof err.toJSON === 'function' ? err.toJSON() : err
         const errObj = (typeof errJSON === 'object')
-          ? structuredClone(errJSON) : { message: err, code: -7 }
+          ? JSON.parse(JSON.stringify(errJSON)) : { message: err, code: -7 }
         const code = errObj.httpCode
         res.statusCode = (typeof code === 'number' && !isNaN(code)) ? code : 500
         resData['error'] = errObj

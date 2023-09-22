@@ -5,7 +5,8 @@ import {
 } from '@/utils/mongoose'
 import { ITEM_STATUS } from '@/config/global/const'
 
-export interface IArticle extends Document {
+export interface IArticle {
+  _id: ObjectId
   name: string
   desc: string
   img: string
@@ -22,6 +23,8 @@ export interface IArticle extends Document {
   deletedBy?: ObjectId
   deletedAt?: Date
 }
+
+type TArticleDocument = IArticle & Document
 
 const ArticleSchema = new Schema<IArticle>({
   name: { type: String, required: true, maxLength: 255 },

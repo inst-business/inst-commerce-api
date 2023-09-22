@@ -19,8 +19,7 @@
     <div class="Box Box-scrollable">
       <div class="Row">
         <div class="Col lg-9 P-b-0">
-          <form class="Form" action="/v1/categories{{routeI 'crud.store_one'}}" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="referer" value={{referer}}>
+          <form class="Form" action="/v1/categories{{routeI 'crud.store_one'}}" method="post" enctype="multipart/form-data" id="form-create">
             <div class="Form__header">
               <p class="Form__header-title">New category</p>
             </div>

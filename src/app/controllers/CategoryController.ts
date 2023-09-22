@@ -2,7 +2,7 @@ import CategoryModel, { ICategory } from '@models/Category'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
 import { removeOneImage } from '@/services/LocalUploadService'
-import { ROLES, USER_SIGN } from '@/config/global/const'
+import { Keys, ROLES, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 const Category = new CategoryModel()
@@ -37,11 +37,13 @@ class CategoryCtrl {
         data = _.pickProps(<ICategory>req.body, keys)
       data.createdBy = user._id
       if (req.file != null && req.file.fieldname === 'img') {
-        data.img = req.file.filename
+        data.img = req.file?.filename
       }
       const submittedCategory = await Category.insertOne(data)
         .catch(err => {
-          removeOneImage('categories', data.img).catch(e => console.error(e?.message))
+          console.log('- file uploaded: ', req.file)
+          removeOneImage('categories', <string>req.file?.filename)
+            .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
           throw err
         })
       return submittedCategory
@@ -103,12 +105,14 @@ class CategoryCtrl {
       const updatedCategory = await Category.updateOne(id, data)
         .then(async (updatedData) => {
           if (data.img != null && prevData?.img != null) {
-            removeOneImage('categories', prevData.img).catch(e => console.error(e?.message))
+            removeOneImage('categories', prevData.img)
+              .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
           }
           return updatedData
         })
         .catch(() => {
-          removeOneImage('categories', data.img).catch(e => console.error(e?.message))
+          removeOneImage('categories', <string>req.file?.filename)
+            .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
         })
       return updatedCategory
     },
@@ -135,6 +139,7 @@ class CategoryCtrl {
 
   static deleteOneOrMany () {
     return _.routeAsync(async (req, res) => {
+      // console.log('content-type: ', req.headers['content-type'])
       const
         sign: USER_SIGN = (<any>req).user,
         user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
@@ -145,7 +150,7 @@ class CategoryCtrl {
       const result = await Category.deleteOneOrMany(id, user._id)
       return result
     },
-    _.redirectView('back')
+    // _.redirectView('back')
   )}
   
   static restoreOne () {
@@ -154,7 +159,7 @@ class CategoryCtrl {
       const restoredCategory = await Category.restoreOneOrMany(id)
       return restoredCategory
     },
-    _.redirectView('back')
+    // _.redirectView('back')
   )}
 
   static destroyOneOrMany () {
@@ -164,11 +169,12 @@ class CategoryCtrl {
       const result = await Category.destroyOneOrMany(id)
         .then(data => {
           if (prevData?.img == null) return data
-          removeOneImage('categories', prevData.img).catch(e => console.error(e?.message))
+          removeOneImage('categories', prevData.img)
+            .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
         })
       return result
     },
-    _.redirectView('back')
+    // _.redirectView('back')
   )}
 
 }
@@ -182,16 +188,24 @@ export class CategoryExtCtrl {
 
   static getMany () {
     return _.routeAsync(async (req, res) => {
-      const data: ICategory[] = await Category.getMany()
-      return data
+      const
+        data: ICategory[] = await Category.getMany(),
+        pickData = data.map(item => _.pickProps(item, [
+          'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
+        ]))
+      return pickData
     })
   }
 
   static getOneBySlug () {
     return _.routeAsync(async (req, res) => {
       const { slug } = req.params
-      const data: ICategory | null = await Category.getOneBySlug(slug)
-      return data
+      const
+        data: ICategory | null = await Category.getOneBySlug(slug),
+        pickData = data && _.pickProps(data, [
+          'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
+        ])
+      return pickData
     })
   }
 

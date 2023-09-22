@@ -2,18 +2,28 @@ import _ from '@/utils/utils'
 import mongoose, {
   Schema, Document, Query, Model, ObjectId, MongooseError,
   QueryWithHelpers, HydratedDocument, MongooseDefaultQueryMiddleware,
-  Types
 } from 'mongoose'
+import { IResultWithPars } from '@/config/global/const'
+import LogicError from '@/utils/logicError'
 import ERR from '@/config/global/error'
 
 
 // Handle errors
-export const mongoError = (err: MongooseError, stackAllowed?: boolean) => {
-  const { name, message, stack } = err
-  const pars = (<any>err).errors
-  const error = (stackAllowed ? _.stackError : _.logicError)
-    (name, message, 500, ERR.INVALID_DATA, pars)
-  throw error
+export const mongooseError = <E extends MongooseError>(err: E | LogicError, stackAllowed?: boolean) => {
+  if (err instanceof LogicError) throw err
+  const _error = stackAllowed ? _.stackError : _.logicError
+  if (err instanceof mongoose.Error.CastError) {
+    const message = err.reason?.message || err.message
+    throw _error(err.name, message, 400, ERR.INVALID_DATA, err.value)
+  }
+  if (err instanceof mongoose.Error.ValidationError) {
+    const pars = Object.keys(err.errors).map(field => {
+      const { name, path, kind } = err.errors[field]
+      return { field: path, validator: kind, error: name }
+    })
+    throw _error(err.name, err.message, 400, ERR.INVALID_DATA, ...pars)
+  }
+  throw _error(err.name, err.message, 500, ERR.SERVER_ERROR)
 }
 
 // Handle querying
@@ -22,7 +32,7 @@ export const handleQuery = <T>(res: Promise<T>, cb?: (data: T) => void): Promise
     cb && cb(data)
     // structuredClone() doesnt clone non-built-in classes => ObjectId crashed
     return JSON.parse(JSON.stringify(data))
-  }).catch(e => mongoError(e))
+  }).catch(e => mongooseError(e))
 
 
 // edited details plugin
@@ -35,16 +45,17 @@ export const withEditedDetails = (schema: Schema, ref: string) => {
 
 
 // Soft delete
-export type TWithSoftDeleted = {
+export interface TWithSoftDeleted {
   isDeleted: boolean
   deletedBy?: ObjectId
   deletedAt?: Date
 }
 export type TDocument = Document & TWithSoftDeleted
-type TQueryWithHelpers = QueryWithHelpers<Boolean, TDocument | TDocument[]>
+export type ArgumentId = ObjectId | string
+// type TQueryWithHelpers = QueryWithHelpers<Boolean, TDocument | TDocument[]>
 export interface ISoftDeleteQueryHelpers<T> extends Model<T> {
-  softDelete(deletedBy: ObjectId): TQueryWithHelpers,
-  restoreDeleted(): TQueryWithHelpers,
+  softDelete(deletedBy: ArgumentId): Promise<IResultWithPars>,
+  restoreDeleted(): Promise<IResultWithPars>,
 }
 export type TSuspendableDocument<T> = Model<T, ISoftDeleteQueryHelpers<T>>
 
@@ -101,12 +112,12 @@ export const withSoftDelete = (schema: Schema, ref: string) => {
     })
   })
 
-  const setDocumentDeletion = (doc: TDocument, isDeleted: boolean, deletedBy?: ObjectId) => {
+  const setDocumentDeletion = (doc: TDocument, isDeleted: boolean, deletedBy?: ArgumentId) => {
     doc.isDeleted = isDeleted
-    doc.deletedBy = isDeleted ? deletedBy : undefined
+    doc.deletedBy = isDeleted ? <ObjectId>deletedBy : undefined
     doc.deletedAt = isDeleted ? new Date() : undefined
     doc.$isDeleted(isDeleted)
-    return doc.save().then(res => [true, res.toObject()]).catch(err => false)
+    return doc.save().then(res => true).catch(err => true)
   }
   type TDocumentWithQueryHelpers = QueryWithHelpers<
     TDocument | TDocument[],
@@ -116,27 +127,43 @@ export const withSoftDelete = (schema: Schema, ref: string) => {
 
   const QueryHelpers = {
     // Remove (soft deletes) document
-    softDelete: async function (this: TDocumentWithQueryHelpers, deletedBy: ObjectId) {
-      this.where({ isDeleted: false })
-      const doc = await this
-      if (_.isNull(doc)) return false
-      if (_.isArray(doc)) {
-        return doc.reduce((prev, cur) =>
-          [...prev, setDocumentDeletion(cur, true, deletedBy)]
-        , <Promise<unknown>[]>[])
+    softDelete: async function (this: TDocumentWithQueryHelpers, deletedBy: ArgumentId): Promise<IResultWithPars> {
+      const data = await this.where({ isDeleted: false })
+      if (data == null || (Array.isArray(data) && data.length <= 0)) {
+        throw _.logicError('Null', 'No data found.', 400, ERR.EMPTY_DATA)
       }
-      return setDocumentDeletion(doc, true)
+      if (!Array.isArray(data)) {
+        const result = await setDocumentDeletion(data, true, deletedBy)
+        return { result, ...(result && { pars: [data._id] }) }
+      }
+      const pars = new Array()
+      for (const doc of new Set(data)) {
+        const result = await setDocumentDeletion(doc, true, deletedBy)
+        if (result) pars.push(doc._id)
+      }
+      return {
+        result: pars.length > 0 ? true : false,
+        ...(pars.length > 0 && { pars })
+      }
     },
-    restoreDeleted: async function (this: TDocumentWithQueryHelpers) {
-      this.where({ isDeleted: true })
-      const doc = await this
-      if (_.isNull(doc)) return false
-      if (_.isArray(doc)) {
-        return doc.reduce((prev, cur) =>
-          [...prev, setDocumentDeletion(cur, false)]
-        , <Promise<unknown>[]>[])
+    restoreDeleted: async function (this: TDocumentWithQueryHelpers): Promise<IResultWithPars> {
+      const data = await this.where({ isDeleted: true })
+      if (data == null || (Array.isArray(data) && data.length <= 0)) {
+        throw _.logicError('Null', 'No data found.', 400, ERR.EMPTY_DATA)
       }
-      return setDocumentDeletion(doc, false)
+      if (!Array.isArray(data)) {
+        const result = await setDocumentDeletion(data, false)
+        return { result, ...(result && { pars: [data._id] }) }
+      }
+      const pars = new Array()
+      for (const doc of new Set(data)) {
+        const result = await setDocumentDeletion(doc, false)
+        if (result) pars.push(doc._id)
+      }
+      return {
+        result: pars.length > 0 ? true : false,
+        ...(pars.length > 0 && { pars })
+      }
     }
   }
   

@@ -16,6 +16,7 @@ export type TNullableRes<T extends (...args: any[]) => any> =
 export type Many<T> = T | ReadonlyArray<T>
 export type Primitives = string | number | boolean
 export type PropsKey = string | number | symbol
+export type Keys<T> = keyof T
 export type ExcludeKeys<T, K> = Exclude<keyof T, keyof K>
 export type RecursiveArray<T> = Array<RecursiveArray<T> | T>
 export type TProps<T> = {

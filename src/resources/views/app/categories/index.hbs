@@ -19,13 +19,13 @@
     <div class="Actions">
       <div class="Actions-left">
         <div class="Field__option">
-          <input type="checkbox" class="Check" name="categoryItems[]" value="" id="select-all" data-select-all="select-all">
+          <input type="checkbox" class="Check" name="id[]" value="" id="select-all" data-select-all="select-all">
           <label for="select-all">Select all</label>
         </div>
         <div class="Actions__seperate"></div>
         <button class="Btn" data-size="sm" data-variant="outline danger" title="Delete selected"
-          data-form-id="{{this._id}}">
-          <i class="fa-regular fa-trash"></i> Deleted
+          data-dialog-target="#delete-selected-dialog" id="delete-selected">
+          <i class="fa-regular fa-trash"></i> Delete
         </button>
       </div>
       <div class="Actions-right">
@@ -64,7 +64,7 @@
           {{#each data.items}}
             <tr class="Item">
               <td scope="Row">
-                <input type="checkbox" class="Check" name="categoryItems[]" value="{{this._id}}" data-select-target="select-all">
+                <input type="checkbox" class="Check" name="id[]" value="{{this._id}}" data-select-target="select-all">
               </td>
               {{!-- <td><p>{{increase @index 1}}</p></td> --}}
               <td class="Item__name" width="25%">
@@ -75,7 +75,7 @@
               </td> --}}
               <td class="Item__img">
                 <picture>
-                  <source srcset="/uploads/categories/{{webpFormat this.img}}" type="image/webp">
+                  {{!-- <source srcset="/uploads/categories/{{webpFormat this.img}}" type="image/webp"> --}}
                   <img src="/uploads/categories/{{this.img}}" alt="{{this.name}}" title="{{this.name}}"
                     loading="lazy" decoding="async" fetchpriority="true"
                     class="Img" data-variant="thumbnail" data-dialog-target="#imgviewing-dialog">
@@ -125,7 +125,7 @@
 
 {{!-- Image viewing Modal --}}
 <dialog id="imgviewing-dialog" class="Dialog" data-size="lg">
-  <form class="Dialog__form" id="imgviewing-dialog-form">
+  <form class="Dialog__form" method="dialog" id="imgviewing-dialog-form">
     <div class="Dialog__header"></div>
     <div class="Dialog__body">
       <img class="Dialog__img Img" data-variant="thumbnail" src="" alt="">
@@ -137,18 +137,36 @@
 
 {{!-- Modal Delete --}}
 <dialog id="delete-dialog" class="Dialog">
-  <form class="Dialog__form" method="POST">
+  <form class="Dialog__form" method="dialog">
+    <input type="hidden" name="id" disabled>
     <div class="Dialog__header">Confirmation</div>
     <div class="Dialog__body">
       You really want to perform this action?
     </div>
     <div class="Dialog__footer">
-      <input type="hidden" name="id[]" value="">
       <button type="submit" class="Btn" data-variant="danger">Yes, delete it!</button>
       <button type="submit" class="Btn" data-variant="grey" formmethod="dialog">Cancel</button>
     </div>
   </form>
 </dialog>
 {{!-- End of Modal Delete --}}
+
+{{!-- Modal Delete Selected --}}
+<dialog id="delete-selected-dialog" class="Dialog">
+  <form class="Dialog__form" method="dialog">
+    <div class="Dialog__header">Confirmation</div>
+    <div class="Dialog__body">
+      <p class="P1 M-b-2">You really want to delete these following categories?</p>
+      <ul>
+        <li><strong>...</strong></li>
+      </ul>
+    </div>
+    <div class="Dialog__footer">
+      <button type="submit" class="Btn" data-variant="danger">Yes, delete them!</button>
+      <button type="submit" class="Btn" data-variant="grey" formmethod="dialog">Cancel</button>
+    </div>
+  </form>
+</dialog>
+{{!-- End of Modal Delete Selected --}}
 
 <script src="/js/pages/categories/index.js"></script>

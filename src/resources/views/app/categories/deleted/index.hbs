@@ -24,12 +24,12 @@
           <label for="select-all">Select all</label>
         </div>
         <div class="Actions__seperate"></div>
-        <button class="Btn" data-size="sm" data-variant="outline success" title="Delete selected"
-          data-form-id="{{this._id}}">
+        <button class="Btn" data-size="sm" data-variant="outline success" title="Restore selected"
+          data-dialog-target="#selected-actions-dialog" id="restore-selected">
           <i class="fa-regular fa-clock-rotate-left"></i> Restore
         </button>
-        <button class="Btn" data-size="sm" data-variant="outline danger" title="Delete selected"
-          data-form-id="{{this._id}}">
+        <button class="Btn" data-size="sm" data-variant="outline danger" title="Permanently delete selected"
+          data-dialog-target="#selected-actions-dialog" id="destroy-selected">
           <i class="fa-regular fa-file-slash"></i> Destroy
         </button>
       </div>
@@ -48,7 +48,7 @@
             <th scope="col">
               {{!-- <input type="checkbox" class="Check" name="item[]" value="" id="select-all"> --}}
             </th>
-            <th>#</th>
+            {{!-- <th>#</th> --}}
             <th>Name</th>
             <th>Image</th>
             <th>Description</th>
@@ -61,9 +61,9 @@
           {{#each data}}
             <tr class="Item">
               <td scope="Row">
-                <input type="checkbox" class="Check" name="categoryItems[]" value="{{this._id}}" data-select-target="select-all">
+                <input type="checkbox" class="Check" name="id[]" value="{{this._id}}" data-select-target="select-all">
               </td>
-              <td>{{increase @index 1}}</td>
+              {{!-- <td>{{increase @index 1}}</td> --}}
               <td class="Item__name" width="22.5%">
                 <p class="Text-limit-3">{{this.name}}</p>
               </td>
@@ -118,7 +118,7 @@
 
 {{!-- Image viewing Modal --}}
 <dialog id="imgviewing-dialog" class="Dialog" data-size="lg">
-  <form class="Dialog__form" id="imgviewing-dialog-form">
+  <form class="Dialog__form" method="dialog" id="imgviewing-dialog-form">
     <div class="Dialog__header"></div>
     <img class="Dialog__img Img" data-variant="thumbnail" src="" alt="">
   </form>
@@ -128,19 +128,37 @@
 
 {{!-- Actions Modal --}}
 <dialog id="actions-dialog" class="Dialog">
-  <form class="Dialog__form" method="POST">
-    <a href="/v1/categories{{routeI 'crud.get_many_deleted'}}" id="dialog-action" hidden></a>
+  <form class="Dialog__form" method="dialog">
+    <input type="hidden" name="id" disabled>
     <div class="Dialog__header">Confirmation</div>
     <div class="Dialog__body">
       You really want to perform this action?
     </div>
     <div class="Dialog__footer">
-      <input type="hidden" name="id[]" value="">
       <button type="submit" class="Btn Dialog__confirm-button" data-variant=""></button>
       <button type="submit" class="Btn" data-variant="grey" formmethod="dialog">Cancel</button>
     </div>
   </form>
 </dialog>
 {{!-- End of Actions Modal --}}
+
+{{!-- Modal Perform Selected Actions --}}
+<dialog id="selected-actions-dialog" class="Dialog">
+  <form class="Dialog__form" method="dialog">
+    <input type="hidden" name="ids" disabled>
+    <div class="Dialog__header">Confirmation</div>
+    <div class="Dialog__body">
+      <p class="P1 M-b-2">You really want to perform this action to all the following fields?</p>
+      <ul>
+        <li><strong>...</strong></li>
+      </ul>
+    </div>
+    <div class="Dialog__footer">
+      <button type="submit" class="Btn" data-variant="">Yes, do it</button>
+      <button type="submit" class="Btn" data-variant="grey" formmethod="dialog">Cancel</button>
+    </div>
+  </form>
+</dialog>
+{{!-- End of Modal Perform Selected Actions --}}
 
 <script src="/js/pages/categories/deleteds.js"></script>

@@ -1,3 +1,5 @@
+@use "../utilities/loading";
+
 /**
   Dialog
 */
@@ -12,7 +14,7 @@
 }
 .Dialog {
   // display: none;
-  // position: relative;
+  position: relative;
   gap: var(--Dialog-padding);
   width: var(--Dialog-width);
   max-width: calc(
@@ -21,10 +23,18 @@
   padding: 0;
   border: 0;
   background-color: transparent;
+  border-radius: var(--Dialog-radius);
   visibility: hidden;
   opacity: 0;
   // overflow-x: hidden;
   // transition: all 0.35s ease;
+
+  &[aria-busy="true"],
+  &.loading {
+    // overflow: hidden;
+    pointer-events: none;
+    @include loading.onloading;
+  }
 
   &[data-size="lg"] {
     --Dialog-width: 48rem;

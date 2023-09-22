@@ -3,7 +3,7 @@ import { createClient } from 'redis'
 import { GV } from '@/config/global/const'
 import _ from '@/utils/utils'
 import ERR from '@/config/global/error'
-import { mongoError } from '@/utils/mongoose'
+import { mongooseError } from '@/utils/mongoose'
 
 class Connect {
 
@@ -29,7 +29,7 @@ class Connect {
     await connect(`${connectionString}/${dbname}`, opts)
       .then(() => console.log(`MongoDB connect to ${dbname} successfully!`))
       // .catch(e => console.log(e))
-      .catch(e => mongoError(e))
+      .catch(e => mongooseError(e))
   }
 
   private async configureCache () {
