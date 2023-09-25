@@ -38,7 +38,7 @@ class ArticleCtrl {
         'items': Article.getMany(),
         'deletedCount': Article.getDeletedAmount()
       }
-      const data = _.asyncAllSettled(resources)
+      const data = _.fetchAllSettled(resources)
       return data
     },
     _.renderView('app/articles/index')

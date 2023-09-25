@@ -31,7 +31,7 @@ class Utils {
     return ENV[name]
   }
 
-  async asyncAllSettled (records: Record<string, Promise<any>>) {
+  async fetchAllSettled (records: Record<string, Promise<unknown>>) {
     const promises = Object.values(records)
     const keys = Object.keys(records)    
     const resData = await Promise.allSettled(promises).then(res => res)

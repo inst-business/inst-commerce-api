@@ -4,7 +4,7 @@ import _ from '@/utils/utils'
 import {
   ArgumentId, handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
 } from '@/utils/mongoose'
-import { Keys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
+import { Many, Keys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
 
 export interface ICategory {
   _id: ObjectId
@@ -105,16 +105,22 @@ class CategoryModel extends SuspendableModel<ICategory> {
     return data
   }
   
-  async findImgById (id: ArgumentId): Promise<Pick<ICategory, 'img'> | null> {
-    const q = Category.findOne({ _id: id }).select('img -_id').lean()
+  async findImageById (id: Many<ArgumentId>): Promise<ICategory['img'][]> {
+    const q = Category.find({ _id: id }).select('img -_id').lean()
     const data = await handleQuery(q)
-    return data
+    return data.map(item => item.img)
   }
 
-  async findImgOfDeletedById (id: ArgumentId): Promise<Pick<ICategory, 'img'> | null> {
-    const q = Category.findOne({ _id: id, isDeleted: true }).select('img -_id').lean()
+  // async findImgByManyIds (id: Many<ArgumentId>): Promise<Pick<ICategory, 'img'>[]> {
+  //   const q = Category.find({ _id: id }).select('img -_id').lean()
+  //   const data = await handleQuery(q)
+  //   return data
+  // }
+
+  async findImageOfDeletedById (id: Many<ArgumentId>): Promise<ICategory['img'][]> {
+    const q = Category.find({ _id: id, isDeleted: true }).select('img -_id').lean()
     const data = await handleQuery(q)
-    return data
+    return data.map(item => item.img)
   }
   
 }

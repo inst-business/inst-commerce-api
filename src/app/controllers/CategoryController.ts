@@ -1,7 +1,7 @@
 import CategoryModel, { ICategory } from '@models/Category'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
-import { removeOneImage } from '@/services/LocalUploadService'
+import { removeOneImage, removeManyImages } from '@/services/LocalUploadService'
 import { Keys, ROLES, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
@@ -10,11 +10,12 @@ const User = new UserModel()
 
 class CategoryCtrl {
 
-  // static test() {
-  //   return _.routeAsync(async (req, res) => {
-  //     return await Category.findImgById(req.params.id)
-  //   })
-  // }
+  static test() {
+    return _.routeAsync(async (req, res) => {
+      const data = await Category.findImageById(req.params.id3 || [req.params.id, req.params.id2])
+      return data
+    })
+  }
 
   static createOne () {
     return _.routeAsync(async () => {},
@@ -66,7 +67,7 @@ class CategoryCtrl {
         'items': Category.getMany(),
         'deletedCount': Category.getDeletedAmount()
       }
-      const data = _.asyncAllSettled(resources)
+      const data = _.fetchAllSettled(resources)
       return data
     },
     _.renderView('app/categories/index')
@@ -96,7 +97,7 @@ class CategoryCtrl {
       const
         keys = ['name', 'desc'],
         data = _.pickProps(<ICategory>req.body, keys),
-        prevData = await Category.findImgById(id)
+        prevData = await Category.findImageById(id)
       if (req.file != null && req.file.fieldname === 'img') {
         data.img = req.file.filename
       }
@@ -104,8 +105,8 @@ class CategoryCtrl {
       data.editedAt = new Date()
       const updatedCategory = await Category.updateOne(id, data)
         .then(async (updatedData) => {
-          if (data.img != null && prevData?.img != null) {
-            removeOneImage('categories', prevData.img)
+          if (data.img != null && prevData[0] != null) {
+            removeOneImage('categories', prevData[0])
               .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
           }
           return updatedData
@@ -165,12 +166,14 @@ class CategoryCtrl {
   static destroyOneOrMany () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.body
-      const prevData = await Category.findImgOfDeletedById(id)
+      const images = await Category.findImageOfDeletedById(id)
       const result = await Category.destroyOneOrMany(id)
         .then(data => {
-          if (prevData?.img == null) return data
-          removeOneImage('categories', prevData.img)
-            .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
+          if (images.length > 0) {
+            removeManyImages('categories', images)
+              .catch(e => console.error(`${e?.message} (${e?.errorCode})`, e?.pars))
+          }
+          return data
         })
       return result
     },

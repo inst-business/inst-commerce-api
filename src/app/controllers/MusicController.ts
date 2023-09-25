@@ -67,7 +67,7 @@ class MusicCtrl {
         'items': Music.getMany(),
         'deletedCount': Music.getDeletedAmount()
       }
-      const data = _.asyncAllSettled(resources)
+      const data = _.fetchAllSettled(resources)
       return data
     },
     _.renderView('app/categories/index')

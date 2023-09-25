@@ -16,7 +16,7 @@ router.get('/e/:slug', CategoryExtCtrl.getOneBySlug())
 router.get('/e', CategoryExtCtrl.getMany())
 
 
-// router.get('/test/:id', CategoryCtrl.test())
+router.get('/test/:id?/:id2?/:id3?', CategoryCtrl.test())
 /** 
  *  INTERNAL
 */

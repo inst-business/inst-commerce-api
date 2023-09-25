@@ -53,12 +53,42 @@ export const uploadOneImage = (fieldName: string, dest: string, prefix: string, 
     })
     next()
   })
+  
+// export const uploadManyImages = (fieldsName: string[], dest: string, prefix: string, maxSize?: number) =>
+// _.routeNextableAsync(async (req, res, next) => {
+//   uploadImage(dest, prefix, maxSize).array(fieldsName)(req, res, (err) => {
+//     if (err) return handleMulterError(err, req)
+//   })
+//   next()
+// })
 
-export const removeOneImage = async (dir: string, name: string) => {
+export const removeOneImage = async (dir: string, fileName: string) => {
   await new Promise(() => {
-    const dest = path.join(GV.UPLOADED_PATH, dir || '', name || '')
+    const dest = path.join(GV.UPLOADED_PATH, dir || '', fileName || '')
     fs.unlinkSync(dest)
   }).catch(err => {
     throw _.logicError(err.name, err.message, 404, ERR.OBJECT_NOT_FOUND, err.path)
   })
+}
+
+export const removeManyImages = async (dir: string, fileNames: string[]) => {
+  const _removeManyImages = await Promise.allSettled(
+    fileNames.map(filename => new Promise(() => {
+      const dest = path.join(GV.UPLOADED_PATH, dir || '', filename || '')
+      fs.unlinkSync(dest)
+    }))
+  )
+  const rejectedImages = new Array()
+  for (const res of _removeManyImages) {
+    if (res.status === 'rejected') {
+      rejectedImages.push({
+        path: res.reason?.path,
+        message: res.reason?.message,
+      })
+    }
+  }
+  const rejectedLength = rejectedImages.length
+  if (rejectedLength > 0) {
+    throw _.logicError('Not found', `Unable to remove ${rejectedLength} file(s).`, 404, ERR.OBJECT_NOT_FOUND, ...rejectedImages)
+  }
 }

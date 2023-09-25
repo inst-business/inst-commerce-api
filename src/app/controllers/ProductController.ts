@@ -38,7 +38,7 @@ class ProductCtrl {
         'items': Product.getMany(),
         'deletedCount': Product.getDeletedAmount()
       }
-      const data = _.asyncAllSettled(resources)
+      const data = _.fetchAllSettled(resources)
       return data
     },
     _.renderView('app/products/index')
