@@ -11,8 +11,29 @@ dialogImgToggle.addEventListener('click', e => {
 })
 
 const form = document.querySelector('form#form-edit')
-form.addEventListener('reset', e => {
+form?.addEventListener('reset', e => {
   const defaultSrc = dialogImgToggle.dataset.defaultSrc
   if (!defaultSrc) return
   dialogImgToggle.src = defaultSrc
+})
+form?.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  const
+    url = form.action,
+    formData = new FormData(form),
+    nameRef = form.querySelector('input[name="name"]'),
+    imgRef = form.querySelector('input[name="img"][type="file"]')
+  if (nameRef.defaultValue === nameRef.value) formData.delete(nameRef.name)
+  if (imgRef.length <= 0 && imgRef.files[0] == null) formData.delete(imgRef.name)
+  console.log('formData', Object.fromEntries(formData.entries()))
+  const updateCategory = fetch(url, {
+    method: 'PUT',
+    body: formData,
+  }).then(res => {
+    if (res.ok) {
+      window.location.replace('/v1/categories')
+    }
+    return res.json()
+  }).catch(e => console.error(e))
+  await updateCategory
 })

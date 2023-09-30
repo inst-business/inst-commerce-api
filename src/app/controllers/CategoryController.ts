@@ -44,8 +44,7 @@ class CategoryCtrl {
       }
       const submittedCategory = await Category.insertOne(data)
         .then(data => {
-          appendOneImage(<any>req.file, 'categories', data.img)
-            .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
+          appendOneImage(<any>req.file, 'categories', data.img).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
           return data
         })
       return submittedCategory
@@ -97,27 +96,28 @@ class CategoryCtrl {
       }
       const
         keys = ['name', 'desc'],
-        data = _.pickProps(<ICategory>req.body, keys),
-        prevImage = await Category.findImageById(id)
+        data = _.pickProps(<ICategory>req.body, keys)
+      let prevImage: string[]
       if (req.file != null && req.file.fieldname === 'img') {
         data.img = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
+        prevImage = await Category.findImageById(id)
       }
+      data.slug = data.name && _.genSlug(data.name + '-' + _.genUniqueCode())
       data.editedBy = user._id
       data.editedAt = new Date()
-      const updatedCategory = await Category.updateOne(id, data)
-        .then((updatedData) => {
-          const dir = 'categories'
-          appendOneImage(<any>req.file, dir, data.img)
-            .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
-          if (prevImage[0] != null) {
-            removeOneImage(dir, prevImage[0])
-              .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
+      const updatedCategory = Category.updateOne(id, data)
+        .then(async (updatedData) => {
+          if (data.img != null) {
+            if (prevImage?.[0] != null) {
+              removeOneImage('categories', prevImage[0]).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
+            }
+            appendOneImage(<any>req.file, 'categories', data.img).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
           }
           return updatedData
         })
-      return updatedCategory
+      const newdata = await updatedCategory
+      return newdata
     },
-    // _.redirectView('/v1/categories/:id', 'id')
     // _.redirectView('back')
   )}
 
@@ -170,8 +170,7 @@ class CategoryCtrl {
       const result = await Category.destroyOneOrMany(id)
         .then(data => {
           if (images.length > 0) {
-            removeManyImages('categories', images)
-              .catch(e => console.error(`${e?.message} (${e?.errorCode})`, e?.pars))
+            removeManyImages('categories', images).catch(e => console.error(`${e?.message} (${e?.errorCode})`, e?.pars))
           }
           return data
         })
@@ -195,11 +194,8 @@ export class CategoryExtCtrl {
         keys: ExcludableKeys<ICategory>[] = [
           '-_id', 'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
         ],
-        data: ICategory[] = await Category.getMany(),
-        pickData = data.map(item => _.pickProps(item, [
-          'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
-        ]))
-      return pickData
+        data: ICategory[] = await Category.getMany(keys)
+      return data
     })
   }
 

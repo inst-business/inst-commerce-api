@@ -49,8 +49,12 @@ class Model<I> {
     // return res.toObject()
   }
 
-  async updateOne (id: ArgumentId, data: Partial<I>): Promise<I | null> {
-    const q = this.model.findOneAndUpdate({ _id: id }, data)
+  async updateOne (
+    id: ArgumentId, data: Partial<I>,
+    selected?: ExcludableKeys<I>[]
+  ): Promise<I | null> {
+    const q = this.model.findOneAndUpdate({ _id: id }, data, { new: true })
+      .select(selected?.join(' ') ?? '').lean()
     const res = await handleQuery(q)
     return res as I | null
   }

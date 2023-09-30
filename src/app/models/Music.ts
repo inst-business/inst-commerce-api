@@ -7,11 +7,13 @@ import {
 import { ExcludableKeys, ExcludeKeys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
 
 export interface IMusic {
+  _id: ObjectId
   name: string
+  desc?: string
   artist: string
   path: string
   cover?: string
-  desc?: string
+  slug: string
   status: ITEM_STATUS
   createdBy: ObjectId
   createdAt: Date
@@ -27,10 +29,11 @@ type TMusicDocument = IMusic & Document
 
 const MusicSchema = new Schema<IMusic>({
   name: { type: String, required: true, maxLength: 255 },
+  desc: { type: String },
   artist: { type: String, required: true, maxLength: 255 },
   path: { type: String, required: true },
   cover: { type: String },
-  desc: { type: String },
+  slug: { type: String, required: true, unique: true, maxLength: 255 },
   status: { type: String, required: true, default: 'active' },
   createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true })

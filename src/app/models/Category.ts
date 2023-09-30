@@ -29,7 +29,7 @@ const CategorySchema = new Schema<ICategory>({
   name: { type: String, required: true, maxLength: 255 },
   desc: { type: String },
   img: { type: String, required: true },
-  slug: { type: String, required: true, maxLength: 255 },
+  slug: { type: String, required: true, unique: true, maxLength: 255 },
   status: { type: String, required: true, default: 'pending' },
   createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true })

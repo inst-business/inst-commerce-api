@@ -1,9 +1,8 @@
-import { ObjectId } from 'mongoose';
 import MusicModel, { IMusic } from '@models/Music'
-import UserModel, { IUser } from '@models/User'
+import UserModel from '@models/User'
 import _ from '@/utils/utils'
 import { removeOneImage } from '@/services/LocalUploadService'
-import { ROLES, USER_SIGN } from '@/config/global/const'
+import { ExcludableKeys, ROLES, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 const Music = new MusicModel()
@@ -36,6 +35,7 @@ class MusicCtrl {
       const
         keys = ['name', 'artist', 'path', 'cover', 'desc'],
         data = _.pickProps(<IMusic>req.body, keys)
+      data.slug = _.genSlug(data.name + '-' + _.genUniqueCode())
       data.createdBy = user._id
       // if (req.file != null && req.file.fieldname === 'cover') {
       //   data.cover = req.file?.filename
@@ -198,11 +198,11 @@ export class MusicExtCtrl {
     return _.routeAsync(async (req, res) => {
       const { slug } = req.params
       const
-        data: IMusic | null = await Music.getOneBySlug(slug),
-        pickData = data && _.pickProps(data, [
-          'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
-        ])
-      return pickData
+        keys: ExcludableKeys<IMusic>[] = [
+          '-_id', 'name', 'desc', 'cover', 'artist', 'slug', 'createdBy', 'createdAt'
+        ],
+        data: IMusic | null = await Music.getOneBySlug(slug, keys)
+      return data
     })
   }
 

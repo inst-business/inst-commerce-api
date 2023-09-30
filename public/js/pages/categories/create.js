@@ -9,7 +9,7 @@ dialogImgToggle?.addEventListener('click', e => {
   dialogImg.alt = dialogImgToggle.alt
 })
 
-const form = document.querySelector('#form-create')
+const form = document.querySelector('form#form-create')
 form?.addEventListener('submit', async (e) => {
   e.preventDefault()
   const url = form.action
