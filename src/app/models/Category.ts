@@ -4,7 +4,7 @@ import _ from '@/utils/utils'
 import {
   ArgumentId, handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
 } from '@/utils/mongoose'
-import { Many, Keys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
+import { Many, Keys, ExcludableKeys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
 
 export interface ICategory {
   _id: ObjectId
@@ -53,52 +53,58 @@ class CategoryModel extends SuspendableModel<ICategory> {
   }
 
   async getMany (
+    selected?: ExcludableKeys<ICategory>[],
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
     sortBy: Keys<ICategory> = 'createdAt'
   ): Promise<ICategory[]> {
     const q = Category.find({})
       .populate({ path: 'createdBy', select: 'username -_id' })
+      .select(selected?.join(' ') ?? '')
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
       .lean()
     const data = await handleQuery(q)
     return data
   }
 
-  async getOneById (id: ArgumentId): Promise<ICategory | null> {
+  async getOneById (id: ArgumentId, selected?: ExcludableKeys<ICategory>[]): Promise<ICategory | null> {
     const q = Category.findById(id)
       .populate({ path: 'createdBy', select: 'username -_id' })
       .populate({ path: 'editedBy', select: 'username -_id' })
+      .select(selected?.join(' ') ?? '')
       .lean()
     const data = await handleQuery(q)
     return data
   }
 
-  async getOneBySlug (slug: String): Promise<ICategory | null> {
+  async getOneBySlug (slug: String, selected?: ExcludableKeys<ICategory>[]) {
     const q = Category.findOne({ slug })
       .populate({ path: 'createdBy', select: 'username -_id' })
       .populate({ path: 'editedBy', select: 'username -_id' })
+      .select(selected?.join(' ') ?? '')
       .lean()
     const data = await handleQuery(q)
     return data
   }
 
-  async insertOne (category: ICategory): Promise<ICategory> {
-    category.slug = category.name
-    const q = Category.create(category)
-    const res = await handleQuery(q, data => {
-      data.slug = _.genUniqueSlug(category.name, data._id.toString())
-      data.save()
-    })
-    return res
-  }
+  // async insertOne (category: ICategory): Promise<ICategory> {
+  //   category.slug = category.name
+  //   const q = Category.create(category)
+  //   const res = await handleQuery(q, data => {
+  //     data.slug = _.genUniqueSlug(category.name, data._id.toString())
+  //     data.save()
+  //   })
+  //   return res
+  // }
   
   async getManyDeleted (
+    selected?: ExcludableKeys<ICategory>[],
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
     sortBy: Keys<ICategory> = 'deletedAt'
   ): Promise<ICategory[]> {
     const q = Category.find({ isDeleted: true })
       .populate({ path: 'createdBy', select: 'username -_id' })
       .populate({ path: 'deletedBy', select: 'username -_id' })
+      .select(selected?.join(' ') ?? '')
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
       .lean()
     const data = await handleQuery(q)

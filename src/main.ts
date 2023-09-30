@@ -2,7 +2,7 @@ import 'dotenv/config'
 import 'module-alias/register'
 import express from 'express'
 // import bodyParser from 'body-parser'
-import session from 'express-session'
+// import session from 'express-session'
 import methodOverride from 'method-override'
 import { engine } from 'express-handlebars'
 import morgan from 'morgan'
@@ -27,21 +27,22 @@ class Server {
     // app.use(bodyParser.json())
     app.use(methodOverride('_method'))
     app.use(express.static(path.join(__dirname, '../public')))
+    // app.use(express.static(path.join(__dirname, '../public/scss')))
     app.use(express.static(path.join(__dirname, '../node_modules/bootstrap')))
     app.use(morgan('dev'))  // HTTP logger
     // app.use(morgan('":remote-addr - :remote-user [:date[web]]" :method :url HTTP/:http-version :status :response-time ms - :res[content-length]'))
     
     // start session
-    app.use(session({
-      secret: 'instance_dev_secret',
-      resave: false,
-      saveUninitialized: true,
-      cookie: {
-        secure: GV.COOKIE_SECURE,
-        httpOnly: true,
-        maxAge: 5 * GV._1M
-      }
-    }))
+    // app.use(session({
+    //   secret: 'instance_dev_secret',
+    //   resave: false,
+    //   saveUninitialized: true,
+    //   cookie: {
+    //     secure: GV.COOKIE_SECURE,
+    //     httpOnly: true,
+    //     maxAge: 5 * GV._1M
+    //   }
+    // }))
 
     // Template engine
     const viewEngineConfig = {
@@ -75,7 +76,8 @@ class Server {
       }
       next()
     })
-    
+    app.disable('x-powered-by')   //  Hide techologies used from tracker (e.g. Wappalyzer)
+
     // Configure routes
     app.use(routes)
 

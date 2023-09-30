@@ -1,12 +1,13 @@
 import CategoryModel, { ICategory } from '@models/Category'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
-import { removeOneImage, removeManyImages } from '@/services/LocalUploadService'
-import { Keys, ROLES, USER_SIGN } from '@/config/global/const'
+import { appendOneImage, removeOneImage, removeManyImages } from '@/services/LocalUploadService'
+import { Keys, ExcludableKeys, ROLES, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 const Category = new CategoryModel()
 const User = new UserModel()
+const fileUploadPrefix = 'upload-cat'
 
 class CategoryCtrl {
 
@@ -36,16 +37,16 @@ class CategoryCtrl {
       const
         keys = ['name', 'desc'],
         data = _.pickProps(<ICategory>req.body, keys)
+      data.slug = _.genSlug(data.name + '-' + _.genUniqueCode())
       data.createdBy = user._id
       if (req.file != null && req.file.fieldname === 'img') {
-        data.img = req.file?.filename
+        data.img = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
       }
       const submittedCategory = await Category.insertOne(data)
-        .catch(err => {
-          console.log('- file uploaded: ', req.file)
-          removeOneImage('categories', <string>req.file?.filename)
+        .then(data => {
+          appendOneImage(<any>req.file, 'categories', data.img)
             .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
-          throw err
+          return data
         })
       return submittedCategory
     },
@@ -97,23 +98,22 @@ class CategoryCtrl {
       const
         keys = ['name', 'desc'],
         data = _.pickProps(<ICategory>req.body, keys),
-        prevData = await Category.findImageById(id)
+        prevImage = await Category.findImageById(id)
       if (req.file != null && req.file.fieldname === 'img') {
-        data.img = req.file.filename
+        data.img = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
       }
       data.editedBy = user._id
       data.editedAt = new Date()
       const updatedCategory = await Category.updateOne(id, data)
-        .then(async (updatedData) => {
-          if (data.img != null && prevData[0] != null) {
-            removeOneImage('categories', prevData[0])
+        .then((updatedData) => {
+          const dir = 'categories'
+          appendOneImage(<any>req.file, dir, data.img)
+            .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
+          if (prevImage[0] != null) {
+            removeOneImage(dir, prevImage[0])
               .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
           }
           return updatedData
-        })
-        .catch(() => {
-          removeOneImage('categories', <string>req.file?.filename)
-            .catch(e => console.error(`${e?.message} (${e?.errorCode})`))
         })
       return updatedCategory
     },
@@ -192,6 +192,9 @@ export class CategoryExtCtrl {
   static getMany () {
     return _.routeAsync(async (req, res) => {
       const
+        keys: ExcludableKeys<ICategory>[] = [
+          '-_id', 'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
+        ],
         data: ICategory[] = await Category.getMany(),
         pickData = data.map(item => _.pickProps(item, [
           'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
@@ -204,11 +207,11 @@ export class CategoryExtCtrl {
     return _.routeAsync(async (req, res) => {
       const { slug } = req.params
       const
-        data: ICategory | null = await Category.getOneBySlug(slug),
-        pickData = data && _.pickProps(data, [
-          'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
-        ])
-      return pickData
+        keys: ExcludableKeys<ICategory>[] = [
+          '-_id', 'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
+        ],
+        data: ICategory | null = await Category.getOneBySlug(slug, keys)
+      return data
     })
   }
 

@@ -194,4 +194,16 @@ export class MusicExtCtrl {
     })
   }
 
+  static getOneBySlug () {
+    return _.routeAsync(async (req, res) => {
+      const { slug } = req.params
+      const
+        data: IMusic | null = await Music.getOneBySlug(slug),
+        pickData = data && _.pickProps(data, [
+          'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
+        ])
+      return pickData
+    })
+  }
+
 }

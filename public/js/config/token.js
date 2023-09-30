@@ -1,19 +1,19 @@
 
 class Token {
-  static getAccessToken (): string {
+  static getAccessToken () {
     return localStorage.accessToken
   }
   
-  static setAccessToken (accessToken: string) {
+  static setAccessToken (accessToken) {
     if (accessToken == null) return
     localStorage.setItem('accessToken', accessToken)
   }
 
-  static getRefreshToken (): string {
+  static getRefreshToken () {
     return localStorage.refreshToken
   }
 
-  // static setRefreshToken (refreshToken: string) {
+  // static setRefreshToken (refreshToken) {
   //   if (refreshToken == null) return
   //   localStorage.setItem('accessToken', refreshToken)
   // }

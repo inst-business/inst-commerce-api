@@ -1,6 +1,7 @@
 import {
   Request, Response, NextFunction, RequestHandler
 } from 'express'
+import path from 'path'
 import _ from 'lodash'
 import slugify from 'slugify'
 import uniqueSlug from 'unique-slug'
@@ -216,13 +217,7 @@ class Utils {
   genUniqueSlug (title: string, code: string) {
     // const uniqueId = uniqueSlug(Date.now().toString())
     const uniqueId = uniqueSlug(code)
-    const options = {
-      replacement: '-',
-      remove: /[*+~.()'"!:@]/g,
-      lower: true, 
-    }
-    const slug = slugify(`${title} ${uniqueId}`, options)
-    return slug
+    return this.genSlug(title + '-' + uniqueId)
   }
 
   genUniqueCode (prefix = 'IA') {
@@ -258,6 +253,12 @@ class Utils {
 
   genUniqueId () {
     return crypto.randomUUID()
+  }
+
+  genFileName (originalName: string, newName?: string, prefix = 'upload') {
+    const ext = path.extname(originalName)
+    const name = newName || path.basename(originalName, ext)
+    return this.genSlug(this.genUniqueCode(prefix) + '-' + name) + ext
   }
 
   genHash (data: string) {

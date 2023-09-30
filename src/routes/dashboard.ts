@@ -15,7 +15,7 @@ router.get('/',
       'orders': Order.getMany(),
       'products': Product.getMany()
     }
-    const data = _.asyncAllSettled(fetchRecords)
+    const data = _.fetchAllSettled(fetchRecords)
     return data
   },
   _.renderView('app/dashboard/index')

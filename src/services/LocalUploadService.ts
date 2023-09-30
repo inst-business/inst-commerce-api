@@ -1,7 +1,9 @@
 import { Request } from 'express'
 import fs from 'fs'
 import path from 'path'
-import multer, { diskStorage, MulterError } from 'multer'
+import multer, {
+  diskStorage, memoryStorage, MulterError
+} from 'multer'
 import sharp from 'sharp'
 import slugify from 'slugify'
 import _ from '@/utils/utils'
@@ -10,7 +12,8 @@ import { GV } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 
-const uploadImage = (dest: string, prefix: string, maxSize?: number) =>
+const uploadImage = (maxSize?: number) =>
+// const uploadImage = (dest: string, prefix: string, maxSize?: number) =>
   multer({
     limits: { fileSize: maxSize },
     fileFilter: (req, file, cb) => {
@@ -23,20 +26,19 @@ const uploadImage = (dest: string, prefix: string, maxSize?: number) =>
       }
       cb(null, GV.IMG_MIMETYPES_ALLOWED.includes(file.mimetype))
     },
-    // dest: path.join('../upload'),
-    storage: diskStorage({
-      destination: path.join(GV.UPLOADED_PATH, dest),
-      filename: function (req, file, cb) {
-        // console.log('- body: ', req.body)
-        const
-          ext = path.extname(file.originalname),
-          originalName = req.body.name || path.basename(file.originalname, ext),
-          name = _.genSlug(_.genUniqueCode(prefix) + '-' + originalName)
-        cb(null, name + ext)
-      }
-    })
+    // storage: diskStorage({
+    //   destination: path.join(GV.UPLOADED_PATH, dest),
+    //   filename: function (req, file, cb) {
+    //     const
+    //       ext = path.extname(file.originalname),
+    //       originalName = req.body.name || path.basename(file.originalname, ext),
+    //       name = _.genSlug(_.genUniqueCode(prefix) + '-' + originalName)
+    //     cb(null, name + ext)
+    //   }
+    // }),
+    storage: memoryStorage(),
   })
-
+  
 const handleMulterError = (err: MulterError | LogicError, req: Request) => {
   if (err instanceof MulterError) {
     const errMsg = 'Service has been crashed unexpectedly, please try again later.';
@@ -46,21 +48,23 @@ const handleMulterError = (err: MulterError | LogicError, req: Request) => {
   (<any>req).errorUpload = err
 }
 
-export const uploadOneImage = (fieldName: string, dest: string, prefix: string, maxSize?: number) =>
+export const uploadOneImage = (fieldName: string, maxSize?: number) =>
   _.routeNextableAsync(async (req, res, next) => {
-    uploadImage(dest, prefix, maxSize).single(fieldName)(req, res, (err) => {
+    uploadImage(maxSize).single(fieldName)(req, res, (err) => {
       if (err) return handleMulterError(err, req)
     })
     next()
   })
-  
-// export const uploadManyImages = (fieldsName: string[], dest: string, prefix: string, maxSize?: number) =>
-// _.routeNextableAsync(async (req, res, next) => {
-//   uploadImage(dest, prefix, maxSize).array(fieldsName)(req, res, (err) => {
-//     if (err) return handleMulterError(err, req)
-//   })
-//   next()
-// })
+
+export const appendOneImage = async (file: Express.Multer.File, dir: string, fileName?: string) => { 
+  await new Promise(() => {
+    const name = fileName || _.genFileName(file.originalname)
+    const dest = path.join(GV.UPLOADED_PATH, dir, name)
+    fs.writeFileSync(dest, file.buffer)
+  }).catch(err => {
+    throw _.logicError(err.name, err.message, 404, ERR.OBJECT_NOT_FOUND, err.path)
+  })
+}
 
 export const removeOneImage = async (dir: string, fileName: string) => {
   await new Promise(() => {

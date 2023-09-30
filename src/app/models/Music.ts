@@ -4,7 +4,7 @@ import _ from '@/utils/utils'
 import {
   ArgumentId, handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
 } from '@/utils/mongoose'
-import { ExcludeKeys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
+import { ExcludableKeys, ExcludeKeys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
 
 export interface IMusic {
   name: string
@@ -54,11 +54,13 @@ class MusicModel extends SuspendableModel<IMusic> {
   }
 
   async getMany (
+    selected?: ExcludableKeys<IMusic>[],
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
     sortBy: ExcludeKeys<IMusic, Document> = 'createdAt'
   ): Promise<IMusic[]> {
     const q = Music.find({})
       .populate({ path: 'createdBy', select: 'username -_id' })
+      .select(selected?.join(' ') ?? '')
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
       .lean()
     const data = await handleQuery(q)
@@ -75,12 +77,14 @@ class MusicModel extends SuspendableModel<IMusic> {
   }
   
   async getManyDeleted (
+    selected?: ExcludableKeys<IMusic>[],
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
     sortBy: ExcludeKeys<IMusic, Document> = 'deletedAt'
   ): Promise<IMusic[]> {
     const q = Music.find({ isDeleted: true })
       .populate({ path: 'createdBy', select: 'username -_id' })
       .populate({ path: 'deletedBy', select: 'username -_id' })
+      .select(selected?.join(' ') ?? '')
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
       .lean()
     const data = await handleQuery(q)

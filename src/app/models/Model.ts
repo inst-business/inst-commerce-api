@@ -1,7 +1,7 @@
 import mongoose, { Document } from 'mongoose'
 import { TSuspendableDocument, ArgumentId, handleQuery } from '@/utils/mongoose'
 import _ from '@/utils/utils'
-import { Keys, Many, IResultWithPars, ExcludeKeys, SORT_ORDER } from '@/config/global/const'
+import { Keys, ExcludableKeys, Many, IResultWithPars, ExcludeKeys, SORT_ORDER } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 class Model<I> {
@@ -11,31 +11,33 @@ class Model<I> {
     this.model = model
   }
 
-  async getAll (): Promise<I[]> {
-    const q = this.model.find({}).lean()
+  async getAll (selected?: ExcludableKeys<I>[]): Promise<I[]> {
+    const q = this.model.find({}).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data as I[]
   }
 
   async getMany (
+    selected?: ExcludableKeys<I>[],
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
     sortBy: Keys<I> = 'createdAt' as any
   ): Promise<I[]> {
     const q = this.model.find({})
+      .select(selected?.join(' ') ?? '')
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
       .lean()
     const data = await handleQuery(q)
     return data as I[]
   }
 
-  async getOneById (id: ArgumentId): Promise<I | null> {
-    const q = this.model.findOne({ _id: id }).lean()
+  async getOneById (id: ArgumentId, selected?: ExcludableKeys<I>[]): Promise<I | null> {
+    const q = this.model.findOne({ _id: id }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data as I | null
   }
 
-  async getOneBySlug (slug: String): Promise<I | null> {
-    const q = this.model.findOne({ slug: slug }).lean()
+  async getOneBySlug (slug: string, selected?: ExcludableKeys<I>[]): Promise<I | null> {
+    const q = this.model.findOne({ slug: slug }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data as I | null
   }
@@ -53,17 +55,19 @@ class Model<I> {
     return res as I | null
   }
 
-  async getAllDeleted (): Promise<I[]> {
-    const q = this.model.find({ isDeleted: true }).lean()
+  async getAllDeleted (selected?: ExcludableKeys<I>[]): Promise<I[]> {
+    const q = this.model.find({ isDeleted: true }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data as I[]
   }
 
   async getManyDeleted (
+    selected?: ExcludableKeys<I>[],
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
     sortBy: Keys<I> = 'deletedAt' as any
   ): Promise<I[]> {
     const q = this.model.find({ isDeleted: true })
+      .select(selected?.join(' ') ?? '')
       .sort({ [sortBy]: sort }).skip(offset).limit(limit)
       .lean()
     const data = await handleQuery(q)
@@ -76,8 +80,8 @@ class Model<I> {
     return data
   }
 
-  async getDeletedById (id: ArgumentId): Promise<I | null> {
-    const q = this.model.findOne({ _id: id, isDeleted: true }).lean()
+  async getDeletedById (id: ArgumentId, selected?: ExcludableKeys<I>[]): Promise<I | null> {
+    const q = this.model.findOne({ _id: id, isDeleted: true }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data as I | null
   }

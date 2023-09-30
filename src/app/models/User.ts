@@ -2,7 +2,7 @@ import { Schema, Document, model, ObjectId } from 'mongoose'
 // import { SuspendableModel } from './Model'
 // import withJsonSchema from 'mongoose-schema-jsonschema'
 import {
-  GV, GENDER, ACCOUNT_STATUS, ROLE, ROLES, ALL_RULES, IResultWithPars
+  ExcludableKeys, GV, GENDER, ACCOUNT_STATUS, ROLE, ROLES, ALL_RULES, IResultWithPars
 } from '@/config/global/const'
 import {
   TSuspendableDocument, withSoftDelete, handleQuery
@@ -67,22 +67,22 @@ export const User = model<IUser, TSuspendableDocument<IUser>>('User', UserSchema
 
 class UserModel {
 
-  async getUserByUsername (username: string): Promise<IUser | null> {
-    const q = User.findOne({ username }).lean()
+  async getUserByUsername (username: string, selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
+    const q = User.findOne({ username }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data
   }
 
-  async getUserByEmailOrUsername (email: string, username: string): Promise<IUser | null> {
+  async getUserByEmailOrUsername (email: string, username: string, selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
     const q = User.findOne({
       $or: [{ username }, { email }]
-    }).lean()
+    }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data
   }
 
-  async getAuthorizedUserByUsername (username: string, role: ROLE): Promise<IUser | null> {
-    const q = User.findOne({ username, role }).lean()
+  async getAuthorizedUserByUsername (username: string, role: ROLE, selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
+    const q = User.findOne({ username, role }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data
   }

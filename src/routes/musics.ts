@@ -6,12 +6,13 @@ import { ROLES } from '@/config/global/const'
 import { uploadOneImage } from '@/services/LocalUploadService'
 
 const router = express.Router()
-const upload = uploadOneImage('img', 'musics', 'upload-cat')
+const upload = uploadOneImage('cover')
 
 /** 
  *  EXTERNAL
 */
 
+router.get('/e/:slug', MusicExtCtrl.getOneBySlug())
 router.get('/e', MusicExtCtrl.getMany())
 
 

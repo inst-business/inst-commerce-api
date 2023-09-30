@@ -6,7 +6,7 @@ import { ROLES } from '@/config/global/const'
 import { uploadOneImage } from '@/services/LocalUploadService'
 
 const router = express.Router()
-const upload = uploadOneImage('img', 'categories', 'upload-cat')
+const upload = uploadOneImage('img')
 
 /** 
  *  EXTERNAL
