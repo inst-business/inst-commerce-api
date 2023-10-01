@@ -1,16 +1,15 @@
 <div class="Sidebar">
 
-  {{!-- <div class="Sidebar__searchbox" role="button">
+  <div class="Sidebar__searchbox" role="button">
     <div class="Sidebar__searchbox-input">
       <span class="Sidebar__searchbox-icon"><i class="fa-regular fa-magnifying-glass"></i></span>
       <span class="Sidebar__searchbox-placeholder">Search</span>
     </div>
-  </div> --}}
+  </div>
 
   <div class="Sidebar__main">
-    
-    <nav class="Sidebar__menu">
-      <a href="/v1" title="dashboard" class="Sidebar__link"
+    <div class="Sidebar__list">
+      <a href="/v1" class="Sidebar__link"
         {{#equals _sections.current 'dashboard'}}aria-current="page"{{/equals}}
       >
         <span class="Sidebar__link-icon"><i class="fa-regular fa-table-layout"></i></span>
@@ -18,7 +17,7 @@
           Dashboard
         </div>
       </a>
-      <a href="#analytics" title="analytics" class="Sidebar__link"
+      <a href="#analytics" class="Sidebar__link"
         {{#equals _sections.current 'analytics'}}aria-current="page"{{/equals}}
       >
         <span class="Sidebar__link-icon"><i class="fa-regular fa-chart-mixed"></i></span>
@@ -26,7 +25,7 @@
           Analytics
         </div>
       </a>
-      <a href="#users" title="users" class="Sidebar__link"
+      <a href="#users" class="Sidebar__link"
         {{#equals _sections.current 'user'}}aria-current="page"{{/equals}}
       >
         <span class="Sidebar__link-icon"><i class="fa-regular fa-users"></i></span>
@@ -34,7 +33,7 @@
           Users
         </div>
       </a>
-      <a href="/v1/categories" title="categories" class="Sidebar__link"
+      <a href="/v1/categories" class="Sidebar__link"
         {{#equals _sections.current 'categories'}}aria-current="page"{{/equals}}
       >
         <span class="Sidebar__link-icon"><i class="fa-regular fa-shapes"></i></span>
@@ -42,7 +41,7 @@
           Categories
         </div>
       </a>
-      <a href="/v1/products" title="products" class="Sidebar__link"
+      <a href="/v1/products" class="Sidebar__link"
         {{#equals _sections.current 'products'}}aria-current="page"{{/equals}}
       >
         <span class="Sidebar__link-icon"><i class="fa-regular fa-box"></i></span>
@@ -50,7 +49,7 @@
           Products
         </div>
       </a>
-      <a href="#tickets" title="tickets" class="Sidebar__link"
+      <a href="#tickets" class="Sidebar__link"
         {{#equals _sections.current 'tickets'}}aria-current="page"{{/equals}}
       >
         <span class="Sidebar__link-icon"><i class="fa-regular fa-envelope"></i></span>
@@ -59,7 +58,7 @@
           <span class="Sidebar__link-badge">16</span>
         </div>
       </a>
-      <a href="#salelist" title="salelist" class="Sidebar__link"
+      <a href="#salelist" class="Sidebar__link"
         {{#equals _sections.current 'salelist'}}aria-current="page"{{/equals}}
       >
         <span class="Sidebar__link-icon"><i class="fa-regular fa-notes"></i></span>
@@ -67,7 +66,7 @@
           Sale List
         </div>
       </a>
-      <a href="#history" title="history" class="Sidebar__link"
+      <a href="#history" class="Sidebar__link"
         {{#equals _sections.current 'history'}}aria-current="page"{{/equals}}
       >
         <span class="Sidebar__link-icon"><i class="fa-regular fa-clock-rotate-left"></i></span>
@@ -75,7 +74,7 @@
           History
         </div>
       </a>
-      <a href="#reports" title="reports" class="Sidebar__link"
+      <a href="#reports" class="Sidebar__link"
         {{#equals _sections.current 'reports'}}aria-current="page"{{/equals}}
       >
         <span class="Sidebar__link-icon"><i class="fa-regular fa-hexagon-exclamation"></i></span>
@@ -83,7 +82,7 @@
           Reports
         </div>
       </a>
-      <a href="#settings" title="settings" class="Sidebar__link"
+      <a href="#settings" class="Sidebar__link"
         {{#equals _sections.current 'settings'}}aria-current="page"{{/equals}}
       >
         <span class="Sidebar__link-icon"><i class="fa-regular fa-gear"></i></span>
@@ -92,12 +91,12 @@
         </div>
       </a>
       <div class="Sidebar__dash-end"></div>
-      <a href="#homesite" title="homesite" class="Sidebar__link">
+      <a href="#homesite" class="Sidebar__link">
         <span class="Sidebar__link-icon"><i class="fa-regular fa-house"></i></span>
         <div class="Sidebar__link-text">
           Homesite
         </div>
       </a>
-    </nav>
+    </div>
   </div>
 </div>

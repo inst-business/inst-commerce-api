@@ -143,7 +143,7 @@ export class GV {
   static IMG_EXT_ALLOWED = 'jpg'
   static IMG_MIMETYPES_ALLOWED = ['image/jpeg', 'image/png']
   static IMG_EXTENSIONS_ALLOWED = ['.jpeg', '.jpg', '.png']
-  static IMG_EXT_REDUCED = 'webp'
+  static IMG_REDUCE_EXT = 'webp'
 
   static UPLOADED_PATH = 'public/uploads/'
 }

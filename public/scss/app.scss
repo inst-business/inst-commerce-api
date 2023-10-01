@@ -134,7 +134,7 @@ body {
   color: var(--base-color);
   background-color: var(--base-body);
   transition: background-color $transition-1-ln;
-  @include scroll-bar;
+  // @include scroll-bar;
 }
 
 img {

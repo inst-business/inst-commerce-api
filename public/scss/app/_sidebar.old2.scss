@@ -1,6 +1,5 @@
 @use "../helpers/helpers";
 @use "../helpers/responsive";
-@use "../utilities/scrollbar";
 
 .Sidebar {
   --Sidebar-height: inherit;
@@ -10,7 +9,7 @@
   --Sidebar-transition: all #{$transition-out-1}, #{$transition-color-1};
   --Sidebar-link-height: 3rem;
   --Sidebar-link-min-height: 2rem;
-  --Sidebar-link-padding: .5rem;
+  --Sidebar-link-padding: 1rem;
   --Sidebar-link-transition: all #{$transition-1-ln};
   --Sidebar-font-size: #{$font-size};
 }
@@ -19,11 +18,10 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  width: var(--Sidebar-width);
-  max-width: $sidebar-width;
-  min-width: var(--Sidebar-width-collapsed);
+  width: inherit;
+  max-width: var(--Sidebar-width);
   height: 100%;
-  // padding: var(--Sidebar-padding);
+  padding: var(--Sidebar-padding);
   background-color: var(--base-box);
   border-right: 1px solid var(--base-border);
   transition: var(--Sidebar-transition);
@@ -73,24 +71,19 @@
     height: 100%;
   }
 
-  &__menu {
+  &__list {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     height: 100%;
-    padding: var(--Sidebar-padding);
     overflow-x: hidden;
-    overflow-y: auto;
-    @include scrollbar.scroll-bar-overlay;
   }
 
   &__link {
-    $_link: #{&};
     position: relative;
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    width: 100%;
     min-height: var(--Sidebar-link-min-height);
     height: var(--Sidebar-link-height);
     padding: 0 var(--Sidebar-link-padding);
@@ -101,27 +94,10 @@
 
     &-icon {
       display: flex;
-      min-width: calc(var(--Sidebar-font-size) * 1.5);
+      width: calc(var(--Sidebar-font-size) * 1.25);
       text-align: center;
-      opacity: .75;
-      transition: opacity $transition-1-ln;
       & > * {
         min-width: 100%;
-      }
-      &::before {
-        content: "";
-        position: absolute;
-        inset: calc(50% - .75rem) auto auto 1.5rem;
-        z-index: 5;
-        width: 0.5rem;
-        height: 0.5rem;
-        border-radius: $radius-circle;
-        background-color: $color-danger;
-        border: 2px solid var(--base-box);
-        opacity: 0;
-        transform: scale(0);
-        transition: $transition-1-ln;
-        transition-property: border, opacity, transform;
       }
     }
     &-text {
@@ -129,10 +105,8 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      opacity: .75;
       // @include make-text-ellipsised;
-      transition: $transition-1-ln;
-      transition-property: opacity, visibility;
+      transition: none;
       white-space: nowrap;
     }
     &-badge {
@@ -141,10 +115,6 @@
     }
 
     @include make-hover;
-    &:hover &-icon,
-    &:hover &-text {
-      opacity: 1;
-    }
 
     &.active,
     &[aria-current="page"] {
@@ -154,16 +124,13 @@
       &::before {
         content: "";
         position: absolute;
-        left: -.55rem;
+        left: 3px;
         margin-top: -3px;
-        width: .25rem;
+        width: 3px;
         border-radius: $radius-md;
         height: 1.25rem;
         background-color: var(--base-color-highlight);
         transition: var(--Sidebar-link-transition);
-      }
-      #{$_link}-text, #{$_link}-icon {
-        opacity: 1;
       }
     }
   }
@@ -190,9 +157,9 @@
   }
 
   @mixin sidebar-collapse {
-    // --Sidebar-width: var(--Sidebar-width-collapsed);
-    // --Sidebar-padding: 0.5rem;
-    // --Sidebar-link-padding: 0;
+    --Sidebar-width: var(--Sidebar-width-collapsed);
+    --Sidebar-padding: 0.5rem;
+    --Sidebar-link-padding: 0;
     &__searchbox {
       $this: helpers.direct-parent(&);
       &-input {
@@ -209,34 +176,54 @@
         display: none;
       }
     }
+    &__toggle {
+      justify-content: center;
+      &-brand {
+        display: none;
+      }
+    }
+    &__list {
+      overflow-x: visible;
+    }
     &__link {
       $this: helpers.direct-parent(&);
+      --Sidebar-link-height: 2.5rem;
+      margin: 0.25rem 0;
+      justify-content: center;
+
       &:has(#{$this}-badge) #{$this}-icon::before {
-        opacity: 1;
-        transform: scale(1);
+        content: "";
+        position: absolute;
+        inset: 8px 4px auto auto;
+        z-index: 5;
+        width: 0.65rem;
+        height: 0.65rem;
+        border-radius: $radius-circle;
+        background-color: $color-danger;
+        border: 2px solid var(--base-box);
       }
 
       &-text {
         opacity: 0;
         visibility: hidden;
-        // position: absolute;
-        // white-space: nowrap;
-        // left: calc(100% + 0.5rem);
-        // background-color: var(--base-overlay);
-        // color: var(--base-body);
-        // padding: var(--Sidebar-padding);
-        // box-shadow: var(--base-shadow-variant);
-        // border-radius: $radius-md;
-        // font-size: $font-size-sm;
-        // font-weight: 600 !important;
-        // transition: opacity #{$transition-1-ln};
-        // pointer-events: none;
+        position: absolute;
+        white-space: nowrap;
+        left: calc(100% + 0.5rem);
+        background-color: var(--base-overlay);
+        color: var(--base-body);
+        padding: var(--Sidebar-padding);
+        box-shadow: var(--base-shadow-variant);
+        border-radius: $radius-md;
+        font-size: $font-size-sm;
+        font-weight: 600 !important;
+        transition: opacity #{$transition-1-ln};
+        pointer-events: none;
       }
-      // &:hover #{$this}-text,
-      // &:focus-visible #{$this}-text {
-      //   opacity: 1;
-      //   visibility: visible;
-      // }
+      &:hover #{$this}-text,
+      &:focus-visible #{$this}-text {
+        opacity: 1;
+        visibility: visible;
+      }
       &.active,
       &[aria-current="page"] {
         &::before {
@@ -250,13 +237,9 @@
     }
   }
 
-  [aria-expanded="false"] &:not(:hover) & {
+  [aria-expanded="false"] & {
     @include sidebar-collapse;
   }
-  [aria-expanded="false"] &:hover {
-    width: $sidebar-width;
-  }
-
   @include responsive.make-range-responsive(sm, lg) {
     & {
       @include sidebar-collapse;
