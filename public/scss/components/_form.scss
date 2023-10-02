@@ -89,6 +89,7 @@
   }
   &__input {
     @extend .Input;
+    width: 100%;
     &:required ~ .Field__label {
       &::after {
         visibility: visible;
@@ -157,6 +158,7 @@
     #{$Field}__input {
       border-color: $color-danger !important;
       --Input-outline: #{make-shadow-outlined($color-danger)};
+      --Input-border: #{$color-danger};
     }
   }
   &[aria-invalid="false"] {

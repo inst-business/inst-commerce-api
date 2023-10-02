@@ -1,7 +1,7 @@
 .Table {
   --Table-margin: #{$spacing-3};
   --Table-color: var(--base-color);
-  --Table-border-color: var(--base-border);
+  --Table-border-color: var(--base-border-lighter);
   --Table-hover-color: var(--base-hover-overlay);
   --Table-thead-cell-padding: #{$table-cell-padding-lg} #{$table-cell-padding};
   --Table-tbody-cell-padding: #{$table-cell-padding};
@@ -51,17 +51,23 @@
     }
   }
   tbody {
-    > tr > th,
-    > tr > td {
-      padding: var(--Table-tbody-cell-padding);
-      border-bottom-width: var(--Table-border-width);
-      text-align: var(--Table-text-alignment);
-      vertical-align: var(--Table-vertical-alignment);
+    tr {
+      th, td {
+        padding: var(--Table-tbody-cell-padding);
+        text-align: var(--Table-text-alignment);
+        vertical-align: var(--Table-vertical-alignment);
+      }
+    }
+    tr + tr {
+      border-top-width: var(--Table-border-width);
     }
   }
-  &-hover > tbody > tr:hover,
-  &-hover > tbody > tr:focus-visible {
-    background-color: var(--Table-hover-color);
+  &-hover tbody {
+    tr:not(.hover-0) {
+      &:hover, &:focus-visible {
+        background-color: var(--Table-hover-color);
+      }
+    }
   }
 
   &-sm,

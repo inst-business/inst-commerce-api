@@ -15,6 +15,7 @@ export interface IMusic {
   cover?: string
   slug: string
   status: ITEM_STATUS
+  categorizedBy?: ObjectId
   createdBy: ObjectId
   createdAt: Date
   updatedAt: Date
@@ -28,13 +29,14 @@ export interface IMusic {
 type TMusicDocument = IMusic & Document
 
 const MusicSchema = new Schema<IMusic>({
-  name: { type: String, required: true, maxLength: 255 },
+  name: { type: String, required: true, minlength: 1, maxlength: 80 },
   desc: { type: String },
-  artist: { type: String, required: true, maxLength: 255 },
+  artist: { type: String, required: true, minlength: 1, maxlength: 48 },
   path: { type: String, required: true },
   cover: { type: String },
-  slug: { type: String, required: true, unique: true, maxLength: 255 },
+  slug: { type: String, required: true, unique: true, maxlength: 96 },
   status: { type: String, required: true, default: 'active' },
+  categorizedBy: { type: Schema.Types.ObjectId, ref: 'Category' },
   createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true })
 

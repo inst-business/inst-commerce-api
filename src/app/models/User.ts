@@ -36,16 +36,16 @@ export interface IUser extends Document {
 type TUserDocument = IUser & Document
 
 const UserSchema = new Schema<IUser>({
-  username: { type: String, required: true, unique: true, lowercase: true, maxLength: 32 },
-  email: { type: String, required: true, unique: true, maxLength: 50 },
-  tel: { type: String, required: true, unique: true, maxLength: 20 },
+  username: { type: String, required: true, unique: true, lowercase: true, minlength: 3, maxlength: 32 },
+  email: { type: String, required: true, unique: true, maxlength: 24 },
+  tel: { type: String, required: true, unique: true, maxlength: 24 },
   password: { type: String, required: true },
-  firstname: { type: String, required: true, maxLength: 50 },
-  lastname: { type: String, required: true, maxLength: 50 },
+  firstname: { type: String, required: true, minlength: 1, maxlength: 32 },
+  lastname: { type: String, required: true, minlength: 1, maxlength: 32 },
   gender: { type: String, required: true, default: 'other'},
   birthday: { type: Date, default: null },
-  address: { type: String, maxLength: 128, default: '' },
-  country: { type: String, maxLength: 32, default: '' },
+  address: { type: String, maxlength: 128, default: '' },
+  country: { type: String, minlength: 1, maxlength: 48, default: '' },
   bio: { type: String, default: '' },
   avatar: { type: String, default: '' },
   cover: { type: String, default: '' },
@@ -53,7 +53,7 @@ const UserSchema = new Schema<IUser>({
   role: { type: String, required: true, default: ROLES.USER },
   permissions: { type: [String], default: [] },
   token: { type: String, default: '' },
-  salt: { type: String, required: true, maxLength: GV.SALT_LENGTH },
+  salt: { type: String, required: true, maxlength: GV.SALT_LENGTH },
   verifiedAt: { type: Date, default: null },
 }, { timestamps: true })
 

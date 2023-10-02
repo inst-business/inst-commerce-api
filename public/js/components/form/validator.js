@@ -2,7 +2,7 @@ import { qs, isValidFnName, splitOutFnName, getFnValue } from '../../helpers/hel
 
 const validator = props => {
   // console.log(props)
-  const { form, rules, field, label, response, submit } = props
+  const { form, rules, field, label, response } = props
   const formElement = qs.$o(form)
   if (!formElement) return
   const inputNameRule = name => `[name="${name}"]:not([disabled])`
@@ -67,46 +67,54 @@ const validator = props => {
     return !result
   }
 
-  
-  formElement.onsubmit = e => {
+  const { submit, submitFormData } = props
+  formElement.addEventListener('submit', function __ValidateFields (e) {
     e.preventDefault()
     let isFormValid = true
     rules.forEach(rule => {
-      let props = validateProps(formElement, rule, response)
+      const props = validateProps(formElement, rule, response)
       if (!props) return
-      let isValid = validate(props)
+      const isValid = validate(props)
       isFormValid = isValid && isFormValid
     })
-
     if (isFormValid) {
+      if (typeof submit !== 'function' && typeof submitFormData !== 'function') {
+        formElement.submit()
+        return
+      }
       if (typeof submit === 'function') {
-        let enableFields = formElement.querySelectorAll('[name]:not([disabled])')
-        let inputsVal = Array.from(enableFields).reduce((vals, input, index, array) => {
-          const type = input.type
-          switch (type) {
-            case 'radio':
-              if (input.checked) {
-                vals[input.name] = input.value
-              }
-              break;
-            case 'checkbox':
-              if (input.checked) {
-                vals[input.name] = !vals[input.name] ? [input.value] : [input.value, ...vals[input.name]]
-              }
-              break;
-            default:
+        const enableFields = formElement.querySelectorAll('[name]:not([disabled])')
+        let data = Array.from(enableFields).reduce((vals, input, index, array) => {
+          switch (input.type) {
+            case 'radio': {
+              if (input.checked) vals[input.name] = input.value
+              break
+            }
+            case 'checkbox': {
+              if (input.checked) (vals[input.name] = !vals[input.name])
+                ? [input.value] : [input.value, ...vals[input.name]]
+              break
+            }
+            case 'file': {
+              vals[input.name] = !input.multiple ? input.files[0] : input.files
+              break
+            }
+            default: {
               vals[input.name] = !vals[input.name] && input.value
-              break;
+              break
+            }
           }
           return vals
         }, {})
-        submit(inputsVal)
+        submit(data)
       }
-      else {
-        formElement.submit()
+      if (typeof submitFormData === 'function') {
+        const formData = new FormData(formElement)
+        // console.log('formData', Object.fromEntries(formData.entries()))
+        submitFormData(formData)
       }
     }
-  }
+  })
 
   rules.forEach(rule => {
     const props = validateProps(formElement, rule, response)

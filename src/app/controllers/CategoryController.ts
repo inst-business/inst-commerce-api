@@ -23,6 +23,15 @@ class CategoryCtrl {
     _.renderView('app/categories/create')
   )}
 
+  static createOneChild () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data = await Category.getOneById(id, ['name'])
+      return data
+    },
+    _.renderView('app/categories/categorized/create')
+  )}
+
   static storeOne () {
     return _.routeAsync(async (req, res) => {
       const
@@ -35,7 +44,7 @@ class CategoryCtrl {
         throw (<any>req).errorUpload
       }
       const
-        keys = ['name', 'desc'],
+        keys = ['name', 'desc', 'categorizedBy'],
         data = _.pickProps(<ICategory>req.body, keys)
       data.slug = _.genSlug(data.name + '-' + _.genUniqueCode())
       data.createdBy = user._id
@@ -49,7 +58,6 @@ class CategoryCtrl {
         })
       return submittedCategory
     },
-    // _.redirectView('/v1/categories')
   )}
   
   static getOne () {
@@ -72,6 +80,14 @@ class CategoryCtrl {
     },
     _.renderView('app/categories/index')
   )}
+  
+  static getManyByParentId () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: ICategory[] = await Category.getManyByParentId(id)
+      return data
+    })
+  }
 
   static editOne () {
     return _.routeAsync(async (req, res) => {
@@ -192,9 +208,23 @@ export class CategoryExtCtrl {
     return _.routeAsync(async (req, res) => {
       const
         keys: ExcludableKeys<ICategory>[] = [
-          '-_id', 'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
+          '-_id', '-categorizedBy', 'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
         ],
         data: ICategory[] = await Category.getMany(keys)
+      return data
+    })
+  }
+  
+  static getManyByParentSlug () {
+    return _.routeAsync(async (req, res) => {
+      const { slug } = req.params
+      const parent = await Category.getOneBySlug(slug, ['_id'])
+      if (parent == null) return []
+      const
+        keys: ExcludableKeys<ICategory>[] = [
+          '-_id', 'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
+        ],
+        data: ICategory[] = await Category.getManyByParentId(parent._id, keys)
       return data
     })
   }

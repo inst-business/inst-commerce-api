@@ -1,4 +1,4 @@
-{{#section 'title'}}New Category{{/section}}
+{{#section 'title'}}New Category for {{data.name}}{{/section}}
 {{#section 'current'}}categories{{/section}}
 
 
@@ -7,9 +7,10 @@
   <ol class="Breadcrumb">
     <li class="Breadcrumb__item"><a href="/v1">Home</a></li>
     <li class="Breadcrumb__item"><a href="/v1/categories{{routeI 'crud.get_many'}}">Categories</a></li>
+    <li class="Breadcrumb__item"><a href="/v1/categories/{{data._id}}">{{data.name}}</a></li>
     <li class="Breadcrumb__item" aria-current="page">Create</li>
   </ol>
-  <h1 class="Heading">Create New Category</h1>
+  <h1 class="Heading">Create New Sub-Category</h1>
 </nav>
 {{!-- End of Head section --}}
 
@@ -19,28 +20,24 @@
     <div class="Box Box-scrollable">
       <div class="Row">
         <div class="Col lg-9 P-b-0">
-          <form class="Form" action="/v1/categories{{routeI 'crud.store_one'}}" method="post" enctype="multipart/form-data" id="form-create">
+          <form class="Form" action="/v1/categories/{{data._id}}{{routeI 'crud.store_one'}}" method="post" enctype="multipart/form-data" id="form-create">
             <div class="Form__header">
-              <p class="Form__header-title">Category</p>
+              <p class="Form__header-title">Sub-category</p>
             </div>
             <div class="Form__body">
-              <div class="Field" data-col="" aria-invalid="">
-                <label for="name" class="Field__label">Name</label>
-                <input type="text" class="Field__input" name="name" id="name">
-                <span class="Field__response"></span>
-              </div>
-              {{!-- <div class="Field-group">
+              <div class="Field-group">
                 <div class="Field" data-col="df-6" aria-invalid="">
-                  <label for="categorizedBy" class="Field__label">Categorize</label>
-                  <select class="Field__input" name="categorizedBy" id="categorizedBy">
-                    <option selected>(Uncategorized)</option>
-                    {{#each data.parents}}
-                      <option value="{{this._id}}">{{this.name}}</option>
-                    {{/each}}
-                  </select>
+                  <label for="name" class="Field__label">Name</label>
+                  <input type="text" class="Field__input" name="name" id="name">
                   <span class="Field__response"></span>
                 </div>
-              </div> --}}
+                <div class="Field" data-col="df-6" aria-invalid="">
+                  <label for="categorizedBy" class="Field__label">Categorize</label>
+                  <input type="hidden" name="categorizedBy" id="categorizedBy" value="{{data._id}}">
+                  <input type="text" class="Field__input" name="category" value="{{data.name}}" readonly disabled>
+                  <span class="Field__response"></span>
+                </div>
+              </div>
               <div class="Field" data-col="" aria-invalid="">
                 <label for="desc" class="Field__label">Description</label>
                 <textarea class="Field__input" id="desc" name="desc" rows="5"></textarea>

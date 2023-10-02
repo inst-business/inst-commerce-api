@@ -27,10 +27,10 @@ export interface IArticle {
 type TArticleDocument = IArticle & Document
 
 const ArticleSchema = new Schema<IArticle>({
-  name: { type: String, required: true, maxLength: 255 },
+  name: { type: String, required: true, minlength: 1, maxlength: 80 },
   desc: { type: String },
   img: { type: String, required: true },
-  slug: { type: String, required: true, unique: true, maxLength: 255 },
+  slug: { type: String, required: true, unique: true, maxlength: 96 },
   status: { type: String, required: true, default: 'pending' },
   // tags: { type: [Schema.Types.ObjectId], ref: 'Tag', default: [] },
   categorizedBy: { type: Schema.Types.ObjectId, ref: 'Category' },

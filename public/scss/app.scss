@@ -91,6 +91,7 @@
   --base-body: #{$base-body};
   --base-box: #{$base-box};
   --base-border: #{$base-border};
+  --base-border-lighter: #{$base-border-lighter};
   --base-border-highlighted: #{$base-border-highlighted};
   --base-hover-overlay: #{$base-hover-overlay};
   --base-overlay: #{$base-overlay};
@@ -109,6 +110,7 @@
   --base-body: #{$base-night-body};
   --base-box: #{$base-night-box};
   --base-border: #{$base-night-border};
+  --base-border-lighter: #{$base-night-border-lighter};
   --base-border-highlighted: #{$base-night-border-highlighted};
   --base-hover-overlay: #{$base-night-hover-overlay};
   --base-overlay: #{$base-night-overlay};

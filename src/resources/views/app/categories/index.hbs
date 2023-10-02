@@ -23,9 +23,17 @@
           <label for="select-all">Select all</label>
         </div>
         <div class="Actions__seperate"></div>
-        <button class="Btn" data-size="sm" data-variant="outline danger" title="Delete selected"
+        <select class="Input" name="action" id="action" title="select an action">
+          <option selected>- Select action -</option>
+          <option value="delete">Delete</option>
+        </select>
+        {{!-- <button class="Btn" data-size="sm" data-variant="outline danger" title="Delete selected"
           data-dialog-target="#delete-selected-dialog" id="delete-selected">
-          <i class="fa-regular fa-trash"></i> Delete
+          <i class="fa-regular fa-trash"></i>&ensp;Delete
+        </button> --}}
+        <button class="Btn" data-size="sm" data-variant="outline grey" title="Delete selected"
+          data-dialog-target="#delete-selected-dialog" id="delete-selected">
+          <i class="fa-regular fa-arrow-up-right-from-square"></i>&ensp;Perform
         </button>
       </div>
       <div class="Actions-right">
@@ -38,12 +46,12 @@
           <div class="Actions__seperate"></div>
         {{/if}}
         <a href="/v1/categories{{routeI 'crud.create'}}" class="Btn" data-variant="success" data-size="sm">
-          <i class="fa-regular fa-circle-plus"></i> Add new
+          <i class="fa-regular fa-circle-plus"></i>&ensp;New category
         </a>
       </div>
     </div>
     <div class="Box Box-scrollable">
-      <table class="Table Table-hover">
+      <table class="Table Table-hover M-b-0">
         {{!-- <caption>List</caption> --}}
         <thead>
           <tr>
@@ -68,7 +76,7 @@
               </td>
               {{!-- <td><p>{{increase @index 1}}</p></td> --}}
               <td class="Item__name" width="25%">
-                <a href="/v1/categories{{routeI 'crud.get_one' this._id}}" class="Text-limit-3">{{this.name}}</a>
+                <a href="/v1/categories{{routeI 'crud.get_one' this._id}}" class="Text-link Text-limit-3">{{this.name}}</a>
               </td>
               {{!-- <td class="Item__name">
                 <a href="#" class="Text-link">{{this.createdBy.username}}</a>
@@ -98,6 +106,10 @@
                 {{/if}}
               </td>
               <td class="Item__actions">
+                <a href="/v1/categories/{{this._id}}{{routeI 'crud.create'}}" title="New sub-category for '{{this.name}}'"
+                  class="Btn" data-size="sm" data-variant="success outline">
+                  <i class="fa-regular fa-file-circle-plus"></i>
+                </a>
                 <a href="/v1/categories{{routeI 'crud.edit' this._id}}" title="Edit '{{this.name}}'"
                   class="Btn" data-size="sm" data-variant="info outline">
                   <i class="fa-regular fa-pen-to-square"></i>
@@ -108,14 +120,19 @@
                 </button>
               </td>
             </tr>
+          {{else}}
+            <tr class="hover-0">
+              <td colspan="8">
+                <p class="Text-muted Text-center P-y-3"><em>(No data available)</em></p>
+              </td>
+            </tr>
           {{/each}}
         </tbody>
-        <tfoot>
+        {{!-- <tfoot>
           <th colspan="8">
+            No categories available
           </th>
-        </tfoot>
-        <div id="desc-popover" popover>
-        </div>
+        </tfoot> --}}
       </table>
     </div>
   </div>

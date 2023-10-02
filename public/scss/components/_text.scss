@@ -147,15 +147,11 @@ p.P3 {
   }
 }
 
-.Ul,
-ul,
-.Ol,
-ol {
+.Ul, ul, .Ol, ol {
   padding-left: $spacing-4;
   @include gen-text-properties;
 }
-.Li,
-li {
+.Li, li {
   color: var(--base-color);
   font-size: $font-size;
   @include gen-text-properties;

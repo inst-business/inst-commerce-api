@@ -13,6 +13,7 @@ const upload = uploadOneImage('img')
 */
 
 router.get('/e/:slug', CategoryExtCtrl.getOneBySlug())
+router.get('/e/:slug/list', CategoryExtCtrl.getManyByParentSlug())
 router.get('/e', CategoryExtCtrl.getMany())
 
 
@@ -30,10 +31,13 @@ router.route('/d')
 
 // (view only)
 router.get('/create', Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.createOne())
+router.get('/:id/list', Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.getManyByParentId())
+router.get('/:id/create', Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.createOneChild())
 router.get('/:id/edit', Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.editOne())
 
 router.route('/:id')
   .get(Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.getOne())
+  .post(Auth.reqUserByRole(ROLES.MANAGER), upload, CategoryCtrl.storeOne())
   .put(Auth.reqUserByRole(ROLES.MANAGER), upload, CategoryCtrl.updateOne())
   
 router.route('/')
