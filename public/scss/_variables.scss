@@ -110,7 +110,7 @@ $color-txt-muted: #7d8da1;
 $color-bg: #f1f4f8;
 // Colors for main content (dark mode)
 $color-txt-dark-darkened: #f1f4f8;
-$color-txt-grey-darkened: #a3bdcc;
+$color-txt-grey-darkened: #8194a0;
 $color-txt-light-darkened: #404142;
 $color-bg-darkened: #202528;
 
@@ -152,7 +152,9 @@ $font-size: 1rem;
 $font-size-xs: 0.65rem;
 $font-size-ss: 0.75rem;
 $font-size-sm: 0.875rem;
-$font-size-lg: 1.25rem;
+$font-size-md: 1rem;
+$font-size-lg: 1.125rem;
+$font-size-sl: 1.25rem;
 $font-size-xl: 1.65rem;
 $line-height: 1.25rem;
 $line-height-sm: 1rem;
@@ -161,7 +163,7 @@ $line-height-sm: 1rem;
 $input-border: 1px solid make-color-spread($color-dark);
 
 // Button properties
-$btn-font-size: $font-size;
+$btn-font-size: $font-size-md;
 $btn-font-size-sm: $font-size-sm;
 $btn-font-size-lg: $font-size-lg;
 $btn-font-size-xl: $font-size-xl;

@@ -50,7 +50,7 @@ const UserSchema = new Schema<IUser>({
   avatar: { type: String, default: '' },
   cover: { type: String, default: '' },
   status: { type: String, required: true, default: 'pending' },
-  role: { type: String, required: true, default: ROLES.USER },
+  role: { type: String, required: true, default: 'user' },
   permissions: { type: [String], default: [] },
   token: { type: String, default: '' },
   salt: { type: String, required: true, maxlength: GV.SALT_LENGTH },
@@ -81,8 +81,8 @@ class UserModel {
     return data
   }
 
-  async getAuthorizedUserByUsername (username: string, role: ROLE, selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
-    const q = User.findOne({ username, role }).select(selected?.join(' ') ?? '').lean()
+  async getAuthorizedUserByUsername (username: string, roles: ROLE[], selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
+    const q = User.findOne({ username, role: { $in: roles } }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data
   }

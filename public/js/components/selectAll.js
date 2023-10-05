@@ -5,7 +5,7 @@ export const __Checkboxes = Array.from(qs.$a(`${pattern}[data-select-target]`))
 export const __SelectAlls = Array.from(qs.$a(`${pattern}[data-select-all]`))
 
 __SelectAlls.map(selectAll => selectAll.addEventListener('change',
-  function selectAllCheckbox () {
+  function __selectAllCheckbox () {
     const target = selectAll.dataset.selectAll
     const checkNodes = qs.$a(`${pattern}[data-select-target = ${target}]`)
     Array.from(checkNodes).map(checkbox => checkbox.checked = selectAll.checked)
@@ -13,7 +13,7 @@ __SelectAlls.map(selectAll => selectAll.addEventListener('change',
 ))
 
 __Checkboxes.map(checkbox => checkbox.addEventListener('change',
-  function toggleSelectAll () {
+  function __toggleSelectAll () {
     const
       target = checkbox.dataset.selectTarget,
       selectAll = qs.$a(`${pattern}[data-select-all = ${target}]`),

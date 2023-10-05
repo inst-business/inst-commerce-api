@@ -5,7 +5,7 @@
 {{!-- Head section --}}
 <nav class="Head" aria-label="breadcrumb">
   <ol class="Breadcrumb">
-    <li class="Breadcrumb__item"><a href="/v1">Home</a></li>
+    <li class="Breadcrumb__item"><a href="/">Home</a></li>
     <li class="Breadcrumb__item" aria-current="page">Products</li>
   </ol>
   <h1 class="Heading">Product Management</h1>
@@ -30,14 +30,14 @@
       </div>
       <div class="Actions-right">
         {{#if (when data.deletedCount 'gt' 0)}}
-          <a href="/v1/products{{routeI 'crud.get_all_deleted'}}" class="Text-link">
+          <a href="/products{{routeI 'crud.get_all_deleted'}}" class="Text-link">
             {{!-- <i class="fa-regular fa-trash"></i> --}}
             <i class="fa-regular fa-circle-trash"></i>
             Removed products ({{data.deletedCount}})
           </a>
           <div class="Actions__seperate"></div>
         {{/if}}
-        <a href="/v1/products{{routeI 'crud.create'}}" class="Btn" data-variant="success" data-size="sm">
+        <a href="/products{{routeI 'crud.create'}}" class="Btn" data-variant="success" data-size="sm">
           <i class="fa-regular fa-circle-plus"></i> Add new
         </a>
       </div>

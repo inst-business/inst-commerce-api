@@ -5,9 +5,9 @@
 {{!-- Head section --}}
 <nav class="Head" aria-label="breadcrumb">
   <ol class="Breadcrumb">
-    <li class="Breadcrumb__item"><a href="/v1">Home</a></li>
-    <li class="Breadcrumb__item"><a href="/v1/categories{{routeI 'crud.get_many'}}">Categories</a></li>
-    <li class="Breadcrumb__item"><a href="/v1/categories{{routeI 'crud.get_one' data._id}}">{{data.name}}</a></li>
+    <li class="Breadcrumb__item"><a href="/">Home</a></li>
+    <li class="Breadcrumb__item"><a href="/categories{{routeI 'crud.get_many'}}">Categories</a></li>
+    <li class="Breadcrumb__item"><a href="/categories{{routeI 'crud.get_one' data._id}}">{{data.name}}</a></li>
     <li class="Breadcrumb__item" aria-current="page">Edit</li>
   </ol>
   <h1 class="Heading">Category Editing</h1>

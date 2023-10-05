@@ -44,21 +44,21 @@ export const ACCOUNT_STATUS_ARR = {
 }
 
 export type ROLE = 'guess' | 'user' | 'manager' | 'admin'
+export const ROLES = Object.freeze({
+  ADMIN: ['admin', 'manager', 'user'],
+  MANAGER: ['manager', 'user'],
+  USER: ['user'],
+  // GUESS: 'guess',
+}) satisfies Record<string, ROLE[]>
 export interface RULE {
   ADMIN: 'view_admin' | 'modify_admin' | 'remove_admin'
   MANAGER: 'view_manager' | 'modify_manager' | 'remove_manager'
   SELLER: 'view_seller' | 'ban_seller' | 'remove_seller'
   USER: 'view_user' | 'ban_user'
-  PRODUCT: 'view_product' | 'modify_product' | 'view_removed_product' | 'modify_removed_product'
+  PRODUCT: 'r_pd' | 'u_pd' | 'view_removed_product' | 'modify_removed_product'
   CATEGORY: 'view_category' | 'modify_category' | 'view_removed_category' | 'modify_removed_category'
   ARTICLE: 'view_article' | 'modify_article' | 'view_removed_article' | 'modify_removed_article'
 }
-export const ROLES: Record<string, ROLE> = Object.freeze({
-  ADMIN: 'admin',
-  MANAGER: 'manager',
-  USER: 'user',
-  GUESS: 'guess',
-})
 export type ALL_RULES = RULE[keyof RULE]
 
 export interface USER_SIGN {

@@ -5,7 +5,7 @@ export const __ImgInputFiles = Array.from(qs.$a(`${pattern}[data-previewer-targe
 export const __ImgPreviewers = Array.from(qs.$a('.Previewer'))
 
 __ImgInputFiles.map(input => input.addEventListener('change',
-  function setPreviewImage () {
+  function __setPreviewImage () {
     const
       target = input.dataset.previewerTarget,
       previewer = qs.$o(`.Previewer${target}`),

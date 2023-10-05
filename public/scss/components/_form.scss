@@ -10,6 +10,7 @@
   --Field-spacing: 0.75rem;
   --Field-response: var(--base-color-variant);
   --Field-transition: all #{$transition-1-eio}, #{$transition-color-1};
+  --Field-oninvalid-animation: none;
 }
 
 .Form {
@@ -57,6 +58,10 @@
     flex-wrap: wrap;
     gap: var(--Field-spacing);
   }
+
+  &[data-oninvalid="vibrate"] {
+    --Field-oninvalid-animation: vibrate-on-invalid #{$transition-1-eio} 0s 1;
+  }
 }
 
 @mixin make-field-12col($gap: 0.75rem) {
@@ -64,6 +69,12 @@
   @include responsive.make-responsive-down(sm, md, lg, xl) using ($breakpoint) {
     @include responsive.make-data-12col($breakpoint, $gap);
   }
+}
+
+@keyframes vibrate-on-invalid {
+  0% { transform: translateX(.15rem); }
+  50% { transform: translateX(-.15rem); }
+  100% { transform: translateX(.15rem); }
 }
 
 .Field {
@@ -157,6 +168,7 @@
     --Field-response: #{$color-danger};
     #{$Field}__input {
       border-color: $color-danger !important;
+      animation: var(--Field-oninvalid-animation);
       --Input-outline: #{make-shadow-outlined($color-danger)};
       --Input-border: #{$color-danger};
     }

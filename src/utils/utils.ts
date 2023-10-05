@@ -156,6 +156,10 @@ class Utils {
     return ajv.compile(schema)
   }
 
+  // isType <T> (arg: any): arg is T {
+  //   return (arg instanceof T)
+  // }
+
   pickProps <T extends {}, K extends keyof T>
     (obj: T, ...keys: RecursiveArray<K | PropsKey>) {
       // better performance than Array.flat() but [depth = 1]

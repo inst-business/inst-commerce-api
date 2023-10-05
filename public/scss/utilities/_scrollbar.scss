@@ -1,5 +1,9 @@
 @import "../variables"; // Global variables
 
+@mixin scroll-bar-default {
+  
+}
+
 @mixin scroll-bar {
   overflow: auto;
   overflow-y: overlay;

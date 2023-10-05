@@ -18,20 +18,6 @@ class CategoryCtrl {
     })
   }
 
-  static createOne () {
-    return _.routeAsync(async () => {},
-    _.renderView('app/categories/create')
-  )}
-
-  static createOneChild () {
-    return _.routeAsync(async (req, res) => {
-      const { id } = req.params
-      const data = await Category.getOneById(id, ['name'])
-      return data
-    },
-    _.renderView('app/categories/categorized/create')
-  )}
-
   static storeOne () {
     return _.routeAsync(async (req, res) => {
       const
@@ -57,7 +43,7 @@ class CategoryCtrl {
           return data
         })
       return submittedCategory
-    },
+    }
   )}
   
   static getOne () {
@@ -65,20 +51,14 @@ class CategoryCtrl {
       const { id } = req.params
       const data: ICategory | null = await Category.getOneById(id)
       return data
-    },
-    _.renderView('app/categories/detail')
+    }
   )}
 
   static getMany () {
     return _.routeAsync(async (req, res) => {
-      const resources = {
-        'items': Category.getMany(),
-        'deletedCount': Category.getDeletedAmount()
-      }
-      const data = _.fetchAllSettled(resources)
+      const data: ICategory[] = await Category.getMany()
       return data
-    },
-    _.renderView('app/categories/index')
+    }
   )}
   
   static getManyByParentId () {
@@ -88,15 +68,6 @@ class CategoryCtrl {
       return data
     })
   }
-
-  static editOne () {
-    return _.routeAsync(async (req, res) => {
-      const { id } = req.params
-      const data: ICategory | null = await Category.getOneById(id)
-      return data
-    },
-    _.renderView('app/categories/edit', true)
-  )}
 
   static updateOne () {
     return _.routeAsync(async (req, res) => {
@@ -133,8 +104,7 @@ class CategoryCtrl {
         })
       const newdata = await updatedCategory
       return newdata
-    },
-    // _.redirectView('back')
+    }
   )}
 
   static getOneDeleted () {
@@ -142,16 +112,14 @@ class CategoryCtrl {
       const { id } = req.params
       const data: ICategory | null = await Category.getDeletedById(id)
       return data
-    },
-    _.renderView('app/categories/deleted/detail')
+    }
   )}
 
   static getManyDeleted () {
     return _.routeAsync(async () => {
       const data: ICategory[] = await Category.getManyDeleted()
       return data
-    },
-    _.renderView('app/categories/deleted/index')
+    }
   )}
 
   static deleteOneOrMany () {
@@ -166,8 +134,7 @@ class CategoryCtrl {
       const { id } = req.body
       const result = await Category.deleteOneOrMany(id, user._id)
       return result
-    },
-    // _.redirectView('back')
+    }
   )}
   
   static restoreOne () {
@@ -175,8 +142,7 @@ class CategoryCtrl {
       const { id } = req.body
       const restoredCategory = await Category.restoreOneOrMany(id)
       return restoredCategory
-    },
-    // _.redirectView('back')
+    }
   )}
 
   static destroyOneOrMany () {
@@ -191,8 +157,7 @@ class CategoryCtrl {
           return data
         })
       return result
-    },
-    // _.redirectView('back')
+    }
   )}
 
 }
@@ -240,5 +205,83 @@ export class CategoryExtCtrl {
       return data
     })
   }
+
+}
+
+
+/** 
+ *  VIEW RENDERING
+*/
+export class CategoryViewCtrl {
+
+  static createOne () {
+    return _.routeAsync(async () => {},
+    _.renderView('app/categories/create')
+  )}
+  
+  static createOneChild () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data = await Category.getOneById(id, ['name'])
+      return data
+    },
+    _.renderView('app/categories/categorized/create')
+  )}
+  
+  static getOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: ICategory | null = await Category.getOneById(id)
+      return data
+    },
+    _.renderView('app/categories/detail')
+  )}
+
+  static getMany () {
+    return _.routeAsync(async (req, res) => {
+      const resources = {
+        'items': Category.getMany(),
+        'deletedCount': Category.getDeletedAmount()
+      }
+      const data = _.fetchAllSettled(resources)
+      return data
+    },
+    _.renderView('app/categories/index')
+  )}
+
+  static getManyByParentId () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: ICategory[] = await Category.getManyByParentId(id)
+      return data
+    },
+    // _.renderView('app/categories/index')
+  )}
+  
+  static editOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: ICategory | null = await Category.getOneById(id)
+      return data
+    },
+    _.renderView('app/categories/edit', true)
+  )}
+
+  static getOneDeleted () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: ICategory | null = await Category.getDeletedById(id)
+      return data
+    },
+    _.renderView('app/categories/deleted/detail')
+  )}
+
+  static getManyDeleted () {
+    return _.routeAsync(async () => {
+      const data: ICategory[] = await Category.getManyDeleted()
+      return data
+    },
+    _.renderView('app/categories/deleted/index')
+  )}
 
 }

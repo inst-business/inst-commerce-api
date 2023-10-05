@@ -13,6 +13,7 @@ export interface ICategory {
   img: string
   slug: string
   status: ITEM_STATUS
+  isImmutable?: boolean
   categorizedBy?: ObjectId
   // left: number
   // right: number
@@ -34,6 +35,7 @@ const CategorySchema = new Schema<ICategory>({
   img: { type: String, required: true },
   slug: { type: String, required: true, unique: true, maxlength: 64 },
   status: { type: String, required: true, default: 'pending' },
+  isImmutable: { type: Boolean, default: false },
   categorizedBy: { type: Schema.Types.ObjectId, ref: 'Category' },
   createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true })

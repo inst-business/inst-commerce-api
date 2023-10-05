@@ -43,6 +43,18 @@
       --Input-color: var(--base-color);
     }
   }
+  
+  /*  Sizes */
+  &[data-size="sm"] {
+    --Input-padding: .375rem;
+    --Input-font-size: .875rem;
+    // --Input-font-size: #{$font-size-sm};
+  }
+  &[data-size="lg"] {
+    --Input-padding: .625rem;
+    --Input-font-size: #{$font-size-lg};
+    // --Input-padding: #{$font-size-xs};
+  }
 
   /*  Each color */
   @each $name, $color in $colors {
@@ -116,6 +128,14 @@ select.Input {
   background-size: 0.25rem 0.25rem, 0.25rem 0.25rem, 0.5px 1.5em;
   background-repeat: no-repeat;
   transition: var(--Input-transition), background-image $transition-1-ln;
+
+  /*  Sizes */
+  &[data-size="sm"] {
+    min-height: 2.0625rem;
+  }
+  &[data-size="lg"] {
+    min-height: 3.0625rem;
+  }
   option[value=""]:disabled {
     display: none;
   }

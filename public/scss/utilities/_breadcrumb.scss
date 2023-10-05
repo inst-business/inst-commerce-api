@@ -22,7 +22,7 @@
   // transition: var(--Breadcrumb-transition);
 
   &__item {
-    @include make-text-ellipsised(24ch);
+    @include make-text-ellipsised(48ch);
     color: var(--Breadcrumb-color);
     transition: var(--Breadcrumb-transition);
     & + &::before {

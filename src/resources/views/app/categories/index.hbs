@@ -5,7 +5,7 @@
 {{!-- Head section --}}
 <nav class="Head" aria-label="breadcrumb">
   <ol class="Breadcrumb">
-    <li class="Breadcrumb__item"><a href="/v1">Home</a></li>
+    <li class="Breadcrumb__item"><a href="/">Home</a></li>
     <li class="Breadcrumb__item" aria-current="page">Categories</li>
   </ol>
   <h1 class="Heading">Category Management</h1>
@@ -15,7 +15,55 @@
 {{!-- Available categories --}}
 <section class="Row">
   <div class="Col lg-12 sm-12">
-    <h2 class="Heading">Available categories</h2>
+    <nav class="Tab" id="nav-tab" data-tab="">
+      <div class="Tab__label">
+        <div class="Tab__label-anchor" tabindex="0" id="tab0" data-tab-target="#nav-tab" aria-current="page">
+          <div class="P-x-2">Available</div>
+        </div>
+        <div class="Tab__label-anchor" tabindex="1" id="tab1" data-tab-target="#nav-tab">
+          <div class="P-x-2">Sub-Categories</div>
+        </div>
+        <div class="Tab__label-anchor" tabindex="2" id="tab2" data-tab-target="#nav-tab">
+          <div class="P-x-2">Pending</div>
+        </div>
+        <div class="Tab__label-anchor" tabindex="3" id="tab3" data-tab-target="#nav-tab">
+          <div class="P-x-2">Removed</div>
+        </div>
+        {{!-- <div class="hidden-bar">
+          <div class="active-bar"></div>
+        </div> --}}
+      </div>
+      {{!-- <div class="content-boxes">
+        <div class="box active" data-content="1">
+          <div class="title">React</div>
+          <div class="content">React ipsum dolor sit amet consectetur adipisicing elit. Laboriosam expedita accusantium,
+            ea vero autem cupiditate, consectetur quae voluptatum alias fuga corporis quibusdam harum praesentium mollitia
+            voluptatem soluta, atque dolor error!</div>
+        </div>
+        <div class="box" data-content="2">
+          <div class="title">Angular</div>
+          <div class="content">Angular ipsum dolor sit amet consectetur, adipisicing elit. Praesentium accusantium libero
+            ea
+            quaerat. Incidunt eos laboriosam laborum eligendi natus eaque, nostrum officiis facilis dicta, distinctio eius
+            repellat perspiciatis facere numquam!</div>
+        </div>
+        <div class="box" data-content="3">
+          <div class="title">Ember</div>
+          <div class="content">Ember ipsum dolor sit amet consectetur adipisicing elit. Quas sint dolores eum officia
+            iusto repellendus atque nemo quae praesentium sit. Illo eius, similique soluta ab sed quis fugit assumenda.
+            Explicabo.</div>
+        </div>
+        <div class="box" data-content="4">
+          <div class="title">Design</div>
+          <div class="content">Design ipsum dolor sit amet consectetur adipisicing elit. Soluta ratione nesciunt id fugiat
+            expedita! Cum facilis ratione nostrum quidem aliquid? Libero consectetur esse minima delectus soluta illum
+            porro tenetur a!</div>
+        </div>
+      </div> --}}
+    </nav>
+
+    
+    <h2 class="Heading M-b-2">Available categories</h2>
     <div class="Actions">
       <div class="Actions-left">
         <div class="Field__option">
@@ -23,7 +71,7 @@
           <label for="select-all">Select all</label>
         </div>
         <div class="Actions__seperate"></div>
-        <select class="Input" name="action" id="action" title="select an action">
+        <select class="Input" name="action" id="action" title="select an action" data-size="sm">
           <option selected>- Select action -</option>
           <option value="delete">Delete</option>
         </select>
@@ -31,21 +79,21 @@
           data-dialog-target="#delete-selected-dialog" id="delete-selected">
           <i class="fa-regular fa-trash"></i>&ensp;Delete
         </button> --}}
-        <button class="Btn" data-size="sm" data-variant="outline grey" title="Delete selected"
+        <button class="Btn" data-size="sm" data-variant="outline primary" title="Delete selected"
           data-dialog-target="#delete-selected-dialog" id="delete-selected">
           <i class="fa-regular fa-arrow-up-right-from-square"></i>&ensp;Perform
         </button>
       </div>
       <div class="Actions-right">
         {{#if (when data.deletedCount 'gt' 0)}}
-          <a href="/v1/categories{{routeI 'crud.get_many_deleted'}}" class="Text-link">
+          <a href="/categories{{routeI 'crud.get_many_deleted'}}" class="Text-link">
             {{!-- <i class="fa-regular fa-trash"></i> --}}
             <i class="fa-regular fa-circle-trash"></i>
             Removed categories ({{data.deletedCount}})
           </a>
           <div class="Actions__seperate"></div>
         {{/if}}
-        <a href="/v1/categories{{routeI 'crud.create'}}" class="Btn" data-variant="success" data-size="sm">
+        <a href="/categories{{routeI 'crud.create'}}" class="Btn" data-variant="success" data-size="sm">
           <i class="fa-regular fa-circle-plus"></i>&ensp;New category
         </a>
       </div>
@@ -59,13 +107,14 @@
               {{!-- <input type="checkbox" class="Check" name="item[]" value="" id="select-all"> --}}
             </th>
             {{!-- <th>#</th> --}}
-            <th>Name</th>
+            <th width="25%">Name</th>
             <th>Image</th>
-            <th>Description</th>
+            <th width="25%">Description</th>
             <th>Added by</th>
             <th>Added at</th>
             <th>Modified at</th>
-            <th>Actions</th>
+            {{!-- <th>Actions</th> --}}
+            <th width="1%"></th>
           </tr>
         </thead>
         <tbody>
@@ -75,13 +124,13 @@
                 <input type="checkbox" class="Check" name="id[]" value="{{this._id}}" data-select-target="select-all">
               </td>
               {{!-- <td><p>{{increase @index 1}}</p></td> --}}
-              <td class="Item__name" width="25%">
-                <a href="/v1/categories{{routeI 'crud.get_one' this._id}}" class="Text-link Text-limit-3">{{this.name}}</a>
+              <td class="Item__name">
+                <a href="/categories{{routeI 'crud.get_one' this._id}}" class="Text-link Text-limit-2">{{this.name}}</a>
               </td>
               {{!-- <td class="Item__name">
                 <a href="#" class="Text-link">{{this.createdBy.username}}</a>
               </td> --}}
-              <td class="Item__img">
+              <td class="Item__img" data-size="xs">
                 <picture>
                   {{!-- <source srcset="/uploads/categories/{{webpFormat this.img}}" type="image/webp"> --}}
                   <img src="/uploads/categories/{{this.img}}" alt="{{this.name}}" title="{{this.name}}"
@@ -89,11 +138,11 @@
                     class="Img" data-variant="thumbnail" data-dialog-target="#imgviewing-dialog">
                 </picture>
               </td>
-              <td class="Item__desc" width="25%">
-                <p class="Text-limit-3">{{this.desc}}</p>
+              <td class="Item__desc">
+                <p class="Text-limit-2">{{this.desc}}{{#unless this.desc}}-{{/unless}}</p>
               </td>
               <td class="">
-                <a href="/v1/u/{{this.createdBy.username}}" class="Text-link">{{this.createdBy.username}}</a>
+                <a href="/u/{{this.createdBy.username}}" class="Text-link">{{this.createdBy.username}}</a>
               </td>
               <td class="Item__time">
                 {{dateFormat this.createdAt 'dateShort'}}<br>{{dateFormat this.createdAt 'timeMedium'}}
@@ -106,24 +155,27 @@
                 {{/if}}
               </td>
               <td class="Item__actions">
-                <a href="/v1/categories/{{this._id}}{{routeI 'crud.create'}}" title="New sub-category for '{{this.name}}'"
-                  class="Btn" data-size="sm" data-variant="success outline">
+                <a href="/categories/{{this._id}}{{routeI 'crud.create'}}" title="New sub-category"
+                  class="Btn" data-size="" data-variant="success unstyled">
                   <i class="fa-regular fa-file-circle-plus"></i>
                 </a>
-                <a href="/v1/categories{{routeI 'crud.edit' this._id}}" title="Edit '{{this.name}}'"
-                  class="Btn" data-size="sm" data-variant="info outline">
-                  <i class="fa-regular fa-pen-to-square"></i>
+                <a href="/categories{{routeI 'crud.edit' this._id}}" title="Edit"
+                  class="Btn" data-size="" data-variant="info unstyled">
+                  <i class="fa-regular fa-pen-line"></i>
+                  {{!-- <i class="fa-regular fa-pen-clip"></i> --}}
+                  {{!-- <i class="fa-regular fa-pen-swirl"></i> --}}
                 </a>
-                <button title="Delete '{{this.name}}'" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}"
-                  class="Item__actions-delete Btn" data-size="sm" data-variant="outline danger">
-                  <i class="fa-regular fa-trash"></i>
+                <button title="Delete" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}"
+                  class="Item__actions-delete Btn" data-size="" data-variant="danger unstyled">
+                  <i class="fa-regular fa-trash-can"></i>
+                  {{!-- <i class="fa-regular fa-trash"></i> --}}
                 </button>
               </td>
             </tr>
           {{else}}
             <tr class="hover-0">
               <td colspan="8">
-                <p class="Text-muted Text-center P-y-3"><em>(No data available)</em></p>
+                <p class="Text-muted Text-center P-y-3"><em>(No data found)</em></p>
               </td>
             </tr>
           {{/each}}

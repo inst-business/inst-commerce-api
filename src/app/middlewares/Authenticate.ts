@@ -48,7 +48,7 @@ class Auth {
     })
   }
 
-  static reqUserByRole (role: ROLE): RequestHandler {
+  static reqUserByRole (roles: ROLE[]): RequestHandler {
     return _.routeNextableAsync(async (req, res, next) => {
       const authHeader = req.headers.authorization
       const token = authHeader && authHeader.split(' ')[1]
@@ -59,7 +59,7 @@ class Auth {
         if (err) {
           throw _.logicError('Session Expired', 'Your session has expired.', 401, ERR.REQUEST_EXPIRED)
         }
-        if ((<any>user).role !== role) {
+        if (!roles.includes((<USER_SIGN>user).role)) {
           throw _.logicError('Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
         }
         (<any>req).user = user

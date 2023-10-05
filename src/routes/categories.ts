@@ -1,5 +1,5 @@
 import express from 'express'
-import CategoryCtrl, { CategoryExtCtrl } from '@controllers/CategoryController'
+import CategoryCtrl, { CategoryExtCtrl, CategoryViewCtrl } from '@controllers/CategoryController'
 import Auth from '@middlewares/Authenticate'
 import _ from '@/utils/utils'
 import { ROLES } from '@/config/global/const'
@@ -12,12 +12,12 @@ const upload = uploadOneImage('img')
  *  EXTERNAL
 */
 
+router.get('/test/:id?/:id2?/:id3?', CategoryCtrl.test())
+
 router.get('/e/:slug', CategoryExtCtrl.getOneBySlug())
 router.get('/e/:slug/list', CategoryExtCtrl.getManyByParentSlug())
 router.get('/e', CategoryExtCtrl.getMany())
 
-
-router.get('/test/:id?/:id2?/:id3?', CategoryCtrl.test())
 /** 
  *  INTERNAL
 */
@@ -25,15 +25,11 @@ router.get('/test/:id?/:id2?/:id3?', CategoryCtrl.test())
 // deleted
 router.get('/d/:id', Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.getOneDeleted())
 router.route('/d')
-  .get(Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.getManyDeleted())
+  .get(Auth.reqUserByRole(ROLES.MANAGER), Auth.reqRules(['u_pd']), CategoryCtrl.getManyDeleted())
   .patch(Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.restoreOne())
   .delete(Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.destroyOneOrMany())
 
-// (view only)
-router.get('/create', Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.createOne())
 router.get('/:id/list', Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.getManyByParentId())
-router.get('/:id/create', Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.createOneChild())
-router.get('/:id/edit', Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.editOne())
 
 router.route('/:id')
   .get(Auth.reqUserByRole(ROLES.MANAGER), CategoryCtrl.getOne())
@@ -47,3 +43,19 @@ router.route('/')
 
 
 export default router
+
+
+/** 
+ *  VIEW RENDERING
+*/
+
+export const viewRouter = express.Router()
+
+viewRouter.get('/d/:id', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.getOneDeleted())
+viewRouter.get('/d', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.getManyDeleted())
+viewRouter.get('/create', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.createOne())
+viewRouter.get('/:id/create', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.createOneChild())
+viewRouter.get('/:id/edit', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.editOne())
+viewRouter.get('/:id/list', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.getManyByParentId())
+viewRouter.get('/:id', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.getOne())
+viewRouter.get('/', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.getMany())

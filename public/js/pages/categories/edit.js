@@ -31,7 +31,7 @@ form?.addEventListener('submit', async (e) => {
     body: formData,
   }).then(res => {
     if (res.ok) {
-      window.location.replace('/v1/categories')
+      window.location.replace('/categories')
     }
     return res.json()
   }).catch(e => console.error(e))
