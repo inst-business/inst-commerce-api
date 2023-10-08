@@ -27,6 +27,7 @@ const ERR = Object.freeze({
   SERVER_ERROR: -500,
   SERVICE_ERROR: -501,
   ENV_VARIABLE_MISSING: -502,
+  DATA_CRASHED: -503,
 
 })
 

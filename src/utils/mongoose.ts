@@ -29,6 +29,7 @@ export const mongooseError = <E extends MongooseError>(err: E | LogicError, stac
 // Handle querying
 export const handleQuery = <T>(res: Promise<T>, cb?: (data: T) => void): Promise<T> => 
   res.then(data => {
+    // console.log('- handleQuery: ', data)
     cb && cb(data)
     // structuredClone() doesnt clone non-built-in classes => ObjectId crashed
     return JSON.parse(JSON.stringify(data))
@@ -117,7 +118,7 @@ export const withSoftDelete = (schema: Schema, ref: string) => {
     doc.deletedBy = isDeleted ? <ObjectId>deletedBy : undefined
     doc.deletedAt = isDeleted ? new Date() : undefined
     doc.$isDeleted(isDeleted)
-    return doc.save().then(res => true).catch(err => true)
+    return handleQuery(doc.save()).then(res => true)
   }
   type TDocumentWithQueryHelpers = QueryWithHelpers<
     TDocument | TDocument[],

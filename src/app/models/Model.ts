@@ -126,7 +126,7 @@ export class IndelibleModel<I> extends Model<I> {
 
   private errTitle: string = 'Access denied'
   private errMessage: string = 'This action is not allowed.'
-  private err: Error = _.logicError(this.errTitle, this.errMessage, 403, ERR.ACTION_REJECTED)
+  private err: Error = _.logicError(this.errTitle, this.errMessage, 406, ERR.ACTION_REJECTED)
 
   getAllDeleted (): any {
     throw this.err

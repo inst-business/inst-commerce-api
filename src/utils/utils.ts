@@ -71,7 +71,7 @@ class Utils {
   private createServiceCallback (res: Response): ExpressCallback {    
     return (data?: any, err?: any) => {
       // const resData = data ? JSON.parse(JSON.stringify(data)) : {}
-      const resData = data != null ? structuredClone(data) : {}
+      const resData = (data != null && typeof data === 'object') ? structuredClone(data) : {}
       res.statusCode = 200
       if (err) {
         console.error(err)

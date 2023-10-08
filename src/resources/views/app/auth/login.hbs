@@ -1,27 +1,27 @@
 <section class="Row">
-  <div class="Col lg-4 olg-4">
+  <div class="Col lg-4 olg-4 P-b-0">
     <div class="Center">
       <div class="Box Box-scrollable">
-        <form class="Form" action="/v1/a/e/login" method="post" id="instance-form">
+        <form class="Form" action="/v1/a/e/login" method="post" id="form-login" data-oninvalid="vibrate">
           <div class="Form__header">
             <p class="Form__header-title">Login</p>
             <p class="Form__header-description">Welcome back!</p>
           </div>
           <div class="Form__body">
-            <div class="Field" aria-invalid="">
+            <div class="Field" aria-invalid="" aria-required="true">
               <label for="userInfo" class="Field__label">Username or Email</label>
-              <input type="text" class="Field__input" name="userInfo" id="userInfo">
+              <input type="text" class="Field__input" name="userInfo" id="userInfo" autocomplete="username" aria-required="true">
               <span class="Field__response"></span>
             </div>
-            <div class="Field">
+            <div class="Field" aria-required="true">
               <label for="password" class="Field__label">Password</label>
-              <input type="password" class="Field__input" name="password" id="password">
+              <input type="password" class="Field__input" name="password" id="password" autocomplete="current-password" aria-required="true">
               <span class="Field__response"></span>
             </div>
           </div>
           <div class="Form__footer">
             <div class="Field" aria-invalid="">
-              <button type="submit" class="Btn" name="submit" id="submit">
+              <button type="submit" class="Btn" id="submit">
                 Login
               </button>
             </div>
@@ -39,3 +39,5 @@
     </div>
   </div>
 </section>
+
+<script defer src="/js/pages/dashboard/account.js" type="module"></script>

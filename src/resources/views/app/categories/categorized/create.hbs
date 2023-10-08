@@ -22,19 +22,24 @@
         <div class="Col lg-9 P-b-0">
           <form class="Form" action="/v1/categories/{{data._id}}{{routeI 'crud.store_one'}}" method="post" enctype="multipart/form-data" id="form-create">
             <div class="Form__header">
-              <p class="Form__header-title">Sub-category</p>
+              <p class="Form__header-title">{{data.name}}'s sub-category</p>
             </div>
             <div class="Form__body">
+              {{!-- <div class="Field" data-col="" aria-invalid="">
+                <label for="categorizedBy" class="Field__label">Categorized by</label>
+                <input type="text" class="Field__input" name="category" value="{{data.name}}" data-variant="" readonly disabled>
+                <span class="Field__response"></span>
+              </div> --}}
+              {{!-- <input type="hidden" name="categorizedBy" id="categorizedBy" value="{{data._id}}"> --}}
               <div class="Field-group">
-                <div class="Field" data-col="df-6" aria-invalid="">
+                <div class="Field" data-col="df-6" aria-required="true" aria-invalid="">
                   <label for="name" class="Field__label">Name</label>
-                  <input type="text" class="Field__input" name="name" id="name">
+                  <input type="text" class="Field__input" aria-required="true" name="name" id="name">
                   <span class="Field__response"></span>
                 </div>
                 <div class="Field" data-col="df-6" aria-invalid="">
-                  <label for="categorizedBy" class="Field__label">Categorize</label>
-                  <input type="hidden" name="categorizedBy" id="categorizedBy" value="{{data._id}}">
-                  <input type="text" class="Field__input" name="category" value="{{data.name}}" readonly disabled>
+                  <label for="slug" class="Field__label">Slug</label>
+                  <input type="text" class="Field__input" name="slug" id="slug" placeholder="Auto generate based on name">
                   <span class="Field__response"></span>
                 </div>
               </div>
@@ -43,9 +48,9 @@
                 <textarea class="Field__input" id="desc" name="desc" rows="5"></textarea>
                 <span class="Field__response"></span>
               </div>
-              <div class="Field" data-col="" aria-invalid="">
+              <div class="Field" data-col="" aria-required="true" aria-invalid="">
                 <label for="img" class="Field__label">Image</label>
-                <input type="file" accept=".jpg,.jpeg,.png" name="img" id="img"
+                <input type="file" accept=".jpg,.jpeg,.png" name="img" id="img" aria-required="true"
                   class="Field__input" data-previewer-target="#preview-img">
                 <span class="Field__response"></span>
               </div>

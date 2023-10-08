@@ -1,12 +1,15 @@
 import 'dotenv/config'
 import 'module-alias/register'
+import https from 'https'
+import fs from 'fs'
+import path from 'path'
 import express from 'express'
 // import bodyParser from 'body-parser'
 // import session from 'express-session'
+import cookieParser from 'cookie-parser'
 import methodOverride from 'method-override'
 import { engine } from 'express-handlebars'
 import morgan from 'morgan'
-import path from 'path'
 import Connect from '@/config/db/connect'
 import routes from '@/routes'
 // import jsonServer from 'json-server'
@@ -23,14 +26,17 @@ class Server {
     // Middleware
     app.use(express.urlencoded({ extended: true }))
     app.use(express.json())
+    app.use(cookieParser())
     // app.use(bodyParser.urlencoded({ extended: true }))
     // app.use(bodyParser.json())
     app.use(methodOverride('_method'))
     app.use(express.static(path.join(__dirname, '../public')))
-    // app.use(express.static(path.join(__dirname, '../public/scss')))
-    app.use(express.static(path.join(__dirname, '../node_modules/bootstrap')))
-    app.use(morgan('dev'))  // HTTP logger
-    // app.use(morgan('":remote-addr - :remote-user [:date[web]]" :method :url HTTP/:http-version :status :response-time ms - :res[content-length]'))
+    // app.use(express.static(path.join(__dirname, '../node_modules/bootstrap')))
+
+    console.log(ENV.NODE_ENV + ' started!')
+    if (ENV.NODE_ENV === 'development') {
+      app.use(morgan('dev'))  // HTTP logger
+    }
     
     // start session
     // app.use(session({
@@ -86,10 +92,23 @@ class Server {
       res.status(404).end()
     })
 
+    // Set up https
+    // let server
+    // try {
+    //   server = https.createServer({
+    //     key: fs.readFileSync(<string>ENV.SSL_KEY_PATH),
+    //     cert: fs.readFileSync(<string>ENV.SSL_CERT_PATH),
+    //   }, app)
+    // }
+    // catch (err: any) {
+    //   console.error('SSL configurate failed:', err.message || err)
+    //   server = app
+    // }
+    
     // Start server
-    app.listen(ENV.PORT, () =>
-      console.log(`(つ▀¯▀ )つ Server is listening at ${ENV.PROTOCOL}://${ENV.HOST} on port: ${ENV.PORT}`)
-    )
+    app.listen(ENV.PORT, () => {
+      console.log(`(つ▀¯▀ )つ Listening on port: ${ENV.PORT}`)
+    })
     
   }
 }

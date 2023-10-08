@@ -4,6 +4,7 @@ import Auth from '@middlewares/Authenticate'
 import _ from '@/utils/utils'
 import { ROLES } from '@/config/global/const'
 import { uploadOneImage } from '@/services/LocalUploadService'
+import Token from '@/services/TokenService'
 
 const router = express.Router()
 const upload = uploadOneImage('img')
@@ -51,11 +52,11 @@ export default router
 
 export const viewRouter = express.Router()
 
-viewRouter.get('/d/:id', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.getOneDeleted())
-viewRouter.get('/d', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.getManyDeleted())
-viewRouter.get('/create', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.createOne())
-viewRouter.get('/:id/create', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.createOneChild())
-viewRouter.get('/:id/edit', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.editOne())
-viewRouter.get('/:id/list', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.getManyByParentId())
-viewRouter.get('/:id', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.getOne())
-viewRouter.get('/', Auth.reqUserByRole(ROLES.MANAGER), CategoryViewCtrl.getMany())
+viewRouter.get('/d/:id', CategoryViewCtrl.getOneDeleted())
+viewRouter.get('/d', CategoryViewCtrl.getManyDeleted())
+viewRouter.get('/create', CategoryViewCtrl.createOne())
+viewRouter.get('/:id/create', CategoryViewCtrl.createOneChild())
+viewRouter.get('/:id/edit', CategoryViewCtrl.editOne())
+viewRouter.get('/:id/list', CategoryViewCtrl.getManyByParentId())
+viewRouter.get('/:id', CategoryViewCtrl.getOne())
+viewRouter.get('/', Token.useAccessToken(), Auth.reqUserOrRedirect('/login'), CategoryViewCtrl.getMany())

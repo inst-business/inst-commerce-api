@@ -78,7 +78,7 @@
 }
 
 .Field {
-  $Field: helpers.direct-parent(&);
+  $_Field: helpers.direct-parent(&);
   display: flex;
   flex-direction: column;
   // flex-grow: 3;
@@ -92,11 +92,6 @@
     @include make-text-ellipsised();
     color: var(--base-color);
     transition: var(--Field-transition);
-    &::after {
-      content: " *";
-      color: var(--danger);
-      // visibility: hidden;
-    }
   }
   &__input {
     @extend .Input;
@@ -164,9 +159,15 @@
     transition: var(--Field-transition);
   }
 
-  &[aria-invalid="true"] {
+  &[aria-required="true"], &.required {
+    #{$_Field}__label::after {
+      content: " *";
+      color: var(--danger);
+    }
+  }
+  &[aria-invalid="true"], &.invalid {
     --Field-response: #{$color-danger};
-    #{$Field}__input {
+    #{$_Field}__input {
       border-color: $color-danger !important;
       animation: var(--Field-oninvalid-animation);
       --Input-outline: #{make-shadow-outlined($color-danger)};
@@ -175,7 +176,7 @@
   }
   &[aria-invalid="false"] {
     --Field-response: #{$color-success};
-    #{$Field}__input {
+    #{$_Field}__input {
       border-color: $color-success !important;
       --Input-outline: #{make-shadow-outlined($color-success)};
     }

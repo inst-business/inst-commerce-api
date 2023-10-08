@@ -137,6 +137,7 @@ export class GV {
   static REFRESH_TOKEN_EXPIRED = '24h'
   static VERIFY_EXPIRED = '5m'
   static SESSION_EXPIRED = 5 * this._1M
+  static TEMP_DATA_EXPIRED = '1d'
   static SALT_LENGTH = 16
 
   static DEFAULT_STATUS = 'pending'

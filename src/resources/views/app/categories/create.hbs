@@ -24,31 +24,26 @@
               <p class="Form__header-title">Category</p>
             </div>
             <div class="Form__body">
-              <div class="Field" data-col="" aria-invalid="">
-                <label for="name" class="Field__label">Name</label>
-                <input type="text" class="Field__input" name="name" id="name">
-                <span class="Field__response"></span>
-              </div>
-              {{!-- <div class="Field-group">
-                <div class="Field" data-col="df-6" aria-invalid="">
-                  <label for="categorizedBy" class="Field__label">Categorize</label>
-                  <select class="Field__input" name="categorizedBy" id="categorizedBy">
-                    <option selected>(Uncategorized)</option>
-                    {{#each data.parents}}
-                      <option value="{{this._id}}">{{this.name}}</option>
-                    {{/each}}
-                  </select>
+              <div class="Field-group">
+                <div class="Field" data-col="df-6" aria-required="true" aria-invalid="">
+                  <label for="name" class="Field__label">Name</label>
+                  <input type="text" class="Field__input" aria-required="true" name="name" id="name">
                   <span class="Field__response"></span>
                 </div>
-              </div> --}}
+                <div class="Field" data-col="df-6" aria-invalid="">
+                  <label for="slug" class="Field__label">Slug</label>
+                  <input type="text" class="Field__input" name="slug" id="slug" placeholder="Auto generate based on name">
+                  <span class="Field__response"></span>
+                </div>
+              </div>
               <div class="Field" data-col="" aria-invalid="">
                 <label for="desc" class="Field__label">Description</label>
                 <textarea class="Field__input" id="desc" name="desc" rows="5"></textarea>
                 <span class="Field__response"></span>
               </div>
-              <div class="Field" data-col="" aria-invalid="">
+              <div class="Field" data-col="" aria-required="true" aria-invalid="">
                 <label for="img" class="Field__label">Image</label>
-                <input type="file" accept=".jpg,.jpeg,.png" name="img" id="img"
+                <input type="file" accept=".jpg,.jpeg,.png" name="img" id="img" aria-required="true"
                   class="Field__input" data-previewer-target="#preview-img">
                 <span class="Field__response"></span>
               </div>

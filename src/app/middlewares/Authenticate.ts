@@ -1,5 +1,6 @@
-import express, { RequestHandler } from 'express'
 import 'dotenv/config'
+import express, { RequestHandler } from 'express'
+import url from 'url'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 import UserModel from '@models/User'
@@ -25,7 +26,7 @@ class Auth {
       const authHeader = req.headers.authorization
       const token = authHeader && authHeader.split(' ')[1]
       if (token == null || token === '') {
-        throw _.logicError('Unauthorized', 'Login required.', 401, ERR.UNAUTHORIZED)
+        throw _.logicError('Unauthorized', 'You are not allowed.', 401, ERR.UNAUTHORIZED)
       }
       jwt.verify(token, <string>_.env('ACCESS_TOKEN'), (err, user) => {
         if (err) {
@@ -33,6 +34,30 @@ class Auth {
         }
         // Object.assign(req, { user })
         (<any>req).user = user
+        next()
+      })
+    })
+  }
+  
+  static reqUserOrRedirect (redirectUrl: string): RequestHandler {
+    return _.routeNextableAsync(async (req, res, next) => {
+      const
+        authHeader = req.headers.authorization,
+        token = authHeader && authHeader.split(' ')[1],
+        redirectParam = url.format({
+          protocol: req.protocol,
+          host: req.get('host'),
+          pathname: req.originalUrl
+        })
+      if (token == null || token === '') {
+        res.redirect(redirectUrl + '?redirect=' + redirectParam)
+        return
+      }
+      jwt.verify(token, <string>_.env('ACCESS_TOKEN'), (err, user) => {
+        if (err) {
+          res.redirect(redirectUrl + '?redirect=' + redirectParam)
+          return
+        }
         next()
       })
     })
@@ -53,7 +78,7 @@ class Auth {
       const authHeader = req.headers.authorization
       const token = authHeader && authHeader.split(' ')[1]
       if (token == null || token === '') {
-        throw _.logicError('Unauthorized', 'Login required.', 401, ERR.UNAUTHORIZED)
+        throw _.logicError('Unauthorized', 'You are not allowed.', 401, ERR.UNAUTHORIZED)
       }
       jwt.verify(token, <string>_.env('ACCESS_TOKEN'), (err, user) => {
         if (err) {
