@@ -1,3 +1,4 @@
+import { onLoadContent, setCookie } from '../../helpers/helpers.js'
 import validator from '../../components/form/validator.js'
 import '../../components/form/prototypes.js'
 import toast from '../../components/toast.js'
@@ -6,25 +7,20 @@ import { ERR } from '../../config/consts.js'
 
 const Account = async () => {
 
-  const formSelector = 'form#form-login'
   const useToast = (message) => toast({
     title: 'Login failed!', message, type: 'danger', duration: 5000, closable: false,
   })
-  const setAccessToken = (token) => {
-    document.cookie = `accessToken=${token}; max-age=1440; Secure; SameSite=Strict;`
-  }
-  const _login = async (url, user) => await fetch(url, {
+  const _login = (user) => fetch('/v1/a/e/login', {
     method: 'POST',
     credentials: 'include',
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify(user),
+    body: user,
   }).then(async res => await res.json()).catch(e => console.error(e))
 
   const onSubmit = async (data) => {
-    const formRef = document.querySelector(formSelector)
-    const res = await _login(formRef?.action, data)
+    const res = await _login(JSON.stringify(data))
     if (res.error) {
       // if (res.error.code === ERR.INVALID_DATA) {
       //   res.error?.pars?.forEach(par => {
@@ -34,13 +30,13 @@ const Account = async () => {
       useToast(res.error.message)
       return
     }
-    setAccessToken(res.accessToken)
+    setCookie('accessToken', res.accessToken)
     const queryParams = new URLSearchParams(window.location.search)
     window.location.replace(queryParams.get('redirect') || '/')
   }
 
   validator({
-    form: formSelector,
+    form: 'form#form-login',
     rules: [
       ['userInfo', 'required'],
       ['password', 'required'],
@@ -50,7 +46,6 @@ const Account = async () => {
     response: '.Field__response',
     submit: onSubmit
   })
-
 }
 
-document.addEventListener('DOMContentLoaded', Account)
+onLoadContent(Account)

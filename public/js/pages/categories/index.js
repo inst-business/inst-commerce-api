@@ -1,44 +1,63 @@
-
-const dialogBtns = document.querySelectorAll('button.Item__actions-delete')
-Array.from(dialogBtns).forEach(btn => btn.addEventListener('click', e => {
-  const dialog = document.querySelector(btn.dataset.dialogTarget)
-  if (!dialog) return
-  const
-    secretInputId = dialog.querySelector('input[name="id"]'),
-    name = btn.closest('.Item').querySelector('.Item__name').innerText,
-    contentElement = dialog.querySelector('.Dialog__body')
-  secretInputId.value = btn.dataset.formId
-  contentElement.innerHTML = /*html*/
-    `You really want to delete <strong>${name}</strong> category?`
-}))
+import { onLoadContent, getCookie } from '../../helpers/helpers.js'
+import validator from '../../components/form/validator.js'
+import toast from '../../components/toast.js'
+import { ERR } from '../../config/consts.js'
 
 
-const deleteDialog = document.querySelector('#delete-dialog')
-const deleteForm = deleteDialog.querySelector('form.Dialog__form')
-deleteForm?.addEventListener('submit', async (e) => {
-  const closeBtn = deleteDialog.querySelector('[type="submit"][formmethod="dialog"]')
-  if (e.submitter === closeBtn) return
-  e.preventDefault()
-  const inputId = deleteDialog.querySelector('input[name="id"]')
-  const formData = { id: inputId.value }
-  const deleteCategory = fetch('/v1/categories', {
+const DeleteCategory = () => {
+
+  const tableRef = document.querySelector('#items-table')
+  const dialogRef = document.querySelector('#delete-dialog')
+  const token = getCookie('accessToken')
+  let id = null
+
+  const setId = (value) => id = value
+  const setContent = (name) => {
+    dialogRef.querySelector('.Dialog__body').innerHTML =
+      /*html*/`You really want to delete <strong>${name}</strong> category?`
+  }
+
+  const useToast = (title, message) => toast({
+    title: title || 'Error!', message, type: 'danger', duration: 5000, closable: false,
+  })
+
+  const _deleteCategory = (category) => fetch('/v1/categories', {
     method: 'DELETE',
+    credentials: 'include',
     headers: {
-      'Content-Type': 'application/json'
+      'authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
     },
-    body: JSON.stringify(formData),
-  }).then(res => {
-    deleteDialog.ariaBusy = true
-    if (res.ok) {
-      inputId.value = ''
-      deleteDialog.removeAttribute('aria-busy')
-      deleteDialog.close()
-      window.location.reload()
+    body: category,
+  }).then(async res => await res.json()).catch(e => console.error(e))
+
+  const onClick = e => {
+    const triggerRef = e.target.closest('.Item__actions-delete')
+    if (!triggerRef) return
+    setId(triggerRef.dataset.formId)
+    setContent(e.target.closest('.Item').querySelector('.Item__name').innerText)
+  }
+
+  const onSubmit = async (data, e) => {
+    dialogRef.close()
+    if (e.submitter.matches('[type="submit"][formmethod="dialog"]')) return
+    // dialogRef.ariaBusy = true
+    const res = await _deleteCategory(JSON.stringify({ id }))
+    if (res.error) {
+      useToast('Delete Failed!', res.error.message)
+      return
     }
-    return res.json()
-  }).catch(e => console.error(e))
-  await deleteCategory
-})
+    // dialogRef.removeAttribute('aria-busy')
+    window.location.reload()
+  }
+
+  tableRef?.addEventListener('click', onClick)
+
+  validator({
+    form: '#delete-dialog > form',
+    submit: onSubmit
+  })
+}
 
 
 const deleteSelectedBtn = document.querySelector('#delete-selected')
@@ -101,3 +120,6 @@ Array.from(dialogImgToggle).forEach(img => img.addEventListener('click', e => {
     dialogImg.alt = ''
   })
 }))
+
+
+onLoadContent(DeleteCategory)

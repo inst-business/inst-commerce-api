@@ -74,7 +74,7 @@ class Utils {
       const resData = (data != null && typeof data === 'object') ? structuredClone(data) : {}
       res.statusCode = 200
       if (err) {
-        console.error(err)
+        // console.error(err)
         const errJSON = typeof err.toJSON === 'function' ? err.toJSON() : err
         const errObj = (typeof errJSON === 'object')
           ? JSON.parse(JSON.stringify(errJSON)) : { message: err, code: -7 }

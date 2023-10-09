@@ -7,6 +7,19 @@ export const qs = {
   $a: document.getElementById('App').querySelectorAll.bind(document.getElementById('App')),
 }
 
+export const onLoadContent = (...handlers) => {
+  handlers.forEach(handler => {
+    document.addEventListener('DOMContentLoaded', handler)
+  })
+}
+
+export const getCookie = (name) =>
+  document.cookie.split(`; `).find(r => r.startsWith(`${name}=`))?.split('=')[1]
+
+export const setCookie = (name, value, maxAge = 86400) => {
+  document.cookie = `${name}=${value}; max-age=${maxAge}; Secure; SameSite=Strict;`
+}
+
 export const isValidFnName = name => {
   const regex = /^[$A-Z_][0-9A-Z_$]*$/i
   return regex.test(name)

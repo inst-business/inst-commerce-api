@@ -1,13 +1,16 @@
-import { qs } from '../helpers/helpers.js'
+import { qs, onLoadContent } from '../helpers/helpers.js'
 
-export const __DialogBtns = Array.from(qs.$a('[data-dialog-target]'))
-export const __Dialogs = Array.from(qs.$a('dialog.Dialog'))
+const __Dialog = () => {
 
-__DialogBtns.map(btn => btn.addEventListener('click', function __toggleDialog () {
-  const target = btn.dataset.dialogTarget
-  const dialog = qs.$o(`dialog.Dialog${target}`)
-  if (!dialog) {
-    return
+  const onClick = e => {
+    const triggerRef = e.target.closest('[data-dialog-target]')
+    const dialogRef = document.querySelector(`dialog.Dialog${triggerRef?.dataset.dialogTarget}`)
+    if (!(dialogRef && dialogRef)) return
+    dialogRef.showModal()
   }
-  dialog.showModal()
-}))
+
+  qs.$?.addEventListener('click', onClick)
+}
+
+
+onLoadContent(__Dialog)

@@ -71,7 +71,7 @@ const validator = props => {
   formElement.addEventListener('submit', function __ValidateFields (e) {
     e.preventDefault()
     let isFormValid = true
-    rules.forEach(rule => {
+    rules?.forEach(rule => {
       const props = validateProps(formElement, rule, response)
       if (!props) return
       const isValid = validate(props)
@@ -106,17 +106,17 @@ const validator = props => {
           }
           return vals
         }, {})
-        submit(data)
+        submit(data, e)
       }
       if (typeof submitFormData === 'function') {
         const formData = new FormData(formElement)
         // console.log('formData', Object.fromEntries(formData.entries()))
-        submitFormData(formData)
+        submitFormData(formData, e)
       }
     }
   })
 
-  rules.forEach(rule => {
+  rules?.forEach(rule => {
     const props = validateProps(formElement, rule, response)
     if (!props) return
     // console.log(props)
