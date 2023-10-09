@@ -38,30 +38,6 @@ class Auth {
       })
     })
   }
-  
-  static reqUserOrRedirect (redirectUrl: string): RequestHandler {
-    return _.routeNextableAsync(async (req, res, next) => {
-      const
-        authHeader = req.headers.authorization,
-        token = authHeader && authHeader.split(' ')[1],
-        redirectParam = url.format({
-          protocol: req.protocol,
-          host: req.get('host'),
-          pathname: req.originalUrl
-        })
-      if (token == null || token === '') {
-        res.redirect(redirectUrl + '?redirect=' + redirectParam)
-        return
-      }
-      jwt.verify(token, <string>_.env('ACCESS_TOKEN'), (err, user) => {
-        if (err) {
-          res.redirect(redirectUrl + '?redirect=' + redirectParam)
-          return
-        }
-        next()
-      })
-    })
-  }
 
   static reqRole (role: ROLE): RequestHandler {
     return _.routeNextableAsync(async (req, res, next) => {

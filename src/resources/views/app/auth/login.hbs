@@ -6,6 +6,12 @@
           <div class="Form__header">
             <p class="Form__header-title">Login</p>
             <p class="Form__header-description">Welcome back!</p>
+            {{#if data.alert}}
+              <div class="Alert M-b-0" role="alert" data-variant="warning" data-size="">
+                <p>{{data.alert}}</p>
+                {{!-- <span class="Alert__close" role="button" aria-label="close"></span> --}}
+              </div>
+            {{/if}}
           </div>
           <div class="Form__body">
             <div class="Field" aria-invalid="" aria-required="true">

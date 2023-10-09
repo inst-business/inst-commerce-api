@@ -1,3 +1,4 @@
+import url from 'url'
 import jwt from 'jsonwebtoken'
 import Auth from '@/app/middlewares/Authenticate'
 import _ from '@/utils/utils'
@@ -8,7 +9,6 @@ class Token {
   static useAccessToken () {
     return _.routeNextableAsync(async (req, res, next) => {
       const accessToken = req.cookies.accessToken
-      // console.log('cookies: ', req.cookies)
       if (accessToken) {
         req.headers.authorization = `Bearer ${accessToken}`
       }
@@ -16,15 +16,42 @@ class Token {
     })
   }
 
-  static requireToken () {
+  static reqUserOrRedirect (redirectUrl: string) {
     return _.routeNextableAsync(async (req, res, next) => {
-      try {
-        Auth.reqUser()
+      const token: string = req.cookies.accessToken
+      const redirectParam = url.format({
+        protocol: req.protocol,
+        host: req.get('host'),
+        pathname: req.originalUrl
+      })
+      if (token == null || token === '') {
+        res.cookie('alert', 'You need to login first.', { httpOnly: true })
+        res.redirect(redirectUrl + '?redirect=' + redirectParam)
+        return
       }
-      catch (err) {
-        console.log(err)
-      }
-      next()
+      jwt.verify(token, <string>_.env('ACCESS_TOKEN'), (err, user) => {
+        if (err) {
+          res.cookie('alert', 'Your session has expired.', { httpOnly: true })
+          res.clearCookie('accessToken')
+          res.redirect(redirectUrl + '?redirect=' + redirectParam)
+          return
+        }
+        next()
+      })
+    })
+  }
+
+  static reqUnauthorized (defaultUrl?: string) {
+    return _.routeNextableAsync(async (req, res, next) => {
+      const token: string = req.cookies.accessToken
+      jwt.verify(token, <string>_.env('ACCESS_TOKEN'), (err, user) => {
+        console.log(defaultUrl || '/')
+        if (err == null) {
+          res.redirect(defaultUrl || '/')
+          return
+        }
+        next()
+      })
     })
   }
   

@@ -30,14 +30,15 @@ class CategoryCtrl {
         throw (<any>req).errorUpload
       }
       const
-        keys = ['name', 'desc', 'categorizedBy'],
+        parentId = req.params.id,
+        keys = ['name', 'slug', 'desc'],
         data = _.pickProps(<ICategory>req.body, keys)
-      data.slug = _.genSlug(data.name + '-' + _.genUniqueCode())
+      data.slug = _.genSlug((data.slug || data.name) + '-' + _.genUniqueCode())
       data.createdBy = user._id
       if (req.file != null && req.file.fieldname === 'img') {
         data.img = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
       }
-      const submittedCategory = await Category.insertOne(data)
+      const submittedCategory = await Category.insertOne(data, parentId)
         .then(data => {
           appendOneImage(<any>req.file, 'categories', data.img).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
           return data
@@ -82,14 +83,14 @@ class CategoryCtrl {
         throw (<any>req).errorUpload
       }
       const
-        keys = ['name', 'desc'],
+        keys = ['name', 'slug', 'desc'],
         data = _.pickProps(<ICategory>req.body, keys)
       let prevImage: string[]
       if (req.file != null && req.file.fieldname === 'img') {
         data.img = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
         prevImage = await Category.findImageById(id)
       }
-      data.slug = data.name && _.genSlug(data.name + '-' + _.genUniqueCode())
+      data.slug = data.slug && _.genSlug(data.slug + '-' + _.genUniqueCode())
       data.editedBy = user._id
       data.editedAt = new Date()
       const updatedCategory = Category.updateOne(id, data)
@@ -173,7 +174,7 @@ export class CategoryExtCtrl {
     return _.routeAsync(async (req, res) => {
       const
         keys: ExcludableKeys<ICategory>[] = [
-          '-_id', '-categorizedBy', 'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
+          '-_id', 'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
         ],
         data: ICategory[] = await Category.getMany(keys)
       return data
@@ -241,7 +242,7 @@ export class CategoryViewCtrl {
     return _.routeAsync(async (req, res) => {
       const resources = {
         'items': Category.getMany(),
-        'deletedCount': Category.getDeletedAmount()
+        'deletedCount': Category.getDeletedAmount(),
       }
       const data = _.fetchAllSettled(resources)
       return data

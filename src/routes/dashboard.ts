@@ -4,6 +4,7 @@ import _ from '@/utils/utils'
 import ProductModel from '@models/Product'
 import CategoryModel from '@models/Category'
 import OrderModel from '@models/Order'
+import Token from '@/services/TokenService'
 
 const Product = new ProductModel()
 const Category = new CategoryModel()
@@ -39,10 +40,14 @@ viewRouter.get('/hello', _.routeAsync(async () => {
 }
 ))
 
-viewRouter.get('/login', _.routeAsync(async () => {},
+viewRouter.get('/login', Token.reqUnauthorized('back'), _.routeAsync(async (req, res) => {
+    const alert = req.cookies.alert
+    res.clearCookie('alert')
+    return { alert }
+  },
   _.renderView('app/auth/login', false, 'no-partials.hbs')
 ))
 
-viewRouter.get('/signup', _.routeAsync(async () => {},
+viewRouter.get('/signup', Token.reqUnauthorized('back'), _.routeAsync(async () => {},
   _.renderView('app/auth/signup', false, 'no-partials.hbs')
 ))

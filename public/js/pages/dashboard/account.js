@@ -1,4 +1,3 @@
-
 import validator from '../../components/form/validator.js'
 import '../../components/form/prototypes.js'
 import toast from '../../components/toast.js'
