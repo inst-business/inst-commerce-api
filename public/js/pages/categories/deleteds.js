@@ -1,7 +1,10 @@
+import { html, createScene, onLoadContent, getCookie } from '../../helpers/helpers.js'
+
+const token = getCookie('accessToken')
 
 const dialogBtns = document.querySelectorAll('.Item__actions > button[data-action]')
 Array.from(dialogBtns).forEach(btn => 
-  btn.addEventListener('click', printInfomation = e => {
+  btn.addEventListener('click', function printInfomation (e) {
     const dialog = document.querySelector(btn.dataset.dialogTarget)
     if (!dialog) return
     const
@@ -36,7 +39,7 @@ Array.from(dialogBtns).forEach(btn =>
 
 const actionsDialog = document.querySelector('#actions-dialog')
 const actionsForm = actionsDialog.querySelector('form.Dialog__form')
-actionsForm?.addEventListener('submit', performAction = async (e) => {
+actionsForm?.addEventListener('submit', async function performAction (e) {
   const closeBtn = actionsDialog.querySelector('[type="submit"][formmethod="dialog"]')
   if (e.submitter === closeBtn) return
   e.preventDefault()
@@ -50,7 +53,8 @@ actionsForm?.addEventListener('submit', performAction = async (e) => {
     performAction = fetch('/v1/categories/d', {
       method,
       headers: {
-        'Content-Type': 'application/json'
+        'authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
     })
@@ -71,7 +75,7 @@ actionsForm?.addEventListener('submit', performAction = async (e) => {
 const restoreSelectedBtn = document.querySelector('#restore-selected')
 const destroySelectedBtn = document.querySelector('#destroy-selected')
 Array.from([restoreSelectedBtn, destroySelectedBtn]).forEach(btn =>
-  btn.addEventListener('click', printInfomation = e => {
+  btn.addEventListener('click', function printInfomation (e) {
     const dialog = document.querySelector(restoreSelectedBtn.dataset.dialogTarget)
     if (!dialog) return
     const
@@ -113,7 +117,7 @@ Array.from([restoreSelectedBtn, destroySelectedBtn]).forEach(btn =>
 
 const selectedActionsDialog = document.querySelector('#selected-actions-dialog')
 const selectedActionsForm = selectedActionsDialog.querySelector('form.Dialog__form')
-selectedActionsForm?.addEventListener('submit', performAction = async (e) => {
+selectedActionsForm?.addEventListener('submit', async function performAction (e) {
   const closeBtn = selectedActionsDialog.querySelector('[type="submit"][formmethod="dialog"]')
   if (e.submitter === closeBtn) return
   e.preventDefault()

@@ -8,6 +8,7 @@ import uniqueSlug from 'unique-slug'
 import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
 import crypto from 'crypto'
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import LogicError from './logicError'
 import {
@@ -70,20 +71,23 @@ class Utils {
 
   private createServiceCallback (res: Response): ExpressCallback {    
     return (data?: any, err?: any) => {
+      // console.log(data, err)
+      if (err) {
+        const errJSON = typeof err.toJSON === 'function' ? err.toJSON() : err
+        const errObj = (typeof errJSON === 'object') ? JSON.parse(JSON.stringify(errJSON)) : { message: err, code: -7 }
+        res.statusCode = (typeof errObj.httpCode === 'number' && !isNaN(errObj.httpCode)) ? errObj.httpCode : 500
+        res.send({ error: errObj })
+        return
+      }
       // const resData = data ? JSON.parse(JSON.stringify(data)) : {}
       const resData = (data != null && typeof data === 'object') ? structuredClone(data) : {}
-      res.statusCode = 200
-      if (err) {
-        // console.error(err)
-        const errJSON = typeof err.toJSON === 'function' ? err.toJSON() : err
-        const errObj = (typeof errJSON === 'object')
-          ? JSON.parse(JSON.stringify(errJSON)) : { message: err, code: -7 }
-        const code = errObj.httpCode
-        res.statusCode = (typeof code === 'number' && !isNaN(code)) ? code : 500
-        resData['error'] = errObj
-      }
+      res.statusCode = resData?.meta?.status || 200
       res.send(resData)
     }
+  }
+
+  createResponseData (data: Many<Record<string, Primitives>>, meta?: Record<string, Primitives>) {
+    return { data, meta }
   }
 
   renderView (view: string, view404 = false, layout?: string): ExpressCallbackProvider {
@@ -264,15 +268,9 @@ class Utils {
     const name = newName || path.basename(originalName, ext)
     return this.genSlug(this.genUniqueCode(prefix) + '-' + name) + ext
   }
-
-  genHash (data: string) {
-    // MD5 hashing algorithm
-    return crypto.createHash('md5').update(data).digest('hex')
-  }
   
   genRandomString (length: number): string {
-    return crypto.randomBytes(Math.ceil(length / 2))
-      .toString('hex').slice(0, length)
+    return crypto.randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length)
   }
   
   genRandomLetters (length: number, toCase?: 'upper' | 'lower'): string {
@@ -290,6 +288,22 @@ class Utils {
   }
 
   genSalt () {
+  }
+
+  genHash (data: string) {
+    // MD5 hashing algorithm
+    return crypto.createHash('md5').update(data).digest('hex')
+  }
+
+  genBcryptHash (string: string, salt: string) {
+    const saltRounds = GV.SALT_LENGTH
+    const saltingString = string + salt
+    return bcrypt.hashSync(saltingString, saltRounds)
+  }
+
+  compareBcryptHash (string: string, salt: string, hashedString: string) {
+    const saltingString = string + salt
+    return bcrypt.compareSync(saltingString, hashedString)
   }
 
   sha512 (password: string, salt: string) {

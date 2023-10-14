@@ -71,7 +71,7 @@ export interface USER_SIGN {
   }
   avatar?: string
   role: ROLE
-  permissions: ALL_RULES[]
+  permissions?: ALL_RULES[]
 }
 
 // Routes
@@ -138,7 +138,7 @@ export class GV {
   static VERIFY_EXPIRED = '5m'
   static SESSION_EXPIRED = 5 * this._1M
   static TEMP_DATA_EXPIRED = '1d'
-  static SALT_LENGTH = 16
+  static SALT_LENGTH = 10
 
   static DEFAULT_STATUS = 'pending'
   static IMG_EXT_ALLOWED = 'jpg'

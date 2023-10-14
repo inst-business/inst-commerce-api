@@ -23,7 +23,7 @@ class UserValidator {
       firstname: { type: 'string', maxLength: 50 },
       lastname: { type: 'string', maxLength: 50 },
       gender: { type: 'string' },
-      birthday: { type: ['string', 'null'], format: 'date-time' },
+      birthday: { type: ['string', 'null'], format: 'date' },
       address: { type: 'string', maxLength: 128 },
       country: { type: 'string', maxLength: 32 },
       bio: { type: 'string' },

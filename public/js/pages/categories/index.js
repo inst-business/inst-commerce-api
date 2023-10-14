@@ -1,14 +1,48 @@
-import { onLoadContent, getCookie } from '../../helpers/helpers.js'
+import { html, createScene, onLoadContent, getCookie } from '../../helpers/helpers.js'
+import ItemRows from '../../components/categories/ItemRows.js'
 import validator from '../../components/form/validator.js'
 import toast from '../../components/toast.js'
 import { ERR } from '../../config/consts.js'
+
+const token = getCookie('accessToken')
+const listScene = createScene()
+listScene.mount(ItemRows, document.querySelector('#items-table tbody'), false)
+const _getCategory = () => fetch('/v1/categories', {
+  method: 'GET',
+  headers: {
+    'authorization': `Bearer ${token}`,
+  },
+}).then(async res => await res.json()).catch(e => console.error(e))
+
+
+const ViewImage = () => {
+  
+  const tableRef = document.querySelector('#items-table')
+  const dialogRef = document.querySelector('#viewimage-dialog')
+  const displayRef = dialogRef?.querySelector('.Dialog__img')
+  const setImage = ({ src, alt }) => {
+    displayRef.src = src
+    displayRef.alt = alt
+  }
+
+  const onClickImage = e => {
+    const previewRef = e.target.closest('.Item__img img')
+    if (!(dialogRef && displayRef && previewRef)) return
+    if (!(previewRef.complete && previewRef.naturalWidth > 0)) {
+      dialogRef.close()
+      return
+    }
+    setImage(previewRef)
+  }
+
+  tableRef?.addEventListener('click', onClickImage)
+}
 
 
 const DeleteCategory = () => {
 
   const tableRef = document.querySelector('#items-table')
   const dialogRef = document.querySelector('#delete-dialog')
-  const token = getCookie('accessToken')
   let id = null
 
   const setId = (value) => id = value
@@ -17,8 +51,8 @@ const DeleteCategory = () => {
       /*html*/`You really want to delete <strong>${name}</strong> category?`
   }
 
-  const useToast = (title, message) => toast({
-    title: title || 'Error!', message, type: 'danger', duration: 5000, closable: false,
+  const useToast = (type, title, message) => toast({
+    title: title || 'Error!', message, type: type || 'danger', duration: 4000, closable: false,
   })
 
   const _deleteCategory = (category) => fetch('/v1/categories', {
@@ -31,7 +65,7 @@ const DeleteCategory = () => {
     body: category,
   }).then(async res => await res.json()).catch(e => console.error(e))
 
-  const onClick = e => {
+  const onClickDeleteButton = e => {
     const triggerRef = e.target.closest('.Item__actions-delete')
     if (!triggerRef) return
     setId(triggerRef.dataset.formId)
@@ -44,14 +78,17 @@ const DeleteCategory = () => {
     // dialogRef.ariaBusy = true
     const res = await _deleteCategory(JSON.stringify({ id }))
     if (res.error) {
-      useToast('Delete Failed!', res.error.message)
+      useToast('danger', 'Delete Failed!', res.error.message)
       return
     }
+    useToast('success', 'Deleted Successfully!', 'Category has been removed.')
+    const list = await _getCategory()
+    listScene.dispatch({ data: list })
     // dialogRef.removeAttribute('aria-busy')
-    window.location.reload()
+    // window.location.reload()
   }
 
-  tableRef?.addEventListener('click', onClick)
+  tableRef?.addEventListener('click', onClickDeleteButton)
 
   validator({
     form: '#delete-dialog > form',
@@ -105,21 +142,4 @@ deleteSelectedBtn?.addEventListener('click', e => {
 })
 
 
-const dialogImgToggle = document.querySelectorAll('.Item__img img')
-Array.from(dialogImgToggle).forEach(img => img.addEventListener('click', e => {
-  const dialog = document.querySelector(img.dataset.dialogTarget)
-  if (!dialog) return
-  dialog.querySelector('.Dialog__header').innerText = img.alt
-  const dialogImg = dialog.querySelector('.Dialog__img')
-  if (!dialogImg) return
-  dialogImg.src = img.src
-  dialogImg.alt = img.alt
-  const closeBtn = dialog.querySelector('[formmethod="dialog"]')
-  closeBtn?.addEventListener('click', e => {
-    dialogImg.src = ''
-    dialogImg.alt = ''
-  })
-}))
-
-
-onLoadContent(DeleteCategory)
+onLoadContent(ViewImage, DeleteCategory)

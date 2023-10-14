@@ -25,7 +25,7 @@ export interface IUser extends Document {
   cover?: string
   status: ACCOUNT_STATUS
   role: ROLE
-  permissions: ALL_RULES[]
+  permissions?: ALL_RULES[]
   token?: string
   salt: string
   verifiedAt?: Date
@@ -51,7 +51,7 @@ const UserSchema = new Schema<IUser>({
   cover: { type: String, default: '' },
   status: { type: String, required: true, default: 'pending' },
   role: { type: String, required: true, default: 'user' },
-  permissions: { type: [String], default: [] },
+  permissions: { type: [String] },
   token: { type: String, default: '' },
   salt: { type: String, required: true, maxlength: GV.SALT_LENGTH },
   verifiedAt: { type: Date, default: null },

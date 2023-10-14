@@ -24,7 +24,7 @@ class AuthCtrl {
         if (user.status === ACCOUNT_STATUS_ARR.PENDING || !user.verifiedAt) {
           throw _.logicError(errTitle, 'User is not verified', 400, ERR.UNVERIFIED, userInfo)
         }
-        if (user.password !== _.sha512(password, user.salt)) {
+        if (!_.compareBcryptHash(password, user.salt, user.password)) {
           throw _.logicError(errTitle, 'Password is not correct', 400, ERR.INVALID_PASSWORD)
         }
         const
@@ -47,24 +47,23 @@ class AuthCtrl {
     return _.routeAsync(async (req, res) => {
       const { email, username } = req.body
       const isExisting = await User.checkUserExists(email, username)
-      if (!isExisting.result) {
-        const keys = [
-          'email', 'username', 'password', 'tel',
-          'firstname', 'lastname', 'gender', 'birthday',
-          'address', 'country', 'bio', 'avatar', 'cover',
-        ],
-        data = _.pickProps(<IUser>req.body, keys)
-        data.salt = _.genRandomString(GV.SALT_LENGTH)
-        data.password = _.sha512(data.password, data.salt)
-        const newUser = await User.insertNewUser(data)
-        const verifyToken = _.genVerifyToken(newUser.username)
-        return { username: newUser.username, verifyToken }
-      }
-      else {
+      if (isExisting.result) {
         throw _.logicError('Signup Failed', 'User already exists', 400, ERR.USER_ALREADY_EXIST, <any>isExisting.pars)
       }
-    },
-    _.redirectView('/v1/categories/d')
+      const keys = [
+        'email', 'username', 'password', 'tel',
+        'firstname', 'lastname', 'gender', 'birthday',
+        'address', 'country', 'bio', 'avatar', 'cover',
+      ],
+      data = _.pickProps(<IUser>req.body, keys)
+      data.salt = _.genRandomString(GV.SALT_LENGTH)
+      // data.password = _.sha512(data.password, data.salt)
+      data.password = _.genBcryptHash(data.password, data.salt)
+      const newUser = await User.insertNewUser(data)
+      const verifyToken = _.genVerifyToken(newUser.username)
+      res.status(201)
+      return { username: newUser.username, verifyToken }
+    }
   )}
 
   static verifyUser () {
