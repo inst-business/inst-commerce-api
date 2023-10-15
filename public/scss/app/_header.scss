@@ -1,0 +1,94 @@
+.Header {
+  --Header-height: #{$header-height};
+  --Header-padding: #{$header-padding};
+  --Header-left-width: #{$sidebar-width - $header-padding};
+  --Header-collapse-width: #{$sidebar-width-collapsed};
+  --Header-logo-size: 2.25rem;
+}
+
+.Header {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--Header-padding) 0;
+  // padding-bottom: var(--Header-padding) !important;
+  background-color: var(--base-box);
+  border-bottom: 1px solid var(--base-border);
+  transition: all $transition-1-eio, $transition-color-1;
+
+  & > * {
+    display: flex;
+    max-height: calc(var(--Header-height) - var(--Header-padding) * 2);
+    height: calc(var(--Header-height) - var(--Header-padding) * 2);
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: var(--Header-left-width);
+  }
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    & img {
+      width: var(--Header-logo-size);
+      height: var(--Header-logo-size);
+    }
+  }
+  &__collapse {
+    position: static;
+    width: var(--Header-collapse-width);
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    font-size: $font-size;
+    cursor: pointer;
+  }
+
+  &__right {
+    display: inline-flex;
+    // width: auto;
+    justify-content: end;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 var(--Header-padding);
+  }
+
+  &__menu {
+    display: none;
+  }
+
+  &__profile {
+    display: flex;
+    height: 100%;
+    gap: 1rem;
+    text-align: right;
+    &-info {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+      justify-content: center;
+      @include make-text-ellipsised(6rem);
+      // margin-top: -0.15rem;
+    }
+    &-avt {
+      height: 100%;
+      border-radius: $radius-circle;
+      border: solid 2px $color-primary;
+      padding: 2px;
+      cursor: pointer;
+      & img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        border-radius: $radius-circle;
+      }
+    }
+  }
+}

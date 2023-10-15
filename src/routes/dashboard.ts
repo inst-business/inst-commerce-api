@@ -1,27 +1,50 @@
 import express from 'express'
-import { ROUTES } from '@/config/global/const'
+import bcrypt from 'bcrypt'
+import { R } from '@/config/global/const'
 import _ from '@/utils/utils'
-import { IOrder } from '@models/Order'
-import OrderController from '@controllers/OrderController'
-import ProductController from '@controllers/ProductController'
+import ProductModel from '@models/Product'
+import CategoryModel from '@models/Category'
+import OrderModel from '@models/Order'
+import Token from '@/services/TokenService'
 
-const router = express.Router()
+const Product = new ProductModel()
+const Category = new CategoryModel()
+const Order= new OrderModel()
 
-router.get(ROUTES.I.INDEX, _.routeAsync(async () => {
+// export default router
+
+
+/** 
+ *  VIEW RENDERING
+*/
+
+export const viewRouter = express.Router()
+
+viewRouter.get('/hash', _.routeAsync(async () => {
+  const hash = await bcrypt.hash('hello world', 10)
+  return { hash }
+}
+))
+
+viewRouter.get('/login', Token.reqUnauthorized('back'), _.routeAsync(async (req, res) => {
+    const alert = req.cookies.alert
+    res.clearCookie('alert')
+    return { alert }
+  },
+  _.renderView('app/auth/login', false, 'no-partials.hbs')
+))
+
+viewRouter.get('/signup', Token.reqUnauthorized('back'), _.routeAsync(async () => {},
+  _.renderView('app/auth/signup', false, 'no-partials.hbs')
+))
+
+viewRouter.get('/', _.routeAsync(async () => {
   const fetchRecords = {
-    'orders': OrderController.getAll(),
-    'products': ProductController.getAll()
+    'orders': Order.getMany(),
+    'products': Product.getMany()
   }
-  const data = _.asyncAllSettled(fetchRecords)
+  const data = _.fetchAllSettled(fetchRecords)
   return data
-}, _.renderView('dashboard/index')
+},
+_.renderView('app/dashboard/index')
 ))
-
-router.get(ROUTES.E.LOGIN, _.routeAsync(async () => {
-}, _.renderView('dashboard/login', {}, 'no-partials.hbs')
-))
-router.get(ROUTES.E.SIGNUP, _.routeAsync(async () => {
-}, _.renderView('dashboard/signup', {}, 'no-partials.hbs')
-))
-
-export default router

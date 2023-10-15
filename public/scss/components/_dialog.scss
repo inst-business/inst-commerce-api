@@ -1,0 +1,118 @@
+@use "../utilities/loading";
+
+/**
+  Dialog
+*/
+.Dialog {
+  --Dialog-width: 32rem;
+  --Dialog-padding: #{$spacing-3};
+  --Dialog-gap: #{$spacing-2};
+  --Dialog-radius: #{$radius-lg};
+  --Dialog-close-size: 2em;
+  --Dialog-close-icon-path: url(../../../../assets/svgs/xmark.svg);
+  --Dialog-form-gap: #{$spacing-sm};
+}
+.Dialog {
+  // display: none;
+  position: relative;
+  gap: var(--Dialog-padding);
+  width: var(--Dialog-width);
+  max-width: calc(
+    var(--Dialog-width) + var(--Dialog-close-size) + var(--Dialog-padding)
+  );
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  border-radius: var(--Dialog-radius);
+  visibility: hidden;
+  opacity: 0;
+  // overflow-x: hidden;
+  // transition: all 0.35s ease;
+
+  &[aria-busy="true"],
+  &.loading {
+    // overflow: hidden;
+    pointer-events: none;
+    @include loading.onloading;
+  }
+
+  &[data-size="lg"] {
+    --Dialog-width: 48rem;
+  }
+
+  &[open] {
+    display: flex;
+    flex-direction: row;
+    visibility: visible;
+    opacity: 1;
+  }
+  &[open]::backdrop {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.75);
+    transition: all 0.35s ease;
+    animation: show-backdrop 0.35s ease forwards;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: var(--Dialog-form-gap);
+    padding: var(--Dialog-padding);
+    background-color: var(--base-box);
+    color: var(--base-color);
+    border-radius: var(--Dialog-radius);
+    // box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    // box-shadow: var(--base-shadow);
+  }
+  &__close {
+    display: block;
+    width: var(--Dialog-close-size);
+    height: var(--Dialog-close-size);
+    aspect-ratio: 1;
+    // background-color: var(--base-color);
+    background-color: #fff;
+    -webkit-mask: var(--Dialog-close-icon-path) no-repeat 50% 50%;
+    mask: var(--Dialog-close-icon-path) no-repeat 50% 50%;
+    cursor: pointer;
+  }
+  &__img {
+    height: auto;
+    font-size: $font-size;
+  }
+  &__header {
+    font-size: $font-size-lg;
+    font-weight: 500;
+  }
+  &__body {
+    padding-bottom: var(--Dialog-padding);
+    font-size: $font-size;
+  }
+  &__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--Dialog-gap);
+    padding-top: var(--Dialog-padding);
+    border-top: solid 1px var(--base-border);
+  }
+}
+/* End of Dialog */
+
+@keyframes show-backdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes hide-backdrop {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

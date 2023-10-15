@@ -1,34 +1,50 @@
-import Order, { IOrder } from '@models/Order'
+import OrderModel, { IOrder } from '@models/Order'
 import _ from '@/utils/utils'
+import ERR from '@/config/global/error'
 
-class OrderController {
+const Order = new OrderModel()
 
-  static async getAll (): Promise<IOrder[]> {
-    const query = Order.find({}).lean()
-    const data = await query
-    return data
+class OrderCtrl {
+
+  static getOne () {
+    return _.routeAsync(async (req, res) => {
+      const { id } = req.params
+      const data: IOrder | null = await Order.getOneById(id)
+      return data
+    },
+    _.renderView('app/orders/detail')
+  )}
+
+  static getMany () {
+    return _.routeAsync(async (req, res) => {
+      const data = Order.getMany()
+      return data
+    },
+    _.renderView('app/orders/index')
+  )}
+
+}
+export default OrderCtrl
+
+
+/** 
+ *  EXTERNAL
+*/
+export class OrderExtCtrl {
+
+  static getMany () {
+    return _.routeAsync(async (req, res) => {
+      const data: IOrder[] = await Order.getMany()
+      return data
+    })
   }
 
-  static async getOneById (id: string): Promise<IOrder | null> {
-    const query = Order.findOne({ _id: id }).lean()
-    const data = await query
-    return data
-  }
-
-  static async getOneByCode (code: String): Promise<IOrder | null> {
-    const query = Order.findOne({ code: code }).lean()
-    const data = await query
-    return data
-  }
-  
-  static async insertOne (order: IOrder): Promise<IOrder> {
-    const formData = structuredClone(order)
-    formData.code = _.genOrderCode()
-    const query = Order.create(formData)
-    const res = await query
-    return res
+  static getOneBySlug () {
+    return _.routeAsync(async (req, res) => {
+      const { slug } = req.params
+      const data: IOrder | null = await Order.getOneBySlug(slug)
+      return data
+    })
   }
 
 }
-
-export default OrderController

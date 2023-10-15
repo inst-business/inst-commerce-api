@@ -1,0 +1,159 @@
+
+.Tab {
+  --Tab-highlight: var(--base-color-highlight);
+}
+
+/* Tabs */
+.Tab {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: $spacing-3;
+  &[data-align="start"] {
+    align-items: start;
+  }
+  &[data-align="center"] {
+    align-items: center;
+  }
+  &[data-align="end"] {
+    align-items: end;
+  }
+  &__label {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding-bottom: .25rem;
+    // min-width: 640px;
+    // gap: .75rem;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: calc(100% - #{$spacing-1} * 2);
+      height: 1px;
+      margin-inline: $spacing-1;
+      background-color: var(--base-border-lighter);
+      transition: background-color $transition-1-ln;
+    }
+    &-anchor {
+      display: flex;
+      // align-items: center;
+      justify-content: center;
+      width: auto;
+      // height: fit-content;
+      padding-block: $spacing-2;
+      padding-inline: $spacing-1;
+      border-radius: $radius-md;
+      color: var(--txt-muted);
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      transition:
+        all $transition-1-eio,
+        background-color $transition-1-ln,
+        color $transition-1-ln;
+      @include make-hover;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -.25rem;
+        right: $spacing-1;
+        width: 0;
+        height: .15rem;
+        background-color: var(--Tab-highlight);
+        border-radius: $radius-md;
+        transition:
+          width $transition-1-eio,
+          background-color $transition-1-ln;
+        z-index: 10;
+      }
+      &[aria-current="page"], &.active {
+        color: var(--Tab-highlight);
+        // font-weight: 700;
+        pointer-events: none;
+        @include make-hover-0;
+        &::after {
+          left: $spacing-1;
+          width: calc(100% - #{$spacing-1} * 2);
+        }
+      }
+    }
+    // .hidden-bar {
+    //   position: absolute;
+    //   bottom: 0;
+    //   left: 0;
+    //   width: 100%;
+    //   height: .4rem;
+    // }
+    // .hidden-bar .active-bar {
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   width: 0;
+    //   height: 100%;
+    //   border-radius: 1rem;
+    //   background-color: #C23564;
+    //   transition: all .2s ease;
+    // }
+  }
+}
+/*
+
+.Tab .tabs .tab .icon {
+  width: auto;
+  height: auto;
+  font-size: 1.75rem;
+  color: #F6A8C1;
+  transition: inherit;
+}
+.Tab .tabs .tab:hover .icon,
+.Tab .tabs .tab.active .icon {
+  color: #C23564 !important;
+}
+
+.Tab .tabs .tab .text {
+  font-size: 1.5rem;
+  color: #C23564;
+  transition: inherit;
+}
+.Tab .tabs .tab:hover .text,
+.Tab .tabs .tab.active .text {
+  color: #000 !important;
+}
+
+
+*/
+
+/* Contents */
+/*
+
+.Tab .content-boxes {
+  display: flex;
+  flex-direction: column;
+  width: 640px;
+  min-width: 640px;
+}
+
+.Tab .content-boxes .box {
+  display: none;
+}
+.Tab .content-boxes .box.active {
+  display: flex !important;
+  flex-direction: column;
+  gap: .75rem;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 1.5rem;
+}
+
+.Tab .content-boxes .box .title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.Tab .content-boxes .box .content {
+  font-size: 1.25rem;
+}
+
+*/

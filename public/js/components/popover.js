@@ -14,7 +14,7 @@ export const __PopoverTriggers = Array.from(qs.$a('button[data-trigger = popover
 export const __PopoverContents = Array.from(qs.$a('[data-content = popover]'))
 export const __Popovers = Array.from(qs.$a('[popover]'))
 
-__PopoverTriggers.map(btn => btn.addEventListener('click', function togglePopover () {
+__PopoverTriggers.map(btn => btn.addEventListener('click', function __togglePopover () {
   const targetId = btn.getAttribute('popovertarget'),
         contentFrom = btn.dataset.get,
         targetPopover = qs.$o(`#${targetId}[popover]`),

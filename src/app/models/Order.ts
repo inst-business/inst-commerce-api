@@ -1,13 +1,18 @@
-import mongoose, { Model, Schema, model } from 'mongoose'
+import { Schema, Document, model, ObjectId } from 'mongoose'
+import { IndelibleModel } from './Model'
 import { ORDER_STATUS } from '@/config/global/const'
+import { handleQuery } from '@/utils/mongoose'
 
 export interface IOrder {
-  code: string,
-  amount: string,
-  payment: number,
-  status: ORDER_STATUS,
+  _id: ObjectId
+  code: string
+  amount: string
+  payment: number
+  status: ORDER_STATUS
   createdAt: Date
 }
+
+type TOrderDocument = IOrder & Document
 
 const OrderSchema = new Schema<IOrder>({
   code: { type: String, required: true },
@@ -18,4 +23,18 @@ const OrderSchema = new Schema<IOrder>({
 
 const Order = model<IOrder>('Order', OrderSchema)
 
-export default Order
+class OrderModel extends IndelibleModel<IOrder> {
+
+  constructor () {
+    super(Order)
+  }
+  
+  async getOneByCode (code: string): Promise<IOrder | null> {
+    const q = Order.findOne({ code: code }).lean()
+    const data = await handleQuery(q)
+    return data
+  }
+  
+}
+
+export default OrderModel

@@ -11,8 +11,20 @@ Array.from(dialogBtns).map(btn => btn.addEventListener('click', e => {
         quote = /*html*/`You really want to delete <strong>${title}</strong> product?`,
         url = `/v1/products?_method=DELETE`
   input.value = _id
-  console.log(item, title)
+  // console.log(item, title)
   dialog.querySelector('.Dialog__body').innerHTML = quote
   const form = dialog.querySelector('.Dialog__form')
   form.action = url
+}))
+
+
+const dialogImgToggle = document.querySelectorAll('.Item__img img')
+Array.from(dialogImgToggle).map(img => img.addEventListener('click', e => {
+  const target = img.dataset.dialogTarget
+  const dialog = document.querySelector(target)
+  if (!dialog) return
+  dialog.querySelector('.Dialog__header').innerText = img.alt
+  const dialogImg = dialog.querySelector('.Dialog__img')
+  dialogImg.src = img.src
+  dialogImg.alt = img.alt
 }))
