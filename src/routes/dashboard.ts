@@ -1,4 +1,5 @@
 import express from 'express'
+import bcrypt from 'bcrypt'
 import { R } from '@/config/global/const'
 import _ from '@/utils/utils'
 import ProductModel from '@models/Product'
@@ -19,24 +20,9 @@ const Order= new OrderModel()
 
 export const viewRouter = express.Router()
 
-viewRouter.get('/', _.routeAsync(async () => {
-    const fetchRecords = {
-      'orders': Order.getMany(),
-      'products': Product.getMany()
-    }
-    const data = _.fetchAllSettled(fetchRecords)
-    return data
-  },
-  _.renderView('app/dashboard/index')
-))
-
-viewRouter.get('/hello', _.routeAsync(async () => {
-  // const fetchRecords = {
-  //   'deleted_categories_amount': Category.getDeletedAmount()
-  // }
-  // const data = _.fetchAllSettled(fetchRecords)
-  // const deleted_categories_amount = await Category.getDeletedAmount()
-  return { deleted_categories_amount: 'hello' }
+viewRouter.get('/hash', _.routeAsync(async () => {
+  const hash = await bcrypt.hash('hello world', 10)
+  return { hash }
 }
 ))
 
@@ -50,4 +36,15 @@ viewRouter.get('/login', Token.reqUnauthorized('back'), _.routeAsync(async (req,
 
 viewRouter.get('/signup', Token.reqUnauthorized('back'), _.routeAsync(async () => {},
   _.renderView('app/auth/signup', false, 'no-partials.hbs')
+))
+
+viewRouter.get('/', _.routeAsync(async () => {
+  const fetchRecords = {
+    'orders': Order.getMany(),
+    'products': Product.getMany()
+  }
+  const data = _.fetchAllSettled(fetchRecords)
+  return data
+},
+_.renderView('app/dashboard/index')
 ))

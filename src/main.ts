@@ -2,6 +2,7 @@ import 'dotenv/config'
 import 'module-alias/register'
 import https from 'https'
 import fs from 'fs'
+import os from 'os'
 import path from 'path'
 import express from 'express'
 // import bodyParser from 'body-parser'
@@ -15,6 +16,8 @@ import routes from '@/routes'
 // import jsonServer from 'json-server'
 import { hbsHelpers } from '@/utils/viewEngine'
 import { ENV, GV } from '@/config/global/const'
+
+// ENV.UV_THREADPOOL_SIZE = '1'
 
 class Server {
   public static async run () {
@@ -107,6 +110,7 @@ class Server {
     
     // Start server
     app.listen(ENV.PORT, () => {
+      console.log('Thread pool size: ', ENV.UV_THREADPOOL_SIZE)
       console.log(`(つ▀¯▀ )つ Listening on port: ${ENV.PORT}`)
     })
     
