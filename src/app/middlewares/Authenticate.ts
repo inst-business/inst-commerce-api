@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import UserModel from '@models/User'
 import _ from '@/utils/utils'
 import {
-  GV, ROLE, ALL_RULES, RULE, USER_SIGN, ACCOUNT_STATUS, ACCOUNT_STATUS_ARR
+  GV, ROLE, ALL_RULES, RULE, USER_SIGN
 } from '@/config/global/const'
 import ERR from '@/config/global/error'
 

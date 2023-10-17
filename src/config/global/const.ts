@@ -32,24 +32,47 @@ export type ROUTE_TYPE = TProps<typeof R>
 
 export type AVAILABLE_LANGS = 'en' | 'vi'
 export type SORT_ORDER = 'asc' | 'desc'
-export type GENDER = 'male' | 'female' | 'other'
-export type ITEM_STATUS = 'hidden' | 'pending' | 'active'
-export type ORDER_STATUS = 'declined' | 'pending' | 'approved'
 
-export type ACCOUNT_STATUS = 'banned' | 'pending' | 'active'
-export const ACCOUNT_STATUS_ARR = {
-  BANNED: 'banned',
-  PENDING: 'pending',
-  ACTIVE: 'active',
+export const GENDER_ARR = ['male', 'female', 'other'] as const
+export type GENDER = typeof GENDER_ARR[number]
+
+export const TYPE_ARR = Object.freeze({
+  ACCOUNT: ['user', 'seller', 'admin'] as const,
+  ITEM: ['product', 'article'] as const,
+})
+export type TYPE = {
+  [K in keyof typeof TYPE_ARR]: typeof TYPE_ARR[K][number]
+}
+enum TYPE2 {
+  GENDER = '12'
 }
 
-export type ROLE = 'guess' | 'user' | 'manager' | 'admin'
-export const ROLES = Object.freeze({
-  ADMIN: ['admin', 'manager', 'user'],
-  MANAGER: ['manager', 'user'],
-  USER: ['user'],
-  // GUESS: 'guess',
-}) satisfies Record<string, ROLE[]>
+export const STATUS_ARR = Object.freeze({
+  ACCOUNT: ['hidden', 'pending', 'active'] as const,
+  ITEM: ['hidden', 'pending', 'active'] as const,
+  ORDER: ['declined', 'pending', 'approved'] as const,
+})
+export type STATUS = {
+  [K in keyof typeof STATUS_ARR]: typeof STATUS_ARR[K][number]
+}
+
+export const FLAG_ARR = Object.freeze({
+  ACCOUNT: ['warned', 'restricted', 'banned'] as const,
+  ITEM: ['warned', 'restricted', 'banned'] as const,
+})
+export type FLAG = {
+  [K in keyof typeof FLAG_ARR]: typeof FLAG_ARR[K][number]
+}
+
+export const ROLE_ARR = Object.freeze({
+  ADMIN: ['moderator', 'admin', 'root'] as const,
+  SELLER: ['staff', 'manager', 'co-owner', 'owner'] as const,
+  USER: ['normal', 'frequent', 'elite', 'vip'] as const,
+})
+export type ROLE = {
+  [K in keyof typeof ROLE_ARR]: typeof ROLE_ARR[K][number]
+}
+
 export interface RULE {
   ADMIN: 'view_admin' | 'modify_admin' | 'remove_admin'
   MANAGER: 'view_manager' | 'modify_manager' | 'remove_manager'
@@ -61,6 +84,7 @@ export interface RULE {
 }
 export type ALL_RULES = RULE[keyof RULE]
 
+
 export interface USER_SIGN {
   username: string
   email: string
@@ -71,7 +95,7 @@ export interface USER_SIGN {
   }
   avatar?: string
   role: ROLE
-  permissions?: ALL_RULES[]
+  // permissions?: ALL_RULES[]
 }
 
 // Routes

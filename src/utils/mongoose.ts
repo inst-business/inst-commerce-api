@@ -35,24 +35,30 @@ export const handleQuery = <T>(res: Promise<T>, cb?: (data: T) => void): Promise
     return JSON.parse(JSON.stringify(data))
   }).catch(e => mongooseError(e))
 
+export type ArgumentId = ObjectId | string
 
 // edited details plugin
-export const withEditedDetails = (schema: Schema, ref: string) => {
+export const withEditedDetails = (schema: Schema, ref?: string) => {
   schema.add({
-    editedBy: { type: Schema.Types.ObjectId, ref },
+    ...(ref && {
+      editedBy: { type: Schema.Types.ObjectId, ref }
+    }),
     editedAt: { type: Date },
   })
+}
+export interface IEditedDetails {
+  editedBy?: ObjectId
+  editedAt?: Date
 }
 
 
 // Soft delete
-export interface TWithSoftDeleted {
+export interface ISoftDeleted {
   isDeleted: boolean
   deletedBy?: ObjectId
   deletedAt?: Date
 }
-export type TDocument = Document & TWithSoftDeleted
-export type ArgumentId = ObjectId | string
+export type TDocument = Document & ISoftDeleted
 // type TQueryWithHelpers = QueryWithHelpers<Boolean, TDocument | TDocument[]>
 export interface ISoftDeleteQueryHelpers<T> extends Model<T> {
   softDelete(deletedBy: ArgumentId): Promise<IResultWithPars>,

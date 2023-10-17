@@ -34,7 +34,7 @@ class CategoryCtrl {
         keys = ['name', 'slug', 'desc'],
         data = _.pickProps(<ICategory>req.body, keys)
       data.slug = _.genSlug((data.slug || data.name) + '-' + _.genUniqueCode())
-      data.createdBy = user._id
+      data.author = user._id
       if (req.file != null && req.file.fieldname === 'img') {
         data.img = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
       }
@@ -174,7 +174,7 @@ export class CategoryExtCtrl {
     return _.routeAsync(async (req, res) => {
       const
         keys: ExcludableKeys<ICategory>[] = [
-          '-_id', 'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
+          '-_id', 'name', 'desc', 'img', 'slug', 'author', 'createdAt'
         ],
         data: ICategory[] = await Category.getMany(keys)
       return data
@@ -188,7 +188,7 @@ export class CategoryExtCtrl {
       if (parent == null) return []
       const
         keys: ExcludableKeys<ICategory>[] = [
-          '-_id', 'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
+          '-_id', 'name', 'desc', 'img', 'slug', 'author', 'createdAt'
         ],
         data: ICategory[] = await Category.getManyByParentId(parent._id, keys)
       return data
@@ -200,7 +200,7 @@ export class CategoryExtCtrl {
       const { slug } = req.params
       const
         keys: ExcludableKeys<ICategory>[] = [
-          '-_id', 'name', 'desc', 'img', 'slug', 'createdBy', 'createdAt'
+          '-_id', 'name', 'desc', 'img', 'slug', 'author', 'createdAt'
         ],
         data: ICategory | null = await Category.getOneBySlug(slug, keys)
       return data

@@ -17,7 +17,7 @@ import routes from '@/routes'
 import { hbsHelpers } from '@/utils/viewEngine'
 import { ENV, GV } from '@/config/global/const'
 
-// ENV.UV_THREADPOOL_SIZE = '1'
+// ENV.UV_THREADPOOL_SIZE = os.cpus().length.toString()
 
 class Server {
   public static async run () {
@@ -85,7 +85,9 @@ class Server {
       }
       next()
     })
-    app.disable('x-powered-by')   //  Hide techologies used from tracker (e.g. Wappalyzer)
+    
+    //  Hide techologies used from tracker (e.g. Wappalyzer)
+    app.disable('x-powered-by')
 
     // Configure routes
     app.use(routes)
@@ -118,13 +120,3 @@ class Server {
 }
 
 Server.run()
-
-// start DB server
-// "start": "json-server --watch db.json",
-// const server = jsonServer.create()
-// const router = jsonServer.router('db.json')
-// const middleware = jsonServer.defaults()
-// const db_port = process.env.PORT_DB || 7544
-// server.use(middleware)
-// server.use(router)
-// server.listen(db_port)

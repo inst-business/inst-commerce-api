@@ -2,18 +2,19 @@ import { Schema, Document, model, ObjectId } from 'mongoose'
 // import { SuspendableModel } from './Model'
 // import withJsonSchema from 'mongoose-schema-jsonschema'
 import {
-  ExcludableKeys, GV, GENDER, ACCOUNT_STATUS, ROLE, ROLES, ALL_RULES, IResultWithPars
+  ExcludableKeys, GV, ROLE, ROLE_ARR, TYPE, TYPE_ARR, GENDER, GENDER_ARR, STATUS, STATUS_ARR, FLAG, FLAG_ARR, IResultWithPars
 } from '@/config/global/const'
 import {
   TSuspendableDocument, withSoftDelete, handleQuery
 } from '@/utils/mongoose'
 
-export interface IUser extends Document {
+export interface IUser {
   _id: ObjectId
   username: string
   email: string
   tel: string
   password: string
+  salt: string
   firstname: string
   lastname: string
   gender: GENDER
@@ -23,11 +24,16 @@ export interface IUser extends Document {
   bio?: string
   avatar?: string
   cover?: string
-  status: ACCOUNT_STATUS
-  role: ROLE
-  permissions?: ALL_RULES[]
-  token?: string
-  salt: string
+  status: STATUS['ACCOUNT']
+  role: ROLE['USER']
+  // token?: string
+  flag?: {
+    type: FLAG['ACCOUNT']
+    // reason: string
+    from: TYPE['ACCOUNT']
+    flaggedBy: ObjectId
+    flaggedAt: Date
+  }
   verifiedAt?: Date
   createdAt?: Date
   updatedAt?: Date
@@ -40,20 +46,25 @@ const UserSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true, maxlength: 24 },
   tel: { type: String, required: true, unique: true, maxlength: 24 },
   password: { type: String, required: true },
+  salt: { type: String, required: true, maxlength: GV.SALT_LENGTH },
   firstname: { type: String, required: true, minlength: 1, maxlength: 32 },
   lastname: { type: String, required: true, minlength: 1, maxlength: 32 },
-  gender: { type: String, required: true, default: 'other'},
+  gender: { type: String, required: true, enum: GENDER_ARR, default: 'other' },
   birthday: { type: Date, default: null },
   address: { type: String, maxlength: 128, default: '' },
   country: { type: String, minlength: 1, maxlength: 48, default: '' },
   bio: { type: String, default: '' },
   avatar: { type: String, default: '' },
   cover: { type: String, default: '' },
-  status: { type: String, required: true, default: 'pending' },
-  role: { type: String, required: true, default: 'user' },
-  permissions: { type: [String] },
-  token: { type: String, default: '' },
-  salt: { type: String, required: true, maxlength: GV.SALT_LENGTH },
+  status: { type: String, required: true, enum: STATUS_ARR.ACCOUNT, default: 'pending' },
+  role: { type: String, required: true, enum: ROLE_ARR.USER, default: 'normal' },
+  // token: { type: String, default: '' },
+  flag: {
+    type: { type: String, required: true, enum: FLAG_ARR.ACCOUNT },
+    from: { type: String, required: true, enum: TYPE_ARR.ACCOUNT },
+    flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+    flaggedAt: { type: Date },
+  },
   verifiedAt: { type: Date, default: null },
 }, { timestamps: true })
 
@@ -81,7 +92,7 @@ class UserModel {
     return data
   }
 
-  async getAuthorizedUserByUsername (username: string, roles: ROLE[], selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
+  async getAuthorizedUserByUsername (username: string, roles: ROLE['USER'], selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
     const q = User.findOne({ username, role: { $in: roles } }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data
@@ -126,7 +137,6 @@ class UserModel {
   }
 
   async insertNewUser (user: IUser): Promise<IUser> {
-    // const formData = structuredClone(user)
     const q = User.create(user)
     const res = await handleQuery(q)
     return res

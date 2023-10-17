@@ -2,57 +2,101 @@ import { Schema, Document, model, ObjectId } from 'mongoose'
 import { SuspendableModel } from './Model'
 import _ from '@/utils/utils'
 import {
-  ArgumentId, handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
+  handleQuery, IEditedDetails, ISoftDeleted, withEditedDetails, withSoftDelete, TSuspendableDocument
 } from '@/utils/mongoose'
-import { ITEM_STATUS } from '@/config/global/const'
+import { GV, STATUS, STATUS_ARR, FLAG, FLAG_ARR } from '@/config/global/const'
 
-export interface IProduct {
+export interface IProduct extends IEditedDetails, ISoftDeleted {
   _id: ObjectId
+  expiresAt?: Date
+  // sku?: string
   name: string
-  desc: string
+  shortDesc: string
+  longDesc: string
   img: string
   slug: string
-  status: ITEM_STATUS
+  specs: {
+    sku: string
+    price: number
+    discount?: number
+  }[]
+  meta: {
+    views: number
+    likes: number
+    rates?: number
+    comments?: number
+  }
+  status: STATUS['ITEM']
+  author: ObjectId
+  category?: ObjectId
   tags?: ObjectId[]
-  categorizedBy?: ObjectId
-  createdBy: ObjectId
+  flag?: {
+    type: FLAG['ITEM']
+    // reason: string
+    flaggedBy: ObjectId
+    flaggedAt: Date
+  }
   createdAt: Date
   updatedAt: Date
-  editedBy?: ObjectId
-  editedAt?: Date
-  isDeleted: boolean
-  deletedBy?: ObjectId
-  deletedAt?: Date
 }
 
 type TProductDocument = IProduct & Document
 
 const ProductSchema = new Schema<IProduct>({
+  expiresAt: { type: Date, index: { expires: GV.TEMP_DATA_EXPIRED } },
   name: { type: String, required: true, minlength: 3, maxlength: 192 },
-  desc: { type: String },
+  // sku: { type: String, unique: true, minlength: 3 },
+  shortDesc: { type: String },
+  longDesc: { type: String, required: true },
   img: { type: String, required: true },
   slug: { type: String, required: true, maxlength: 208 },
-  status: { type: String, required: true, default: 'pending' },
-  // tags: { type: [Schema.Types.ObjectId], ref: 'Tag', default: [] },
-  categorizedBy: { type: Schema.Types.ObjectId, ref: 'Category' },
-  createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  specs: {
+    type: [{
+      sku: { type: String, required: true, unique: true },
+      price: { type: Number, required: true },
+      discount: { type: Number },
+    }],
+    required: true,
+    validate: {
+      validator: (v: IProduct['specs']) => Array.isArray(v) && v.length > 0,
+      message: 'Product requires at least 1 spec.'
+    }
+  },
+  meta: {
+    type: {
+      views: { type: Number, required: true, default: 0 },
+      likes: { type: Number, required: true, default: 0 },
+      rates: { type: Number, default: 0 },
+      comments: { type: Number, default: 0 },
+    },
+    required: true
+  },
+  status: { type: String, required: true, enum: STATUS_ARR.ITEM, default: 'pending' },
+  author: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  category: { type: Schema.Types.ObjectId, ref: 'Category' },
+  // tags: { type: [Schema.Types.ObjectId], ref: 'Tag' },
+  flag: {
+    type: { type: String, required: true, enum: FLAG_ARR.ITEM },
+    flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+    flaggedAt: { type: Date },
+  },
 }, { timestamps: true })
 
 withEditedDetails(ProductSchema, 'User')
 withSoftDelete(ProductSchema, 'User')
-const Product = model<IProduct, TSuspendableDocument<IProduct>>('Product', ProductSchema)
+const ProductModel = model<IProduct, TSuspendableDocument<IProduct>>('Product', ProductSchema)
 
 
-class ProductModel extends SuspendableModel<IProduct> {
+class Product extends SuspendableModel<IProduct> {
 
   constructor () {
-    super(Product)
+    super(ProductModel)
   }
 
   async insertOne (product: IProduct): Promise<IProduct> {
     Object.assign(product, { slug: product.name })
     product.slug = product.name
-    const q = Product.create(product)
+    const q = ProductModel.create(product)
     const res = await handleQuery(q, data => {
       data.slug = _.genUniqueSlug(product.name, data._id.toString())
       data.save()
@@ -69,4 +113,4 @@ class ProductModel extends SuspendableModel<IProduct> {
   
 }
 
-export default ProductModel
+export default Product

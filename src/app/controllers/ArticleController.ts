@@ -1,7 +1,7 @@
 import ArticleModel, { IArticle } from '@models/Article'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
-import { ROLES, USER_SIGN } from '@/config/global/const'
+import { ROLE, ROLE_ARR, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 const Article = new ArticleModel()
@@ -85,7 +85,7 @@ class ArticleCtrl {
     return _.routeAsync(async (req, res) => {
       const
         sign: USER_SIGN = (<any>req).user,
-        user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
+        user = await User.getAuthorizedUserByUsername(sign.username)
       if (user == null) {
         throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
       }

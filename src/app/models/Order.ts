@@ -1,14 +1,15 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
 import { IndelibleModel } from './Model'
-import { ORDER_STATUS } from '@/config/global/const'
+import { STATUS, STATUS_ARR } from '@/config/global/const'
 import { handleQuery } from '@/utils/mongoose'
 
 export interface IOrder {
   _id: ObjectId
+  cart: ObjectId
   code: string
-  amount: string
   payment: number
-  status: ORDER_STATUS
+  status: STATUS['ORDER']
+  userCreated: ObjectId
   createdAt: Date
 }
 
@@ -16,25 +17,24 @@ type TOrderDocument = IOrder & Document
 
 const OrderSchema = new Schema<IOrder>({
   code: { type: String, required: true },
-  amount: { type: String, required: true },
   payment: { type: Number, required: true },
-  status: { type: String, required: true, default: 'pending' },
+  status: { type: String, required: true, enum: STATUS_ARR.ORDER, default: 'pending' },
 }, { timestamps: true })
 
-const Order = model<IOrder>('Order', OrderSchema)
+const OrderModel = model<IOrder>('Order', OrderSchema)
 
-class OrderModel extends IndelibleModel<IOrder> {
+class Order extends IndelibleModel<IOrder> {
 
   constructor () {
-    super(Order)
+    super(OrderModel)
   }
   
   async getOneByCode (code: string): Promise<IOrder | null> {
-    const q = Order.findOne({ code: code }).lean()
+    const q = OrderModel.findOne({ code: code }).lean()
     const data = await handleQuery(q)
     return data
   }
   
 }
 
-export default OrderModel
+export default Order
