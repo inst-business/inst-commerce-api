@@ -1,24 +1,39 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
 import { IndelibleModel } from './Model'
-import { STATUS, STATUS_ARR } from '@/config/global/const'
+import { STATUS, STATUS_ARR, TYPE, TYPE_ARR } from '@/config/global/const'
 import { handleQuery } from '@/utils/mongoose'
 
 export interface IOrder {
   _id: ObjectId
-  cart: ObjectId
   code: string
-  payment: number
+  payment: TYPE['PAYMENT']
+  items: {
+    product: ObjectId,
+    sku: string,
+    qty: number
+  }[]
   status: STATUS['ORDER']
-  userCreated: ObjectId
+  // detail: ObjectId
+  user: ObjectId
   createdAt: Date
 }
 
 type TOrderDocument = IOrder & Document
 
 const OrderSchema = new Schema<IOrder>({
-  code: { type: String, required: true },
-  payment: { type: Number, required: true },
+  code: { type: String, required: true, unique: true },
+  payment: { type: String, required: true, enum: TYPE_ARR.PAYMENT },
+  items: {
+    type: [{
+      product: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
+      sku: { type: String, required: true },
+      qty: { type: Number, required: true, min: 0, default: 0 },
+    }],
+    required: true
+  },
   status: { type: String, required: true, enum: STATUS_ARR.ORDER, default: 'pending' },
+  // detail: { type: Schema.Types.ObjectId, required: true, ref: 'OrderDetail' },
+  user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
 }, { timestamps: true })
 
 const OrderModel = model<IOrder>('Order', OrderSchema)

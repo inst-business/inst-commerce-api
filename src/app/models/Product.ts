@@ -9,7 +9,6 @@ import { GV, STATUS, STATUS_ARR, FLAG, FLAG_ARR } from '@/config/global/const'
 export interface IProduct extends IEditedDetails, ISoftDeleted {
   _id: ObjectId
   expiresAt?: Date
-  // sku?: string
   name: string
   shortDesc: string
   longDesc: string
@@ -23,11 +22,14 @@ export interface IProduct extends IEditedDetails, ISoftDeleted {
   meta: {
     views: number
     likes: number
-    rates?: number
-    comments?: number
+    comments: number
+    sold: number
+    reviews: number
+    rating?: number
   }
   status: STATUS['ITEM']
   author: ObjectId
+  seller: ObjectId
   category?: ObjectId
   tags?: ObjectId[]
   flag?: {
@@ -64,20 +66,23 @@ const ProductSchema = new Schema<IProduct>({
   },
   meta: {
     type: {
-      views: { type: Number, required: true, default: 0 },
-      likes: { type: Number, required: true, default: 0 },
-      rates: { type: Number, default: 0 },
-      comments: { type: Number, default: 0 },
+      views: { type: Number, required: true, min: 0, default: 0 },
+      likes: { type: Number, required: true, min: 0, default: 0 },
+      comments: { type: Number, required: true, min: 0, default: 0 },
+      sold: { type: Number, required: true, min: 0, default: 0 },
+      reviews: { type: Number, required: true, min: 0, default: 0 },
+      rating: { type: Schema.Types.Decimal128, min: 1, max: 5 },
     },
     required: true
   },
   status: { type: String, required: true, enum: STATUS_ARR.ITEM, default: 'pending' },
-  author: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  author: { type: Schema.Types.ObjectId, required: true, ref: 'UserSeller' },
+  seller: { type: Schema.Types.ObjectId, required: true, ref: 'Seller' },
   category: { type: Schema.Types.ObjectId, ref: 'Category' },
-  // tags: { type: [Schema.Types.ObjectId], ref: 'Tag' },
+  tags: { type: [Schema.Types.ObjectId], ref: 'Tag' },
   flag: {
     type: { type: String, required: true, enum: FLAG_ARR.ITEM },
-    flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+    flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
     flaggedAt: { type: Date },
   },
 }, { timestamps: true })

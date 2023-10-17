@@ -1,4 +1,4 @@
-import MusicModel, { IMusic } from '@models/Music'
+import MusicModel, { IMusic } from '@/app/models/Music.old'
 import UserModel from '@models/User'
 import _ from '@/utils/utils'
 import { removeOneImage } from '@/services/LocalUploadService'

@@ -14,7 +14,7 @@ export interface ICategory extends IEditedDetails, ISoftDeleted {
   expiresAt?: Date
   name: string
   desc: string
-  img: string
+  thumbnail: string
   slug: string
   specs?: {
     name: string,
@@ -36,13 +36,18 @@ const CategorySchema = new Schema<ICategory>({
   expiresAt: { type: Date, index: { expires: GV.TEMP_DATA_EXPIRED } },
   name: { type: String, required: true, minlength: 1, maxlength: 48 },
   desc: { type: String },
-  img: { type: String, required: true },
+  thumbnail: { type: String, required: true },
   slug: { type: String, required: true, unique: true, maxlength: 64 },
+  specs: [{
+    name: { type: String, required: true, minlength: 1, maxlength: 16 },
+    unit: { type: String },
+    desc: { type: String },
+  }],
   status: { type: String, required: true, enum: STATUS_ARR.ITEM, default: 'pending' },
-  isImmutable: { type: Boolean },
+  author: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
   left: { type: Number, required: true, default: 1 },
   right: { type: Number, required: true, default: 2 },
-  author: { type: Schema.Types.ObjectId, ref: 'User' },
+  isImmutable: { type: Boolean },
 }, { timestamps: true })
 
 // CategorySchema.virtual('author', {
@@ -68,7 +73,7 @@ class Category extends SuspendableModel<ICategory> {
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
     sortBy: Keys<ICategory> = 'createdAt'
   ): Promise<ICategory[]> {
-    const q = CategoryModel.find({ left: 1 })
+    const q = this.Model.find({ left: 1 })
       // .populate({ path: 'categorizedBy', select: 'name -_id' })
       .populate({ path: 'createdBy', select: 'username -_id' })
       .select(selected?.join(' ') ?? '')
@@ -84,9 +89,9 @@ class Category extends SuspendableModel<ICategory> {
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
     sortBy: Keys<ICategory> = 'createdAt'
   ): Promise<ICategory[]> {
-    const parent = await CategoryModel.findById(id)
+    const parent = await this.Model.findById(id)
     if (parent == null) return []
-    const q = CategoryModel.find({ left: { $gte: parent.left, $lte: parent.right } })
+    const q = this.Model.find({ left: { $gte: parent.left, $lte: parent.right } })
       // .populate({ path: 'categorizedBy', select: 'name -_id' })
       .populate({ path: 'createdBy', select: 'username -_id' })
       .select(selected?.join(' ') ?? '')
@@ -97,7 +102,7 @@ class Category extends SuspendableModel<ICategory> {
   }
 
   async getOneById (id: ArgumentId, selected?: ExcludableKeys<ICategory>[]): Promise<ICategory | null> {
-    const q = CategoryModel.findById(id)
+    const q = this.Model.findById(id)
       // .populate({ path: 'categorizedBy', select: 'name -_id' })
       .populate({ path: 'createdBy', select: 'username -_id' })
       .populate({ path: 'editedBy', select: 'username -_id' })
@@ -108,7 +113,7 @@ class Category extends SuspendableModel<ICategory> {
   }
 
   async getOneBySlug (slug: String, selected?: ExcludableKeys<ICategory>[]) {
-    const q = CategoryModel.findOne({ slug })
+    const q = this.Model.findOne({ slug })
       // .populate({ path: 'categorizedBy', select: 'name -_id' })
       .populate({ path: 'createdBy', select: 'username -_id' })
       .populate({ path: 'editedBy', select: 'username -_id' })
@@ -121,18 +126,18 @@ class Category extends SuspendableModel<ICategory> {
   async insertOne (category: ICategory, id?: ArgumentId): Promise<ICategory> {
     category.left = 1
     category.right = 2
-    const parent = await CategoryModel.findById(id)
+    const parent = await this.Model.findById(id)
     if (parent != null) {
       category.left = parent.right
       category.right = parent.right + 1
-      const rightSibling = await CategoryModel.findOne({ left: parent.right })
+      const rightSibling = await this.Model.findOne({ left: parent.right })
       if (rightSibling != null) await handleQuery(
-        CategoryModel.updateMany({ left: { $gte: parent.right } }, { $inc: { left: 2, right: 2 } })
+        this.Model.updateMany({ left: { $gte: parent.right } }, { $inc: { left: 2, right: 2 } })
       )
       parent.right += 2
       await handleQuery(parent.save())
     }
-    const q = CategoryModel.create(category)
+    const q = this.Model.create(category)
     const res = await handleQuery(q)
     return res
   }
@@ -142,7 +147,7 @@ class Category extends SuspendableModel<ICategory> {
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
     sortBy: Keys<ICategory> = 'deletedAt'
   ): Promise<ICategory[]> {
-    const q = CategoryModel.find({ isDeleted: true })
+    const q = this.Model.find({ isDeleted: true })
       // .populate({ path: 'categorizedBy', select: 'name -_id' })
       .populate({ path: 'createdBy', select: 'username -_id' })
       .populate({ path: 'deletedBy', select: 'username -_id' })
@@ -153,10 +158,10 @@ class Category extends SuspendableModel<ICategory> {
     return data
   }
   
-  async findImageById (id: Many<ArgumentId>): Promise<ICategory['img'][]> {
-    const q = CategoryModel.find({ _id: id }).select('img -_id').lean()
+  async findImageById (id: Many<ArgumentId>): Promise<ICategory['thumbnail'][]> {
+    const q = this.Model.find({ _id: id }).select('img -_id').lean()
     const data = await handleQuery(q)
-    return data.map(item => item.img)
+    return data.map(item => item.thumbnail)
   }
 
   // async findImgByManyIds (id: Many<ArgumentId>): Promise<Pick<ICategory, 'img'>[]> {
@@ -165,10 +170,10 @@ class Category extends SuspendableModel<ICategory> {
   //   return data
   // }
 
-  async findImageOfDeletedById (id: Many<ArgumentId>): Promise<ICategory['img'][]> {
-    const q = CategoryModel.find({ _id: id, isDeleted: true }).select('img -_id').lean()
+  async findImageOfDeletedById (id: Many<ArgumentId>): Promise<ICategory['thumbnail'][]> {
+    const q = this.Model.find({ _id: id, isDeleted: true }).select('img -_id').lean()
     const data = await handleQuery(q)
-    return data.map(item => item.img)
+    return data.map(item => item.thumbnail)
   }
   
 }

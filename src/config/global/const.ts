@@ -39,6 +39,7 @@ export type GENDER = typeof GENDER_ARR[number]
 export const TYPE_ARR = Object.freeze({
   ACCOUNT: ['user', 'seller', 'admin'] as const,
   ITEM: ['product', 'article'] as const,
+  PAYMENT: ['cod', 'e-wallet', 'credit'] as const,
 })
 export type TYPE = {
   [K in keyof typeof TYPE_ARR]: typeof TYPE_ARR[K][number]

@@ -9,8 +9,9 @@ import { STATUS, STATUS_ARR } from '@/config/global/const'
 export interface ICart extends ISoftDeleted {
   _id: ObjectId
   user: ObjectId
-  products: {
-    productId: ObjectId,
+  items: {
+    product: ObjectId,
+    sku: string,
     qty: number
   }[]
   createdAt: Date
@@ -21,13 +22,14 @@ type TCartDocument = ICart & Document
 
 const CartSchema = new Schema<ICart>({
   user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
-  products: {
+  items: {
     type: [{
-      productId: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
-      qty: { type: Number, required: true },
+      product: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
+      sku: { type: String, required: true },
+      qty: { type: Number, required: true, min: 0, default: 0 },
     }],
     required: true
-  }
+  },
 }, { timestamps: true })
 
 withSoftDelete(CartSchema, 'User')

@@ -15,10 +15,11 @@ export interface IArticle extends IEditedDetails, ISoftDeleted {
   meta: {
     views: number
     likes: number
-    comments?: number
+    comments: number
   }
   status: STATUS['ITEM']
   author: ObjectId
+  seller: ObjectId
   category?: ObjectId
   tags?: ObjectId[]
   flag?: {
@@ -40,19 +41,19 @@ const ArticleSchema = new Schema<IArticle>({
   slug: { type: String, required: true, unique: true, maxlength: 208 },
   meta: {
     type: {
-      views: { type: Number, required: true, default: 0 },
-      likes: { type: Number, required: true, default: 0 },
-      comments: { type: Number, default: 0 },
+      views: { type: Number, required: true, min: 0, default: 0 },
+      likes: { type: Number, required: true, min: 0, default: 0 },
+      comments: { type: Number, required: true, min: 0, default: 0 },
     },
     required: true
   },
   status: { type: String, required: true, enum: STATUS_ARR.ITEM, default: 'pending' },
   author: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   category: { type: Schema.Types.ObjectId, ref: 'Category' },
-  // tags: { type: [Schema.Types.ObjectId], ref: 'Tag' },
+  tags: { type: [Schema.Types.ObjectId], ref: 'Tag' },
   flag: {
     type: { type: String, required: true, enum: FLAG_ARR.ITEM },
-    flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+    flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
     flaggedAt: { type: Date },
   },
 }, { timestamps: true })

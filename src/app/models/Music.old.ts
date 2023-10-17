@@ -4,7 +4,7 @@ import _ from '@/utils/utils'
 import {
   ArgumentId, handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
 } from '@/utils/mongoose'
-import { ExcludableKeys, ExcludeKeys, ITEM_STATUS, SORT_ORDER } from '@/config/global/const'
+import { ExcludableKeys, ExcludeKeys, STATUS, SORT_ORDER, STATUS_ARR } from '@/config/global/const'
 
 export interface IMusic {
   _id: ObjectId
@@ -14,7 +14,7 @@ export interface IMusic {
   path: string
   cover?: string
   slug: string
-  status: ITEM_STATUS
+  status: STATUS['ITEM']
   categorizedBy?: ObjectId
   createdBy: ObjectId
   createdAt: Date
@@ -35,7 +35,7 @@ const MusicSchema = new Schema<IMusic>({
   path: { type: String, required: true },
   cover: { type: String },
   slug: { type: String, required: true, unique: true, maxlength: 96 },
-  status: { type: String, required: true, default: 'active' },
+  status: { type: String, required: true, enum: STATUS_ARR.ITEM, default: 'active' },
   categorizedBy: { type: Schema.Types.ObjectId, ref: 'Category' },
   createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true })
