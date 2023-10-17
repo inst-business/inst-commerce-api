@@ -5,22 +5,44 @@ import { handleQuery } from '@/utils/mongoose'
 
 export interface IOrderDetail {
   _id: ObjectId
-  code: string
-  payment: TYPE['PAYMENT']
-  status: STATUS['ORDER']
-  detail: ObjectId
-  user: ObjectId
+  items: {
+    product: ObjectId,
+    sku: string,
+    price: number,
+    discount?: number
+    promotions?: ObjectId[]
+    qty: number,
+  }[]
+  order: ObjectId
+  seller: ObjectId
+  // delivery: ObjectId
+  verifiedAt?: Date
   createdAt: Date
+  updatedAt: Date
 }
 
 type TOrderDocument = IOrderDetail & Document
 
 const OrderSchema = new Schema<IOrderDetail>({
-  code: { type: String, required: true, unique: true },
-  payment: { type: String, required: true, enum: TYPE_ARR.PAYMENT },
-  status: { type: String, required: true, enum: STATUS_ARR.ORDER, default: 'pending' },
-  detail: { type: Schema.Types.ObjectId, required: true, ref: 'OrderDetail' },
-  user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  items: {
+    type: [{
+      product: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
+      sku: { type: String, required: true },
+      qty: { type: Number, required: true, min: 0, default: 0 },
+      price: { type: Schema.Types.Decimal128, required: true },
+      discount: { type: Number },
+      promotions: [{ type: Schema.Types.ObjectId, ref: 'Promotion' }],
+    }],
+    required: true,
+    validate: {
+      validator: (v: IOrderDetail['items']) => Array.isArray(v) && v.length > 0,
+      message: 'Order detail requires at least 1 item.'
+    }
+  },
+  order: { type: Schema.Types.ObjectId, required: true, ref: 'Order' },
+  seller: { type: Schema.Types.ObjectId, required: true, ref: 'Seller' },
+  // delivery: { type: Schema.Types.ObjectId, required: true, ref: 'Delivery' },
+  verifiedAt: { type: Date, default: null },
 }, { timestamps: true })
 
 const OrderModel = model<IOrderDetail>('Order', OrderSchema)

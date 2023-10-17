@@ -12,7 +12,7 @@ export interface IArticle extends IEditedDetails, ISoftDeleted {
   content: string
   img: string
   slug: string
-  meta: {
+  interaction: {
     views: number
     likes: number
     comments: number
@@ -39,7 +39,7 @@ const ArticleSchema = new Schema<IArticle>({
   content: { type: String, required: true },
   img: { type: String, required: true },
   slug: { type: String, required: true, unique: true, maxlength: 208 },
-  meta: {
+  interaction: {
     type: {
       views: { type: Number, required: true, min: 0, default: 0 },
       likes: { type: Number, required: true, min: 0, default: 0 },
@@ -50,7 +50,7 @@ const ArticleSchema = new Schema<IArticle>({
   status: { type: String, required: true, enum: STATUS_ARR.ITEM, default: 'pending' },
   author: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   category: { type: Schema.Types.ObjectId, ref: 'Category' },
-  tags: { type: [Schema.Types.ObjectId], ref: 'Tag' },
+  tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
   flag: {
     type: { type: String, required: true, enum: FLAG_ARR.ITEM },
     flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
@@ -58,8 +58,8 @@ const ArticleSchema = new Schema<IArticle>({
   },
 }, { timestamps: true })
 
-withEditedDetails(ArticleSchema, 'User')
-withSoftDelete(ArticleSchema, 'User')
+withEditedDetails(ArticleSchema, 'UserSeller')
+withSoftDelete(ArticleSchema, 'UserSeller')
 const Article = model<IArticle, TSuspendableDocument<IArticle>>('Article', ArticleSchema)
 
 

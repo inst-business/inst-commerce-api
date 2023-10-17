@@ -26,6 +26,7 @@ export interface IUser {
   cover?: string
   status: STATUS['ACCOUNT']
   role: ROLE['USER']
+  // tier: ROLE['USER']
   // token?: string
   flag?: {
     type: FLAG['ACCOUNT']
@@ -42,7 +43,7 @@ export interface IUser {
 type TUserDocument = IUser & Document
 
 const UserSchema = new Schema<IUser>({
-  username: { type: String, required: true, unique: true, lowercase: true, minlength: 3, maxlength: 32 },
+  username: { type: String, required: true, unique: true, minlength: 3, maxlength: 32 },
   email: { type: String, required: true, unique: true, maxlength: 24 },
   tel: { type: String, required: true, unique: true, maxlength: 24 },
   password: { type: String, required: true },

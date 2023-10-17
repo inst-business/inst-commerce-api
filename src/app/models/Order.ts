@@ -1,4 +1,4 @@
-import { Schema, Document, model, ObjectId } from 'mongoose'
+import { Schema, Document, model, ObjectId, Decimal128 } from 'mongoose'
 import { IndelibleModel } from './Model'
 import { STATUS, STATUS_ARR, TYPE, TYPE_ARR } from '@/config/global/const'
 import { handleQuery } from '@/utils/mongoose'
@@ -6,34 +6,30 @@ import { handleQuery } from '@/utils/mongoose'
 export interface IOrder {
   _id: ObjectId
   code: string
-  payment: TYPE['PAYMENT']
-  items: {
-    product: ObjectId,
-    sku: string,
-    qty: number
-  }[]
+  fullname: string
+  email: string
+  tel: string
+  total: number | Decimal128
   status: STATUS['ORDER']
-  // detail: ObjectId
+  transaction: ObjectId
   user: ObjectId
+  editedAt?: Date
   createdAt: Date
+  updatedAt: Date
 }
 
 type TOrderDocument = IOrder & Document
 
 const OrderSchema = new Schema<IOrder>({
   code: { type: String, required: true, unique: true },
-  payment: { type: String, required: true, enum: TYPE_ARR.PAYMENT },
-  items: {
-    type: [{
-      product: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
-      sku: { type: String, required: true },
-      qty: { type: Number, required: true, min: 0, default: 0 },
-    }],
-    required: true
-  },
+  fullname: { type: String, required: true, minlength: 1, maxlength: 64 },
+  email: { type: String, required: true, maxlength: 24 },
+  tel: { type: String, required: true, maxlength: 24 },
+  total: { type: Schema.Types.Decimal128, required: true },
   status: { type: String, required: true, enum: STATUS_ARR.ORDER, default: 'pending' },
-  // detail: { type: Schema.Types.ObjectId, required: true, ref: 'OrderDetail' },
+  transaction: { type: Schema.Types.ObjectId, required: true, ref: 'Transaction' },
   user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  editedAt: { type: Date },
 }, { timestamps: true })
 
 const OrderModel = model<IOrder>('Order', OrderSchema)

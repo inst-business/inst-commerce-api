@@ -7,9 +7,11 @@ import { FLAG, FLAG_ARR, TYPE, TYPE_ARR } from '@/config/global/const'
 
 export interface IArticleComment extends ISoftDeleted {
   _id: ObjectId
+  left: number
+  right: number
   comment: string
   media?: string[]
-  meta: {
+  interaction: {
     likes: number
   }
   article: ObjectId
@@ -22,8 +24,6 @@ export interface IArticleComment extends ISoftDeleted {
     flaggedBy: ObjectId
     flaggedAt: Date
   }
-  left: number
-  right: number
   editedAt?: Date
   createdAt: Date
   updatedAt: Date
@@ -32,9 +32,11 @@ export interface IArticleComment extends ISoftDeleted {
 type TArticleCommentDocument = IArticleComment & Document
 
 const ArticleCommentSchema = new Schema<IArticleComment>({
+  left: { type: Number, required: true, default: 1 },
+  right: { type: Number, required: true, default: 2 },
   comment: { type: String, required: true },
   media: { type: [String] },
-  meta: {
+  interaction: {
     type: {
       likes: { type: Number, required: true, min: 0, default: 0 },
     },
@@ -53,11 +55,9 @@ const ArticleCommentSchema = new Schema<IArticleComment>({
     flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
     flaggedAt: { type: Date },
   },
-  left: { type: Number, required: true, default: 1 },
-  right: { type: Number, required: true, default: 2 },
 }, { timestamps: true })
 
-withSoftDelete(ArticleCommentSchema, 'User')
+withSoftDelete(ArticleCommentSchema)
 const ArticleCommentModel = model<IArticleComment, TSuspendableDocument<IArticleComment>>('ArticleComment', ArticleCommentSchema)
 
 

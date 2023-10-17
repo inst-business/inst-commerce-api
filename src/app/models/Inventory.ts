@@ -1,8 +1,8 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
-import { SuspendableModel } from './Model'
+import { IndelibleModel } from './Model'
 import _ from '@/utils/utils'
 import {
-  ArgumentId, handleQuery, IEditedDetails, TSuspendableDocument, withEditedDetails, withSoftDelete
+  ArgumentId, handleQuery, IEditedDetails, withEditedDetails
 } from '@/utils/mongoose'
 import { } from '@/config/global/const'
 
@@ -32,12 +32,11 @@ const InventorySchema = new Schema<IInventory>({
 }, { timestamps: true })
 
 withEditedDetails(InventorySchema, 'UserSeller')
-withSoftDelete(InventorySchema, 'User')
 
-const InventoryModel = model<IInventory, TSuspendableDocument<IInventory>>('Inventory', InventorySchema)
+const InventoryModel = model<IInventory>('Inventory', InventorySchema)
 
 
-class Inventory extends SuspendableModel<IInventory> {
+class Inventory extends IndelibleModel<IInventory> {
 
   constructor () {
     super(InventoryModel)

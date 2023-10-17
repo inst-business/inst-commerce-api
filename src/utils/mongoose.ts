@@ -61,16 +61,18 @@ export interface ISoftDeleted {
 export type TDocument = Document & ISoftDeleted
 // type TQueryWithHelpers = QueryWithHelpers<Boolean, TDocument | TDocument[]>
 export interface ISoftDeleteQueryHelpers<T> extends Model<T> {
-  softDelete(deletedBy: ArgumentId): Promise<IResultWithPars>,
+  softDelete(deletedBy?: ArgumentId): Promise<IResultWithPars>,
   restoreDeleted(): Promise<IResultWithPars>,
 }
 export type TSuspendableDocument<T> = Model<T, ISoftDeleteQueryHelpers<T>>
 
 // soft delete plugin
-export const withSoftDelete = (schema: Schema, ref: string) => {
+export const withSoftDelete = (schema: Schema, ref?: string) => {
   schema.add({
     isDeleted: { type: Boolean, required: true, default: false },
-    deletedBy: { type: Schema.Types.ObjectId, ref },
+    ...(ref && {
+      deletedBy: { type: Schema.Types.ObjectId, ref }
+    }),
     deletedAt: { type: Date },
   })
 
@@ -112,7 +114,7 @@ export const withSoftDelete = (schema: Schema, ref: string) => {
   })
 
   // Delete queries for available document(s)
-  deleteQueries.forEach((method) => {
+  deleteQueries.forEach(method => {
     schema.pre(<MongooseDefaultQueryMiddleware>method, function (next) {
       this.where({ isDeleted: true })
       next()
@@ -134,7 +136,7 @@ export const withSoftDelete = (schema: Schema, ref: string) => {
 
   const QueryHelpers = {
     // Remove (soft deletes) document
-    softDelete: async function (this: TDocumentWithQueryHelpers, deletedBy: ArgumentId): Promise<IResultWithPars> {
+    softDelete: async function (this: TDocumentWithQueryHelpers, deletedBy?: ArgumentId): Promise<IResultWithPars> {
       const data = await this.where({ isDeleted: false })
       if (data == null || (Array.isArray(data) && data.length <= 0)) {
         throw _.logicError('Null', 'No data found.', 400, ERR.EMPTY_DATA)

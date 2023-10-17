@@ -11,7 +11,8 @@ import {
 
 export interface ICategory extends IEditedDetails, ISoftDeleted {
   _id: ObjectId
-  expiresAt?: Date
+  left: number
+  right: number
   name: string
   desc: string
   thumbnail: string
@@ -23,9 +24,8 @@ export interface ICategory extends IEditedDetails, ISoftDeleted {
   }[]
   status: STATUS['ITEM']
   author: ObjectId
-  left: number
-  right: number
   isImmutable?: boolean
+  expiresAt?: Date  // automatically destroyed if containing no product
   createdAt: Date
   updatedAt: Date
 }
@@ -33,7 +33,8 @@ export interface ICategory extends IEditedDetails, ISoftDeleted {
 type TCategoryDocument = ICategory & Document
 
 const CategorySchema = new Schema<ICategory>({
-  expiresAt: { type: Date, index: { expires: GV.TEMP_DATA_EXPIRED } },
+  left: { type: Number, required: true },
+  right: { type: Number, required: true },
   name: { type: String, required: true, minlength: 1, maxlength: 48 },
   desc: { type: String },
   thumbnail: { type: String, required: true },
@@ -45,9 +46,8 @@ const CategorySchema = new Schema<ICategory>({
   }],
   status: { type: String, required: true, enum: STATUS_ARR.ITEM, default: 'pending' },
   author: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
-  left: { type: Number, required: true, default: 1 },
-  right: { type: Number, required: true, default: 2 },
   isImmutable: { type: Boolean },
+  expiresAt: { type: Date, index: { expires: GV.TEMP_DATA_EXPIRED } },
 }, { timestamps: true })
 
 // CategorySchema.virtual('author', {

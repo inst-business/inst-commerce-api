@@ -1,19 +1,19 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
-import { SuspendableModel } from './Model'
+import { IndelibleModel } from './Model'
 import _ from '@/utils/utils'
 import {
-  ArgumentId, handleQuery, ISoftDeleted, TSuspendableDocument, withSoftDelete
+  ArgumentId, handleQuery, TSuspendableDocument
 } from '@/utils/mongoose'
 import { STATUS, STATUS_ARR } from '@/config/global/const'
 
-export interface ICart extends ISoftDeleted {
+export interface ICart {
   _id: ObjectId
-  user: ObjectId
   items: {
     product: ObjectId,
     sku: string,
     qty: number
   }[]
+  user: ObjectId
   createdAt: Date
   updatedAt: Date
 }
@@ -21,7 +21,6 @@ export interface ICart extends ISoftDeleted {
 type TCartDocument = ICart & Document
 
 const CartSchema = new Schema<ICart>({
-  user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   items: {
     type: [{
       product: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
@@ -30,13 +29,13 @@ const CartSchema = new Schema<ICart>({
     }],
     required: true
   },
+  user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
 }, { timestamps: true })
 
-withSoftDelete(CartSchema, 'User')
-const CartModel = model<ICart, TSuspendableDocument<ICart>>('Cart', CartSchema)
+const CartModel = model<ICart>('Cart', CartSchema)
 
 
-class Cart extends SuspendableModel<ICart> {
+class Cart extends IndelibleModel<ICart> {
 
   constructor () {
     super(CartModel)

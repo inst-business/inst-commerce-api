@@ -1,4 +1,4 @@
-import { Schema, Document, model, ObjectId } from 'mongoose'
+import { Schema, Document, model, ObjectId, Decimal128 } from 'mongoose'
 import { SuspendableModel } from './Model'
 import _ from '@/utils/utils'
 import {
@@ -16,7 +16,7 @@ export interface IProduct extends IEditedDetails, ISoftDeleted {
   slug: string
   specs: {
     sku: string
-    price: number
+    price: number | Decimal128
     discount?: number
   }[]
   meta: {
@@ -25,7 +25,7 @@ export interface IProduct extends IEditedDetails, ISoftDeleted {
     comments: number
     sold: number
     reviews: number
-    rating?: number
+    rating: number | Decimal128
   }
   status: STATUS['ITEM']
   author: ObjectId
@@ -55,7 +55,7 @@ const ProductSchema = new Schema<IProduct>({
   specs: {
     type: [{
       sku: { type: String, required: true, unique: true },
-      price: { type: Number, required: true },
+      price: { type: Schema.Types.Decimal128, required: true },
       discount: { type: Number },
     }],
     required: true,
@@ -79,7 +79,7 @@ const ProductSchema = new Schema<IProduct>({
   author: { type: Schema.Types.ObjectId, required: true, ref: 'UserSeller' },
   seller: { type: Schema.Types.ObjectId, required: true, ref: 'Seller' },
   category: { type: Schema.Types.ObjectId, ref: 'Category' },
-  tags: { type: [Schema.Types.ObjectId], ref: 'Tag' },
+  tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
   flag: {
     type: { type: String, required: true, enum: FLAG_ARR.ITEM },
     flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
