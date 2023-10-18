@@ -6,22 +6,22 @@ import { handleQuery } from '@/utils/mongoose'
 export interface IOrderDetail {
   _id: ObjectId
   items: {
-    product: ObjectId,
-    sku: string,
-    price: number,
+    product: ObjectId
+    sku: string
+    price: number
     discount?: number
     promotions?: ObjectId[]
-    qty: number,
+    qty: number
   }[]
   order: ObjectId
+  delivery: ObjectId
   seller: ObjectId
-  // delivery: ObjectId
   verifiedAt?: Date
   createdAt: Date
   updatedAt: Date
 }
 
-type TOrderDocument = IOrderDetail & Document
+type TOrderDetailDocument = IOrderDetail & Document
 
 const OrderSchema = new Schema<IOrderDetail>({
   items: {
@@ -41,7 +41,7 @@ const OrderSchema = new Schema<IOrderDetail>({
   },
   order: { type: Schema.Types.ObjectId, required: true, ref: 'Order' },
   seller: { type: Schema.Types.ObjectId, required: true, ref: 'Seller' },
-  // delivery: { type: Schema.Types.ObjectId, required: true, ref: 'Delivery' },
+  delivery: { type: Schema.Types.ObjectId, required: true, ref: 'Delivery' },
   verifiedAt: { type: Date, default: null },
 }, { timestamps: true })
 

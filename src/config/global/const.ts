@@ -38,20 +38,23 @@ export type GENDER = typeof GENDER_ARR[number]
 
 export const TYPE_ARR = Object.freeze({
   ACCOUNT: ['user', 'seller', 'admin'] as const,
+  PRIVACY: ['public', 'shared', 'private'] as const,
   ITEM: ['product', 'article'] as const,
   PAYMENT: ['cod', 'e-wallet', 'credit'] as const,
+  DELIVERY: ['casual', 'express'] as const,
 })
 export type TYPE = {
   [K in keyof typeof TYPE_ARR]: typeof TYPE_ARR[K][number]
 }
 enum TYPE2 {
-  GENDER = '12'
+  GENDER = 'male'
 }
 
 export const STATUS_ARR = Object.freeze({
   ACCOUNT: ['hidden', 'pending', 'active'] as const,
   ITEM: ['hidden', 'pending', 'active'] as const,
-  ORDER: ['declined', 'pending', 'approved'] as const,
+  APPROVAL: ['declined', 'pending', 'approved'] as const,
+  PROCESS: ['preparing', 'processing', 'completed', 'rejected'] as const,
 })
 export type STATUS = {
   [K in keyof typeof STATUS_ARR]: typeof STATUS_ARR[K][number]

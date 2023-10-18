@@ -3,7 +3,7 @@ import { SuspendableModel } from './Model'
 import {
   handleQuery, IEditedDetails, ISoftDeleted, withEditedDetails, withSoftDelete, TSuspendableDocument
 } from '@/utils/mongoose'
-import { STATUS, STATUS_ARR, FLAG, FLAG_ARR } from '@/config/global/const'
+import { STATUS, STATUS_ARR, FLAG, FLAG_ARR, TYPE, TYPE_ARR } from '@/config/global/const'
 
 export interface IArticle extends IEditedDetails, ISoftDeleted {
   _id: ObjectId
@@ -17,6 +17,7 @@ export interface IArticle extends IEditedDetails, ISoftDeleted {
     likes: number
     comments: number
   }
+  privacy: TYPE['PRIVACY']
   status: STATUS['ITEM']
   author: ObjectId
   seller: ObjectId
@@ -47,6 +48,7 @@ const ArticleSchema = new Schema<IArticle>({
     },
     required: true
   },
+  privacy: { type: String, required: true, enum: TYPE_ARR.PRIVACY, default: 'public' },
   status: { type: String, required: true, enum: STATUS_ARR.ITEM, default: 'pending' },
   author: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   category: { type: Schema.Types.ObjectId, ref: 'Category' },

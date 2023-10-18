@@ -9,8 +9,8 @@ import { STATUS, STATUS_ARR } from '@/config/global/const'
 export interface ICart {
   _id: ObjectId
   items: {
-    product: ObjectId,
-    sku: string,
+    product: ObjectId
+    sku: string
     qty: number
   }[]
   user: ObjectId

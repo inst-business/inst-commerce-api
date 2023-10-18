@@ -18,14 +18,14 @@ export interface ICategory extends IEditedDetails, ISoftDeleted {
   thumbnail: string
   slug: string
   specs?: {
-    name: string,
-    unit?: string,
+    name: string
+    unit?: string
     desc?: string
   }[]
   status: STATUS['ITEM']
   author: ObjectId
   isImmutable?: boolean
-  expiresAt?: Date  // automatically destroyed if containing no product
+  expiresAt?: Date  // cron job add expried date to destroy if containing no product
   createdAt: Date
   updatedAt: Date
 }

@@ -12,7 +12,7 @@ export interface IInventory extends IEditedDetails {
   qty: number
   product: ObjectId
   reservations?: {
-    user: ObjectId,
+    user: ObjectId
     qty: number
   }[]
   createdAt: Date
