@@ -14,6 +14,8 @@ const storeTheme = (mode) => {
   localStorage.setItem('theme', mode)
 }
 export const loadTheme = (switcher) => {
+  if (!switcher || switcher.nodeName !== 'INPUT' || switcher.type !== 'checkbox')
+    return
   const theme = localStorage.getItem('theme')
   if (theme && themeModes.includes(theme)) {
     const Root = qs.o('html')
@@ -22,6 +24,8 @@ export const loadTheme = (switcher) => {
   }
 }
 export const switchTheme = (switcher) => {
+  if (!switcher || switcher.nodeName !== 'INPUT' || switcher.type !== 'checkbox')
+    return
   switcher.addEventListener('click', function switchRootTheme (e) {
     const Root = qs.o('html')
     const theme = (Root.dataset?.theme === 'dark') ? Root.dataset.theme : 'light'
@@ -39,12 +43,13 @@ const storeSidebarState = (state) => {
 }
 export const loadSidebarState = () => {
   const state = localStorage.getItem('sidebarExpanded')
-  if (state) {
-    const Sidebar = qs.$o('#Sidebar')
+  const Sidebar = qs.$o('#Sidebar')
+  if (state && Sidebar) {
     Sidebar.setAttribute('aria-expanded', state)
   }
 }
 export const toggleExpanded = (btn, target) => {
+  if (!btn) return
   btn.addEventListener('click', function expandTarget (e) {
     const expanded = (target.getAttribute('aria-expanded') === 'true') ? true : false
     target.setAttribute('aria-expanded', !expanded)

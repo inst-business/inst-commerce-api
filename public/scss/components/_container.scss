@@ -1,0 +1,141 @@
+@use "../helpers/helpers";
+@use "../helpers/responsive";
+@import "../variables";
+
+@mixin make-breakpoint(
+  $name,
+  $max-width: null,
+  $breakpoints: $media-breakpoints
+) {
+  $min-width: map-get($breakpoints, $name);
+  @if $min-width {
+    @media screen and (min-width: $min-width) {
+      @if $max-width != 0 {
+        max-width: $max-width;
+      }
+      @content;
+    }
+  }
+}
+@mixin make-breakpoint-up($name, $breakpoints: $media-breakpoints) {
+  $min-width: helpers.map-get-next($breakpoints, $name, true);
+  @if $min-width {
+    $max-width: $min-width - 1px;
+    @media screen and (max-width: $max-width) {
+      @content;
+    }
+  }
+}
+
+.Container {
+  --Container-max-width: 100%;
+  --Container-wide-width: 100%;
+  --Container-spacing: 0.75rem;
+  --Container-gutter: #{$main-gutter};
+  --Row-margin: calc(0rem - var(--Container-spacing));
+  --Col-padding: var(--Container-spacing);
+}
+
+.Container {
+  // gap: var(--Col-padding);
+  width: 100%;
+  max-width: var(--Container-max-width);
+  padding-left: var(--Container-gutter);
+  padding-right: var(--Container-gutter);
+  margin-left: auto;
+  margin-right: auto;
+  // transition: all 0.15s linear;
+}
+
+.Container {
+  .Head {
+    display: flex;
+    flex-direction: column;
+    // gap: var(--Col-padding);
+    padding-bottom: calc(var(--Col-padding) * 2);
+  }
+  .Row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: var(--Row-margin);
+    margin-right: var(--Row-margin);
+
+    & > * {
+      flex-shrink: 0;
+      width: 100%;
+      max-width: 100%;
+      padding-left: var(--Col-padding);
+      padding-right: var(--Col-padding);
+      padding-bottom: var(--Col-padding);
+    }
+
+    & .Heading {
+      margin: 0;
+      // padding-left: var(--Col-padding);
+      // padding-right: var(--Col-padding);
+      padding-bottom: var(--Col-padding);
+    }
+
+    & .Col {
+      padding-left: var(--Col-padding);
+      padding-right: var(--Col-padding);
+      padding-bottom: calc(var(--Col-padding) * 2);
+    }
+
+    &-gutters-0 {
+      margin-left: 0;
+      margin-right: 0;
+      & .Col {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+
+  $self: #{&};
+  &-wide {
+    @extend #{$self};
+    min-width: var(--Container-wide-width);
+  }
+  &-gutter {
+    &-0 {
+      --Container-gutter: 0;
+    }
+    &-responsive {
+      --Container-gutter: var(--Container-spacing);
+    }
+  }
+
+  @include responsive.make-responsive(xs, sm, md) using ($breakpoint) {
+    --Container-spacing: 0.5rem;
+  }
+
+  $container-max-widths-list: $container-max-widths;
+  @each $breakpoint, $max-width in $container-max-widths-list {
+    @include make-breakpoint($breakpoint, $max-width) {
+      @if ($breakpoint == "sm") or
+        ($breakpoint == "md") or
+        ($breakpoint == "lg") or
+        ($breakpoint == "xl")
+      {
+        .Row .Col {
+          @include responsive.make-class-12col($breakpoint);
+        }
+      }
+    }
+    @include make-breakpoint-up($breakpoint) {
+      .Row .Col {
+        @include responsive.make-class-hidden-col($breakpoint);
+      }
+    }
+  }
+}
+
+.Center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-height: 100vh;
+}

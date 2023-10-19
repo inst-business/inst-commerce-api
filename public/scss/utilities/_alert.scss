@@ -1,0 +1,56 @@
+@mixin make-alert {
+  position: relative;
+  padding: var(--Alert-padding);
+  margin-bottom: $spacing-3;
+  border: 1px solid;
+  border-radius: $radius-md;
+  font-size: $font-size;
+}
+
+.Alert {
+  --Alert-padding: #{$spacing-3};
+  --Alert-close-icon-path: url(../../../../assets/svgs/xmark.svg);
+}
+
+.Alert {
+  display: flex;
+  align-items: center;
+
+  /*  Each color */
+  @each $name, $color in $colors {
+    &[data-variant~="#{$name}"], &-#{$name} {
+      @include make-alert;
+      border-color: make-color-variant($color, 35%);
+      background-color: make-color-variant($color, 15%);
+      color: make-color-emphasis($color, 75%);
+      & > * {
+        color: make-color-emphasis($color, 75%);
+      }
+    }
+  }
+  
+  &[data-size="sm"] {
+    --Alert-padding: #{$spacing-2};
+    font-size: $font-size-sm;
+  }
+  &[data-size="lg"] {
+    --Alert-padding: #{$spacing-3};
+    font-size: $font-size-lg;
+  }
+  & > *:not(#{&}__close) {
+    padding-right: calc(var(--Alert-padding) / 2);
+  }
+  &__close {
+    display: block;
+    margin-right: calc(-1 * var(--Alert-padding) / 4);
+    width: 1.25em;
+    height: 1.25em;
+    margin-left: auto;
+    aspect-ratio: 1;
+    // background-color: var(--base-color);
+    background-color: var(--base-color-muted);
+    -webkit-mask: var(--Alert-close-icon-path) no-repeat 50% 50%;
+    mask: var(--Alert-close-icon-path) no-repeat 50% 50%;
+    cursor: pointer;
+  }
+}

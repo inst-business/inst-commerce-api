@@ -1,22 +1,39 @@
-import express from 'express'
-import 'dotenv/config'
+import {
+  Request, Response, NextFunction, RequestHandler
+} from 'express'
+import path from 'path'
+import _ from 'lodash'
 import slugify from 'slugify'
 import uniqueSlug from 'unique-slug'
-// import CryptoJS from 'crypto-js'
+import Ajv from 'ajv'
+import addFormats from 'ajv-formats'
 import crypto from 'crypto'
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import _ from 'lodash'
-import LogicError, { Primitives } from './logicError'
+import LogicError from './logicError'
+import {
+  ENV, GV, USER_SIGN, Many, TProps, PropsKey, RecursiveArray, Primitives, ErrPars
+} from '@/config/global/const'
 import ERR from '@/config/global/error'
-import { GV, VIEWABLE } from '@/config/global/const'
 
-export type ExpressAsyncRequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<unknown>
+export type ExpressAsyncRequestHandler = (req: Request, res: Response, next: NextFunction) => Promise<unknown>
 export type ExpressCallback = (data?: any, err?: any) => void
-export type ExpressCallbackProvider = (res: express.Response, req?: express.Request) => ExpressCallback
+export type ExpressCallbackProvider = (res: Response, req?: Request) => ExpressCallback
 
 class Utils {
 
-  async asyncAllSettled (records: Record<string, Promise<any>>) {
+  env (name: string, replacement?: Primitives) {
+    if (ENV[name] == null) {
+      if (replacement != null) return replacement
+      const title = 'Internal Server Error'
+      const message = 'An unexpected issue occurred.'
+      console.error('Environment variable "%d" is missing.', name)
+      throw this.logicError(title, message, 500, ERR.ENV_VARIABLE_MISSING)
+    }
+    return ENV[name]
+  }
+
+  async fetchAllSettled (records: Record<string, Promise<unknown>>) {
     const promises = Object.values(records)
     const keys = Object.keys(records)    
     const resData = await Promise.allSettled(promises).then(res => res)
@@ -30,8 +47,8 @@ class Utils {
     return res
   }
 
-  routeAsync (reqHandler: ExpressAsyncRequestHandler, callbackProvider?: ExpressCallbackProvider): express.RequestHandler {
-    return (req, res, next) => {      
+  routeAsync (reqHandler: ExpressAsyncRequestHandler, callbackProvider?: ExpressCallbackProvider): RequestHandler {
+    return (req, res, next) => {
       const cb = callbackProvider
         ? callbackProvider(res, req)
         : this.createServiceCallback(res)
@@ -41,7 +58,7 @@ class Utils {
     }
   }
 
-  routeNextableAsync (reqHandler: ExpressAsyncRequestHandler, callbackProvider?: ExpressCallbackProvider): express.RequestHandler {
+  routeNextableAsync (reqHandler: ExpressAsyncRequestHandler, callbackProvider?: ExpressCallbackProvider): RequestHandler {
     return (req, res, next) => {      
       const cb = callbackProvider
         ? callbackProvider(res, req)
@@ -52,83 +69,143 @@ class Utils {
     }
   }
 
-  private createServiceCallback (res: express.Response): ExpressCallback {    
+  private createServiceCallback (res: Response): ExpressCallback {    
     return (data?: any, err?: any) => {
-      const resData = data ? structuredClone(data) : {}
-      res.statusCode = 200
       if (err) {
-        const errJSON = typeof err.toJSON === 'function' ? err.toJSON() : err
-        const errObj = (typeof err === 'object')
-          ? structuredClone(errJSON) : { message: err, code: -7 }
-        const code = err.httpCode
-        res.statusCode = (typeof code === 'number' && !isNaN(code)) ? code : 500
-        resData['err'] = errObj
+        err = typeof err.toJSON === 'function' ? err.toJSON() : err
+        const errObj = (typeof err === 'object' && Object.keys(err).length > 0)
+          ? JSON.parse(JSON.stringify(err)) : new LogicError('Unknown', 'Unexcepted error.', 500, ERR.UNKNOWN)
+        res.statusCode = (typeof errObj.httpCode === 'number' && !isNaN(errObj.httpCode)) ? errObj.httpCode : 500
+        res.send({ error: errObj }).end()
+        return
       }
-      res.send(resData)
+      // const resData = data ? JSON.parse(JSON.stringify(data)) : {}
+      const resData = (data != null && typeof data === 'object') ? structuredClone(data) : {}
+      res.statusCode = resData?.meta?.status || 200
+      res.send(resData).end()
     }
   }
 
-  renderView (view: string, page?: {}, layout?: string): ExpressCallbackProvider {
-    return !VIEWABLE
+  createResponseData (data: Many<Record<string, Primitives>>, meta?: Record<string, Primitives>) {
+    return { data, meta }
+  }
+
+  renderView (view: string, view404 = false, layout?: string): ExpressCallbackProvider {
+    return !GV.ALLOW_VIEW_ENGINE
       ? (res) => {
         try {
-          throw this.logicError('REJECTED', 'Rendering view has been refused', 406, ERR.RENDER_VIEW_REJECTED, view)
+          throw this.logicError('Rejected', 'Rendering view has been refused', 406, ERR.RENDER_VIEW_REJECTED, view)
         } catch (e: any) {
-          this.errorMsg(e)
+          // this.errorMsg(e)
+          console.warn('Rendering view rejected - ', view)
           return this.createServiceCallback(res)
         }
       }
-      : (res: express.Response, req?: express.Request): ExpressCallback => {
+      : (res: Response, req?: Request): ExpressCallback => {
         return (data: any, err?: any) => {
-          const reception = { data, page, layout: layout || 'main.hbs' }
-          res.render(view, reception)
+          const reception = {
+            data,
+            layout: layout || 'main.hbs',
+            ...((req && (<any>req)?.user) && { sign: (<any>req).user }),
+            // ...((referer && req?.headers.referer) && { referer: req.headers.referer }),
+          }
+          if (view404 && (data == null || data.length <= 0)) {
+            res.render('app/notfound', { layout: 'no-partials' })
+          }
+          else res.render(view, reception)
         }
       }
   }
 
   redirectView (route: string, ...params: any[]): ExpressCallbackProvider {
-    return (res: express.Response, req?: express.Request): ExpressCallback => {
-      return (data: any, err?: any) => {
-        const args = params.reduce((prev, cur) => 
-          (req?.params[cur]) ? [...prev, req.params[cur]] : prev
-        , [])
-        const url = this.routeParseParams(route, ...args)        
-        res.redirect(url)
+    return !GV.ALLOW_VIEW_ENGINE
+      ? (res) => {
+        console.warn('Rendering view rejected.')
+        return this.createServiceCallback(res)
       }
-    }
+      : (res: Response, req?: Request): ExpressCallback => {
+        return (data: any, err?: any) => {
+          const args = params.reduce((prev, cur) => 
+            (req?.params[cur]) ? [...prev, req.params[cur]] : prev
+          , [])
+          const url = this.routeParseParams(route, ...args)        
+          res.redirect(url)
+        }
+      }
   }
 
-  logicError (title: string, message: string, httpError: number, errorCode: number, ...pars: Primitives[]): LogicError { 
+  logicError (title: string, message: string, httpError: number, errorCode: number, ...pars: ErrPars): LogicError {
     return new LogicError(title, message, httpError, errorCode, ...pars)
+  }
+
+  stackError (title: string, message: string, httpError: number, errorCode: number, ...pars: ErrPars): LogicError {
+    return this.logicError(title, message, httpError, errorCode, ...pars).withStack()
   }
 
   errorMsg (e: LogicError) {
     console.error(`${e.title}: ${e.message}\n`, `{http: ${e.httpCode}, error: ${e.errorCode}}\n`, e.pars)
   }
   
-  routeParseParams = (route: string, ...args: any[]): string => {
+  routeParseParams (route: string, ...args: any[]): string {
     const regex = new RegExp(":\\w+")
     return args.reduce((prev, val) =>
       (_.isString(val) || _.isNumber(val) || val.constructor.name === 'ObjectId')
         ? prev.replace(regex, val?.toString()) : prev
     , route)
   }
+  
+  validate (schema: Record<string, unknown>) {
+    const ajv = new Ajv()
+    addFormats(ajv)
+    return ajv.compile(schema)
+  }
 
-  genAccessToken = (user: any): string => {
-    const secretAccessToken = <string>process.env.ACCESS_TOKEN
+  // isType <T> (arg: any): arg is T {
+  //   return (arg instanceof T)
+  // }
+
+  pickProps <T extends {}, K extends keyof T>
+    (obj: T, ...keys: RecursiveArray<K | PropsKey>) {
+      // better performance than Array.flat() but [depth = 1]
+      // flattenKeys = (keys instanceof Array ? [].concat(...<[]>keys) : keys)
+      const flattenKeys = (<K[]>keys).flat(Infinity)
+      return Object.fromEntries(
+        flattenKeys.filter(key => key in obj).map(key => [key, obj[<K>key]])
+      ) as Pick<T, K>
+    }
+  
+  inclusivePickProps <T extends {}, K extends PropsKey>
+    (obj: T, ...keys: RecursiveArray<K>) {
+      const flattenKeys = (<K[]>keys).flat(Infinity)
+      return Object.fromEntries(
+        flattenKeys.map(key => [key, obj[<keyof T>(<unknown>key)]])
+      ) as {[key in K]: key extends keyof T ? T[key] : undefined}
+    }
+  
+  omitProps <T extends {}, K extends keyof T>
+    (obj: T, ...keys: RecursiveArray<K | PropsKey>) {
+      const flattenKeys = (<K[]>keys).flat(Infinity)
+      return Object.fromEntries(
+        Object.entries(obj)
+          .filter(([key]) => !flattenKeys.includes(key as K))
+      ) as Omit<T, K>
+    }
+
+  genAccessToken (user: any): string {
+    const secretAccessToken = <string>this.env('ACCESS_TOKEN')
     const options = {
-      expiresIn: GV.JWT_EXPIRED
+      expiresIn: GV.ACCESS_TOKEN_EXPIRED
     }
     return jwt.sign(user, secretAccessToken, options)
   }
 
-  genRefreshToken = (user: any): string => {
-    const secretRefreshToken = <string>process.env.REFRESH_TOKEN
+  genRefreshToken (user: any): string {
+    const secretRefreshToken = <string>this.env('REFRESH_TOKEN')
     return jwt.sign(user, secretRefreshToken)
   }
 
-  genVerifyToken = (username: string): string => {
-    const secretAccessToken = <string>process.env.ACCESS_TOKEN
+  genVerifyToken (username: string): string {
+    const secretAccessToken = <string>this.env('ACCESS_TOKEN')
     const secretKey = this.genHash(username + secretAccessToken)
     const options = {
       expiresIn: GV.VERIFY_EXPIRED
@@ -136,47 +213,102 @@ class Utils {
     return jwt.sign({username}, secretKey, options)
   }
 
-  genUniqueSlug (title: string, code: string) {
-    // const uniqueId = uniqueSlug(Date.now().toString())
-    const uniqueId = uniqueSlug(code)
+  genSlug (content: string) {
     const options = {
       replacement: '-',
       remove: /[*+~.()'"!:@]/g,
       lower: true, 
     }
-    const slug = slugify(`${title} ${uniqueId}`, options)
-    return slug
+    return slugify(content, options)
   }
 
-  genOrderCode = () => {
-    const uniqueId = this.genUniqueId()
-    // const uniqueId = id
-    const timestamp = Date.now().toString()
-    // const codeString = uniqueId + timestamp
-    const hashString = this.genHash(uniqueId + timestamp)
-    return `${hashString.substring(0, 8)}-${uniqueId}`
+  genUniqueSlug (title: string, code: string) {
+    // const uniqueId = uniqueSlug(Date.now().toString())
+    const uniqueId = uniqueSlug(code)
+    return this.genSlug(title + '-' + uniqueId)
   }
 
-  genUniqueId = () => {
+  genUniqueCode (prefix = 'IC') {
+    const timestamp = Math.floor(Date.now() / 1000).toString()
+    let uniqueCode = prefix.toUpperCase()
+
+    const
+      beginStr = timestamp.substring(0, 4),
+      beginDigits = beginStr.split('').map(Number)
+    for (let i = 0; i < beginDigits.length; i += 2) {
+      const variant = (i + 1) * 2
+      // e.g: 1694 -> {1+6+2}{9+4+6} -> 919
+      const sum = (beginDigits[i] || 0) + (beginDigits[i + 1] || 0) + variant
+      uniqueCode += sum.toString()
+    }
+    
+    let restStr = timestamp.substring(4)
+    restStr += (restStr.length % 2 !== 0) ? '0' : ''
+    const
+      numbers = restStr.match(/.{2}/g) || [],
+      length = numbers.length,
+      randomLettersString = this.genRandomLetters(length, 'upper'),
+      letters = randomLettersString.match(/.{1}/g) || []
+      
+    for (let i = 0; i < length; i++) {
+      const variant = (i + 1) * 2
+      const n = (variant * Number(numbers[i])).toString().slice(-2)
+      uniqueCode += letters[i] + n
+    }
+    
+    return uniqueCode
+  }
+
+  genUniqueId () {
     return crypto.randomUUID()
   }
 
-  genHash = (data: string) => {
-    // MD5 hashing algorithm
-    return crypto.createHash('md5').update(data).digest('hex')
+  genFileName (originalName: string, newName?: string, prefix = 'upload') {
+    const ext = path.extname(originalName)
+    const name = newName || path.basename(originalName, ext)
+    return this.genSlug(this.genUniqueCode(prefix) + '-' + name) + ext
   }
   
-  genRandomString = (length: number): string => {
-    return crypto.randomBytes(Math.ceil(length / 2))
-      .toString('hex').slice(0, length)
+  genRandomString (length: number): string {
+    return crypto.randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length)
+  }
+  
+  genRandomLetters (length: number, toCase?: 'upper' | 'lower'): string {
+    let charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    if (toCase != null && ['upper', 'lower'].includes(toCase))
+      charset = toCase === 'lower' ? charset.toLowerCase() : charset
+    else charset += charset.toLowerCase()
+    const randomBytes = crypto.randomBytes(length)
+    let randomLetterString = ''
+    for (let i = 0; i < length; i++) {
+      const randomIndex = randomBytes[i] % charset.length
+      randomLetterString += charset[randomIndex]
+    }
+    return randomLetterString
   }
 
   genSalt () {
   }
 
-  sha512 = (password: string, salt: string) => {
+  genHash (data: string) {
+    // MD5 hashing algorithm
+    return crypto.createHash('md5').update(data).digest('hex')
+  }
+
+  genBcryptHash (string: string, salt: string) {
+    const saltRounds = GV.SALT_LENGTH
+    const saltingString = string + salt
+    return bcrypt.hashSync(saltingString, saltRounds)
+  }
+
+  compareBcryptHash (string: string, salt: string, hashedString: string) {
+    const saltingString = string + salt
+    return bcrypt.compareSync(saltingString, hashedString)
+  }
+
+  sha512 (password: string, salt: string) {
     // sha512 hashing algorithm
-    let hash = crypto.createHmac('sha512', salt)
+    const hash = crypto.createHmac('sha512', salt)
     hash.update(password)
     const value: string = hash.digest('hex')
     // return {

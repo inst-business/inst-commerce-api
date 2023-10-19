@@ -1,0 +1,80 @@
+{{#section 'title'}}New Category{{/section}}
+{{#section 'current'}}categories{{/section}}
+
+
+{{!-- Head section --}}
+<nav class="Head" aria-label="breadcrumb">
+  <ol class="Breadcrumb">
+    <li class="Breadcrumb__item"><a href="/">Home</a></li>
+    <li class="Breadcrumb__item"><a href="/categories{{routeI 'crud.get_many'}}">Categories</a></li>
+    <li class="Breadcrumb__item" aria-current="page">Create</li>
+  </ol>
+  <h1 class="Heading">Create New Category</h1>
+</nav>
+{{!-- End of Head section --}}
+
+{{!-- Create new Category --}}
+<section class="Row">
+  <div class="Col lg-12 sm-12">
+    <div class="Box Box-scrollable">
+      <div class="Row">
+        <div class="Col lg-9 P-b-0">
+          <form class="Form" action="#" method="post" enctype="multipart/form-data" id="form-create" data-oninvalid="vibrate">
+            <div class="Form__header">
+              <p class="Form__header-title">Category</p>
+            </div>
+            <div class="Form__body">
+              <div class="Field-group">
+                <div class="Field" data-col="df-6" aria-required="true" aria-invalid="">
+                  <label for="name" class="Field__label">Name</label>
+                  <input type="text" class="Field__input" aria-required="true" name="name" id="name">
+                  <span class="Field__response"></span>
+                </div>
+                <div class="Field" data-col="df-6" aria-invalid="">
+                  <label for="slug" class="Field__label">Slug</label>
+                  <input type="text" class="Field__input" name="slug" id="slug" placeholder="Auto generate based on name">
+                  <span class="Field__response"></span>
+                </div>
+              </div>
+              <div class="Field" data-col="" aria-invalid="">
+                <label for="desc" class="Field__label">Description</label>
+                <textarea class="Field__input" id="desc" name="desc" rows="5"></textarea>
+                <span class="Field__response"></span>
+              </div>
+              <div class="Field" data-col="" aria-required="true" aria-invalid="">
+                <label for="img" class="Field__label">Image</label>
+                <input type="file" accept=".jpg,.jpeg,.png" name="img" id="img" aria-required="true"
+                  class="Field__input" data-previewer-target="#preview-img">
+                <span class="Field__response"></span>
+              </div>
+            </div>
+            <div class="Form__footer">
+              <div class="Field-actions" data-align="end">
+                <button type="button" class="Btn" data-variant="grey" onclick="history.back()">Cancel</button>
+                <button type="submit" class="Btn" data-variant="success">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="Col lg-3 P-b-0">
+          <img src="#" class="Img Previewer" data-variant="thumbnail" id="preview-img" data-dialog-target="#imgviewing-dialog">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{{!-- End of Create new Category --}}
+
+{{!-- Image viewing Modal --}}
+<dialog id="imgviewing-dialog" class="Dialog" data-size="lg">
+  <form class="Dialog__form" id="imgviewing-dialog-form">
+    <div class="Dialog__header"></div>
+    <div class="Dialog__body">
+      <img class="Dialog__img Img" data-variant="thumbnail" src="" alt="">
+    </div>
+  </form>
+  <button class="Dialog__close" formmethod="dialog" form="imgviewing-dialog-form"></button>
+</dialog>
+{{!-- End of Image viewing Modal --}}
+
+<script defer src="/js/pages/categories/create.js" type="module"></script>

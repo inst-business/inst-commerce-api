@@ -1,32 +1,42 @@
-import { connect } from "mongoose"
+import { connect } from 'mongoose'
+import { createClient } from 'redis'
+import { GV } from '@/config/global/const'
+import _ from '@/utils/utils'
+import ERR from '@/config/global/error'
+import { mongooseError } from '@/utils/mongoose'
 
 class Connect {
 
-  private ENV: any
-  public static DB: any
-  public static NODEMAILER: any
+  static DB: any
+  static NODEMAILER: any
 
   constructor () {
-    this.ENV = process.env
     this.configureConnections()
+    this.configureCache()
   }
 
-  public async configureConnections () {
-    try {
-      const connectionString = this.ENV.DB_CONNSTR
-      const dbname = this.ENV.DB_NAME
-      const opts = {
-        retryWrites: true,
-        socketTimeoutMS: 5000,
-        connectTimeoutMS: 5000
-      }
-      await connect(`${connectionString}/${dbname}`, opts)
-      console.log(`MongoDB connect to ${dbname} successfully!`)
+  private async configureConnections () {
+    const connectionString = _.env('DB_CONNSTR')
+    const dbname = _.env('DB_NAME')
+    const timeOut = GV.CONNECT_TIMEOUT
+    const opts = {
+      retryWrites: true,
+      socketTimeoutMS: timeOut,
+      connectTimeoutMS: timeOut,
+      serverSelectionTimeoutMS: timeOut,
+      heartbeatFrequencyMS: timeOut,
     }
-    catch (err) {
-      console.log('MongoDB connect failure: ', err)
-    }
+    await connect(`${connectionString}/${dbname}`, opts)
+      .then(() => console.log(`MongoDB connect to ${dbname} successfully!`))
+      // .catch(e => console.log(e))
+      .catch(e => mongooseError(e))
   }
+
+  private async configureCache () {
+    const client = createClient()
+    client.on('error', e => console.error('Redis Client Error', e))
+  }
+
 }
 
 export default Connect

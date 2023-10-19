@@ -1,0 +1,226 @@
+{{#section 'title'}}Category Management{{/section}}
+{{#section 'current'}}categories{{/section}}
+
+
+{{!-- Head section --}}
+<nav class="Head" aria-label="breadcrumb">
+  <ol class="Breadcrumb">
+    <li class="Breadcrumb__item"><a href="/">Home</a></li>
+    <li class="Breadcrumb__item" aria-current="page">Categories</li>
+  </ol>
+  <h1 class="Heading">Category Management</h1>
+</nav>
+{{!-- End of Head section --}}
+
+{{!-- Available categories --}}
+<section class="Row">
+  <div class="Col lg-12 sm-12">
+    <nav class="Tab" id="nav-tab" role="tablist" data-tab="">
+      <div class="Tab__label">
+        <div class="Tab__label-anchor" tabindex="0" id="tab0" data-tab-target="#nav-tab" aria-current="page">
+          <div class="P-x-2">Available</div>
+        </div>
+        <div class="Tab__label-anchor" tabindex="1" id="tab1" data-tab-target="#nav-tab">
+          <div class="P-x-2">Sub-Categories</div>
+        </div>
+        <div class="Tab__label-anchor" tabindex="2" id="tab2" data-tab-target="#nav-tab">
+          <div class="P-x-2">Pending</div>
+        </div>
+        <div class="Tab__label-anchor" tabindex="3" id="tab3" data-tab-target="#nav-tab">
+          <div class="P-x-2">Removed</div>
+        </div>
+        {{!-- <div class="hidden-bar">
+          <div class="active-bar"></div>
+        </div> --}}
+      </div>
+      {{!-- <div class="content-boxes">
+        <div class="box active" data-content="1">
+          <div class="title">React</div>
+          <div class="content">React ipsum dolor sit amet consectetur adipisicing elit. Laboriosam expedita accusantium,
+            ea vero autem cupiditate, consectetur quae voluptatum alias fuga corporis quibusdam harum praesentium mollitia
+            voluptatem soluta, atque dolor error!</div>
+        </div>
+        <div class="box" data-content="2">
+          <div class="title">Angular</div>
+          <div class="content">Angular ipsum dolor sit amet consectetur, adipisicing elit. Praesentium accusantium libero
+            ea
+            quaerat. Incidunt eos laboriosam laborum eligendi natus eaque, nostrum officiis facilis dicta, distinctio eius
+            repellat perspiciatis facere numquam!</div>
+        </div>
+        <div class="box" data-content="3">
+          <div class="title">Ember</div>
+          <div class="content">Ember ipsum dolor sit amet consectetur adipisicing elit. Quas sint dolores eum officia
+            iusto repellendus atque nemo quae praesentium sit. Illo eius, similique soluta ab sed quis fugit assumenda.
+            Explicabo.</div>
+        </div>
+        <div class="box" data-content="4">
+          <div class="title">Design</div>
+          <div class="content">Design ipsum dolor sit amet consectetur adipisicing elit. Soluta ratione nesciunt id fugiat
+            expedita! Cum facilis ratione nostrum quidem aliquid? Libero consectetur esse minima delectus soluta illum
+            porro tenetur a!</div>
+        </div>
+      </div> --}}
+    </nav>
+
+    
+    <h2 class="Heading M-b-2">Available categories</h2>
+    <div class="Actions">
+      <div class="Actions-left">
+        <div class="Field__option">
+          <input type="checkbox" class="Check" name="id[]" value="" id="select-all" data-select-all="select-all">
+          <label for="select-all">Select all</label>
+        </div>
+        <div class="Actions__seperate"></div>
+        <select class="Input" name="action" id="action" title="select an action" data-size="sm">
+          <option selected>- Select action -</option>
+          <option value="delete">Delete</option>
+        </select>
+        <button class="Btn" data-size="sm" data-variant="outline primary" title="Delete selected"
+          data-dialog-target="#delete-selected-dialog" id="delete-selected">
+          <i class="fa-regular fa-arrow-up-right-from-square"></i>&ensp;Perform
+        </button>
+      </div>
+      <div class="Actions-right">
+        {{#if (when data.deletedCount 'gt' 0)}}
+          <a href="/categories{{routeI 'crud.get_many_deleted'}}" class="Text-link">
+            {{!-- <i class="fa-regular fa-trash"></i> --}}
+            <i class="fa-regular fa-circle-trash"></i>
+            Removed categories ({{data.deletedCount}})
+          </a>
+          <div class="Actions__seperate"></div>
+        {{/if}}
+        <a href="/categories{{routeI 'crud.create'}}" class="Btn" data-variant="success" data-size="sm">
+          <i class="fa-regular fa-circle-plus"></i>&ensp;New category
+        </a>
+      </div>
+    </div>
+    <div class="Box Box-scrollable">
+      <table class="Table Table-hover M-b-0" id="items-table">
+        {{!-- <caption>List</caption> --}}
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th width="25%">Name</th>
+            <th>Image</th>
+            <th width="25%">Description</th>
+            <th>Added by</th>
+            <th>Added at</th>
+            <th>Modified at</th>
+            <th width="1%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each data.items}}
+            <tr class="Item">
+              <td scope="row">
+                <input type="checkbox" class="Check" name="id[]" value="{{this._id}}" data-select-target="select-all">
+              </td>
+              <td class="Item__name">
+                <a href="/categories{{routeI 'crud.get_one' this._id}}" class="Text-link Text-limit-2">{{this.name}}</a>
+              </td>
+              <td class="Item__img" data-size="xs">
+                <picture>
+                  {{!-- <source srcset="/uploads/categories/{{webpFormat this.img}}" type="image/webp"> --}}
+                  <img src="/uploads/categories/{{this.img}}" alt="{{this.name}}" title="{{this.name}}"
+                    loading="lazy" decoding="async" fetchpriority="true"
+                    class="Img" data-variant="thumbnail" data-dialog-target="#viewimage-dialog">
+                </picture>
+              </td>
+              <td class="Item__desc">
+                <p class="Text-limit-2">{{this.desc}}{{#unless this.desc}}-{{/unless}}</p>
+              </td>
+              <td class="">
+                <a href="/u/{{this.createdBy.username}}" class="Text-link">{{this.createdBy.username}}</a>
+              </td>
+              <td class="Item__time">
+                {{dateFormat this.createdAt 'dateShort'}}<br>{{dateFormat this.createdAt 'timeMedium'}}
+              </td>
+              <td class="Item__time">
+                {{#if this.editedAt}}
+                  {{dateFormat this.editedAt 'dateShort'}}<br>{{dateFormat this.editedAt 'timeMedium'}}
+                {{else}}
+                  -
+                {{/if}}
+              </td>
+              <td class="Item__actions">
+                <a href="/categories/{{this._id}}{{routeI 'crud.create'}}" title="New sub-category"
+                  class="Btn" data-size="" data-variant="success unstyled">
+                  <i class="fa-regular fa-file-circle-plus"></i>
+                </a>
+                <a href="/categories{{routeI 'crud.edit' this._id}}" title="Edit"
+                  class="Btn" data-size="" data-variant="info unstyled">
+                  <i class="fa-regular fa-pen-line"></i>
+                </a>
+                <button title="Delete" data-dialog-target="#delete-dialog" data-form-id="{{this._id}}"
+                  class="Item__actions-delete Btn" data-size="" data-variant="danger unstyled">
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </td>
+            </tr>
+          {{else}}
+            <tr class="Item hover-0">
+              <td colspan="8">
+                <p class="Text-muted Text-center" style="line-height: 2.75;"><em>(No data found)</em></p>
+                {{!-- <br> --}}
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+        {{!-- <tfoot>
+          <th colspan="8">
+            No categories available
+          </th>
+        </tfoot> --}}
+      </table>
+    </div>
+  </div>
+</section>
+{{!-- End of Available categories --}}
+
+
+{{!-- Image viewing Modal --}}
+<dialog id="viewimage-dialog" class="Dialog" data-size="lg">
+  <form class="Dialog__form" method="dialog" id="viewimage-dialog-form">
+    <div class="Dialog__header"></div>
+    <div class="Dialog__body">
+      <img class="Dialog__img Img" data-variant="thumbnail" src="" alt="">
+    </div>
+  </form>
+  <button class="Dialog__close" formmethod="dialog" form="viewimage-dialog-form"></button>
+</dialog>
+{{!-- End of Image viewing Modal --}}
+
+{{!-- Modal Delete --}}
+<dialog id="delete-dialog" class="Dialog">
+  <form class="Dialog__form" method="dialog">
+    <div class="Dialog__header">Confirmation</div>
+    <div class="Dialog__body">
+      You really want to perform this action?
+    </div>
+    <div class="Dialog__footer">
+      <button type="submit" class="Btn" data-variant="danger">Yes, delete it!</button>
+      <button type="submit" class="Btn" data-variant="grey" formmethod="dialog">Cancel</button>
+    </div>
+  </form>
+</dialog>
+{{!-- End of Modal Delete --}}
+
+{{!-- Modal Delete Selected --}}
+<dialog id="delete-selected-dialog" class="Dialog">
+  <form class="Dialog__form" method="dialog">
+    <div class="Dialog__header">Confirmation</div>
+    <div class="Dialog__body">
+      <p class="P1 M-b-2">You really want to delete these following categories?</p>
+      <ul>
+        <li><strong>...</strong></li>
+      </ul>
+    </div>
+    <div class="Dialog__footer">
+      <button type="submit" class="Btn" data-variant="danger">Yes, delete them!</button>
+      <button type="submit" class="Btn" data-variant="grey" formmethod="dialog">Cancel</button>
+    </div>
+  </form>
+</dialog>
+{{!-- End of Modal Delete Selected --}}
+
+<script src="/js/pages/categories/index.js" type="module"></script>

@@ -1,0 +1,57 @@
+{{#section 'title'}}Category: {{data.name}}{{/section}}
+{{#section 'current'}}categories{{/section}}
+
+
+{{!-- Head section --}}
+<nav class="Head" aria-label="breadcrumb">
+  <ol class="Breadcrumb">
+    <li class="Breadcrumb__item"><a href="/">Home</a></li>
+    <li class="Breadcrumb__item"><a href="/categories{{routeI 'crud.get_many'}}">Categories</a></li>
+    <li class="Breadcrumb__item" aria-current="page">{{data.name}}</li>
+  </ol>
+  <h1 class="Heading">Category Details</h1>
+</nav>
+{{!-- End of Head section --}}
+
+{{!-- Product editing --}}
+<section class="Row">
+  <div class="Col lg-3 sm-12">
+    <div class="Box Box-scrollable">
+      <picture>
+        <source srcset="/uploads/categories/{{webpFormat data.img}}" type="image/webp">
+        <img src="/uploads/categories/{{data.img}}" alt="{{data.name}}" title="{{data.name}}"
+          loading="lazy" decoding="async" fetchpriority="true"
+          class="Img" data-variant="thumbnail" data-dialog-target="#imgviewing-dialog">
+      </picture>
+    </div>
+  </div>
+  <div class="Col lg-9 sm-12">
+    <div class="Box Box-scrollable">
+      <p class="Text-h2 M-b-1">{{data.name}}</p>
+      <p class="P3 Text-sm M-b-3">
+        {{dateFormat data.createdAt 'detailed'}}
+        <em>
+          &ensp;-&ensp;Added by
+          <a href="#{{data.createdBy.username}}" class="Text-link">
+            <strong>{{data.createdBy.username}}</strong>
+          </a>
+        </em>
+      </p>
+      <p class="P2">{{data.desc}}</p>
+    </div>
+  </div>
+</section>
+{{!-- End of Product editing --}}
+
+
+{{!-- Image viewing Modal --}}
+<dialog id="imgviewing-dialog" class="Dialog" data-size="lg">
+  <form class="Dialog__form" id="imgviewing-dialog-form">
+    <div class="Dialog__header"></div>
+    <div class="Dialog__img">
+      <img class="Img" data-variant="thumbnail" src="" alt="">
+    </div>
+  </form>
+  <button class="Dialog__close" formmethod="dialog" form="imgviewing-dialog-form"></button>
+</dialog>
+{{!-- End of Image viewing Modal --}}

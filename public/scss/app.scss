@@ -1,0 +1,171 @@
+@import "fonts";
+@import "variables";
+@import "components/container";
+@import "components/spacing";
+@import "components/text";
+@import "components/button";
+@import "components/input";
+@import "components/form";
+@import "components/table";
+@import "components/image";
+@import "components/dialog";
+@import "components/utilities";
+
+@import "app/layout";
+@import "app/header";
+@import "app/sidebar";
+@import "app/main";
+@import "app/rightbar";
+
+* {
+  font-family: "Nunito", sans-serif;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  // user-select: none;
+  // text-decoration: none;
+  // appearance: none;
+  outline: none;
+  // transition: color $transition-1-ln;
+  // transition: background-color 10s linear;
+
+  &::selection {
+    color: #fff;
+    background: make-color-spread($color-tertiary, 75%);
+  }
+}
+
+:root {
+  --primary: #{$color-primary};
+  --secondary: #{$color-secondary};
+  --tertiary: #{$color-tertiary};
+  --success: #{$color-success};
+  --danger: #{$color-danger};
+  --warning: #{$color-warning};
+  --info: #{$color-info};
+  --grey: #{$color-grey};
+  --lightgrey: #{$color-lightgrey};
+  --lightergrey: #{$color-lightergrey};
+  --dark: #{$color-dark};
+  --light: #{$color-light};
+
+  --txt-dark: #{$color-txt-dark};
+  --txt-grey: #{$color-txt-grey};
+  --txt-light: #{$color-txt-light};
+  --txt-muted: #{$color-txt-muted};
+  --bg: #{$color-bg};
+
+  --radius-sm: #{$radius-sm};
+  --radius-md: #{$radius-md};
+  --radius-lg: #{$radius-lg};
+  --radius-xl: #{$radius-xl};
+  --radius-circle: #{$radius-circle};
+
+  --font-size: #{$font-size};
+  --font-size-xs: #{$font-size-xs};
+  --font-size-sm: #{$font-size-sm};
+  --font-size-lg: #{$font-size-lg};
+  --font-size-xl: #{$font-size-xl};
+  --line-height: #{$line-height};
+
+  --shadow-1: #{$shadow-1};
+
+  --transition-1-eio: #{$transition-1-eio};
+
+  --spacing-xs: #{spacing-xs};
+  --spacing-sm: #{spacing-sm};
+  --spacing-md: #{spacing-md};
+  --spacing-lg: #{spacing-lg};
+  --spacing-xl: #{spacing-xl};
+}
+
+:root {
+  --Sidebar-width: #{$sidebar-width};
+  --Rightbar-width: #{$rightbar-width};
+}
+
+:root[data-theme="light"] {
+  --base-scheme: light;
+  --base-color: #{$base-color};
+  --base-color-variant: #{$base-color-variant};
+  --base-color-highlight: #{$base-color-highlight};
+  --base-color-muted: #{$base-color-muted};
+  --base-body: #{$base-body};
+  --base-box: #{$base-box};
+  --base-border: #{$base-border};
+  --base-border-lighter: #{$base-border-lighter};
+  --base-border-highlighted: #{$base-border-highlighted};
+  --base-hover-overlay: #{$base-hover-overlay};
+  --base-overlay: #{$base-overlay};
+  --base-shadow: #{$base-shadow};
+  --base-shadow-variant: #{$base-shadow-variant};
+  --base-outlined: #{$base-outlined};
+  --base-outlined-sm: #{$base-outlined-sm};
+}
+
+:root[data-theme="dark"],
+.DarkMode {
+  --base-scheme: dark;
+  --base-color: #{$base-night-color};
+  --base-color-variant: #{$base-night-color-variant};
+  --base-color-highlight: #{$base-night-color-highlight};
+  --base-color-muted: #{$base-night-color-muted};
+  --base-body: #{$base-night-body};
+  --base-box: #{$base-night-box};
+  --base-border: #{$base-night-border};
+  --base-border-lighter: #{$base-night-border-lighter};
+  --base-border-highlighted: #{$base-night-border-highlighted};
+  --base-hover-overlay: #{$base-night-hover-overlay};
+  --base-overlay: #{$base-night-overlay};
+  --base-shadow: #{$base-night-shadow};
+  --base-shadow-variant: #{$base-night-shadow-variant};
+  --base-outlined: #{$base-night-outlined};
+  --base-outlined-sm: #{$base-night-outlined-sm};
+
+  --dark: #{$color-dark};
+  --light: #{$color-light};
+  --txt-dark: #{$color-txt-dark-darkened};
+  --txt-grey: #{$color-txt-grey-darkened};
+  --txt-light: #{$color-txt-light-darkened};
+  --bg: #{$color-bg-darkened};
+  --shadow-1: #{$shadow-1-darkened};
+}
+
+html {
+  // color-scheme: var(--base-scheme);
+  color-scheme: light;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--base-color);
+  background-color: var(--base-body);
+  transition: background-color $transition-1-ln;
+  // @include scroll-bar-default;
+}
+
+img {
+  // display: block;
+  width: 100%;
+  object-fit: cover;
+  vertical-align: middle;
+}
+
+// p, b, strong, span {
+//   transition: $transition-color-1;
+// }
+
+.App {
+  width: 100%;
+  min-height: 100vh;
+  transition: opacity 0.3s, visibility 0.3s;
+  @include loading-screen;
+}
+
+.Title {
+  font-size: 1.75rem;
+  height: 2rem;
+  margin: 1rem 0;
+}
