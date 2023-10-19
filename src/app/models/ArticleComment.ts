@@ -58,6 +58,7 @@ const ArticleCommentSchema = new Schema<IArticleComment>({
 }, { timestamps: true })
 
 withSoftDelete(ArticleCommentSchema)
+
 const ArticleCommentModel = model<IArticleComment, TSuspendableDocument<IArticleComment>>('ArticleComment', ArticleCommentSchema)
 
 

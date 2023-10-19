@@ -13,6 +13,8 @@ export interface IOrderDetail {
     promotions?: ObjectId[]
     qty: number
   }[]
+  status: STATUS['APPROVAL']
+  reason?: string
   order: ObjectId
   delivery: ObjectId
   seller: ObjectId
@@ -39,6 +41,8 @@ const OrderSchema = new Schema<IOrderDetail>({
       message: 'Order detail requires at least 1 item.'
     }
   },
+  status: { type: String, required: true, enum: STATUS_ARR.APPROVAL, default: 'pending' },
+  reason: { type: String },
   order: { type: Schema.Types.ObjectId, required: true, ref: 'Order' },
   seller: { type: Schema.Types.ObjectId, required: true, ref: 'Seller' },
   delivery: { type: Schema.Types.ObjectId, required: true, ref: 'Delivery' },

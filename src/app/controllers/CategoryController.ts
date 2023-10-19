@@ -2,7 +2,7 @@ import CategoryModel, { ICategory } from '@models/Category'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
 import { appendOneImage, removeOneImage, removeManyImages } from '@/services/LocalUploadService'
-import { Keys, ExcludableKeys, ROLES, USER_SIGN } from '@/config/global/const'
+import { Keys, ExcludableKeys, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 const Category = new CategoryModel()
@@ -20,12 +20,12 @@ class CategoryCtrl {
 
   static storeOne () {
     return _.routeAsync(async (req, res) => {
-      const
-        sign: USER_SIGN = (<any>req).user,
-        user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
-      if (user == null) {
-        throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
-      }
+      // const
+      //   sign: USER_SIGN = (<any>req).user,
+      //   user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
+      // if (user == null) {
+      //   throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      // }
       if ((<any>req).errorUpload) {
         throw (<any>req).errorUpload
       }
@@ -34,13 +34,14 @@ class CategoryCtrl {
         keys = ['name', 'slug', 'desc'],
         data = _.pickProps(<ICategory>req.body, keys)
       data.slug = _.genSlug((data.slug || data.name) + '-' + _.genUniqueCode())
-      data.author = user._id
-      if (req.file != null && req.file.fieldname === 'img') {
-        data.img = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
+      // data.author = user._id
+      data.author = <any>'652521c8497013713c684e48'
+      if (req.file != null && req.file.fieldname === 'thumbnail') {
+        data.thumbnail = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
       }
       const submittedCategory = await Category.insertOne(data, parentId)
         .then(data => {
-          appendOneImage(<any>req.file, 'categories', data.img).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
+          appendOneImage(<any>req.file, 'categories', data.thumbnail).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
           return data
         })
       return submittedCategory
@@ -72,39 +73,39 @@ class CategoryCtrl {
 
   static updateOne () {
     return _.routeAsync(async (req, res) => {
-      const
-        { id } = req.params,
-        sign: USER_SIGN = (<any>req).user,
-        user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
-      if (user == null) {
-        throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
-      }
-      if ((<any>req).errorUpload) {
-        throw (<any>req).errorUpload
-      }
-      const
-        keys = ['name', 'slug', 'desc'],
-        data = _.pickProps(<ICategory>req.body, keys)
-      let prevImage: string[]
-      if (req.file != null && req.file.fieldname === 'img') {
-        data.img = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
-        prevImage = await Category.findImageById(id)
-      }
-      data.slug = data.slug && _.genSlug(data.slug + '-' + _.genUniqueCode())
-      data.editedBy = user._id
-      data.editedAt = new Date()
-      const updatedCategory = Category.updateOne(id, data)
-        .then(async (updatedData) => {
-          if (data.img != null) {
-            if (prevImage?.[0] != null) {
-              removeOneImage('categories', prevImage[0]).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
-            }
-            appendOneImage(<any>req.file, 'categories', data.img).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
-          }
-          return updatedData
-        })
-      const newdata = await updatedCategory
-      return newdata
+      // const
+      //   { id } = req.params,
+      //   sign: USER_SIGN = (<any>req).user,
+      //   user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
+      // if (user == null) {
+      //   throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      // }
+      // if ((<any>req).errorUpload) {
+      //   throw (<any>req).errorUpload
+      // }
+      // const
+      //   keys = ['name', 'slug', 'desc'],
+      //   data = _.pickProps(<ICategory>req.body, keys)
+      // let prevImage: string[]
+      // if (req.file != null && req.file.fieldname === 'img') {
+      //   data.img = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
+      //   prevImage = await Category.findImageById(id)
+      // }
+      // data.slug = data.slug && _.genSlug(data.slug + '-' + _.genUniqueCode())
+      // data.editedBy = user._id
+      // data.editedAt = new Date()
+      // const updatedCategory = Category.updateOne(id, data)
+      //   .then(async (updatedData) => {
+      //     if (data.img != null) {
+      //       if (prevImage?.[0] != null) {
+      //         removeOneImage('categories', prevImage[0]).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
+      //       }
+      //       appendOneImage(<any>req.file, 'categories', data.img).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
+      //     }
+      //     return updatedData
+      //   })
+      // const newdata = await updatedCategory
+      // return newdata
     }
   )}
 
@@ -125,16 +126,16 @@ class CategoryCtrl {
 
   static deleteOneOrMany () {
     return _.routeAsync(async (req, res) => {
-      // console.log('content-type: ', req.headers['content-type'])
-      const
-        sign: USER_SIGN = (<any>req).user,
-        user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
-      if (user == null) {
-        throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
-      }
-      const { id } = req.body
-      const result = await Category.deleteOneOrMany(id, user._id)
-      return result
+      // // console.log('content-type: ', req.headers['content-type'])
+      // const
+      //   sign: USER_SIGN = (<any>req).user,
+      //   user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
+      // if (user == null) {
+      //   throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      // }
+      // const { id } = req.body
+      // const result = await Category.deleteOneOrMany(id, user._id)
+      // return result
     }
   )}
   
@@ -174,7 +175,7 @@ export class CategoryExtCtrl {
     return _.routeAsync(async (req, res) => {
       const
         keys: ExcludableKeys<ICategory>[] = [
-          '-_id', 'name', 'desc', 'img', 'slug', 'author', 'createdAt'
+          '-_id', 'name', 'desc', 'thumbnail', 'slug', 'author', 'createdAt'
         ],
         data: ICategory[] = await Category.getMany(keys)
       return data
@@ -188,7 +189,7 @@ export class CategoryExtCtrl {
       if (parent == null) return []
       const
         keys: ExcludableKeys<ICategory>[] = [
-          '-_id', 'name', 'desc', 'img', 'slug', 'author', 'createdAt'
+          '-_id', 'name', 'desc', 'thumbnail', 'slug', 'author', 'createdAt'
         ],
         data: ICategory[] = await Category.getManyByParentId(parent._id, keys)
       return data
@@ -200,7 +201,7 @@ export class CategoryExtCtrl {
       const { slug } = req.params
       const
         keys: ExcludableKeys<ICategory>[] = [
-          '-_id', 'name', 'desc', 'img', 'slug', 'author', 'createdAt'
+          '-_id', 'name', 'desc', 'thumbnail', 'slug', 'author', 'createdAt'
         ],
         data: ICategory | null = await Category.getOneBySlug(slug, keys)
       return data

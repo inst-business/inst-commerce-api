@@ -83,15 +83,15 @@ class ArticleCtrl {
 
   static deleteOneOrMany () {
     return _.routeAsync(async (req, res) => {
-      const
-        sign: USER_SIGN = (<any>req).user,
-        user = await User.getAuthorizedUserByUsername(sign.username)
-      if (user == null) {
-        throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
-      }
-      const { id } = req.body
-      const result = await Article.deleteOneOrMany(id, user._id)
-      return result
+      // const
+      //   sign: USER_SIGN = (<any>req).user,
+      //   user = await User.getAuthorizedUserByUsername(sign.username)
+      // if (user == null) {
+      //   throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      // }
+      // const { id } = req.body
+      // const result = await Article.deleteOneOrMany(id, user._id)
+      // return result
     },
     _.redirectView('back')
   )}

@@ -62,6 +62,7 @@ const ArticleSchema = new Schema<IArticle>({
 
 withEditedDetails(ArticleSchema, 'UserSeller')
 withSoftDelete(ArticleSchema, 'UserSeller')
+
 const Article = model<IArticle, TSuspendableDocument<IArticle>>('Article', ArticleSchema)
 
 

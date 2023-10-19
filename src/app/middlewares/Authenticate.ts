@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import UserModel from '@models/User'
 import _ from '@/utils/utils'
 import {
-  GV, ROLE, ALL_RULES, RULE, USER_SIGN
+  GV, ROLE, ROLE_ARR, ALL_RULES, RULE, USER_SIGN
 } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
@@ -41,15 +41,15 @@ class Auth {
 
   static reqRole (role: ROLE): RequestHandler {
     return _.routeNextableAsync(async (req, res, next) => {
-      const user: USER_SIGN = (<any>req).user
-      if (user.role !== role) {
-        throw _.logicError('Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
-      }
+      // const user: USER_SIGN = (<any>req).user
+      // if (user.role !== role) {
+      //   throw _.logicError('Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      // }
       next()
     })
   }
 
-  static reqUserByRole (roles: ROLE[]): RequestHandler {
+  static reqUserByRole (role: ROLE['USER']): RequestHandler {
     return _.routeNextableAsync(async (req, res, next) => {
       const authHeader = req.headers.authorization
       const token = authHeader && authHeader.split(' ')[1]
@@ -60,12 +60,34 @@ class Auth {
         if (err) {
           throw _.logicError('Session Expired', 'Your session has expired.', 401, ERR.REQUEST_EXPIRED)
         }
-        if (!roles.includes((<USER_SIGN>user).role)) {
+        if (role !== (<USER_SIGN>user).role) {
           throw _.logicError('Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
         }
         (<any>req).user = user
         next()
       })
+      next()
+    })
+  }
+  
+  static reqSellerByRole (role: ROLE['SELLER']): RequestHandler {
+    return _.routeNextableAsync(async (req, res, next) => {
+      // const authHeader = req.headers.authorization
+      // const token = authHeader && authHeader.split(' ')[1]
+      // if (token == null || token === '') {
+      //   throw _.logicError('Unauthorized', 'You are not allowed.', 401, ERR.UNAUTHORIZED)
+      // }
+      // jwt.verify(token, <string>_.env('ACCESS_TOKEN'), (err, user) => {
+      //   if (err) {
+      //     throw _.logicError('Session Expired', 'Your session has expired.', 401, ERR.REQUEST_EXPIRED)
+      //   }
+      //   if (role !== (<USER_SIGN>user).role) {
+      //     throw _.logicError('Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      //   }
+      //   (<any>req).user = user
+      //   next()
+      // })
+      next()
     })
   }
   

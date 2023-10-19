@@ -1,14 +1,13 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
-// import { SuspendableModel } from './Model'
-// import withJsonSchema from 'mongoose-schema-jsonschema'
+import { SuspendableModel } from './Model'
 import {
   ExcludableKeys, GV, STATUS, STATUS_ARR, ROLE, ROLE_ARR, ALL_RULES, IResultWithPars
 } from '@/config/global/const'
 import {
-  TSuspendableDocument, withSoftDelete, handleQuery
+  TSuspendableDocument, handleQuery, ISoftDeleted, withSoftDelete
 } from '@/utils/mongoose'
 
-export interface IUserAdmin {
+export interface IUserAdmin extends ISoftDeleted {
   _id: ObjectId
   email: string
   tel: string
@@ -20,10 +19,10 @@ export interface IUserAdmin {
   status: STATUS['ACCOUNT']
   role: ROLE['ADMIN']
   permissions?: ALL_RULES[]
-  verifiedAt?: Date
   user: ObjectId
-  createdAt?: Date
-  updatedAt?: Date
+  verifiedAt?: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
 type TUserAdminDocument = IUserAdmin & Document
@@ -42,16 +41,12 @@ const UserAdminSchema = new Schema<IUserAdmin>({
   verifiedAt: { type: Date, default: null },
 }, { timestamps: true })
 
-// withJsonSchema(mongoose)
-// const UserAdminJSONSchema = (<any>UserAdminSchema).jsonSchema()
-// export { UserAdminJSONSchema as UserAdminSchema }
-
-// withSoftDelete(UserAdminSchema, 'UserAdmin')
-export const UserAdmin = model<IUserAdmin, TSuspendableDocument<IUserAdmin>>('UserAdmin', UserAdminSchema)
+withSoftDelete(UserAdminSchema, 'UserAdmin')
+export const UserAdminModel = model<IUserAdmin, TSuspendableDocument<IUserAdmin>>('UserAdmin', UserAdminSchema)
 
 
-class UserAdminModel {
+class UserAdmin extends SuspendableModel<IUserAdmin> {
 
 }
 
-export default UserAdminModel
+export default UserAdmin

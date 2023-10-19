@@ -1,7 +1,7 @@
 import ProductModel, { IProduct } from '@models/Product'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
-import { ROLES, USER_SIGN } from '@/config/global/const'
+import { ROLE, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 const Product = new ProductModel()
@@ -83,15 +83,15 @@ class ProductCtrl {
 
   static deleteOneOrMany () {
     return _.routeAsync(async (req, res) => {
-      const
-        sign: USER_SIGN = (<any>req).user,
-        user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
-      if (user == null) {
-        throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
-      }
-      const { id } = req.body
-      const result = await Product.deleteOneOrMany(id, user._id)
-      return result
+      // const
+      //   sign: USER_SIGN = (<any>req).user,
+      //   user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
+      // if (user == null) {
+      //   throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      // }
+      // const { id } = req.body
+      // const result = await Product.deleteOneOrMany(id, user._id)
+      // return result
     },
     _.redirectView('back')
   )}

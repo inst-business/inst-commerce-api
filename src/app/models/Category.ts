@@ -59,6 +59,7 @@ const CategorySchema = new Schema<ICategory>({
 
 withEditedDetails(CategorySchema, 'User')
 withSoftDelete(CategorySchema, 'User')
+
 const CategoryModel = model<ICategory, TSuspendableDocument<ICategory>>('Category', CategorySchema)
 
 

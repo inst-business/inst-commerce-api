@@ -53,6 +53,7 @@ const DeliverySchema = new Schema<IDelivery>({
 })
 
 withEditedDetails(DeliverySchema)
+
 const DeliveryModel = model<IDelivery>('Delivery', DeliverySchema)
 
 class Delivery extends IndelibleModel<IDelivery> {

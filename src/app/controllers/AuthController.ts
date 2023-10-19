@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
-import { GV, USER_STATUS_ARR, USER_SIGN } from '@/config/global/const'
+import { GV, STATUS_ARR, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 const User = new UserModel()
@@ -21,15 +21,15 @@ class AuthCtrl {
         { userInfo, password } = req.body,
         user = await User.getUserByEmailOrUsername(userInfo, userInfo)
       if (user != null) {
-        if (user.status === USER_STATUS_ARR[1] || !user.verifiedAt) {
+        if (user.status === STATUS_ARR.ACCOUNT[1] || !user.verifiedAt) {
           throw _.logicError(errTitle, 'User is not verified.', 401, ERR.UNVERIFIED, userInfo)
         }
         if (!_.compareBcryptHash(password, user.salt, user.password)) {
           throw _.logicError(errTitle, 'Password is not correct.', 400, ERR.INVALID_PASSWORD)
         }
         const
-          { username, email, tel, firstname, lastname, avatar } = user,
-          userSign = { username, email, tel, name: { firstname, lastname }, avatar } satisfies USER_SIGN,
+          { username, email, tel, firstname, lastname, avatar, role } = user,
+          userSign = { username, email, tel, name: { firstname, lastname }, avatar, role } satisfies USER_SIGN,
           accessToken = _.genAccessToken(userSign),
           refreshToken = _.genRefreshToken(userSign)
         return { accessToken, refreshToken }
@@ -115,15 +115,15 @@ class AuthCtrl {
         { userInfo, password } = req.body,
         user = await User.getUserByEmailOrUsername(userInfo, userInfo)
       if (user != null) {
-        if (user.status === USER_STATUS_ARR[1] || !user.verifiedAt) {
+        if (user.status === STATUS_ARR.ACCOUNT[1] || !user.verifiedAt) {
           throw _.logicError(errTitle, 'User is not verified.', 401, ERR.UNVERIFIED, userInfo)
         }
         if (!_.compareBcryptHash(password, user.salt, user.password)) {
           throw _.logicError(errTitle, 'Password is not correct.', 400, ERR.INVALID_PASSWORD)
         }
         const
-          { username, email, tel, firstname, lastname, avatar } = user,
-          userSign = { username, email, tel, name: { firstname, lastname }, avatar } satisfies USER_SIGN,
+          { username, email, tel, firstname, lastname, avatar, role } = user,
+          userSign = { username, email, tel, name: { firstname, lastname }, avatar, role } satisfies USER_SIGN,
           accessToken = _.genAccessToken(userSign),
           refreshToken = _.genRefreshToken(userSign)
         return { accessToken, refreshToken }

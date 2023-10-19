@@ -1,5 +1,5 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
-// import { SuspendableModel } from './Model'
+import { SuspendableModel } from './Model'
 // import withJsonSchema from 'mongoose-schema-jsonschema'
 import {
   ExcludableKeys, GV, ROLE, ROLE_ARR, TYPE, TYPE_ARR, GENDER, GENDER_ARR, STATUS, STATUS_ARR, FLAG, FLAG_ARR, IResultWithPars
@@ -63,7 +63,7 @@ const UserSchema = new Schema<IUser>({
   flag: {
     type: { type: String, required: true, enum: FLAG_ARR.ACCOUNT },
     from: { type: String, required: true, enum: TYPE_ARR.ACCOUNT },
-    flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+    flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
     flaggedAt: { type: Date },
   },
   verifiedAt: { type: Date, default: null },
@@ -73,20 +73,25 @@ const UserSchema = new Schema<IUser>({
 // const UserJSONSchema = (<any>UserSchema).jsonSchema()
 // export { UserJSONSchema as UserSchema }
 
-// withSoftDelete(UserSchema, 'User')
-export const User = model<IUser, TSuspendableDocument<IUser>>('User', UserSchema)
+withSoftDelete(UserSchema)
+
+export const UserModel = model<IUser, TSuspendableDocument<IUser>>('User', UserSchema)
 
 
-class UserModel {
+class User extends SuspendableModel<IUser> {
+
+  constructor () {
+    super(UserModel)
+  }
 
   async getUserByUsername (username: string, selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
-    const q = User.findOne({ username }).select(selected?.join(' ') ?? '').lean()
+    const q = this.Model.findOne({ username }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data
   }
 
   async getUserByEmailOrUsername (email: string, username: string, selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
-    const q = User.findOne({
+    const q = this.Model.findOne({
       $or: [{ username }, { email }]
     }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
@@ -94,14 +99,14 @@ class UserModel {
   }
 
   async getAuthorizedUserByUsername (username: string, roles: ROLE['USER'], selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
-    const q = User.findOne({ username, role: { $in: roles } }).select(selected?.join(' ') ?? '').lean()
+    const q = this.Model.findOne({ username, role: { $in: roles } }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data
   }
 
   async checkUserExists (email: string, username: string): Promise<IResultWithPars> {
-    const qEmail = User.where({ email }).countDocuments(),
-          qUsername = User.where({ username }).countDocuments()
+    const qEmail = this.Model.where({ email }).countDocuments(),
+          qUsername = this.Model.where({ username }).countDocuments()
     const isEmailExists = await handleQuery(qEmail),
           isUsernameExists = await handleQuery(qUsername),
           result = isEmailExists > 0 || isUsernameExists > 0
@@ -118,7 +123,7 @@ class UserModel {
   }
 
   async checkUserVerified (username: string): Promise<boolean> {
-    const q = User.where({
+    const q = this.Model.where({
       username,
       status: { $nin: [ 'pending' ] },
       verifiedAt: { $exists: true, $nin: [ null ] }
@@ -132,17 +137,17 @@ class UserModel {
       status: 'active',
       verifiedAt: Date.now()
     }
-    const q = User.findOneAndUpdate({ username }, update)
+    const q = this.Model.findOneAndUpdate({ username }, update)
     const res = await handleQuery(q)
     return res ? true : false
   }
 
   async insertNewUser (user: IUser): Promise<IUser> {
-    const q = User.create(user)
+    const q = this.Model.create(user)
     const res = await handleQuery(q)
     return res
   }
   
 }
 
-export default UserModel
+export default User

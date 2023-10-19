@@ -31,6 +31,7 @@ const OrderSchema = new Schema<IOrder>({
 }, { timestamps: true })
 
 withEditedDetails(OrderSchema)
+
 const OrderModel = model<IOrder>('Order', OrderSchema)
 
 class Order extends IndelibleModel<IOrder> {

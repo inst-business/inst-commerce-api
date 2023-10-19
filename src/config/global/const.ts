@@ -40,15 +40,15 @@ export const TYPE_ARR = Object.freeze({
   ACCOUNT: ['user', 'seller', 'admin'] as const,
   PRIVACY: ['public', 'shared', 'private'] as const,
   ITEM: ['product', 'article'] as const,
+  INTERACTION: ['object', 'comment'] as const,
   PAYMENT: ['cod', 'e-wallet', 'credit'] as const,
   DELIVERY: ['casual', 'express'] as const,
 })
 export type TYPE = {
   [K in keyof typeof TYPE_ARR]: typeof TYPE_ARR[K][number]
 }
-enum TYPE2 {
-  GENDER = 'male'
-}
+export enum ACCOUNT { USER, SELLER, ADMIN }
+export enum INTERACTION { OBJECT, COMMENT }
 
 export const STATUS_ARR = Object.freeze({
   ACCOUNT: ['hidden', 'pending', 'active'] as const,
@@ -59,6 +59,7 @@ export const STATUS_ARR = Object.freeze({
 export type STATUS = {
   [K in keyof typeof STATUS_ARR]: typeof STATUS_ARR[K][number]
 }
+export enum ACCOUNT_STATUS { HIDDEN, PENDING, ACTIVE }
 
 export const FLAG_ARR = Object.freeze({
   ACCOUNT: ['warned', 'restricted', 'banned'] as const,
@@ -98,7 +99,7 @@ export interface USER_SIGN {
     lastname: string
   }
   avatar?: string
-  role: ROLE
+  role: ROLE['USER']
   // permissions?: ALL_RULES[]
 }
 
