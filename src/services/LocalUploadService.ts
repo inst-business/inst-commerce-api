@@ -51,6 +51,7 @@ const handleMulterError = (err: MulterError | LogicError, req: Request) => {
 export const uploadOneImage = (fieldName: string, maxSize?: number) =>
   _.routeNextableAsync(async (req, res, next) => {
     uploadImage(maxSize).single(fieldName)(req, res, (err) => {
+      console.log(req.body, req.body.name)
       if (err) return handleMulterError(err, req)
     })
     next()

@@ -228,7 +228,7 @@ class Utils {
     return this.genSlug(title + '-' + uniqueId)
   }
 
-  genUniqueCode (prefix = 'IA') {
+  genUniqueCode (prefix = 'IC') {
     const timestamp = Math.floor(Date.now() / 1000).toString()
     let uniqueCode = prefix.toUpperCase()
 

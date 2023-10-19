@@ -39,6 +39,42 @@ class Auth {
     })
   }
 
+  static reqSeller (): RequestHandler {
+    return _.routeNextableAsync(async (req, res, next) => {
+      const authHeader = req.headers.authorization
+      const token = authHeader && authHeader.split(' ')[1]
+      if (token == null || token === '') {
+        throw _.logicError('Unauthorized', 'You are not allowed.', 401, ERR.UNAUTHORIZED)
+      }
+      jwt.verify(token, <string>_.env('ACCESS_TOKEN'), (err, user) => {
+        if (err) {
+          throw _.logicError('Session Expired', 'Your session has expired.', 401, ERR.REQUEST_EXPIRED)
+        }
+        // Object.assign(req, { user })
+        (<any>req).user = user
+        next()
+      })
+    })
+  }
+
+  static reqAdmin (): RequestHandler {
+    return _.routeNextableAsync(async (req, res, next) => {
+      const authHeader = req.headers.authorization
+      const token = authHeader && authHeader.split(' ')[1]
+      if (token == null || token === '') {
+        throw _.logicError('Unauthorized', 'You are not allowed.', 401, ERR.UNAUTHORIZED)
+      }
+      jwt.verify(token, <string>_.env('ACCESS_TOKEN'), (err, user) => {
+        if (err) {
+          throw _.logicError('Session Expired', 'Your session has expired.', 401, ERR.REQUEST_EXPIRED)
+        }
+        // Object.assign(req, { user })
+        (<any>req).user = user
+        next()
+      })
+    })
+  }
+
   static reqRole (role: ROLE): RequestHandler {
     return _.routeNextableAsync(async (req, res, next) => {
       // const user: USER_SIGN = (<any>req).user

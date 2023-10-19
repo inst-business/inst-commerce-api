@@ -5,10 +5,10 @@ import {
   ExcludableKeys, GV, ROLE, ROLE_ARR, TYPE, TYPE_ARR, GENDER, GENDER_ARR, STATUS, STATUS_ARR, FLAG, FLAG_ARR, IResultWithPars
 } from '@/config/global/const'
 import {
-  TSuspendableDocument, withSoftDelete, handleQuery
+  TSuspendableDocument, withSoftDelete, handleQuery, ISoftDeleted
 } from '@/utils/mongoose'
 
-export interface IUser {
+export interface IUser extends ISoftDeleted {
   _id: ObjectId
   username: string
   email: string
@@ -24,8 +24,8 @@ export interface IUser {
   bio?: string
   avatar?: string
   cover?: string
-  status: STATUS['ACCOUNT']
   role: ROLE['USER']
+  status: STATUS['ACCOUNT']
   // tier: ROLE['USER']
   // token?: string
   flag?: {
@@ -36,8 +36,8 @@ export interface IUser {
     flaggedAt: Date
   }
   verifiedAt?: Date
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
 type TUserDocument = IUser & Document
@@ -57,8 +57,8 @@ const UserSchema = new Schema<IUser>({
   bio: { type: String, default: '' },
   avatar: { type: String, default: '' },
   cover: { type: String, default: '' },
-  status: { type: String, required: true, enum: STATUS_ARR.ACCOUNT, default: 'pending' },
   role: { type: String, required: true, enum: ROLE_ARR.USER, default: 'normal' },
+  status: { type: String, required: true, enum: STATUS_ARR.ACCOUNT, default: 'pending' },
   // token: { type: String, default: '' },
   flag: {
     type: { type: String, required: true, enum: FLAG_ARR.ACCOUNT },

@@ -107,7 +107,7 @@ export const withSoftDelete = (schema: Schema, ref?: string) => {
     schema.pre(<MongooseDefaultQueryMiddleware>method, function (next) {
       const query = this.getQuery()
       if (!('isDeleted' in query && query.isDeleted === true)) {
-        this.where({ isDeleted: false })
+        this.where({ isDeleted: { $in: [null, false] } })
       }
       next()
     })
