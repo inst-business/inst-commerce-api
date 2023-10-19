@@ -1,3 +1,4 @@
+import Controller from '@controllers/Controller'
 import Category, { ICategory } from '@models/Category'
 import User, { IUser } from '@models/User'
 import _ from '@/utils/utils'
@@ -6,13 +7,14 @@ import { Keys, ExcludableKeys, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 
-class CategoryController {
+class CategoryController extends Controller {
 
   private Category: Category
   private User: User
   private uploadPrefix: string
 
   constructor () {
+    super()
     this.Category = new Category()
     this.User = new User()
     this.uploadPrefix = 'upload-cat'
