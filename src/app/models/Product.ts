@@ -4,7 +4,7 @@ import _ from '@/utils/utils'
 import {
   handleQuery, IEditedDetails, ISoftDeleted, withEditedDetails, withSoftDelete, TSuspendableDocument
 } from '@/utils/mongoose'
-import { GV, STATUS, STATUS_ARR, FLAG, FLAG_ARR } from '@/config/global/const'
+import { GV, ITEM_STATUS, FLAG } from '@/config/global/const'
 
 export interface IProduct extends IEditedDetails, ISoftDeleted {
   _id: ObjectId
@@ -27,13 +27,13 @@ export interface IProduct extends IEditedDetails, ISoftDeleted {
     reviews: number
     rating: number | Decimal128
   }
-  status: STATUS['ITEM']
+  status: ITEM_STATUS
   author: ObjectId
   seller: ObjectId
   category?: ObjectId
   tags?: ObjectId[]
   flag?: {
-    type: FLAG['ITEM']
+    tier: FLAG
     // reason: string
     flaggedBy: ObjectId
     flaggedAt: Date
@@ -47,7 +47,6 @@ type TProductDocument = IProduct & Document
 const ProductSchema = new Schema<IProduct>({
   expiresAt: { type: Date, index: { expires: GV.TEMP_DATA_EXPIRED } },
   name: { type: String, required: true, minlength: 3, maxlength: 192 },
-  // sku: { type: String, unique: true, minlength: 3 },
   shortDesc: { type: String },
   longDesc: { type: String, required: true },
   img: { type: String, required: true },
@@ -75,13 +74,13 @@ const ProductSchema = new Schema<IProduct>({
     },
     required: true
   },
-  status: { type: String, required: true, enum: STATUS_ARR.ITEM, default: 'pending' },
+  status: { type: Number, required: true, enum: ITEM_STATUS, default: ITEM_STATUS.PENDING },
   author: { type: Schema.Types.ObjectId, required: true, ref: 'UserSeller' },
   seller: { type: Schema.Types.ObjectId, required: true, ref: 'Seller' },
   category: { type: Schema.Types.ObjectId, ref: 'Category' },
   tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
   flag: {
-    type: { type: String, required: true, enum: FLAG_ARR.ITEM },
+    type: { type: Number, required: true, enum: FLAG },
     flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
     flaggedAt: { type: Date },
   },
@@ -89,6 +88,7 @@ const ProductSchema = new Schema<IProduct>({
 
 withEditedDetails(ProductSchema, 'User')
 withSoftDelete(ProductSchema, 'User')
+
 const ProductModel = model<IProduct, TSuspendableDocument<IProduct>>('Product', ProductSchema)
 
 
@@ -108,13 +108,6 @@ class Product extends SuspendableModel<IProduct> {
     })
     return res
   }
-  
-  // async updateOne (id: ArgumentId, product: IProduct): Promise<IProduct | null> {
-  //   product.slug = _.genUniqueSlug(product.name, id)
-  //   const q = Product.findOneAndUpdate({ _id: id }, product)
-  //   const res = await handleQuery(q)
-  //   return res as I | null
-  // }
   
 }
 

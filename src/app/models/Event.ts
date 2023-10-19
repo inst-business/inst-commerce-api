@@ -1,7 +1,9 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
 import { SuspendableModel } from './Model'
-import { STATUS, STATUS_ARR, TYPE, TYPE_ARR } from '@/config/global/const'
-import { TSuspendableDocument, handleQuery, IEditedDetails, ISoftDeleted, withEditedDetails, withSoftDelete } from '@/utils/mongoose'
+import {
+  TSuspendableDocument, handleQuery, IEditedDetails, ISoftDeleted, withEditedDetails, withSoftDelete
+} from '@/utils/mongoose'
+import { GV } from '@/config/global/const'
 
 export interface IEvent extends IEditedDetails, ISoftDeleted {
   _id: ObjectId

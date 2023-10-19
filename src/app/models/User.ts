@@ -2,7 +2,7 @@ import { Schema, Document, model, ObjectId } from 'mongoose'
 import { SuspendableModel } from './Model'
 // import withJsonSchema from 'mongoose-schema-jsonschema'
 import {
-  ExcludableKeys, GV, ROLE, ROLE_ARR, TYPE, TYPE_ARR, GENDER, GENDER_ARR, STATUS, STATUS_ARR, FLAG, FLAG_ARR, IResultWithPars
+  GV, ExcludableKeys, GENDER, USER_ROLE, ACCOUNT_STATUS, FLAG, IResultWithPars
 } from '@/config/global/const'
 import {
   TSuspendableDocument, withSoftDelete, handleQuery, ISoftDeleted
@@ -24,14 +24,13 @@ export interface IUser extends ISoftDeleted {
   bio?: string
   avatar?: string
   cover?: string
-  role: ROLE['USER']
-  status: STATUS['ACCOUNT']
+  role: USER_ROLE
+  status: ACCOUNT_STATUS
   // tier: ROLE['USER']
   // token?: string
   flag?: {
-    type: FLAG['ACCOUNT']
+    tier: FLAG
     // reason: string
-    from: TYPE['ACCOUNT']
     flaggedBy: ObjectId
     flaggedAt: Date
   }
@@ -50,19 +49,18 @@ const UserSchema = new Schema<IUser>({
   salt: { type: String, required: true, maxlength: GV.SALT_LENGTH },
   firstname: { type: String, required: true, minlength: 1, maxlength: 32 },
   lastname: { type: String, required: true, minlength: 1, maxlength: 32 },
-  gender: { type: String, required: true, enum: GENDER_ARR, default: 'other' },
+  gender: { type: Number, required: true, enum: GENDER },
   birthday: { type: Date, default: null },
-  address: { type: String, maxlength: 128, default: '' },
-  country: { type: String, minlength: 1, maxlength: 48, default: '' },
-  bio: { type: String, default: '' },
+  address: { type: String, maxlength: 255, default: '' },
+  country: { type: String, minlength: 2, maxlength: 48, default: '' },
+  bio: { type: String, maxlength: 255, default: '' },
   avatar: { type: String, default: '' },
   cover: { type: String, default: '' },
-  role: { type: String, required: true, enum: ROLE_ARR.USER, default: 'normal' },
-  status: { type: String, required: true, enum: STATUS_ARR.ACCOUNT, default: 'pending' },
+  role: { type: Number, required: true, enum: USER_ROLE, default: USER_ROLE.NORMAL },
+  status: { type: Number, required: true, enum: ACCOUNT_STATUS, default: ACCOUNT_STATUS.PENDING },
   // token: { type: String, default: '' },
   flag: {
-    type: { type: String, required: true, enum: FLAG_ARR.ACCOUNT },
-    from: { type: String, required: true, enum: TYPE_ARR.ACCOUNT },
+    tier: { type: Number, required: true, enum: FLAG },
     flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
     flaggedAt: { type: Date },
   },
@@ -98,8 +96,8 @@ class User extends SuspendableModel<IUser> {
     return data
   }
 
-  async getAuthorizedUserByUsername (username: string, roles: ROLE['USER'], selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
-    const q = this.Model.findOne({ username, role: { $in: roles } }).select(selected?.join(' ') ?? '').lean()
+  async getAuthorizedUserByUsername (username: string, role: USER_ROLE, selected?: ExcludableKeys<IUser>[]): Promise<IUser | null> {
+    const q = this.Model.findOne({ username, role: { $in: role } }).select(selected?.join(' ') ?? '').lean()
     const data = await handleQuery(q)
     return data
   }

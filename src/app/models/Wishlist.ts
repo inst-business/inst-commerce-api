@@ -4,7 +4,7 @@ import _ from '@/utils/utils'
 import {
   ArgumentId, handleQuery, TSuspendableDocument, withEditedDetails, withSoftDelete
 } from '@/utils/mongoose'
-import { } from '@/config/global/const'
+import { GV } from '@/config/global/const'
 
 export interface IWishlist {
   _id: ObjectId

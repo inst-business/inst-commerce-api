@@ -1,14 +1,14 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
-import { SuspendableModel } from './Model'
+import Model from './Model'
 import {
-  ISoftDeleted, withSoftDelete, TSuspendableDocument
+  TSuspendableDocument
 } from '@/utils/mongoose'
-import { INTERACTION, ACCOUNT_STATUS, FLAG, FLAG_ARR, TYPE, TYPE_ARR } from '@/config/global/const'
+import { GV, INTERACTION_TYPE, ACCOUNT_STATUS } from '@/config/global/const'
 
-export interface IArticleLike extends ISoftDeleted {
+export interface IArticleLike {
   _id: ObjectId
   entity: {
-    type: INTERACTION
+    type: INTERACTION_TYPE
     object: ObjectId
   }
   status: ACCOUNT_STATUS
@@ -22,19 +22,17 @@ const ArticleLikeSchema = new Schema<IArticleLike>({
   status: { type: Number, required: true, enum: ACCOUNT_STATUS, default: ACCOUNT_STATUS.PENDING },
   entity: {
     type: {
-      type: { type: Number, required: true, enum: INTERACTION },
+      type: { type: Number, required: true, enum: INTERACTION_TYPE },
       object: { type: Schema.Types.ObjectId, required: true }
     },
     required: true
   },
 }, { timestamps: true })
 
-withSoftDelete(ArticleLikeSchema)
-
 const ArticleLikeModel = model<IArticleLike, TSuspendableDocument<IArticleLike>>('ArticleLike', ArticleLikeSchema)
 
 
-class ArticleLike extends SuspendableModel<IArticleLike> {
+class ArticleLike extends Model<IArticleLike> {
 
   constructor () {
     super(ArticleLikeModel)

@@ -26,57 +26,59 @@ export type TProps<T> = {
 export type ErrPars = Array<Primitives | Record<PropsKey, unknown>>
 
 // export type ITF_TYPE = 'I' | 'E'
-export type PRIVACY_TYPE = Anycase<'I' | 'E'>
+export type PRIVACY_SHORTHAND = Anycase<'I' | 'E'>
 // export type ROUTE_TYPE = 'INT' | 'EXT' | 'CRUD' | 'AUTH'
 export type ROUTE_TYPE = TProps<typeof R>
 
 export type AVAILABLE_LANGS = 'en' | 'vi'
 export type SORT_ORDER = 'asc' | 'desc'
 
-export const GENDER_ARR = ['male', 'female', 'other'] as const
-export type GENDER = typeof GENDER_ARR[number]
+// export const GENDER_ARR = ['male', 'female', 'other'] as const
+// export type GENDER = typeof GENDER_ARR[number]
+export enum GENDER { OTHER, FEMALE, MALE }
 
-export const TYPE_ARR = Object.freeze({
-  ACCOUNT: ['user', 'seller', 'admin'] as const,
-  PRIVACY: ['public', 'shared', 'private'] as const,
-  ITEM: ['product', 'article'] as const,
-  INTERACTION: ['object', 'comment'] as const,
-  PAYMENT: ['cod', 'e-wallet', 'credit'] as const,
-  DELIVERY: ['casual', 'express'] as const,
-})
-export type TYPE = {
-  [K in keyof typeof TYPE_ARR]: typeof TYPE_ARR[K][number]
-}
-export enum ACCOUNT { USER, SELLER, ADMIN }
-export enum INTERACTION { OBJECT, COMMENT }
+// export const FLAG_ARR = Object.freeze({
+//   ACCOUNT: ['warned', 'restricted', 'banned'] as const,
+//   ITEM: ['warned', 'restricted', 'banned'] as const,
+// })
+// export type FLAG = {
+//   [K in keyof typeof FLAG_ARR]: typeof FLAG_ARR[K][number]
+// }
+export enum FLAG { WARNED, RESTRICTED, BANNED }
 
-export const STATUS_ARR = Object.freeze({
-  ACCOUNT: ['hidden', 'pending', 'active'] as const,
-  ITEM: ['hidden', 'pending', 'active'] as const,
-  APPROVAL: ['declined', 'pending', 'approved'] as const,
-  PROCESS: ['preparing', 'processing', 'completed', 'rejected'] as const,
-})
-export type STATUS = {
-  [K in keyof typeof STATUS_ARR]: typeof STATUS_ARR[K][number]
+export enum ACCOUNT_TYPE { USER, SELLER, ADMIN }
+export enum PRIVACY_TYPE { PRIVATE, SHARED, PUBLIC }
+export enum ITEM_TYPE { PRODUCT, ARTICLE }
+export enum INTERACTION_TYPE { OBJECT, COMMENT }
+export enum PAYMENT_TYPE { COD, E_WALLET, CREDIT }
+export enum DELIVERY_TYPE { CASUAL, EXPRESS }
+export abstract class TYPE {
+  static ACCOUNT = ACCOUNT_TYPE
+  static PRIVACY = PRIVACY_TYPE
+  static ITEM = ITEM_TYPE
+  static INTERACTION = INTERACTION_TYPE
+  static PAYMENT = PAYMENT_TYPE
+  static DELIVERY = DELIVERY_TYPE
 }
+
 export enum ACCOUNT_STATUS { HIDDEN, PENDING, ACTIVE }
 export enum ITEM_STATUS { HIDDEN, PENDING, ACTIVE }
-
-export const FLAG_ARR = Object.freeze({
-  ACCOUNT: ['warned', 'restricted', 'banned'] as const,
-  ITEM: ['warned', 'restricted', 'banned'] as const,
-})
-export type FLAG = {
-  [K in keyof typeof FLAG_ARR]: typeof FLAG_ARR[K][number]
+export enum APPROVAL_STATUS { DECLINED, PENDING, APPROVED }
+export enum PROCESS_STATUS { PREPARING, PROCESSING, COMPLETED, REJECTED }
+export const STATUS = {
+  ACCOUNT: ACCOUNT_STATUS,
+  ITEM: ITEM_STATUS,
+  APPROVAL: APPROVAL_STATUS,
+  PROCESS: PROCESS_STATUS,
 }
 
-export const ROLE_ARR = Object.freeze({
-  ADMIN: ['moderator', 'admin', 'root'] as const,
-  SELLER: ['staff', 'manager', 'co-owner', 'owner'] as const,
-  USER: ['normal', 'frequent', 'elite', 'vip'] as const,
-})
-export type ROLE = {
-  [K in keyof typeof ROLE_ARR]: typeof ROLE_ARR[K][number]
+export enum ADMIN_ROLE { MODERATOR, ADMIN, ROOT }
+export enum SELLER_ROLE { STAFF, MANAGER, CO_OWNER, OWNER }
+export enum USER_ROLE { NORMAL, FREQUENT, ELITE, VIP }
+export abstract class ROLE {
+  static ADMIN = ADMIN_ROLE
+  static SELLER = SELLER_ROLE
+  static USER = USER_ROLE
 }
 
 export interface RULE {
@@ -100,7 +102,7 @@ export interface USER_SIGN {
     lastname: string
   }
   avatar?: string
-  role: ROLE['USER']
+  role: USER_ROLE
   // permissions?: ALL_RULES[]
 }
 

@@ -5,7 +5,8 @@ import { Keys, ExcludableKeys, Many, IResultWithPars, ExcludeKeys, SORT_ORDER } 
 import ERR from '@/config/global/error'
 
 
-class Model<I> {
+abstract class Model<I> {
+  
   protected Model: mongoose.Model<I>
   
   constructor (Model: mongoose.Model<I>) {
@@ -47,7 +48,6 @@ class Model<I> {
     const q = this.Model.create(data)
     const res = await handleQuery(q)
     return res
-    // return res.toObject()
   }
 
   async updateOne (
@@ -58,6 +58,25 @@ class Model<I> {
       .select(selected?.join(' ') ?? '').lean()
     const res = await handleQuery(q)
     return res as I | null
+  }
+
+  async destroyOneOrMany (id: Many<ArgumentId>): Promise<Record<string, any>> {
+    const q = this.Model.deleteMany({ _id: id })
+    const res = await handleQuery(q)
+    return res
+  }
+
+}
+export default Model
+
+
+export abstract class SuspendableModel<I> extends Model<I> {
+
+  private SuspendableModel: TSuspendableDocument<I>
+  
+  constructor (Model: TSuspendableDocument<I>) {
+    super(Model)
+    this.SuspendableModel = Model
   }
 
   async getAllDeleted (selected?: ExcludableKeys<I>[]): Promise<I[]> {
@@ -91,24 +110,6 @@ class Model<I> {
     return data as I | null
   }
 
-  async destroyOneOrMany (id: Many<ArgumentId>): Promise<Record<string, any>> {
-    const q = this.Model.deleteMany({ _id: id, isDeleted: true })
-    const res = await handleQuery(q)
-    return res
-  }
-
-}
-export default Model
-
-
-export class SuspendableModel<I> extends Model<I> {
-  private SuspendableModel: TSuspendableDocument<I>
-  
-  constructor (Model: TSuspendableDocument<I>) {
-    super(Model)
-    this.SuspendableModel = Model
-  }
-
   async deleteOneOrMany (id: Many<ArgumentId>, deletedBy: ArgumentId): Promise<IResultWithPars> {
     const q = this.SuspendableModel.find({ _id: id }).softDelete(deletedBy)
     const res = await handleQuery(q)
@@ -120,28 +121,36 @@ export class SuspendableModel<I> extends Model<I> {
     const res = await handleQuery(q)
     return res
   }
+
+  async destroyOneOrMany (id: Many<ArgumentId>): Promise<Record<string, any>> {
+    const q = this.Model.deleteMany({ _id: id, isDeleted: true })
+    const res = await handleQuery(q)
+    return res
+  }
+
 }
 
 
-export class IndelibleModel<I> extends Model<I> {
+export abstract class IndelibleModel<I> extends Model<I> {
 
   private errTitle: string = 'Access denied'
   private errMessage: string = 'This action is not allowed.'
   private err: Error = _.logicError(this.errTitle, this.errMessage, 406, ERR.ACTION_REJECTED)
 
-  getAllDeleted (): any {
-    throw this.err
-  }
-  getManyDeleted (): any {
-    throw this.err
-  }
-  getDeletedAmount (): any {
-    throw this.err
-  }
-  getDeletedById (): any {
-    throw this.err
-  }
+  // getAllDeleted (): any {
+  //   throw this.err
+  // }
+  // getManyDeleted (): any {
+  //   throw this.err
+  // }
+  // getDeletedAmount (): any {
+  //   throw this.err
+  // }
+  // getDeletedById (): any {
+  //   throw this.err
+  // }
   destroyOneOrMany (): any {
     throw this.err
   }
+
 }

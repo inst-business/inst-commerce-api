@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
-import { GV, STATUS_ARR, USER_SIGN } from '@/config/global/const'
+import { GV, ACCOUNT_STATUS, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 const User = new UserModel()
@@ -21,7 +21,7 @@ class AuthCtrl {
         { userInfo, password } = req.body,
         user = await User.getUserByEmailOrUsername(userInfo, userInfo)
       if (user != null) {
-        if (user.status === STATUS_ARR.ACCOUNT[1] || !user.verifiedAt) {
+        if (user.status === ACCOUNT_STATUS.PENDING || !user.verifiedAt) {
           throw _.logicError(errTitle, 'User is not verified.', 401, ERR.UNVERIFIED, userInfo)
         }
         if (!_.compareBcryptHash(password, user.salt, user.password)) {
@@ -115,7 +115,7 @@ class AuthCtrl {
         { userInfo, password } = req.body,
         user = await User.getUserByEmailOrUsername(userInfo, userInfo)
       if (user != null) {
-        if (user.status === STATUS_ARR.ACCOUNT[1] || !user.verifiedAt) {
+        if (user.status === ACCOUNT_STATUS.PENDING || !user.verifiedAt) {
           throw _.logicError(errTitle, 'User is not verified.', 401, ERR.UNVERIFIED, userInfo)
         }
         if (!_.compareBcryptHash(password, user.salt, user.password)) {

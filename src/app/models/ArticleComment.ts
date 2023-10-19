@@ -3,7 +3,7 @@ import { SuspendableModel } from './Model'
 import {
   ISoftDeleted, withSoftDelete, TSuspendableDocument
 } from '@/utils/mongoose'
-import { FLAG, FLAG_ARR, TYPE, TYPE_ARR } from '@/config/global/const'
+import { GV, ITEM_TYPE, FLAG } from '@/config/global/const'
 
 export interface IArticleComment extends ISoftDeleted {
   _id: ObjectId
@@ -16,11 +16,11 @@ export interface IArticleComment extends ISoftDeleted {
   }
   article: ObjectId
   entity: {
-    type: TYPE['ACCOUNT']
+    type: ITEM_TYPE
     user: ObjectId
   }
   flag?: {
-    type: FLAG['ITEM']
+    tier: FLAG
     flaggedBy: ObjectId
     flaggedAt: Date
   }
@@ -35,7 +35,7 @@ const ArticleCommentSchema = new Schema<IArticleComment>({
   left: { type: Number, required: true, default: 1 },
   right: { type: Number, required: true, default: 2 },
   comment: { type: String, required: true },
-  media: { type: [String] },
+  media: [{ type: String }],
   interaction: {
     type: {
       likes: { type: Number, required: true, min: 0, default: 0 },
@@ -45,13 +45,13 @@ const ArticleCommentSchema = new Schema<IArticleComment>({
   article: { type: Schema.Types.ObjectId, required: true, ref: 'Article' },
   entity: {
     type: {
-      type: { type: String, required: true, enum: TYPE_ARR.ACCOUNT },
+      type: { type: Number, required: true, enum: ITEM_TYPE },
       user: { type: Schema.Types.ObjectId, required: true }
     },
     required: true
   },
   flag: {
-    type: { type: String, required: true, enum: FLAG_ARR.ITEM },
+    tier: { type: Number, required: true, enum: FLAG },
     flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
     flaggedAt: { type: Date },
   },

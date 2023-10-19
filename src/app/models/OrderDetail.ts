@@ -1,7 +1,7 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
 import { IndelibleModel } from './Model'
-import { STATUS, STATUS_ARR, TYPE, TYPE_ARR } from '@/config/global/const'
 import { handleQuery } from '@/utils/mongoose'
+import { GV, APPROVAL_STATUS } from '@/config/global/const'
 
 export interface IOrderDetail {
   _id: ObjectId
@@ -13,7 +13,7 @@ export interface IOrderDetail {
     promotions?: ObjectId[]
     qty: number
   }[]
-  status: STATUS['APPROVAL']
+  status: APPROVAL_STATUS
   reason?: string
   order: ObjectId
   delivery: ObjectId
@@ -25,7 +25,7 @@ export interface IOrderDetail {
 
 type TOrderDetailDocument = IOrderDetail & Document
 
-const OrderSchema = new Schema<IOrderDetail>({
+const OrderDetailSchema = new Schema<IOrderDetail>({
   items: {
     type: [{
       product: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
@@ -41,7 +41,7 @@ const OrderSchema = new Schema<IOrderDetail>({
       message: 'Order detail requires at least 1 item.'
     }
   },
-  status: { type: String, required: true, enum: STATUS_ARR.APPROVAL, default: 'pending' },
+  status: { type: Number, required: true, enum: APPROVAL_STATUS, default: APPROVAL_STATUS.PENDING },
   reason: { type: String },
   order: { type: Schema.Types.ObjectId, required: true, ref: 'Order' },
   seller: { type: Schema.Types.ObjectId, required: true, ref: 'Seller' },
@@ -49,14 +49,15 @@ const OrderSchema = new Schema<IOrderDetail>({
   verifiedAt: { type: Date, default: null },
 }, { timestamps: true })
 
-const OrderModel = model<IOrderDetail>('Order', OrderSchema)
+const OrderDetailModel = model<IOrderDetail>('OrderDetail', OrderDetailSchema)
 
-class Order extends IndelibleModel<IOrderDetail> {
+
+class OrderDetail extends IndelibleModel<IOrderDetail> {
 
   constructor () {
-    super(OrderModel)
+    super(OrderDetailModel)
   }
 
 }
 
-export default Order
+export default OrderDetail

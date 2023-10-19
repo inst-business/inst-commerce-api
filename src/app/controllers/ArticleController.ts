@@ -1,7 +1,7 @@
 import ArticleModel, { IArticle } from '@models/Article'
 import UserModel, { IUser } from '@models/User'
 import _ from '@/utils/utils'
-import { ROLE, ROLE_ARR, USER_SIGN } from '@/config/global/const'
+import { ROLE, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
 const Article = new ArticleModel()

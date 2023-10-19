@@ -3,7 +3,7 @@ import { SuspendableModel } from './Model'
 import {
   ISoftDeleted, withSoftDelete, TSuspendableDocument
 } from '@/utils/mongoose'
-import { FLAG_ARR, FLAG, TYPE, TYPE_ARR } from '@/config/global/const'
+import { GV, ACCOUNT_TYPE, FLAG } from '@/config/global/const'
 
 export interface IProductComment extends ISoftDeleted {
   _id: ObjectId
@@ -16,11 +16,11 @@ export interface IProductComment extends ISoftDeleted {
   }
   product: ObjectId
   entity: {
-    type: TYPE['ACCOUNT']
+    type: ACCOUNT_TYPE
     user: ObjectId
   }
   flag?: {
-    type: FLAG['ACCOUNT']
+    tier: FLAG
     flaggedBy: ObjectId
     flaggedAt: Date
   }
@@ -35,7 +35,7 @@ const ProductCommentSchema = new Schema<IProductComment>({
   left: { type: Number, required: true },
   right: { type: Number, required: true },
   comment: { type: String, required: true },
-  media: { type: [String] },
+  media: [{ type: String }],
   interaction: {
     type: {
       likes: { type: Number, required: true, default: 0 },
@@ -45,28 +45,29 @@ const ProductCommentSchema = new Schema<IProductComment>({
   product: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
   entity: {
     type: {
-      type: { type: String, required: true, enum: TYPE_ARR.ACCOUNT },
+      type: { type: Number, required: true, enum: ACCOUNT_TYPE },
       user: { type: Schema.Types.ObjectId, required: true }
     },
     required: true
   },
   flag: {
-    type: { type: String, required: true, enum: FLAG_ARR.ACCOUNT },
+    tier: { type: Number, required: true, enum: FLAG },
     flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
     flaggedAt: { type: Date },
   },
 }, { timestamps: true })
 
 withSoftDelete(ProductCommentSchema)
-const ProductComment = model<IProductComment, TSuspendableDocument<IProductComment>>('ProductComment', ProductCommentSchema)
+
+const ProductCommentModel = model<IProductComment, TSuspendableDocument<IProductComment>>('ProductComment', ProductCommentSchema)
 
 
-class ProductCommentModel extends SuspendableModel<IProductComment> {
+class ProductComment extends SuspendableModel<IProductComment> {
 
   constructor () {
-    super(ProductComment)
+    super(ProductCommentModel)
   }
   
 }
 
-export default ProductCommentModel
+export default ProductComment

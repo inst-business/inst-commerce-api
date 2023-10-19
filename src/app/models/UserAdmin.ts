@@ -1,11 +1,11 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
 import { SuspendableModel } from './Model'
 import {
-  ExcludableKeys, GV, STATUS, STATUS_ARR, ROLE, ROLE_ARR, ALL_RULES, IResultWithPars
-} from '@/config/global/const'
-import {
   TSuspendableDocument, handleQuery, ISoftDeleted, withSoftDelete
 } from '@/utils/mongoose'
+import {
+  GV, ExcludableKeys, ACCOUNT_STATUS, ADMIN_ROLE, ALL_RULES, IResultWithPars
+} from '@/config/global/const'
 
 export interface IUserAdmin extends ISoftDeleted {
   _id: ObjectId
@@ -16,8 +16,8 @@ export interface IUserAdmin extends ISoftDeleted {
   bio?: string
   avatar?: string
   cover?: string
-  status: STATUS['ACCOUNT']
-  role: ROLE['ADMIN']
+  status: ACCOUNT_STATUS
+  role: ADMIN_ROLE
   permissions?: ALL_RULES[]
   user: ObjectId
   verifiedAt?: Date
@@ -35,17 +35,22 @@ const UserAdminSchema = new Schema<IUserAdmin>({
   bio: { type: String, default: '' },
   avatar: { type: String, default: '' },
   cover: { type: String, default: '' },
-  status: { type: String, required: true, enum: STATUS_ARR.ACCOUNT, default: 'pending' },
-  role: { type: String, required: true, enum: ROLE_ARR.ADMIN, default: 'moderator' },
+  status: { type: Number, required: true, enum: ACCOUNT_STATUS, default: ACCOUNT_STATUS.PENDING },
+  role: { type: Number, required: true, enum: ADMIN_ROLE, default: ADMIN_ROLE.MODERATOR },
   permissions: { type: [String] },
   verifiedAt: { type: Date, default: null },
 }, { timestamps: true })
 
 withSoftDelete(UserAdminSchema, 'UserAdmin')
+
 export const UserAdminModel = model<IUserAdmin, TSuspendableDocument<IUserAdmin>>('UserAdmin', UserAdminSchema)
 
 
 class UserAdmin extends SuspendableModel<IUserAdmin> {
+
+  constructor () {
+    super(UserAdminModel)
+  }
 
 }
 

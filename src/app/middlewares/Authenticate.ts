@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import UserModel from '@models/User'
 import _ from '@/utils/utils'
 import {
-  GV, ROLE, ROLE_ARR, ALL_RULES, RULE, USER_SIGN
+  GV, USER_ROLE, SELLER_ROLE, ALL_RULES, RULE, USER_SIGN
 } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
@@ -75,7 +75,7 @@ class Auth {
     })
   }
 
-  static reqRole (role: ROLE): RequestHandler {
+  static reqRole (role: USER_ROLE): RequestHandler {
     return _.routeNextableAsync(async (req, res, next) => {
       // const user: USER_SIGN = (<any>req).user
       // if (user.role !== role) {
@@ -85,7 +85,7 @@ class Auth {
     })
   }
 
-  static reqUserByRole (role: ROLE['USER']): RequestHandler {
+  static reqUserByRole (role: USER_ROLE): RequestHandler {
     return _.routeNextableAsync(async (req, res, next) => {
       const authHeader = req.headers.authorization
       const token = authHeader && authHeader.split(' ')[1]
@@ -106,7 +106,7 @@ class Auth {
     })
   }
   
-  static reqSellerByRole (role: ROLE['SELLER']): RequestHandler {
+  static reqSellerByRole (role: SELLER_ROLE): RequestHandler {
     return _.routeNextableAsync(async (req, res, next) => {
       // const authHeader = req.headers.authorization
       // const token = authHeader && authHeader.split(' ')[1]

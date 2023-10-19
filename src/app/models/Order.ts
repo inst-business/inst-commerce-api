@@ -1,7 +1,7 @@
 import { Schema, Document, model, ObjectId, Decimal128 } from 'mongoose'
 import { IndelibleModel } from './Model'
-import { STATUS, STATUS_ARR, TYPE, TYPE_ARR } from '@/config/global/const'
 import { handleQuery, IEditedDetails, withEditedDetails } from '@/utils/mongoose'
+import { GV, APPROVAL_STATUS } from '@/config/global/const'
 
 export interface IOrder extends IEditedDetails {
   _id: ObjectId
@@ -10,7 +10,7 @@ export interface IOrder extends IEditedDetails {
   email: string
   tel: string
   total: number | Decimal128
-  status: STATUS['APPROVAL']
+  status: APPROVAL_STATUS
   transaction: ObjectId
   user: ObjectId
   createdAt: Date
@@ -25,7 +25,7 @@ const OrderSchema = new Schema<IOrder>({
   email: { type: String, required: true, maxlength: 24 },
   tel: { type: String, required: true, maxlength: 24 },
   total: { type: Schema.Types.Decimal128, required: true },
-  status: { type: String, required: true, enum: STATUS_ARR.APPROVAL, default: 'pending' },
+  status: { type: Number, required: true, enum: APPROVAL_STATUS, default: APPROVAL_STATUS.PENDING },
   transaction: { type: Schema.Types.ObjectId, required: true, ref: 'Transaction' },
   user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
 }, { timestamps: true })
@@ -33,6 +33,7 @@ const OrderSchema = new Schema<IOrder>({
 withEditedDetails(OrderSchema)
 
 const OrderModel = model<IOrder>('Order', OrderSchema)
+
 
 class Order extends IndelibleModel<IOrder> {
 

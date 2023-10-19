@@ -5,8 +5,7 @@ import {
   ArgumentId, handleQuery, ISoftDeleted, IEditedDetails, TSuspendableDocument, withEditedDetails, withSoftDelete
 } from '@/utils/mongoose'
 import {
-  GV, Many, Keys, ExcludableKeys, SORT_ORDER,
-  ITEM_STATUS, STATUS, STATUS_ARR, FLAG_ARR, FLAG
+  GV, Many, Keys, ExcludableKeys, SORT_ORDER, ITEM_STATUS
 } from '@/config/global/const'
 
 export interface ICategory extends IEditedDetails, ISoftDeleted {
@@ -69,7 +68,7 @@ class Category extends SuspendableModel<ICategory> {
     super(CategoryModel)
   }
 
-  async getMany (
+  public async getMany (
     selected?: ExcludableKeys<ICategory>[],
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
     sortBy: Keys<ICategory> = 'createdAt'
@@ -84,7 +83,7 @@ class Category extends SuspendableModel<ICategory> {
     return data
   }
   
-  async getManyByParentId (
+  public async getManyByParentId (
     id: ArgumentId,
     selected?: ExcludableKeys<ICategory>[],
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
@@ -102,7 +101,7 @@ class Category extends SuspendableModel<ICategory> {
     return data
   }
 
-  async getOneById (id: ArgumentId, selected?: ExcludableKeys<ICategory>[]): Promise<ICategory | null> {
+  public async getOneById (id: ArgumentId, selected?: ExcludableKeys<ICategory>[]): Promise<ICategory | null> {
     const q = this.Model.findById(id)
       // .populate({ path: 'categorizedBy', select: 'name -_id' })
       .populate({ path: 'createdBy', select: 'username -_id' })
@@ -113,7 +112,7 @@ class Category extends SuspendableModel<ICategory> {
     return data
   }
 
-  async getOneBySlug (slug: String, selected?: ExcludableKeys<ICategory>[]) {
+  public async getOneBySlug (slug: String, selected?: ExcludableKeys<ICategory>[]) {
     const q = this.Model.findOne({ slug })
       // .populate({ path: 'categorizedBy', select: 'name -_id' })
       .populate({ path: 'createdBy', select: 'username -_id' })
@@ -124,7 +123,7 @@ class Category extends SuspendableModel<ICategory> {
     return data
   }
 
-  async insertOne (category: ICategory, id?: ArgumentId): Promise<ICategory> {
+  public async insertOne (category: ICategory, id?: ArgumentId): Promise<ICategory> {
     category.left = 1
     category.right = 2
     const parent = await this.Model.findById(id)
@@ -143,7 +142,7 @@ class Category extends SuspendableModel<ICategory> {
     return res
   }
   
-  async getManyDeleted (
+  public async getManyDeleted (
     selected?: ExcludableKeys<ICategory>[],
     limit = 15, offset = 0, sort: SORT_ORDER = 'desc',
     sortBy: Keys<ICategory> = 'deletedAt'
@@ -159,19 +158,19 @@ class Category extends SuspendableModel<ICategory> {
     return data
   }
   
-  async findImageById (id: Many<ArgumentId>): Promise<ICategory['thumbnail'][]> {
+  public async findImageById (id: Many<ArgumentId>): Promise<ICategory['thumbnail'][]> {
     const q = this.Model.find({ _id: id }).select('img -_id').lean()
     const data = await handleQuery(q)
     return data.map(item => item.thumbnail)
   }
 
-  // async findImgByManyIds (id: Many<ArgumentId>): Promise<Pick<ICategory, 'img'>[]> {
+  // public async findImgByManyIds (id: Many<ArgumentId>): Promise<Pick<ICategory, 'img'>[]> {
   //   const q = Category.find({ _id: id }).select('img -_id').lean()
   //   const data = await handleQuery(q)
   //   return data
   // }
 
-  async findImageOfDeletedById (id: Many<ArgumentId>): Promise<ICategory['thumbnail'][]> {
+  public async findImageOfDeletedById (id: Many<ArgumentId>): Promise<ICategory['thumbnail'][]> {
     const q = this.Model.find({ _id: id, isDeleted: true }).select('img -_id').lean()
     const data = await handleQuery(q)
     return data.map(item => item.thumbnail)

@@ -1,10 +1,10 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
-import { IndelibleModel } from './Model'
+import Model from './Model'
 import _ from '@/utils/utils'
 import {
   ArgumentId, handleQuery, TSuspendableDocument
 } from '@/utils/mongoose'
-import { STATUS, STATUS_ARR } from '@/config/global/const'
+import { GV } from '@/config/global/const'
 
 export interface ICart {
   _id: ObjectId
@@ -12,10 +12,9 @@ export interface ICart {
     product: ObjectId
     sku: string
     qty: number
+    addedAt: Date
   }[]
   user: ObjectId
-  createdAt: Date
-  updatedAt: Date
 }
 
 type TCartDocument = ICart & Document
@@ -26,16 +25,17 @@ const CartSchema = new Schema<ICart>({
       product: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
       sku: { type: String, required: true },
       qty: { type: Number, required: true, min: 0, default: 0 },
+      addedAt: { type: Date, required: true, default: new Date() }
     }],
     required: true
   },
   user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
-}, { timestamps: true })
+})
 
 const CartModel = model<ICart>('Cart', CartSchema)
 
 
-class Cart extends IndelibleModel<ICart> {
+class Cart extends Model<ICart> {
 
   constructor () {
     super(CartModel)

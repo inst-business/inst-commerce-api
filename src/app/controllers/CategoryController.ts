@@ -1,29 +1,36 @@
-import CategoryModel, { ICategory } from '@models/Category'
-import UserModel, { IUser } from '@models/User'
+import Category, { ICategory } from '@models/Category'
+import User, { IUser } from '@models/User'
 import _ from '@/utils/utils'
 import { appendOneImage, removeOneImage, removeManyImages } from '@/services/LocalUploadService'
 import { Keys, ExcludableKeys, USER_SIGN } from '@/config/global/const'
 import ERR from '@/config/global/error'
 
-const Category = new CategoryModel()
-const User = new UserModel()
-const fileUploadPrefix = 'upload-cat'
 
-class CategoryCtrl {
+class CategoryController {
 
-  static test() {
+  private Category: Category
+  private User: User
+  private uploadPrefix: string
+
+  constructor () {
+    this.Category = new Category()
+    this.User = new User()
+    this.uploadPrefix = 'upload-cat'
+  }
+
+  public test () {
     return _.routeAsync(async (req, res) => {
-      const data = await Category.findImageById(req.params.id3 || [req.params.id, req.params.id2])
+      const data = await this.Category.findImageById(req.params.id3 || [req.params.id, req.params.id2])
       return data
     })
   }
 
-  static storeOne () {
+  public storeOne () {
     return _.routeAsync(async (req, res) => {
       const
         sign: USER_SIGN = (<any>req).user,
         // user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
-        user = await User.getUserByEmailOrUsername(sign?.username, sign?.username)
+        user = await this.User.getUserByEmailOrUsername(sign?.username, sign?.username)
       if (user == null) {
         throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
       }
@@ -38,9 +45,9 @@ class CategoryCtrl {
       data.author = user._id
       // data.author = <any>'652521c8497013713c684e48'
       if (req.file != null && req.file.fieldname === 'thumbnail') {
-        data.thumbnail = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
+        data.thumbnail = _.genFileName(req.file.originalname, data.name, this.uploadPrefix)
       }
-      const submittedCategory = await Category.insertOne(data, parentId)
+      const submittedCategory = await this.Category.insertOne(data, parentId)
         .then(data => {
           appendOneImage(<any>req.file, 'categories', data.thumbnail).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
           return data
@@ -49,30 +56,30 @@ class CategoryCtrl {
     }
   )}
   
-  static getOne () {
+  public getOne () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.params
-      const data: ICategory | null = await Category.getOneById(id)
+      const data: ICategory | null = await this.Category.getOneById(id)
       return data
     }
   )}
 
-  static getMany () {
+  public getMany () {
     return _.routeAsync(async (req, res) => {
-      const data: ICategory[] = await Category.getMany()
+      const data: ICategory[] = await this.Category.getMany()
       return data
     }
   )}
   
-  static getManyByParentId () {
+  public getManyByParentId () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.params
-      const data: ICategory[] = await Category.getManyByParentId(id)
+      const data: ICategory[] = await this.Category.getManyByParentId(id)
       return data
     })
   }
 
-  static updateOne () {
+  public updateOne () {
     return _.routeAsync(async (req, res) => {
       // const
       //   { id } = req.params,
@@ -90,16 +97,16 @@ class CategoryCtrl {
       // let prevImage: string[]
       // if (req.file != null && req.file.fieldname === 'img') {
       //   data.img = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
-      //   prevImage = await Category.findImageById(id)
+      //   prevImage = await this.Category.findImageById(id)
       // }
       // data.slug = data.slug && _.genSlug(data.slug + '-' + _.genUniqueCode())
       // data.editedBy = user._id
       // data.editedAt = new Date()
-      // const updatedCategory = Category.updateOne(id, data)
+      // const updatedCategory = this.Category.updateOne(id, data)
       //   .then(async (updatedData) => {
       //     if (data.img != null) {
       //       if (prevImage?.[0] != null) {
-      //         removeOneImage('categories', prevImage[0]).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
+      //         removeOneImage('this.Category', prevImage[0]).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
       //       }
       //       appendOneImage(<any>req.file, 'categories', data.img).catch(e => console.error(`${e?.message} (${e?.errorCode})`))
       //     }
@@ -110,22 +117,22 @@ class CategoryCtrl {
     }
   )}
 
-  static getOneDeleted () {
+  public getOneDeleted () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.params
-      const data: ICategory | null = await Category.getDeletedById(id)
+      const data: ICategory | null = await this.Category.getDeletedById(id)
       return data
     }
   )}
 
-  static getManyDeleted () {
+  public getManyDeleted () {
     return _.routeAsync(async () => {
-      const data: ICategory[] = await Category.getManyDeleted()
+      const data: ICategory[] = await this.Category.getManyDeleted()
       return data
     }
   )}
 
-  static deleteOneOrMany () {
+  public deleteOneOrMany () {
     return _.routeAsync(async (req, res) => {
       // // console.log('content-type: ', req.headers['content-type'])
       // const
@@ -135,24 +142,24 @@ class CategoryCtrl {
       //   throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
       // }
       // const { id } = req.body
-      // const result = await Category.deleteOneOrMany(id, user._id)
+      // const result = await this.Category.deleteOneOrMany(id, user._id)
       // return result
     }
   )}
   
-  static restoreOne () {
+  public restoreOne () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.body
-      const restoredCategory = await Category.restoreOneOrMany(id)
+      const restoredCategory = await this.Category.restoreOneOrMany(id)
       return restoredCategory
     }
   )}
 
-  static destroyOneOrMany () {
+  public destroyOneOrMany () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.body
-      const images = await Category.findImageOfDeletedById(id)
-      const result = await Category.destroyOneOrMany(id)
+      const images = await this.Category.findImageOfDeletedById(id)
+      const result = await this.Category.destroyOneOrMany(id)
         .then(data => {
           if (images.length > 0) {
             removeManyImages('categories', images).catch(e => console.error(`${e?.message} (${e?.errorCode})`, e?.pars))
@@ -164,47 +171,53 @@ class CategoryCtrl {
   )}
 
 }
-export default CategoryCtrl
+export default CategoryController
 
 
 /** 
  *  EXTERNAL
 */
-export class CategoryExtCtrl {
+export class CategoryExternalController {
 
-  static getMany () {
+  private Category: Category
+
+  constructor () {
+    this.Category = new Category()
+  }
+
+  public getMany () {
     return _.routeAsync(async (req, res) => {
       const
         keys: ExcludableKeys<ICategory>[] = [
           '-_id', 'name', 'desc', 'thumbnail', 'slug', 'author', 'createdAt'
         ],
-        data: ICategory[] = await Category.getMany(keys)
+        data: ICategory[] = await this.Category.getMany(keys)
       return data
     })
   }
   
-  static getManyByParentSlug () {
+  public getManyByParentSlug () {
     return _.routeAsync(async (req, res) => {
       const { slug } = req.params
-      const parent = await Category.getOneBySlug(slug, ['_id'])
+      const parent = await this.Category.getOneBySlug(slug, ['_id'])
       if (parent == null) return []
       const
         keys: ExcludableKeys<ICategory>[] = [
           '-_id', 'name', 'desc', 'thumbnail', 'slug', 'author', 'createdAt'
         ],
-        data: ICategory[] = await Category.getManyByParentId(parent._id, keys)
+        data: ICategory[] = await this.Category.getManyByParentId(parent._id, keys)
       return data
     })
   }
 
-  static getOneBySlug () {
+  public getOneBySlug () {
     return _.routeAsync(async (req, res) => {
       const { slug } = req.params
       const
         keys: ExcludableKeys<ICategory>[] = [
           '-_id', 'name', 'desc', 'thumbnail', 'slug', 'author', 'createdAt'
         ],
-        data: ICategory | null = await Category.getOneBySlug(slug, keys)
+        data: ICategory | null = await this.Category.getOneBySlug(slug, keys)
       return data
     })
   }
@@ -215,36 +228,42 @@ export class CategoryExtCtrl {
 /** 
  *  VIEW RENDERING
 */
-export class CategoryViewCtrl {
+export class CategoryViewController {
 
-  static createOne () {
+  private Category: Category
+
+  constructor () {
+    this.Category = new Category()
+  }
+
+  public createOne () {
     return _.routeAsync(async () => {},
     _.renderView('app/categories/create')
   )}
   
-  static createOneChild () {
+  public createOneChild () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.params
-      const data = await Category.getOneById(id, ['name'])
+      const data = await this.Category.getOneById(id, ['name'])
       return data
     },
     _.renderView('app/categories/categorized/create')
   )}
   
-  static getOne () {
+  public getOne () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.params
-      const data: ICategory | null = await Category.getOneById(id)
+      const data: ICategory | null = await this.Category.getOneById(id)
       return data
     },
     _.renderView('app/categories/detail')
   )}
 
-  static getMany () {
+  public getMany () {
     return _.routeAsync(async (req, res) => {
       const resources = {
-        'items': Category.getMany(),
-        'deletedCount': Category.getDeletedAmount(),
+        'items': this.Category.getMany(),
+        'deletedCount': this.Category.getDeletedAmount(),
       }
       const data = _.fetchAllSettled(resources)
       return data
@@ -252,36 +271,36 @@ export class CategoryViewCtrl {
     _.renderView('app/categories/index')
   )}
 
-  static getManyByParentId () {
+  public getManyByParentId () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.params
-      const data: ICategory[] = await Category.getManyByParentId(id)
+      const data: ICategory[] = await this.Category.getManyByParentId(id)
       return data
     },
     // _.renderView('app/categories/index')
   )}
   
-  static editOne () {
+  public editOne () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.params
-      const data: ICategory | null = await Category.getOneById(id)
+      const data: ICategory | null = await this.Category.getOneById(id)
       return data
     },
     _.renderView('app/categories/edit', true)
   )}
 
-  static getOneDeleted () {
+  public getOneDeleted () {
     return _.routeAsync(async (req, res) => {
       const { id } = req.params
-      const data: ICategory | null = await Category.getDeletedById(id)
+      const data: ICategory | null = await this.Category.getDeletedById(id)
       return data
     },
     _.renderView('app/categories/deleted/detail')
   )}
 
-  static getManyDeleted () {
+  public getManyDeleted () {
     return _.routeAsync(async () => {
-      const data: ICategory[] = await Category.getManyDeleted()
+      const data: ICategory[] = await this.Category.getManyDeleted()
       return data
     },
     _.renderView('app/categories/deleted/index')

@@ -3,7 +3,7 @@ import { SuspendableModel } from './Model'
 import {
   handleQuery, IEditedDetails, ISoftDeleted, withEditedDetails, withSoftDelete, TSuspendableDocument
 } from '@/utils/mongoose'
-import { STATUS, STATUS_ARR, FLAG, FLAG_ARR, TYPE, TYPE_ARR } from '@/config/global/const'
+import { GV, PRIVACY_TYPE, ITEM_STATUS, FLAG } from '@/config/global/const'
 
 export interface IArticle extends IEditedDetails, ISoftDeleted {
   _id: ObjectId
@@ -17,14 +17,14 @@ export interface IArticle extends IEditedDetails, ISoftDeleted {
     likes: number
     comments: number
   }
-  privacy: TYPE['PRIVACY']
-  status: STATUS['ITEM']
+  privacy: PRIVACY_TYPE
+  status: ITEM_STATUS
   author: ObjectId
   seller: ObjectId
   category?: ObjectId
   tags?: ObjectId[]
   flag?: {
-    type: FLAG['ITEM']
+    tier: FLAG
     flaggedBy: ObjectId
     flaggedAt: Date
   }
@@ -48,13 +48,13 @@ const ArticleSchema = new Schema<IArticle>({
     },
     required: true
   },
-  privacy: { type: String, required: true, enum: TYPE_ARR.PRIVACY, default: 'public' },
-  status: { type: String, required: true, enum: STATUS_ARR.ITEM, default: 'pending' },
+  privacy: { type: Number, required: true, enum: PRIVACY_TYPE, default: PRIVACY_TYPE.PUBLIC },
+  status: { type: Number, required: true, enum: ITEM_STATUS, default: ITEM_STATUS.PENDING },
   author: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   category: { type: Schema.Types.ObjectId, ref: 'Category' },
   tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
   flag: {
-    type: { type: String, required: true, enum: FLAG_ARR.ITEM },
+    tier: { type: Number, required: true, enum: FLAG },
     flaggedBy: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
     flaggedAt: { type: Date },
   },

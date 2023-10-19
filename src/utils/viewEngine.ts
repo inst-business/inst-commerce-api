@@ -1,5 +1,5 @@
 import {
-  GV, R, Anycase, Primitives, AVAILABLE_LANGS, PRIVACY_TYPE, REGEX
+  GV, R, Anycase, Primitives, AVAILABLE_LANGS, PRIVACY_SHORTHAND, REGEX
 } from '@/config/global/const'
 // import _ from 'lodash'
 // import moment from 'moment'
@@ -15,7 +15,7 @@ export const hbsHelpers = (() => {
     this._sections[name] = options.fn(this)
   }
 
-  function routeParseParams (privacy: PRIVACY_TYPE, act: string, ...args: any[]): string {
+  function routeParseParams (privacy: PRIVACY_SHORTHAND, act: string, ...args: any[]): string {
     let route
     if (REGEX.VALID_VAR_NAME.test(act)) {
       route = (<any>R)[act.toUpperCase()]

@@ -1,7 +1,7 @@
 import { Schema, Document, model, ObjectId } from 'mongoose'
 import { IndelibleModel } from './Model'
-import { STATUS, STATUS_ARR, TYPE, TYPE_ARR } from '@/config/global/const'
 import { handleQuery } from '@/utils/mongoose'
+import { GV } from '@/config/global/const'
 
 export interface IDeliveryProvider {
   _id: ObjectId

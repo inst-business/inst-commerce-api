@@ -2,9 +2,9 @@ import { Schema, Document, model, ObjectId } from 'mongoose'
 import { IndelibleModel } from './Model'
 import _ from '@/utils/utils'
 import {
-  ArgumentId, handleQuery, IEditedDetails, withEditedDetails
+  handleQuery, ArgumentId, IEditedDetails, withEditedDetails
 } from '@/utils/mongoose'
-import { } from '@/config/global/const'
+import { GV } from '@/config/global/const'
 
 export interface IInventory extends IEditedDetails {
   _id: ObjectId
