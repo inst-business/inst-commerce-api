@@ -60,6 +60,7 @@ export type STATUS = {
   [K in keyof typeof STATUS_ARR]: typeof STATUS_ARR[K][number]
 }
 export enum ACCOUNT_STATUS { HIDDEN, PENDING, ACTIVE }
+export enum ITEM_STATUS { HIDDEN, PENDING, ACTIVE }
 
 export const FLAG_ARR = Object.freeze({
   ACCOUNT: ['warned', 'restricted', 'banned'] as const,

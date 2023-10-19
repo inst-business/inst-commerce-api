@@ -6,7 +6,7 @@ import {
 } from '@/utils/mongoose'
 import {
   GV, Many, Keys, ExcludableKeys, SORT_ORDER,
-  STATUS, STATUS_ARR, FLAG_ARR, FLAG
+  ITEM_STATUS, STATUS, STATUS_ARR, FLAG_ARR, FLAG
 } from '@/config/global/const'
 
 export interface ICategory extends IEditedDetails, ISoftDeleted {
@@ -22,7 +22,7 @@ export interface ICategory extends IEditedDetails, ISoftDeleted {
     unit?: string
     desc?: string
   }[]
-  status: STATUS['ITEM']
+  status: ITEM_STATUS
   author: ObjectId
   isImmutable?: boolean
   expiresAt?: Date  // cron job add expried date to destroy if containing no product
@@ -44,7 +44,7 @@ const CategorySchema = new Schema<ICategory>({
     unit: { type: String },
     desc: { type: String },
   }],
-  status: { type: String, required: true, enum: STATUS_ARR.ITEM, default: 'pending' },
+  status: { type: Number, required: true, enum: ITEM_STATUS, default: ITEM_STATUS.PENDING },
   author: { type: Schema.Types.ObjectId, required: true, ref: 'UserAdmin' },
   isImmutable: { type: Boolean },
   expiresAt: { type: Date, index: { expires: GV.TEMP_DATA_EXPIRED } },

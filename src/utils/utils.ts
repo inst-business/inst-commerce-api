@@ -71,18 +71,18 @@ class Utils {
 
   private createServiceCallback (res: Response): ExpressCallback {    
     return (data?: any, err?: any) => {
-      // console.log(data, err)
       if (err) {
-        const errJSON = typeof err.toJSON === 'function' ? err.toJSON() : err
-        const errObj = (typeof errJSON === 'object') ? JSON.parse(JSON.stringify(errJSON)) : { message: err, code: -7 }
+        err = typeof err.toJSON === 'function' ? err.toJSON() : err
+        const errObj = (typeof err === 'object' && Object.keys(err).length > 0)
+          ? JSON.parse(JSON.stringify(err)) : new LogicError('Unknown', 'Unexcepted error.', 500, ERR.UNKNOWN)
         res.statusCode = (typeof errObj.httpCode === 'number' && !isNaN(errObj.httpCode)) ? errObj.httpCode : 500
-        res.send({ error: errObj })
+        res.send({ error: errObj }).end()
         return
       }
       // const resData = data ? JSON.parse(JSON.stringify(data)) : {}
       const resData = (data != null && typeof data === 'object') ? structuredClone(data) : {}
       res.statusCode = resData?.meta?.status || 200
-      res.send(resData)
+      res.send(resData).end()
     }
   }
 

@@ -20,12 +20,13 @@ class CategoryCtrl {
 
   static storeOne () {
     return _.routeAsync(async (req, res) => {
-      // const
-      //   sign: USER_SIGN = (<any>req).user,
-      //   user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
-      // if (user == null) {
-      //   throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
-      // }
+      const
+        sign: USER_SIGN = (<any>req).user,
+        // user = await User.getAuthorizedUserByUsername(sign.username, ROLES.MANAGER)
+        user = await User.getUserByEmailOrUsername(sign?.username, sign?.username)
+      if (user == null) {
+        throw _.logicError('Access Denied', 'You do not have permission.', 403, ERR.FORBIDDEN)
+      }
       if ((<any>req).errorUpload) {
         throw (<any>req).errorUpload
       }
@@ -34,8 +35,8 @@ class CategoryCtrl {
         keys = ['name', 'slug', 'desc'],
         data = _.pickProps(<ICategory>req.body, keys)
       data.slug = _.genSlug((data.slug || data.name) + '-' + _.genUniqueCode())
-      // data.author = user._id
-      data.author = <any>'652521c8497013713c684e48'
+      data.author = user._id
+      // data.author = <any>'652521c8497013713c684e48'
       if (req.file != null && req.file.fieldname === 'thumbnail') {
         data.thumbnail = _.genFileName(req.file.originalname, data.name, fileUploadPrefix)
       }
