@@ -1,12 +1,14 @@
-import _ from '@/utils/utils'
 import mongoose, {
   Schema, Document, Query, Model, ObjectId, MongooseError,
   QueryWithHelpers, HydratedDocument, MongooseDefaultQueryMiddleware,
 } from 'mongoose'
+import withJsonSchema from 'mongoose-schema-jsonschema'
+import _ from '@/utils/utils'
 import { IResultWithPars } from '@/config/global/const'
 import LogicError from '@/utils/logicError'
 import ERR from '@/config/global/error'
 
+export const extendedMongoose = withJsonSchema(mongoose)
 
 // Handle errors
 export const mongooseError = <E extends MongooseError>(err: E | LogicError, stackAllowed?: boolean) => {

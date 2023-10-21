@@ -35,6 +35,7 @@ class Server {
     app.use(methodOverride('_method'))
     app.use(express.static(path.join(__dirname, '../public')))
     // app.use(express.static(path.join(__dirname, '../node_modules/bootstrap')))
+    app.use(express.static(path.join(__dirname, '../node_modules/@inst-package/assets')))
 
     console.log(ENV.NODE_ENV + ' started!')
     if (ENV.NODE_ENV === 'development') {
